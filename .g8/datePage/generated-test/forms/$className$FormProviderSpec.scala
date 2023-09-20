@@ -2,8 +2,6 @@ package forms
 
 import java.time.{LocalDate, ZoneOffset}
 
-import forms.behaviours.DateBehaviours
-
 class $className$FormProviderSpec extends DateBehaviours {
 
   val form = new $className$FormProvider()()

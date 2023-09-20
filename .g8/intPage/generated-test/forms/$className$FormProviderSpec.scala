@@ -1,6 +1,5 @@
 package forms
 
-import forms.behaviours.IntFieldBehaviours
 import play.api.data.FormError
 
 class $className$FormProviderSpec extends IntFieldBehaviours {

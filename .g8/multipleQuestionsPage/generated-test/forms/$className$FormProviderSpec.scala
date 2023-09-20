@@ -1,6 +1,5 @@
 package forms
 
-import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
 class $className$FormProviderSpec extends StringFieldBehaviours {

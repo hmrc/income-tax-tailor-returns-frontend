@@ -1,8 +1,8 @@
 package pages
 
-import java.time.LocalDate
-
 import play.api.libs.json.JsPath
+
+import java.time.LocalDate
 
 case object $className$Page extends QuestionPage[LocalDate] {
 
