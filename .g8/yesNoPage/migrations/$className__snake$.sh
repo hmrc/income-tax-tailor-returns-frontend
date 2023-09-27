@@ -15,9 +15,12 @@ echo "POST       /change$className$                  controllers.$className$Cont
 echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
 echo "$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
+echo "$className;format="decap"$.agent.title = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
+echo "$className;format="decap"$.agent.heading = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.checkYourAnswersLabel = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.error.required = Select yes if $className;format="decap"$" >> ../conf/messages.en
+echo "$className;format="decap"$.agent.error.required = Select yes if $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.change.hidden = $className$" >> ../conf/messages.en
 
 echo "Migration $className;format="snake"$ completed"

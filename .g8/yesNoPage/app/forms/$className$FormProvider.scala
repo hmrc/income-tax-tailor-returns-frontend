@@ -7,8 +7,10 @@ import play.api.data.Form
 
 class $className$FormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Boolean] =
+  def apply(isAgent: Boolean): Form[Boolean] = {
+    val error: String = if isAgent "$className;format="decap"$.agent.error.required" else "$className;format="decap"$.error.required"
     Form(
-      "value" -> boolean("$className;format="decap"$.error.required")
+      "value" -> boolean(error)
     )
+  }
 }
