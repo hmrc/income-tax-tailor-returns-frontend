@@ -6,7 +6,8 @@ import play.api.data.FormError
 
 class $className$FormProviderSpec extends OptionFieldBehaviours {
 
-  val form = new $className$FormProvider()()
+  val form = new $className$FormProvider()(false)
+  val agentForm = new $className$FormProvider()(true)
 
   ".value" - {
 
@@ -24,6 +25,18 @@ class $className$FormProviderSpec extends OptionFieldBehaviours {
       form,
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".value for an agent" - {
+
+    val fieldName = "value"
+    val agentRequiredKey = "$className;format="decap"$.agent.error.required"
+
+    behave like mandatoryField(
+      agentForm,
+      fieldName,
+      requiredError = FormError(fieldName, agentRequiredKey)
     )
   }
 }
