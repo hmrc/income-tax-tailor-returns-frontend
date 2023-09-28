@@ -14,6 +14,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.$className$View
+import views.html.$className$AgentView
 
 import scala.concurrent.Future
 

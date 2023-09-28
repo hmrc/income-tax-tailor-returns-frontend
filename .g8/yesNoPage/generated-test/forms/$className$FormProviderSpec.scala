@@ -28,4 +28,15 @@ class $className$FormProviderSpec extends BooleanFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
+  ".value for an agent" - {
+
+    val fieldName = "value"
+
+    behave like mandatoryField(
+      agentForm,
+      fieldName,
+      requiredError = FormError(fieldName, agentRequiredKey)
+    )
+  }
 }

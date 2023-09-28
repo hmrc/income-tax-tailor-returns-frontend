@@ -11,6 +11,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.$className$View
+import views.html.$className$AgentView
 
 import scala.concurrent.{ExecutionContext, Future}
 
