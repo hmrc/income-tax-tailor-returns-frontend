@@ -28,6 +28,17 @@ object $className$ extends Enumerable.Implicits {
         )
     }
 
+  def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+    values.zipWithIndex.map {
+      case (value, index) =>
+        CheckboxItemViewModel(
+          content = Text(messages(s"$className;format="decap"$.agent.\${value.toString}") ),
+          fieldId = "value",
+          index = index,
+          value = value.toString
+        )
+    }
+
   implicit val enumerable: Enumerable[$className$] =
     Enumerable(values.map(v => v.toString -> v): _*)
 }

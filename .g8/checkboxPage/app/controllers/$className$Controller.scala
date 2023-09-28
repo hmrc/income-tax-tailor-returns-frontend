@@ -11,6 +11,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.$className$View
+import views.html.$className$AgentView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -23,28 +24,37 @@ class $className$Controller @Inject()(
                                         requireData: DataRequiredAction,
                                         formProvider: $className$FormProvider,
                                         val controllerComponents: MessagesControllerComponents,
-                                        view: $className$View
+                                        view: $className$View,
+                                        agentView: $className$AgentView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  def form(isAgent: Boolean) = formProvider(isAgent)
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get($className$Page) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(request.isAgent)
+        case Some(value) => form(request.isAgent).fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      if (request.isAgent) {
+        Ok(agentView(preparedForm, mode))
+      } else {
+        Ok(view(preparedForm, mode))
+      }
   }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
+      form(request.isAgent).bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+          if (request.isAgent) {
+            Future.successful(BadRequest(agentView(formWithErrors, mode)))
+          } else {
+            Future.successful(BadRequest(view(formWithErrors, mode)))
+          },
 
         value =>
           for {
