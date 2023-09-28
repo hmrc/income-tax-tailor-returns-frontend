@@ -9,8 +9,8 @@ class $className$FormProviderSpec extends BooleanFieldBehaviours {
   val agentRequiredKey = "$className;format="decap"$.agent.error.required"
   val invalidKey = "error.boolean"
 
-  val form = new $className$FormProvider(false)()
-  val agentForm = new $className$FormProvider(true)()
+  val form = new $className$FormProvider()(false)
+  val agentForm = new $className$FormProvider()(true)
 
   ".value" - {
 
