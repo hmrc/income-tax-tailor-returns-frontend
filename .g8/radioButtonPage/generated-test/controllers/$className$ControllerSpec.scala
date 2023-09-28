@@ -51,9 +51,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;
-        format = "decap" $Route
-        )
+        val request = FakeRequest(GET, $className;format="decap"$Route)
 
         val result = route(application, request).value
 
@@ -89,9 +87,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;
-        format = "decap" $Route
-        )
+        val request = FakeRequest(GET, $className;format="decap"$Route)
 
         val view = application.injector.instanceOf[$className$AgentView]
 
@@ -154,10 +150,8 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, $className;
-        format = "decap" $Route
-        )
-        .withFormUrlEncodedBody(("value", "invalid value"))
+          FakeRequest(POST, $className;format="decap"$Route)
+            .withFormUrlEncodedBody(("value", "invalid value"))
 
         val boundForm = agentForm.bind(Map("value" -> "invalid value"))
 
