@@ -24,6 +24,15 @@ object $className$ extends Enumerable.Implicits {
       )
   }
 
+  def agentOptions(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {
+    case (value, index) =>
+      RadioItem(
+        content = Text(messages(s"$className;format="decap"$.agent.\${value.toString}") ),
+        value = Some(value.toString),
+        id = Some(s"value_\$index")
+    )
+  }
+
   implicit val enumerable: Enumerable[$className$] =
     Enumerable(values.map(v => v.toString -> v): _*)
 }

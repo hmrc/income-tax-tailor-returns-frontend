@@ -8,8 +8,15 @@ import models.$className$
 
 class $className$FormProvider @Inject() extends Mappings {
 
-  def apply(): Form[$className$] =
+  def apply(isAgent: Boolean): Form[$className$] = {
+    val error: String =
+      if (isAgent) {
+        "$className;format="decap"$.agent.error.required"
+      } else {
+        "$className;format="decap"$.error.required"
+      }
     Form(
-      "value" -> enumerable[$className$]("$className;format="decap"$.error.required")
+      "value" -> enumerable[$className$](error)
     )
+  }
 }
