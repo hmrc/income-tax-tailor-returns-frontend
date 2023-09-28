@@ -26,7 +26,9 @@ import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.PlayBodyParsers
 import play.api.test.FakeRequest
+import play.api.test.Helpers.stubControllerComponents
 
 trait SpecBase
   extends AnyFreeSpec
@@ -38,15 +40,17 @@ trait SpecBase
 
   val userAnswersId: String = "id"
 
+  val parsers: PlayBodyParsers = stubControllerComponents().parsers
+
   def emptyUserAnswers : UserAnswers = UserAnswers(userAnswersId)
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None): GuiceApplicationBuilder =
+  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None, isAgent: Boolean = false): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
-        bind[IdentifierAction].to[FakeIdentifierAction],
+        bind[IdentifierAction].to(new FakeIdentifierAction(isAgent)(parsers)),
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
       )
 }
