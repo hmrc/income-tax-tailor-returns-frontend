@@ -20,7 +20,7 @@ import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.routes
-import play.api.mvc.{BodyParsers, Results}
+import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
@@ -30,15 +30,35 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class AuthActionSpec extends SpecBase {
 
   class Harness(authAction: IdentifierAction) {
-    def onPageLoad() = authAction { _ => Results.Ok }
+    def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
   }
 
   "Auth Action" - {
 
+    "when the user is authorised" - {
+
+      "must succeed with a identifier Request" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+
+          val authAction = new AuthenticatedIdentifierAction(new FakeSuccessfulAuthConnector(Some("internalId")), appConfig, bodyParsers)
+          val controller = new Harness(authAction)
+          val result = controller.onPageLoad()(FakeRequest())
+
+          status(result) mustBe OK
+        }
+      }
+    }
     "when the user hasn't logged in" - {
 
       "must redirect the user to log in " in {
@@ -186,4 +206,10 @@ class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends A
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
     Future.failed(exceptionToReturn)
+}
+class FakeSuccessfulAuthConnector[T] @Inject()(value: T) extends AuthConnector {
+  val serviceUrl: String = ""
+
+  override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
+    Future.fromTry(Try(value.asInstanceOf[A]))
 }
