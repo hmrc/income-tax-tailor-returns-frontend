@@ -6,7 +6,8 @@ import play.api.data.FormError
 
 class $className$FormProviderSpec extends CheckboxFieldBehaviours {
 
-  val form = new $className$FormProvider()()
+  val form = new $className$FormProvider()(false)
+  val agentForm = new $className$FormProvider()(true)
 
   ".value" - {
 
@@ -22,6 +23,18 @@ class $className$FormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like mandatoryCheckboxField(
       form,
+      fieldName,
+      requiredKey
+    )
+  }
+
+  ".value for an agent" - {
+
+    val fieldName = "value"
+    val requiredKey = "$className;format="decap"$.agent.error.required"
+
+    behave like mandatoryCheckboxField(
+      agentForm,
       fieldName,
       requiredKey
     )

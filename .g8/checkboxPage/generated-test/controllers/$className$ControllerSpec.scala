@@ -14,6 +14,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
 import views.html.$className$View
+import views.html.$className$AgentView
 
 import scala.concurrent.Future
 
@@ -24,7 +25,8 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
   lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(NormalMode).url
 
   val formProvider = new $className$FormProvider()
-  val form = formProvider()
+  val form = formProvider(isAgent = false)
+  val agentForm = formProvider(isAgent = true)
 
   "$className$ Controller" - {
 
@@ -45,6 +47,23 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must return OK and the correct view for a GET as an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(GET, $className;format="decap"$Route)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[$className$AgentView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual view(agentForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = UserAnswers(userAnswersId).set($className$Page, $className$.values.toSet).success.value
@@ -60,6 +79,24 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form.fill($className$.values.toSet), NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
+
+      val userAnswers = UserAnswers(userAnswersId).set($className$Page, $className$.values.toSet).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(GET, $className;format="decap"$Route)
+
+        val view = application.injector.instanceOf[$className$AgentView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm.fill($className$.values.toSet), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -101,6 +138,26 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
         val view = application.injector.instanceOf[$className$View]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, $className;format="decap"$Route)
+            .withFormUrlEncodedBody(("value", "invalid value"))
+
+        val boundForm = agentForm.bind(Map("value" -> "invalid value"))
+
+        val view = application.injector.instanceOf[$className$AgentView]
 
         val result = route(application, request).value
 

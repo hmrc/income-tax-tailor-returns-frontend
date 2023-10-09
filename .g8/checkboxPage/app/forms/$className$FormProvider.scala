@@ -9,8 +9,15 @@ import models.$className$
 
 class $className$FormProvider @Inject() extends Mappings {
 
-  def apply(): Form[Set[$className$]] =
+  def apply(isAgent: Boolean): Form[Set[$className$]] = {
+    val error: String =
+      if (isAgent) {
+        "$className;format="decap"$.agent.error.required"
+      } else {
+        "$className;format="decap"$.error.required"
+      }
     Form(
-      "value" -> set(enumerable[$className$]("$className;format="decap"$.error.required")).verifying(nonEmptySet("$className;format="decap"$.error.required"))
+      "value" -> set(enumerable[$className$](error)).verifying(nonEmptySet(error))
     )
+  }
 }
