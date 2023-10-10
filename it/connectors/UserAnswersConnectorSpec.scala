@@ -50,6 +50,7 @@ class UserAnswersConnectorSpec
       .build()
 
   private val testUrl = "/tailor-return/data"
+  private val testKeepAliveUrl = "/tailor-return/data/keep-alive"
   private lazy val connector = app.injector.instanceOf[UserAnswersConnector]
 
   private val answers = UserAnswers("id")
@@ -113,6 +114,29 @@ class UserAnswersConnectorSpec
       )
 
       connector.set(answers).failed.futureValue
+    }
+  }
+
+  ".keepAlive" - {
+
+    "must post to the server" in {
+
+      server.stubFor(
+        post(urlEqualTo(testKeepAliveUrl))
+          .willReturn(noContent())
+      )
+
+      connector.keepAlive().futureValue
+    }
+
+    "must return a failed future when the server returns an error" in {
+
+      server.stubFor(
+        post(urlEqualTo(testKeepAliveUrl))
+          .willReturn(serverError())
+      )
+
+      connector.keepAlive().failed.futureValue
     }
   }
 

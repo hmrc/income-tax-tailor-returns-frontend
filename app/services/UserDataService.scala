@@ -26,9 +26,10 @@ import scala.concurrent.Future
 
 class UserDataService @Inject()(connector: UserAnswersConnector) extends Logging {
 
-  def get()(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
+  def get()(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] =
     connector.get()
-  }
+  def keepAlive()(implicit hc: HeaderCarrier): Future[Done] =
+    connector.keepAlive()
 
   def set(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] =
     connector.set(answers)

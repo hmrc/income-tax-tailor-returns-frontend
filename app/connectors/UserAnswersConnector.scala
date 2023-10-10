@@ -31,6 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class UserAnswersConnector @Inject()(config:Configuration, httpClient:HttpClientV2)(implicit ec:ExecutionContext) {
   private val baseUrl = config.get[Service]("microservice.services.income-tax-tailor-return")
   private val userAnswersUrl = url"$baseUrl/tailor-return/data"
+  private val keepAliveUrl = url"$baseUrl/tailor-return/data/keep-alive"
 
   def get()(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] =
     httpClient
@@ -46,6 +47,19 @@ class UserAnswersConnector @Inject()(config:Configuration, httpClient:HttpClient
       .withBody(Json.toJson(answers))
       .execute[HttpResponse]
       .logFailureReason(connectorName = "UserAnswersConnector on set")
+      .flatMap { response =>
+        if (response.status == NO_CONTENT) {
+          Future.successful(Done)
+        } else {
+          Future.failed(UpstreamErrorResponse("", response.status))
+        }
+      }
+
+  def keepAlive()(implicit hc: HeaderCarrier): Future[Done] =
+    httpClient
+      .post(keepAliveUrl)
+      .execute[HttpResponse]
+      .logFailureReason(connectorName = "UserAnswersConnector on keepAlive")
       .flatMap { response =>
         if (response.status == NO_CONTENT) {
           Future.successful(Done)
