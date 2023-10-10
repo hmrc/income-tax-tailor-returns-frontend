@@ -33,7 +33,7 @@
     alphaBanner: StandardAlphaBanner
 )
 
-@(pageTitle: String, showBackLink: Boolean = true, timeout: Boolean = true, showSignOut: Boolean = true)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+@(pageTitle: String, showBackLink: Boolean = true, timeout: Boolean = true, showSignOut: Boolean = true, taxYear: Int)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @head = {
 
@@ -42,7 +42,7 @@
             hmrcTimeoutDialog(TimeoutDialog(
                 timeout             = Some(appConfig.timeout),
                 countdown           = Some(appConfig.countdown),
-                keepAliveUrl        = Some(routes.KeepAliveController.keepAlive.url),
+                keepAliveUrl        = Some(routes.KeepAliveController.keepAlive(taxYear).url),
                 keepAliveButtonText = Some(messages("timeout.keepAlive")),
                 signOutUrl          = Some(controllers.auth.routes.AuthController.signOut.url),
                 signOutButtonText   = Some(messages("timeout.signOut")),

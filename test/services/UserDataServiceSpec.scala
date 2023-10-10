@@ -16,7 +16,10 @@
 
 package services
 
+import base.SpecBase
+import connectors.UserAnswersConnector
 import models.{Done, UserAnswers}
+import org.mockito.ArgumentMatchers.any
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
@@ -27,9 +30,11 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.temporal.ChronoUnit
 import java.time.{Clock, Instant, ZoneId}
+import scala.concurrent.Future
 
 class UserDataServiceSpec
   extends AnyFreeSpec
+    with SpecBase
     with Matchers
     with MockitoSugar
     with OptionValues
@@ -39,14 +44,14 @@ class UserDataServiceSpec
   private val instant   = Instant.now.truncatedTo(ChronoUnit.MILLIS)
   private val stubClock = Clock.fixed(instant, ZoneId.systemDefault)
   private val userId    = "foo"
-  private val answers   = UserAnswers(userId, Json.obj("bar" -> "baz"), lastUpdated = Instant.now(stubClock))
+  private def answers(taxYear: Int)   = UserAnswers(userId, taxYear, Json.obj("bar" -> "baz"), lastUpdated = Instant.now(stubClock))
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  private val service = new UserDataService()
+  private val mockConnector = mock[UserAnswersConnector]
+  private val service = new UserDataService(mockConnector)
 
   override def beforeEach(): Unit = {
-//    reset(mockConnector)
+    reset(mockConnector)
     super.beforeEach()
   }
 
@@ -54,14 +59,20 @@ class UserDataServiceSpec
 
     "must return user answers when they exist in the backend" in {
 
-      service.get().futureValue must not be defined
+      when[Future[Option[UserAnswers]]](mockConnector.get(any())(any()))
+        .thenReturn(Future.successful(Some(UserAnswers("anMtdItId", taxYear, Json.obj("aPage" -> "aValue")))))
+
+      service.get(taxYear).futureValue mustBe defined
     }
   }
 
   ".set" - {
 
     "must write the answers to the backend" in {
-      service.set(answers).futureValue mustEqual Done
+
+      when[Future[Done]](mockConnector.set(any())(any())) thenReturn Future.successful(Done)
+
+      service.set(answers(taxYear)).futureValue mustEqual Done
     }
 
   }
@@ -70,15 +81,19 @@ class UserDataServiceSpec
 
     "must keep the backend record alive" in {
 
-      service.keepAlive().futureValue mustEqual Done
+      when[Future[Done]](mockConnector.keepAlive(any())(any())) thenReturn Future.successful(Done)
 
+      service.keepAlive(taxYear).futureValue mustEqual Done
     }
   }
 
   ".clear" - {
 
     "must remove the record from the repository" in {
-      service.clear().futureValue mustEqual Done
+
+      when[Future[Done]](mockConnector.clear(any())(any())) thenReturn Future.successful(Done)
+
+      service.clear(taxYear).futureValue mustEqual Done
     }
   }
 }

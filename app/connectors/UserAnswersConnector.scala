@@ -28,21 +28,23 @@ import play.api.libs.json.Json
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserAnswersConnector @Inject()(config:Configuration, httpClient:HttpClientV2)(implicit ec:ExecutionContext) {
+class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClientV2)(implicit ec: ExecutionContext) {
   private val baseUrl = config.get[Service]("microservice.services.income-tax-tailor-return")
-  private val userAnswersUrl = url"$baseUrl/tailor-return/data"
+  private val userAnswersUrl = url"$baseUrl/income-tax-tailor-return/data"
+  private val keepAliveUrl = url"$baseUrl/income-tax-tailor-return/keep-alive"
 
-  def get()(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] =
+  def get(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     httpClient
-      .get(userAnswersUrl)
-      .setHeader(("MTDITID","1234567890"))
+      .get(url"$userAnswersUrl/$taxYear")
+      .setHeader(("MTDITID", "1234567890"))
       .execute[Option[UserAnswers]]
       .logFailureReason(connectorName = "UserAnswersConnector on get")
+  }
 
   def set(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] =
     httpClient
       .post(userAnswersUrl)
-      .setHeader(("MTDITID","1234567890"))
+      .setHeader(("MTDITID", "1234567890"))
       .withBody(Json.toJson(answers))
       .execute[HttpResponse]
       .logFailureReason(connectorName = "UserAnswersConnector on set")
@@ -54,10 +56,23 @@ class UserAnswersConnector @Inject()(config:Configuration, httpClient:HttpClient
         }
       }
 
-  def clear()(implicit hc: HeaderCarrier): Future[Done] =
+  def keepAlive(taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] =
     httpClient
-      .delete(userAnswersUrl)
-      .setHeader(("MTDITID","1234567890"))
+      .post(url"$keepAliveUrl/$taxYear")
+      .execute[HttpResponse]
+      .logFailureReason(connectorName = "UserAnswersConnector on keepAlive")
+      .flatMap { response =>
+        if (response.status == NO_CONTENT) {
+          Future.successful(Done)
+        } else {
+          Future.failed(UpstreamErrorResponse("", response.status))
+        }
+      }
+
+  def clear(taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] =
+    httpClient
+      .delete(url"$userAnswersUrl/$taxYear")
+      .setHeader(("MTDITID", "1234567890"))
       .execute[HttpResponse]
       .logFailureReason(connectorName = "UserAnswersConnector on clear")
       .flatMap { response =>

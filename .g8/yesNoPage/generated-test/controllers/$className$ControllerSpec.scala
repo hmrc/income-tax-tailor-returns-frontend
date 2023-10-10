@@ -26,7 +26,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
-  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(NormalMode).url
+  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(NormalMode, taxYear).url
 
   "$className$ Controller" - {
 
@@ -42,7 +42,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[$className$View]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -60,13 +60,13 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[$className$AgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set($className$Page, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear).set($className$Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -78,13 +78,13 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set($className$Page, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear).set($className$Page, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
@@ -98,7 +98,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -144,7 +144,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -166,7 +166,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 

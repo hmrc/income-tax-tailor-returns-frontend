@@ -38,11 +38,13 @@ trait SpecBase
     with ScalaFutures
     with IntegrationPatience {
 
-  val userAnswersId: String = "id"
-
+  val mtdItId: String = "anMtdItId"
+  val taxYear: Int = 2024
+  val anAgent: Boolean = true
+  val notAnAgent: Boolean = false
   val parsers: PlayBodyParsers = stubControllerComponents().parsers
 
-  def emptyUserAnswers : UserAnswers = UserAnswers(userAnswersId)
+  def emptyUserAnswers : UserAnswers = UserAnswers(mtdItId, taxYear)
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
 
@@ -51,6 +53,6 @@ trait SpecBase
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to(new FakeIdentifierAction(isAgent)(parsers)),
-        bind[DataRetrievalAction].toInstance(new FakeDataRetrievalAction(userAnswers))
+        bind[DataRetrievalActionProvider].toInstance(new FakeDataRetrievalActionProvider(taxYear, userAnswers))
       )
 }

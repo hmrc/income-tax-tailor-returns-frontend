@@ -20,7 +20,7 @@ class $className;format="cap"$Controller @Inject()(
                                          userDataService: UserDataService,
                                          navigator: Navigator,
                                          identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
+                                         getData: DataRetrievalActionProvider,
                                          requireData: DataRequiredAction,
                                          formProvider: $className$FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
@@ -30,7 +30,7 @@ class $className;format="cap"$Controller @Inject()(
 
   def form(isAgent: Boolean) = formProvider(isAgent)
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify andThen getData(taxYear) andThen requireData) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get($className$Page) match {
@@ -39,21 +39,21 @@ class $className;format="cap"$Controller @Inject()(
       }
 
       if (request.isAgent) {
-        Ok(agentView(preparedForm, mode))
+        Ok(agentView(preparedForm, mode, taxYear))
       } else {
-        Ok(view(preparedForm, mode))
+        Ok(view(preparedForm, mode, taxYear))
       }
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify andThen getData(taxYear) andThen requireData).async {
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(
         formWithErrors =>
           if (request.isAgent) {
-            Future.successful(BadRequest(agentView(formWithErrors, mode)))
+            Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear)))
           } else {
-            Future.successful(BadRequest(view(formWithErrors, mode)))
+            Future.successful(BadRequest(view(formWithErrors, mode, taxYear)))
           },
 
         value =>

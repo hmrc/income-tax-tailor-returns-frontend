@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
 
-  class Harness(userDataService: UserDataService) extends DataRetrievalActionImpl(userDataService) {
+  class Harness(userDataService: UserDataService) extends DataRetrievalActionImpl(userDataService, taxYear) {
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
   }
 
@@ -41,7 +41,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
       "must set userAnswers to 'None' in the request" in {
 
         val userDataService = mock[UserDataService]
-        when(userDataService.get()(any())) thenReturn Future(None)
+        when(userDataService.get(any())(any())) thenReturn Future(None)
         val action = new Harness(userDataService)
 
         val result = action.callTransform(IdentifierRequest(FakeRequest(), "id", isAgent = false)).futureValue
@@ -55,7 +55,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
       "must build a userAnswers object and add it to the request" in {
 
         val userDataService = mock[UserDataService]
-        when(userDataService.get()(any())) thenReturn Future(Some(UserAnswers("id")))
+        when(userDataService.get(any())(any())) thenReturn Future(Some(UserAnswers("id", taxYear)))
         val action = new Harness(userDataService)
 
         val result = action.callTransform(new IdentifierRequest(FakeRequest(), "id", isAgent = false)).futureValue

@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRetrievalActionProvider, IdentifierAction}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -27,16 +27,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class KeepAliveController @Inject()(
                                      val controllerComponents: MessagesControllerComponents,
                                      identify: IdentifierAction,
-                                     getData: DataRetrievalAction,
+                                     getData: DataRetrievalActionProvider,
                                      userDataService: UserDataService
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
-  def keepAlive: Action[AnyContent] = (identify andThen getData).async {
+  def keepAlive(taxYear: Int): Action[AnyContent] = (identify andThen getData(2024)).async {
     implicit request =>
       request.userAnswers
         .map {
           answers =>
-            userDataService.keepAlive().map(_ => Ok)
+            userDataService.keepAlive(taxYear).map(_ => Ok)
         }
         .getOrElse(Future.successful(Ok))
   }

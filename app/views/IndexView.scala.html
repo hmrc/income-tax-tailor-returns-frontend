@@ -18,11 +18,12 @@
     layout: templates.Layout
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(taxYear: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle    = titleNoForm(messages("index.title")),
-    showBackLink = false
+    showBackLink = false,
+    taxYear      = taxYear
 ) {
 
     <h1 class="govuk-heading-xl">@messages("index.heading")</h1>

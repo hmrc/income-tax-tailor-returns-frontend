@@ -29,6 +29,8 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.Instant
+
 class UserAnswersConnectorSpec
   extends AnyFreeSpec
     with WireMockHelper
@@ -41,6 +43,7 @@ class UserAnswersConnectorSpec
     with ModelGenerators {
 
   implicit private lazy val hc: HeaderCarrier = HeaderCarrier()
+  private val taxYear: Int = 2024
 
   private lazy val app: Application =
     new GuiceApplicationBuilder()
@@ -49,21 +52,22 @@ class UserAnswersConnectorSpec
       )
       .build()
 
-  private val testUrl = "/tailor-return/data"
+  private val testUrl = "/income-tax-tailor-return/data"
+  private val keepAliveUrl = "/income-tax-tailor-return/keep-alive"
   private lazy val connector = app.injector.instanceOf[UserAnswersConnector]
 
-  private val answers = UserAnswers("id")
+  private val answers = UserAnswers("mtditid", taxYear, lastUpdated = Instant.ofEpochSecond(1))
 
   ".get" - {
 
     "must return user answers when the server returns them" in {
 
       server.stubFor(
-        get(urlEqualTo(testUrl))
+        get(urlEqualTo(s"$testUrl/$taxYear"))
           .willReturn(ok(Json.toJson(answers).toString))
       )
 
-      val result = connector.get().futureValue
+      val result = connector.get(taxYear).futureValue
 
       result.value mustEqual answers
     }
@@ -71,11 +75,11 @@ class UserAnswersConnectorSpec
     "must return None when the server returns NOT_FOUND" in {
 
       server.stubFor(
-        get(urlEqualTo(testUrl))
+        get(urlEqualTo(s"$testUrl/$taxYear"))
           .willReturn(notFound())
       )
 
-      val result = connector.get().futureValue
+      val result = connector.get(taxYear).futureValue
 
       result must not be defined
     }
@@ -83,11 +87,11 @@ class UserAnswersConnectorSpec
     "must return a failed future when the server returns an error" in {
 
       server.stubFor(
-        get(urlEqualTo(testUrl))
+        get(urlEqualTo(s"$testUrl/$taxYear"))
           .willReturn(serverError())
       )
 
-      connector.get().failed.futureValue
+      connector.get(taxYear).failed.futureValue
     }
   }
 
@@ -104,15 +108,38 @@ class UserAnswersConnectorSpec
       connector.set(answers).futureValue
     }
 
-    "must return a failed future when the server returns an error" in {
+    "must return a failed future when the server returns an unexpected response code" in {
 
       server.stubFor(
         post(urlEqualTo(testUrl))
           .withRequestBody(equalTo(Json.toJson(answers).toString))
-          .willReturn(serverError())
+          .willReturn(ok())
       )
 
       connector.set(answers).failed.futureValue
+    }
+  }
+
+  ".keepAlive" - {
+
+    "must post to the server" in {
+
+      server.stubFor(
+        post(urlEqualTo(s"$keepAliveUrl/$taxYear"))
+          .willReturn(noContent())
+      )
+
+      connector.keepAlive(taxYear).futureValue
+    }
+
+    "must return a failed future when the server returns an unexpected response code" in {
+
+      server.stubFor(
+        post(urlEqualTo(s"$keepAliveUrl/$taxYear"))
+          .willReturn(ok())
+      )
+
+      connector.keepAlive(taxYear).failed.futureValue
     }
   }
 
@@ -121,21 +148,21 @@ class UserAnswersConnectorSpec
     "must send a delete request to the server" in {
 
       server.stubFor(
-        delete(urlEqualTo(testUrl))
+        delete(urlEqualTo(s"$testUrl/$taxYear"))
           .willReturn(noContent())
       )
 
-      connector.clear().futureValue
+      connector.clear(taxYear).futureValue
     }
 
-    "must return a failed future when the server returns an error" in {
+    "must return a failed future when the server returns an unexpected response code" in {
 
       server.stubFor(
-        delete(urlEqualTo(testUrl))
-          .willReturn(serverError())
+        delete(urlEqualTo(s"$testUrl/$taxYear"))
+          .willReturn(ok())
       )
 
-      connector.clear().failed.futureValue
+      connector.clear(taxYear).failed.futureValue
     }
   }
 
