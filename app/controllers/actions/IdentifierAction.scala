@@ -50,7 +50,8 @@ class AuthenticatedIdentifierAction @Inject()(
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
       case _: AuthorisationException =>
-        Redirect(routes.UnauthorisedController.onPageLoad)
+        // TODO: dynamic taxYear
+        Redirect(routes.UnauthorisedController.onPageLoad(taxYear = 2024))
     }
   }
 }
@@ -68,7 +69,8 @@ class SessionIdentifierAction @Inject()(
       case Some(session) =>
         block(IdentifierRequest(request, session.value, isAgent = false))
       case None =>
-        Future.successful(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+        // TODO: dynamic taxYear
+        Future.successful(Redirect(routes.JourneyRecoveryController.onPageLoad(taxYear = 2024)))
     }
   }
 }

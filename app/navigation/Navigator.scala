@@ -26,12 +26,13 @@ import models._
 @Singleton
 class Navigator @Inject()() {
 
+  // TODO: Pass tax year through to navigator for use in routes
   private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad
+    case _ => _ => routes.IndexController.onPageLoad(2024)
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
-    case _ => _ => routes.CheckYourAnswersController.onPageLoad
+    case _ => _ => routes.IndexController.onPageLoad(2024)
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {

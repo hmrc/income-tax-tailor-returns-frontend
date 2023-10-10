@@ -48,7 +48,7 @@ class SessionActionSpec extends SpecBase {
           val result = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value must startWith(controllers.routes.JourneyRecoveryController.onPageLoad().url)
+          redirectLocation(result).value must startWith(controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url)
         }
       }
     }

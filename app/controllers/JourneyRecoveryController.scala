@@ -34,7 +34,7 @@ class JourneyRecoveryController @Inject()(
                                            startAgainView: JourneyRecoveryStartAgainView
                                          ) extends FrontendBaseController with I18nSupport with Logging {
 
-  def onPageLoad(continueUrl: Option[RedirectUrl] = None): Action[AnyContent] = identify {
+  def onPageLoad(continueUrl: Option[RedirectUrl] = None, taxYear: Int): Action[AnyContent] = identify {
     implicit request =>
 
       val safeUrl: Option[String] = continueUrl.flatMap {
@@ -49,7 +49,7 @@ class JourneyRecoveryController @Inject()(
       }
 
       safeUrl
-        .map(url => Ok(continueView(url)))
-        .getOrElse(Ok(startAgainView()))
+        .map(url => Ok(continueView(url, taxYear)))
+        .getOrElse(Ok(startAgainView(taxYear)))
   }
 }

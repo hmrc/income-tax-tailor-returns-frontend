@@ -18,6 +18,7 @@ package controllers.actions
 
 import javax.inject.Inject
 import controllers.routes
+import models.UserAnswers
 import models.requests.{DataRequest, OptionalDataRequest}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
@@ -30,7 +31,8 @@ class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionC
 
     request.userAnswers match {
       case None =>
-        Future.successful(Left(Redirect(routes.JourneyRecoveryController.onPageLoad())))
+        // TODO: refactor or
+        Future.successful(Left(Redirect(routes.JourneyRecoveryController.onPageLoad(taxYear = request.userAnswers.getOrElse(UserAnswers(request.userId, 2024)).taxYear))))
       case Some(data) =>
         Future.successful(Right(DataRequest(request.request, request.userId, data, request.isAgent)))
     }
