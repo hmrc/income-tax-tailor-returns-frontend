@@ -24,6 +24,16 @@ import play.api.mvc.{ActionRefiner, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
+trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+
+trait DataRequiredActionProvider {
+  def apply(taxYear: Int): ActionRefiner[OptionalDataRequest, DataRequest]
+}
+
+class DataRequiredActionProviderImpl @Inject()(implicit val executionContext: ExecutionContext) extends DataRequiredActionProvider {
+  override def apply(taxYear: Int): ActionRefiner[OptionalDataRequest, DataRequest] = new DataRequiredActionImpl(taxYear)
+}
+
 class DataRequiredActionImpl @Inject()(taxYear: Int)(implicit val executionContext: ExecutionContext) extends DataRequiredAction {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
@@ -35,15 +45,4 @@ class DataRequiredActionImpl @Inject()(taxYear: Int)(implicit val executionConte
         Future.successful(Right(DataRequest(request.request, request.userId, data, request.isAgent)))
     }
   }
-}
-
-class DataRequiredActionProviderImpl @Inject()(implicit val executionContext: ExecutionContext) extends DataRequiredActionProvider {
-  override def apply(taxYear: Int): ActionRefiner[OptionalDataRequest, DataRequest] = new DataRequiredActionImpl(taxYear)
-}
-
-
-trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
-
-trait DataRequiredActionProvider {
-  def apply(taxYear: Int): ActionRefiner[OptionalDataRequest, DataRequest]
 }

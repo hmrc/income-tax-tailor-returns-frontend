@@ -61,7 +61,6 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
       case _: AuthorisationException =>
-        // TODO: dynamic taxYear
         Redirect(routes.UnauthorisedController.onPageLoad(taxYear))
     }
   }

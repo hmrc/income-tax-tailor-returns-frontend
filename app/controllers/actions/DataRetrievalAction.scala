@@ -24,6 +24,10 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
+trait DataRetrievalActionProvider {
+  def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest]
+}
+
 class DataRetrievalActionProviderImpl @Inject() (userDataService: UserDataService)(implicit executionContext: ExecutionContext)
   extends DataRetrievalActionProvider {
 
@@ -45,7 +49,3 @@ class DataRetrievalActionImpl @Inject()(
     }
   }
 }
-trait DataRetrievalActionProvider {
-  def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest]
-}
-

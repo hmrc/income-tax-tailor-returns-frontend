@@ -12,8 +12,8 @@ GET         /refresh-session/:taxYear                    controllers.KeepAliveCo
 
 GET         /there-is-a-problem/:taxYear                 controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None, taxYear: Int)
 
-GET         /account/sign-out/:taxYear                   controllers.auth.AuthController.signOut(taxYear: Int)
-GET         /account/sign-out-survey/:taxYear            controllers.auth.AuthController.signOutNoSurvey(taxYear: Int)
+GET         /account/sign-out/:taxYear                   controllers.auth.AuthController.signOutNoSurvey(taxYear: Int)
+GET         /account/sign-out-survey/:taxYear            controllers.auth.AuthController.signOut(taxYear: Int)
 GET         /account/signed-out/:taxYear                 controllers.auth.SignedOutController.onPageLoad(taxYear: Int)
 
 GET         /unauthorised/:taxYear                       controllers.UnauthorisedController.onPageLoad(taxYear: Int)

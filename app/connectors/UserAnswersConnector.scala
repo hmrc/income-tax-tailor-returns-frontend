@@ -59,6 +59,7 @@ class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClie
   def keepAlive(taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] =
     httpClient
       .post(url"$keepAliveUrl/$taxYear")
+      .setHeader(("MTDITID", "1234567890"))
       .execute[HttpResponse]
       .logFailureReason(connectorName = "UserAnswersConnector on keepAlive")
       .flatMap { response =>
