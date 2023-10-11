@@ -29,6 +29,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.PlayBodyParsers
 import play.api.test.FakeRequest
 import play.api.test.Helpers.stubControllerComponents
+import scala.concurrent.ExecutionContext
 
 trait SpecBase
   extends AnyFreeSpec
@@ -43,7 +44,7 @@ trait SpecBase
   val anAgent: Boolean = true
   val notAnAgent: Boolean = false
   val parsers: PlayBodyParsers = stubControllerComponents().parsers
-
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
   def emptyUserAnswers : UserAnswers = UserAnswers(mtdItId, taxYear)
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
@@ -51,8 +52,7 @@ trait SpecBase
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None, isAgent: Boolean = false): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
-        bind[DataRequiredAction].to[DataRequiredActionImpl],
-        bind[IdentifierAction].to(new FakeIdentifierAction(isAgent)(parsers)),
-        bind[DataRetrievalActionProvider].toInstance(new FakeDataRetrievalActionProvider(taxYear, userAnswers))
+        bind[IdentifierActionProvider].to(new FakeIdentifierAction(isAgent)(parsers)),
+        bind[DataRetrievalActionProvider].toInstance(new FakeDataRetrievalActionProvider(userAnswers, isAgent))
       )
 }

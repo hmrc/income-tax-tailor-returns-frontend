@@ -25,12 +25,11 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import services.UserDataService
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
 
-  class Harness(userDataService: UserDataService) extends DataRetrievalActionImpl(userDataService, taxYear) {
+  class Harness(userDataService: UserDataService) extends DataRetrievalActionImpl(userDataService, taxYear)(ec) {
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
   }
 
@@ -55,10 +54,10 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
       "must build a userAnswers object and add it to the request" in {
 
         val userDataService = mock[UserDataService]
-        when(userDataService.get(any())(any())) thenReturn Future(Some(UserAnswers("id", taxYear)))
+        when(userDataService.get(any())(any())) thenReturn Future(Some(UserAnswers("id", taxYear)))(ec)
         val action = new Harness(userDataService)
 
-        val result = action.callTransform(new IdentifierRequest(FakeRequest(), "id", isAgent = false)).futureValue
+        val result = action.callTransform(IdentifierRequest(FakeRequest(), "id", isAgent = false)).futureValue
 
         result.userAnswers mustBe defined
       }

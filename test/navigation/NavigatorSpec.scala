@@ -21,6 +21,8 @@ import controllers.routes
 import pages._
 import models._
 
+import scala.concurrent.ExecutionContext
+
 class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
@@ -45,4 +47,5 @@ class NavigatorSpec extends SpecBase {
       }
     }
   }
+  override implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 }

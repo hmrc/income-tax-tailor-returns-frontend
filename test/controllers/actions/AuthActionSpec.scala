@@ -28,7 +28,6 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -51,7 +50,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new AuthenticatedIdentifierAction(new FakeSuccessfulAuthConnector(Some("internalId")), appConfig, bodyParsers)
+          val authAction = new AuthenticatedIdentifierAction(taxYear)(new FakeSuccessfulAuthConnector(Some("internalId")), appConfig, bodyParsers)(ec)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -69,7 +68,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new MissingBearerToken), appConfig, bodyParsers)
+          val authAction = new AuthenticatedIdentifierAction(taxYear)(new FakeFailingAuthConnector(new MissingBearerToken), appConfig, bodyParsers)(ec)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -89,7 +88,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new BearerTokenExpired), appConfig, bodyParsers)
+          val authAction = new AuthenticatedIdentifierAction(taxYear)(new FakeFailingAuthConnector(new BearerTokenExpired), appConfig, bodyParsers)(ec)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -109,7 +108,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new InsufficientEnrolments), appConfig, bodyParsers)
+          val authAction = new AuthenticatedIdentifierAction(taxYear)(new FakeFailingAuthConnector(new InsufficientEnrolments), appConfig, bodyParsers)(ec)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -129,7 +128,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new InsufficientConfidenceLevel), appConfig, bodyParsers)
+          val authAction = new AuthenticatedIdentifierAction(taxYear)(new FakeFailingAuthConnector(new InsufficientConfidenceLevel), appConfig, bodyParsers)(ec)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -149,7 +148,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new UnsupportedAuthProvider), appConfig, bodyParsers)
+          val authAction = new AuthenticatedIdentifierAction(taxYear)(new FakeFailingAuthConnector(new UnsupportedAuthProvider), appConfig, bodyParsers)(ec)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -169,7 +168,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new UnsupportedAffinityGroup), appConfig, bodyParsers)
+          val authAction = new AuthenticatedIdentifierAction(taxYear)(new FakeFailingAuthConnector(new UnsupportedAffinityGroup), appConfig, bodyParsers)(ec)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -189,7 +188,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new AuthenticatedIdentifierAction(new FakeFailingAuthConnector(new UnsupportedCredentialRole), appConfig, bodyParsers)
+          val authAction = new AuthenticatedIdentifierAction(taxYear)(new FakeFailingAuthConnector(new UnsupportedCredentialRole), appConfig, bodyParsers)(ec)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 

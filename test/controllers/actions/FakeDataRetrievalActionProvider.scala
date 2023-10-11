@@ -17,30 +17,18 @@
 package controllers.actions
 
 import models.UserAnswers
-import org.mockito.ArgumentMatchers.any
-import org.mockito.MockitoSugar.{mock, when}
-import org.scalatestplus.mockito.MockitoSugar
-import services.UserDataService
+import models.requests.{IdentifierRequest, OptionalDataRequest}
+import play.api.mvc.ActionTransformer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-//class FakeDataRetrievalAction(dataToReturn: Option[UserAnswers]) extends DataRetrievalActionProvider {
-//
-//  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
-//    Future(OptionalDataRequest(request.request, request.userId, dataToReturn, request.isAgent))
-//
-//  override protected implicit val executionContext: ExecutionContext =
-//    scala.concurrent.ExecutionContext.Implicits.global
-//}
+class FakeDataRetrievalActionProvider(dataToReturn: Option[UserAnswers], isAgent: Boolean)(implicit ec: ExecutionContext) extends DataRetrievalActionProvider {
 
-class FakeDataRetrievalActionProvider(taxYear: Int,
-                                      dataToReturn: Option[UserAnswers],
-                                      userDataService: UserDataService = mock[UserDataService]) extends DataRetrievalActionProvider with MockitoSugar {
+  override def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
+    new ActionTransformer[IdentifierRequest, OptionalDataRequest] {
+      override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
+        Future.successful(OptionalDataRequest(request, "id", dataToReturn, isAgent))
 
-  implicit val executionContext: ExecutionContext =
-    scala.concurrent.ExecutionContext.Implicits.global
-
-  when(userDataService.get(any())(any())).thenReturn(Future.successful(dataToReturn))
-
-  override def apply(taxYear: Int) = new DataRetrievalActionImpl(userDataService, taxYear)
+      override protected def executionContext: ExecutionContext = ec
+    }
 }

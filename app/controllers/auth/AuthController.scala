@@ -17,26 +17,25 @@
 package controllers.auth
 
 import config.FrontendAppConfig
-import controllers.actions.IdentifierAction
+import controllers.actions.IdentifierActionProvider
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 
 class AuthController @Inject()(
                                 val controllerComponents: MessagesControllerComponents,
                                 config: FrontendAppConfig,
-                                identify: IdentifierAction
+                                identify: IdentifierActionProvider
                               ) extends FrontendBaseController with I18nSupport {
 
-  def signOut(): Action[AnyContent] = identify { _ =>
+  def signOut(taxYear: Int): Action[AnyContent] = identify(taxYear) { _ =>
     Redirect(config.signOutUrl, Map("continue" -> Seq(config.exitSurveyUrl)))
   }
 
-  def signOutNoSurvey(taxYear: Int): Action[AnyContent] = identify { _ =>
+  def signOutNoSurvey(taxYear: Int): Action[AnyContent] = identify(taxYear) { _ =>
     Redirect(config.signOutUrl, Map("continue" -> Seq(routes.SignedOutController.onPageLoad(taxYear).url)))
   }
 }

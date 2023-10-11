@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import java.time.temporal.ChronoUnit
 import java.time.{Clock, Instant, ZoneId}
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class UserDataServiceSpec
   extends AnyFreeSpec
@@ -96,4 +96,5 @@ class UserDataServiceSpec
       service.clear(taxYear).futureValue mustEqual Done
     }
   }
+  override implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 }

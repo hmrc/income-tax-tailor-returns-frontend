@@ -19,9 +19,9 @@ class $className;format="cap"$Controller @Inject()(
                                          override val messagesApi: MessagesApi,
                                          userDataService: UserDataService,
                                          navigator: Navigator,
-                                         identify: IdentifierAction,
+                                         identify: IdentifierActionProvider,
                                          getData: DataRetrievalActionProvider,
-                                         requireData: DataRequiredAction,
+                                         requireData: DataRequiredActionProvider,
                                          formProvider: $className$FormProvider,
                                          val controllerComponents: MessagesControllerComponents,
                                          view: $className$View,
@@ -30,7 +30,7 @@ class $className;format="cap"$Controller @Inject()(
 
   def form(isAgent: Boolean) = formProvider(isAgent)
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify andThen getData(taxYear) andThen requireData) {
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get($className$Page) match {
@@ -45,7 +45,7 @@ class $className;format="cap"$Controller @Inject()(
       }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify andThen getData(taxYear) andThen requireData).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(
