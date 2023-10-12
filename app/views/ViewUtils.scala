@@ -22,7 +22,7 @@ import uk.gov.hmrc.time.TaxYear
 
 object ViewUtils {
 
-  def getTaxYear(): Int = TaxYear.current.currentYear
+  def getTaxYear: Int = TaxYear.current.currentYear
 
   def title(form: Form[_], title: String, section: Option[String] = None)(implicit messages: Messages): String =
     titleNoForm(

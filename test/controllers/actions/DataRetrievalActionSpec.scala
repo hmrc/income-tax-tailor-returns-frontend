@@ -22,6 +22,7 @@ import models.requests.{IdentifierRequest, OptionalDataRequest}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.ActionTransformer
 import play.api.test.FakeRequest
 import services.UserDataService
 
@@ -29,8 +30,13 @@ import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
 
-  class Harness(userDataService: UserDataService) extends DataRetrievalActionImpl(userDataService, taxYear)(ec) {
-    def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
+  class Harness(userDataService: UserDataService) {
+
+    val provider: ActionTransformer[IdentifierRequest, OptionalDataRequest] = new DataRetrievalActionProviderImpl(userDataService)(ec).apply(taxYear)
+
+    def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
+      provider.refine(request).map(_.value)
+    }
   }
 
   "Data Retrieval Action" - {

@@ -32,7 +32,7 @@
     <p class="govuk-body">
         @govukButton(
             ButtonViewModel(messages("site.signIn"))
-                .asLink(routes.IndexController.onPageLoad(getTaxYear()).url)
+                .asLink(routes.IndexController.onPageLoad(getTaxYear).url)
         )
     </p>
 }
