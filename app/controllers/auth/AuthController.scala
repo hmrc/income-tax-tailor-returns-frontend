@@ -31,11 +31,11 @@ class AuthController @Inject()(
                                 identify: IdentifierActionProvider
                               ) extends FrontendBaseController with I18nSupport {
 
-  def signOut(taxYear: Int): Action[AnyContent] = Action { _ =>
+  def signOut(): Action[AnyContent] = Action { _ =>
     Redirect(config.signOutUrl, Map("continue" -> Seq(config.exitSurveyUrl))).withNewSession
   }
 
-  def signOutNoSurvey(taxYear: Int): Action[AnyContent] = Action { _ =>
-    Redirect(config.signOutUrl, Map("continue" -> Seq(routes.SignedOutController.onPageLoad(taxYear).url))).withNewSession
+  def signOutNoSurvey(): Action[AnyContent] = Action { _ =>
+    Redirect(config.signOutUrl, Map("continue" -> Seq(routes.SignedOutController.onPageLoad.url))).withNewSession
   }
 }

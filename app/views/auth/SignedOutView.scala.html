@@ -15,18 +15,14 @@
  *@
 
 @this(
-    layout: templates.Layout,
+    layout: templates.UnauthenticatedLayout,
     govukButton: GovukButton
 )
 
-@(taxYear: Int)(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle    = titleNoForm(messages("signedOut.title")),
-    showBackLink = false,
-    timeout      = false,
-    showSignOut  = false,
-    taxYear = taxYear
+    pageTitle    = titleNoForm(messages("signedOut.title"))
 ) {
 
     <h1 class="govuk-heading-xl">@messages("signedOut.heading")</h1>
@@ -36,7 +32,7 @@
     <p class="govuk-body">
         @govukButton(
             ButtonViewModel(messages("site.signIn"))
-                .asLink(routes.IndexController.onPageLoad(taxYear).url)
+                .asLink(routes.IndexController.onPageLoad(getTaxYear()).url)
         )
     </p>
 }

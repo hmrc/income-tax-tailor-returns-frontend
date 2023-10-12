@@ -27,7 +27,7 @@ class SignedOutController @Inject()(
                                      view: SignedOutView
                                    ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(taxYear: Int): Action[AnyContent] = Action { implicit request =>
-    Ok(view(taxYear))
+  def onPageLoad(): Action[AnyContent] = Action { implicit request =>
+    Ok(view())
   }
 }
