@@ -14,11 +14,11 @@ object $className$Summary  {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
     answers.get($className$Page).map {
-      answers =>
+      checkboxes =>
 
         val value = ValueViewModel(
           HtmlContent(
-            answers.map {
+            checkboxes.map {
               answer => HtmlFormat.escape(messages(s"$className;format="decap"$.\$answer")).toString
             }
             .mkString(",<br>")
@@ -29,7 +29,7 @@ object $className$Summary  {
           key     = "$className;format="decap"$.checkYourAnswersLabel",
           value   = value,
           actions = Seq(
-            ActionItemViewModel("site.change", routes.$className$Controller.onPageLoad(CheckMode).url)
+            ActionItemViewModel("site.change", routes.$className$Controller.onPageLoad(CheckMode, answers.taxYear).url)
               .withVisuallyHiddenText(messages("$className;format="decap"$.change.hidden"))
           )
         )

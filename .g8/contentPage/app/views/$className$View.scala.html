@@ -3,9 +3,9 @@
         govukButton: GovukButton
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(taxYear: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("$className;format="decap"$.title"))) {
+@layout(pageTitle = titleNoForm(messages("$className;format="decap"$.title")), taxYear = taxYear) {
 
     <h1 class="govuk-heading-xl">@messages("$className;format="decap"$.heading")</h1>
 }

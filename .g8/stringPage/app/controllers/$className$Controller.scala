@@ -18,9 +18,9 @@ class $className$Controller @Inject()(
                                         override val messagesApi: MessagesApi,
                                         userDataService: UserDataService,
                                         navigator: Navigator,
-                                        identify: IdentifierAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
+                                        identify: IdentifierActionProvider,
+                                        getData: DataRetrievalActionProvider,
+                                        requireData: DataRequiredActionProvider,
                                         formProvider: $className$FormProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: $className$View
@@ -28,7 +28,7 @@ class $className$Controller @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get($className$Page) match {
@@ -36,15 +36,15 @@ class $className$Controller @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      Ok(view(preparedForm, mode, taxYear))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData andThen requireData).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode))),
+          Future.successful(BadRequest(view(formWithErrors, mode, taxYear))),
 
         value =>
           for {

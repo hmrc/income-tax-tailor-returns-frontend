@@ -14,14 +14,14 @@ class $className$ControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.$className$Controller.onPageLoad().url)
+        val request = FakeRequest(GET, routes.$className$Controller.onPageLoad(taxYear).url)
 
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[$className$View]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear)(request, messages(application)).toString
       }
     }
   }
