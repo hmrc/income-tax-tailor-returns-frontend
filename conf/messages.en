@@ -55,3 +55,12 @@ signedOut.guidance = We did not save your answers.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+sampleYesNoPage.title = sampleYesNoPage
+sampleYesNoPage.agent.title = sampleYesNoPage
+sampleYesNoPage.heading = sampleYesNoPage
+sampleYesNoPage.agent.heading = sampleYesNoPage
+sampleYesNoPage.checkYourAnswersLabel = sampleYesNoPage
+sampleYesNoPage.error.required = Select yes if sampleYesNoPage
+sampleYesNoPage.agent.error.required = Select yes if sampleYesNoPage
+sampleYesNoPage.change.hidden = SampleYesNoPage
