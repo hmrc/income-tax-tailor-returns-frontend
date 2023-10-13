@@ -14,10 +14,24 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import models._
-import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.{Arbitrary, Gen}
+import javax.inject.Inject
 
-trait ModelGenerators
+import forms.mappings.Mappings
+import play.api.data.Form
+
+class SampleYesNoPageFormProvider @Inject() extends Mappings {
+
+  def apply(isAgent: Boolean): Form[Boolean] = {
+    val error: String =
+      if (isAgent) {
+        "sampleYesNoPage.agent.error.required"
+      } else {
+        "sampleYesNoPage.error.required"
+      }
+    Form(
+      "value" -> boolean(error)
+    )
+  }
+}

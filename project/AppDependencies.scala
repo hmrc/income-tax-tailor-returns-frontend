@@ -13,6 +13,7 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"  % "1.13.0-play-28",
     "uk.gov.hmrc"       %% "bootstrap-frontend-play-28"     % bootstrapVersion,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"             % hmrcMongoVersion,
+    "uk.gov.hmrc"       %% "tax-year"                       % "3.3.0",
     "com.fasterxml.jackson.module"  %% "jackson-module-scala"       % "2.14.2"
   )
 

@@ -33,23 +33,12 @@
     alphaBanner: StandardAlphaBanner
 )
 
-@(pageTitle: String, showBackLink: Boolean = true, timeout: Boolean = true, showSignOut: Boolean = true, taxYear: Int)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
+@(pageTitle: String)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @head = {
 
     @hmrcHead(
-        headBlock = if(timeout) { Some(
-            hmrcTimeoutDialog(TimeoutDialog(
-                timeout             = Some(appConfig.timeout),
-                countdown           = Some(appConfig.countdown),
-                keepAliveUrl        = Some(routes.KeepAliveController.keepAlive(taxYear).url),
-                keepAliveButtonText = Some(messages("timeout.keepAlive")),
-                signOutUrl          = Some(controllers.auth.routes.AuthController.signOut.url),
-                signOutButtonText   = Some(messages("timeout.signOut")),
-                title               = Some(messages("timeout.title")),
-                message             = Some(messages("timeout.message"))
-            )))
-        } else None
+        headBlock = None
     )
 
     <link href="@routes.Assets.versioned("stylesheets/application.css")" media="all" rel="stylesheet" type="text/css" />
@@ -69,9 +58,8 @@
         ))
     }
 
-    @if(showBackLink) {
-        @govukBackLink(BackLinkViewModel(href = "#").withCssClass("js-visible"))
-    }
+    @govukBackLink(BackLinkViewModel(href = "#").withCssClass("js-visible"))
+
 }
 
 @content = {
@@ -86,8 +74,8 @@
     pageTitle   = Some(pageTitle),
     headBlock   = Some(head),
     headerBlock = Some(hmrcStandardHeader(
-        serviceUrl  = Some(routes.IndexController.onPageLoad(taxYear).url),
-        signOutUrl  = if(showSignOut) Some(controllers.auth.routes.AuthController.signOut.url) else None,
+        serviceUrl  = Some(routes.IndexController.onPageLoad(getTaxYear).url),
+        signOutUrl  = None,
         phaseBanner = Some(alphaBanner(appConfig.feedbackUrl.toString()))
     )),
     beforeContentBlock = Some(beforeContent),

@@ -1,45 +1,61 @@
+/*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package controllers
 
 import base.SpecBase
-import forms.$className$FormProvider
+import forms.SampleYesNoPageFormProvider
 import models.{NormalMode, UserAnswers, Done}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.$className$Page
+import pages.SampleYesNoPagePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.$className$View
-import views.html.$className$AgentView
+import views.html.SampleYesNoPageView
+import views.html.SampleYesNoPageAgentView
 
 import scala.concurrent.Future
 
-class $className$ControllerSpec extends SpecBase with MockitoSugar {
+class SampleYesNoPageControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new $className$FormProvider()
+  val formProvider = new SampleYesNoPageFormProvider()
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
-  lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(NormalMode, taxYear).url
+  lazy val sampleYesNoPageRoute = routes.SampleYesNoPageController.onPageLoad(NormalMode, taxYear).url
 
-  "$className$ Controller" - {
+  "SampleYesNoPage Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;format="decap"$Route)
+        val request = FakeRequest(GET, sampleYesNoPageRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[$className$View]
+        val view = application.injector.instanceOf[SampleYesNoPageView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
@@ -51,13 +67,12 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;
-        format = "decap" $Route
+        val request = FakeRequest(GET, sampleYesNoPageRoute
         )
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[$className$AgentView]
+        val view = application.injector.instanceOf[SampleYesNoPageAgentView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
@@ -66,14 +81,14 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set($className$Page, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(SampleYesNoPagePage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;format="decap"$Route)
+        val request = FakeRequest(GET, sampleYesNoPageRoute)
 
-        val view = application.injector.instanceOf[$className$View]
+        val view = application.injector.instanceOf[SampleYesNoPageView]
 
         val result = route(application, request).value
 
@@ -84,16 +99,15 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set($className$Page, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(SampleYesNoPagePage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;
-        format = "decap" $Route
+        val request = FakeRequest(GET, sampleYesNoPageRoute
         )
 
-        val view = application.injector.instanceOf[$className$AgentView]
+        val view = application.injector.instanceOf[SampleYesNoPageAgentView]
 
         val result = route(application, request).value
 
@@ -118,7 +132,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, $className;format="decap"$Route)
+          FakeRequest(POST, sampleYesNoPageRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -134,12 +148,12 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, $className;format="decap"$Route)
+          FakeRequest(POST, sampleYesNoPageRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[$className$View]
+        val view = application.injector.instanceOf[SampleYesNoPageView]
 
         val result = route(application, request).value
 
@@ -154,14 +168,13 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, $className;
-        format = "decap" $Route
+          FakeRequest(POST, sampleYesNoPageRoute
         )
         .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = agentForm.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[$className$AgentView]
+        val view = application.injector.instanceOf[SampleYesNoPageAgentView]
 
         val result = route(application, request).value
 
@@ -170,34 +183,5 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request = FakeRequest(GET, $className;format="decap"$Route)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
-      }
-    }
-
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, $className;format="decap"$Route)
-            .withFormUrlEncodedBody(("value", "true"))
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
-      }
-    }
   }
 }

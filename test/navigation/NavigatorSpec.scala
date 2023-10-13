@@ -21,6 +21,8 @@ import controllers.routes
 import pages._
 import models._
 
+import scala.concurrent.ExecutionContext
+
 class NavigatorSpec extends SpecBase {
 
   val navigator = new Navigator
@@ -32,7 +34,7 @@ class NavigatorSpec extends SpecBase {
       "must go from a page that doesn't exist in the route map to Index" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id")) mustBe routes.IndexController.onPageLoad
+        navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id", taxYear)) mustBe routes.IndexController.onPageLoad(taxYear)
       }
     }
 
@@ -41,8 +43,9 @@ class NavigatorSpec extends SpecBase {
       "must go from a page that doesn't exist in the edit route map to CheckYourAnswers" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id")) mustBe routes.CheckYourAnswersController.onPageLoad
+        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id", taxYear)) mustBe routes.IndexController.onPageLoad(taxYear)
       }
     }
   }
+  override implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 }

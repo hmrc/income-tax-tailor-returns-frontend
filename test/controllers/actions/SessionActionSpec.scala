@@ -22,7 +22,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.SessionKeys
 
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class SessionActionSpec extends SpecBase {
 
@@ -36,7 +35,7 @@ class SessionActionSpec extends SpecBase {
 
       "must redirect to the session expired page" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = None, anAgent).build()
 
         running(application){
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
@@ -48,7 +47,7 @@ class SessionActionSpec extends SpecBase {
           val result = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value must startWith(controllers.routes.JourneyRecoveryController.onPageLoad().url)
+          redirectLocation(result).value must startWith(controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url)
         }
       }
     }
@@ -57,7 +56,7 @@ class SessionActionSpec extends SpecBase {
 
       "must perform the action" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = None, anAgent).build()
 
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]

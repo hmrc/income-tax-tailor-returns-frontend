@@ -22,16 +22,21 @@ import models.requests.{IdentifierRequest, OptionalDataRequest}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.mvc.ActionTransformer
 import play.api.test.FakeRequest
 import services.UserDataService
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
 
-  class Harness(userDataService: UserDataService) extends DataRetrievalActionImpl(userDataService) {
-    def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
+  class Harness(userDataService: UserDataService) {
+
+    val provider: ActionTransformer[IdentifierRequest, OptionalDataRequest] = new DataRetrievalActionProviderImpl(userDataService)(ec).apply(taxYear)
+
+    def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
+      provider.refine(request).map(_.value)
+    }
   }
 
   "Data Retrieval Action" - {
@@ -41,7 +46,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
       "must set userAnswers to 'None' in the request" in {
 
         val userDataService = mock[UserDataService]
-        when(userDataService.get()(any())) thenReturn Future(None)
+        when(userDataService.get(any())(any())) thenReturn Future(None)
         val action = new Harness(userDataService)
 
         val result = action.callTransform(IdentifierRequest(FakeRequest(), "id", isAgent = false)).futureValue
@@ -55,10 +60,10 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
       "must build a userAnswers object and add it to the request" in {
 
         val userDataService = mock[UserDataService]
-        when(userDataService.get()(any())) thenReturn Future(Some(UserAnswers("id")))
+        when(userDataService.get(any())(any())) thenReturn Future(Some(UserAnswers("id", taxYear)))(ec)
         val action = new Harness(userDataService)
 
-        val result = action.callTransform(new IdentifierRequest(FakeRequest(), "id", isAgent = false)).futureValue
+        val result = action.callTransform(IdentifierRequest(FakeRequest(), "id", isAgent = false)).futureValue
 
         result.userAnswers mustBe defined
       }

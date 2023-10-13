@@ -24,17 +24,25 @@ import play.api.mvc.{ActionRefiner, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DataRequiredActionImpl @Inject()(implicit val executionContext: ExecutionContext) extends DataRequiredAction {
+trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]
+
+trait DataRequiredActionProvider {
+  def apply(taxYear: Int): ActionRefiner[OptionalDataRequest, DataRequest]
+}
+
+class DataRequiredActionProviderImpl @Inject()(implicit val executionContext: ExecutionContext) extends DataRequiredActionProvider {
+  override def apply(taxYear: Int): ActionRefiner[OptionalDataRequest, DataRequest] = new DataRequiredActionImpl(taxYear)
+}
+
+class DataRequiredActionImpl @Inject()(taxYear: Int)(implicit val executionContext: ExecutionContext) extends DataRequiredAction {
 
   override protected def refine[A](request: OptionalDataRequest[A]): Future[Either[Result, DataRequest[A]]] = {
 
     request.userAnswers match {
       case None =>
-        Future.successful(Left(Redirect(routes.JourneyRecoveryController.onPageLoad())))
+        Future.successful(Left(Redirect(routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear))))
       case Some(data) =>
         Future.successful(Right(DataRequest(request.request, request.userId, data, request.isAgent)))
     }
   }
 }
-
-trait DataRequiredAction extends ActionRefiner[OptionalDataRequest, DataRequest]

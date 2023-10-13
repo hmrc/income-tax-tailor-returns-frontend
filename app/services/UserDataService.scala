@@ -16,6 +16,7 @@
 
 package services
 
+import connectors.UserAnswersConnector
 import models.{Done, UserAnswers}
 import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
@@ -23,22 +24,19 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.Future
 
-class UserDataService @Inject()() extends Logging {
+class UserDataService @Inject()(connector: UserAnswersConnector) extends Logging {
 
-  def get()(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
-    // TODO DUMMY RESPONSE TO BE REPLACED
-    Future.successful(None)
+  def get(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
+    connector.get(taxYear)
   }
 
   def set(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] =
-    // TODO DUMMY RESPONSE TO BE REPLACED
-    Future.successful(Done)
+    connector.set(answers)
 
-  def keepAlive()(implicit hc: HeaderCarrier): Future[Done] =
-    // TODO DUMMY RESPONSE TO BE REPLACED
-    Future.successful(Done)
+  def keepAlive(taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] = {
+    connector.keepAlive(taxYear)
+  }
 
-  def clear()(implicit hc: HeaderCarrier): Future[Done] =
-    // TODO DUMMY RESPONSE TO BE REPLACED
-    Future.successful(Done)
+  def clear(taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] =
+    connector.clear(taxYear)
 }

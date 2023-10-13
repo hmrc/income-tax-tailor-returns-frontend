@@ -24,18 +24,28 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
+trait DataRetrievalActionProvider {
+  def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest]
+}
+
+class DataRetrievalActionProviderImpl @Inject() (userDataService: UserDataService)(implicit executionContext: ExecutionContext)
+  extends DataRetrievalActionProvider {
+
+  def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
+    new DataRetrievalActionImpl(userDataService, taxYear)
+
+}
 class DataRetrievalActionImpl @Inject()(
-                                         val userDataService: UserDataService
-                                       )(implicit val executionContext: ExecutionContext) extends DataRetrievalAction {
+                                         val userDataService: UserDataService,
+                                         taxYear: Int
+                                       )(implicit val executionContext: ExecutionContext) extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
 
     val hc = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    userDataService.get()(hc).map {
+    userDataService.get(taxYear)(hc).map {
       OptionalDataRequest(request.request, request.userId, _, request.isAgent)
     }
   }
 }
-
-trait DataRetrievalAction extends ActionTransformer[IdentifierRequest, OptionalDataRequest]

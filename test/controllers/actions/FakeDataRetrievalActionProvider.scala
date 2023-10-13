@@ -18,14 +18,17 @@ package controllers.actions
 
 import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
+import play.api.mvc.ActionTransformer
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeDataRetrievalAction(dataToReturn: Option[UserAnswers]) extends DataRetrievalAction {
+class FakeDataRetrievalActionProvider(dataToReturn: Option[UserAnswers], isAgent: Boolean)(implicit ec: ExecutionContext) extends DataRetrievalActionProvider {
 
-  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
-    Future(OptionalDataRequest(request.request, request.userId, dataToReturn, request.isAgent))
+  override def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
+    new ActionTransformer[IdentifierRequest, OptionalDataRequest] {
+      override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
+        Future.successful(OptionalDataRequest(request, "id", dataToReturn, isAgent))
 
-  override protected implicit val executionContext: ExecutionContext =
-    scala.concurrent.ExecutionContext.Implicits.global
+      override protected def executionContext: ExecutionContext = ec
+    }
 }

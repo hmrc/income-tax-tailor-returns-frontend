@@ -28,7 +28,8 @@ class LanguageSwitchController @Inject()(
                                           cc: ControllerComponents
                                         ) extends LanguageController(languageUtils, cc) {
 
-  override def fallbackURL: String = routes.IndexController.onPageLoad.url
+  // TODO: Change fallback url or get dynamic taxYear
+  override def fallbackURL: String = routes.IndexController.onPageLoad(2024).url
 
   override def languageMap: Map[String, Lang] = appConfig.languageMap
 }
