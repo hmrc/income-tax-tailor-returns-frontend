@@ -48,7 +48,7 @@ class UkResidenceStatusController @Inject()(
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear)){
     implicit request =>
 
-      val preparedForm = request.userAnswers.getOrElse(UserAnswers("1234567890",taxYear)).get(UkResidenceStatusPage) match {
+      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).get(UkResidenceStatusPage) match {
         case None => form(request.isAgent)
         case Some(value) => form(request.isAgent).fill(value)
       }
@@ -73,7 +73,7 @@ class UkResidenceStatusController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers("1234567890",taxYear)).set(UkResidenceStatusPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)).set(UkResidenceStatusPage, value))
             _              <- userDataService.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(UkResidenceStatusPage, mode, updatedAnswers))
       )

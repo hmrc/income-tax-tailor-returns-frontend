@@ -53,9 +53,10 @@ unauthorised.title = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 
 ###################################  ABOUT YOU ###########################################################################################
-
-ukResidenceStatus.title = Statws preswyl yn y DU
-ukResidenceStatus.agent.title = Statws preswyl yn y DU
+ukResidenceStatus.title = A oeddech yn breswylydd yn y DU rhwng 6 Ebrill 2022 a 5 Ebrill 2023?
+ukResidenceStatus.agent.title = A oedd eich cleient yn breswylydd yn y DU rhwng 6 Ebrill 2022 a 5 Ebrill 2023?
+ukResidenceStatus.heading = Statws preswyl yn y DU
+ukResidenceStatus.agent.heading = Statws preswyl yn y DU
 ukResidenceStatus.details.residence.summary = Deall statws preswyl yn y DU
 ukResidenceStatus.agent.details.residence.summary = Deall statws preswyl yn y DU
 ukResidenceStatus.details.residence.link = Gwirio’ch statws preswyl yn y DU (yn agor mewn tab newydd)
