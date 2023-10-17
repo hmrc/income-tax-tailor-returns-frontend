@@ -13,11 +13,16 @@ class $className$Controller @Inject()(
                                        getData: DataRetrievalActionProvider,
                                        requireData: DataRequiredActionProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: $className$View
+                                       view: $className$View,
+                                       agentView: $className$AgentView
                                      ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
-      Ok(view(taxYear))
+      if (request.isAgent) {
+        Ok(agentView(taxYear))
+      } else {
+        Ok(view(taxYear))
+      }
   }
 }

@@ -11,5 +11,7 @@ echo "Adding messages to conf.messages"
 echo "" >> ../conf/messages.en
 echo "$className;format="decap"$.title = $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.heading = $className;format="decap"$" >> ../conf/messages.en
+echo "$className;format="decap"$.agent.title = $className;format="decap"$" >> ../conf/messages.en
+echo "$className;format="decap"$.agent.heading = $className;format="decap"$" >> ../conf/messages.en
 
 echo "Migration $className;format="snake"$ completed"
