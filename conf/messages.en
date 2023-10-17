@@ -90,6 +90,7 @@ ukResidenceStatus.uk = Yes
 ukResidenceStatus.agent.uk = Yes
 ukResidenceStatus.nonUK= No
 ukResidenceStatus.agent.nonUK = No
+
 ukResidenceStatus.domiciled = Yes, but my permanent home (‘domicile’) was abroad and I’m claiming the remittance basis
 ukResidenceStatus.agent.domiciled = Yes, but their permanent home (‘domicile’) was abroad and they’re claiming the remittance basis
 ukResidenceStatus.error.required = Select if you were a UK resident, a UK resident who lived abroad and want to claim the remittance basis or not a UK resident

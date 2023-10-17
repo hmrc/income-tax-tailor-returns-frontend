@@ -85,6 +85,7 @@ ukResidenceStatus.uk = Iawn
 ukResidenceStatus.agent.uk = Iawn
 ukResidenceStatus.nonUK = Na
 ukResidenceStatus.agent.nonUK = Na
+
 ukResidenceStatus.domiciled = Iawn, ond roedd fy nghartref parhaol (‘domisil’) dramor ac rwy’n hawlio’r sail trosglwyddo
 ukResidenceStatus.agent.domiciled = Iawn, ond roedd ei gartref parhaol (‘domisil’) dramor ac mae’n hawlio’r sail trosglwyddo
 ukResidenceStatus.error.required = Dewiswch a oeddech yn breswylydd yn y DU, yn breswylydd yn y DU a oedd yn byw dramor ac sydd am hawlio’r sail trosglwyddo, neu os nad oeddech yn breswylydd yn y DU
