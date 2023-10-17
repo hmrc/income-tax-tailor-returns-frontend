@@ -1,8 +1,6 @@
 ### Description
 Please include a brief summary of the change you've made and the issue that it fixes.
 
-Add a link to the relevant story in Jira
-[SASS-CHANGE-ME](ADD URL HERE)
 
 ### Checklist PR Raiser
 ### Note: This is just not a tick box, make sure you follow all the below steps
