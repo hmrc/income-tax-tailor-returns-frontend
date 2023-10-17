@@ -1,0 +1,11 @@
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton
+)
+
+@(taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = titleNoForm(messages("$className;format="decap"$.agent.title")), taxYear = taxYear) {
+
+    <h1 class="govuk-heading-xl">@messages("$className;format="decap"$.agent.heading")</h1>
+}
