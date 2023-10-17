@@ -38,9 +38,9 @@ trait IdentifierActionProvider {
   def apply(taxYear: Int): IdentifierAction
 }
 
-class IdentifierActionProviderImpl @Inject() (authConnector: AuthConnector,
-                                              config: FrontendAppConfig,
-                                              parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
+class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
+                                             config: FrontendAppConfig,
+                                             parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
 
   def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(authConnector, config, parser)
@@ -51,21 +51,21 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                               config: FrontendAppConfig,
                                               val parser: BodyParsers.Default)
                                              (implicit val executionContext: ExecutionContext)
-  extends IdentifierAction with AuthorisedFunctions with Logging{
+  extends IdentifierAction with AuthorisedFunctions with Logging {
 
 
   private val unauthorized: Future[Result] = Future.successful(Unauthorized)
 
-  private def authorisedForMtdItId(enrolments: Enrolments): Option[String] = {
+  private def getMtdItId(enrolments: Enrolments): Option[String] = {
     for {
       enrolment <- enrolments.getEnrolment(Enrolment.MtdIncomeTax.key)
       id <- enrolment.getIdentifier(Enrolment.MtdIncomeTax.value)
     } yield id.value
   }
 
-  private def authorisedForMtdItId(mtditid: String, enrolments: Enrolments): Option[String] = {
+  private def authorisedForMtdItId(mtdItId: String, enrolments: Enrolments): Option[String] = {
     //  todo possible check for "mtd-it-auth" rule
-    enrolments.enrolments.find(x => x.identifiers.exists(i => i.value.equals(mtditid)))
+    enrolments.enrolments.find(x => x.identifiers.exists(i => i.value.equals(mtdItId)))
       .flatMap(_.getIdentifier(Enrolment.MtdIncomeTax.value)).map(_.value)
   }
 
@@ -80,33 +80,36 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
 
     implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-        authorised().retrieve(affinityGroup and allEnrolments and confidenceLevel) {
-          case Some(AffinityGroup.Individual) ~ enrolments ~ confidenceLevel =>
-            individualAuth(request, block, enrolments, confidenceLevel)
-          case Some(AffinityGroup.Agent) ~ enrolments ~ _ =>
-            agentAuth(request, block, enrolments)
-          case _ =>
-            logger.info(s"[AuthorisedAction][async] - User failed to authenticate")
-            unauthorized
-        }.recover {
-          case _ =>
-            logger.info(s"[AuthorisedAction][async] - User failed to authenticate")
-            Unauthorized
-        }
+    authorised().retrieve(affinityGroup and allEnrolments and confidenceLevel) {
+      case Some(AffinityGroup.Individual) ~ enrolments ~ confidenceLevel =>
+        authorized(request, block, enrolments, confidenceLevel)
+      case Some(AffinityGroup.Organisation) ~ enrolments ~ confidenceLevel =>
+        authorized(request, block, enrolments, confidenceLevel)
+      case Some(AffinityGroup.Agent) ~ enrolments ~ _ =>
+        agentAuth(request, block, enrolments)
+      case _ =>
+        logger.info(s"[AuthorisedAction][async] - User failed to authenticate")
+        unauthorized
+    }.recover {
+      case _ =>
+        logger.info(s"[AuthorisedAction][async] - User failed to authenticate")
+        Unauthorized
+    }
   }
 
-  private def individualAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result],
+  private def authorized[A](request: Request[A], block: IdentifierRequest[A] => Future[Result],
                                 enrolments: Enrolments, confidenceLevel: ConfidenceLevel) = {
-    authorisedForMtdItId(enrolments) match {
-      case Some(mtdItId) =>
-        if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
+    if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
+      getMtdItId(enrolments) match {
+        case Some(mtdItId) =>
           block(IdentifierRequest(request, mtdItId, isAgent = false))
-        }else {
-           Future.successful(Redirect(config.incomeTaxSubmissionIvRedirect))
-        }
-      case None =>
-        logger.warn("User did not have MTDITID Enrolment")
-        unauthorized
+        case None =>
+          logger.warn("User did not have MTDITID Enrolment")
+          unauthorized
+      }
+    }
+    else {
+      Future.successful(Redirect(config.incomeTaxSubmissionIvRedirect))
     }
   }
 

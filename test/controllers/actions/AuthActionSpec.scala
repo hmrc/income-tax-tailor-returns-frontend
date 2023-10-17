@@ -41,6 +41,35 @@ class AuthActionSpec extends SpecBase {
 
   "Auth Action" - {
 
+    "when the user is an Organisation" - {
+
+      "must succeed with a identifier Request when fully authenticated" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+
+          val enrolments: Enrolments = Enrolments(Set(
+            Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
+          ))
+
+          val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+            new ~(new ~(
+              Some(AffinityGroup.Organisation),
+              enrolments),
+              ConfidenceLevel.L250)
+
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val controller = new Harness(authAction)
+          val result = controller.onPageLoad()(FakeRequest())
+
+          status(result) mustBe OK
+        }
+      }
+    }
     "when the user is an individual" - {
 
       "must succeed with a identifier Request when fully authenticated" in {
@@ -53,7 +82,7 @@ class AuthActionSpec extends SpecBase {
             Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
           ))
 
-          val AuthResponse: Some[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+          val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
             new ~(new ~(
                 Some(AffinityGroup.Individual),
               enrolments),
@@ -62,7 +91,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(AuthResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -79,7 +108,7 @@ class AuthActionSpec extends SpecBase {
           val enrolments: Enrolments = Enrolments(Set(
           ))
 
-          val AuthResponse: Some[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+          val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
             new ~(new ~(
                 Some(AffinityGroup.Individual),
               enrolments),
@@ -88,7 +117,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(AuthResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -106,7 +135,7 @@ class AuthActionSpec extends SpecBase {
             Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
           ))
 
-          val AuthResponse: Some[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+          val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
             new ~(new ~(
                 Some(AffinityGroup.Individual),
               enrolments),
@@ -115,7 +144,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(AuthResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -136,7 +165,7 @@ class AuthActionSpec extends SpecBase {
           Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
         ) + Enrolment(models.Enrolment.Agent.key, Seq(EnrolmentIdentifier(models.Enrolment.Agent.value, "XARN1234567")), "Activated"))
 
-        val AuthResponse: Some[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
           new ~(new ~(
             Some(AffinityGroup.Agent),
             enrolments),
@@ -147,7 +176,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(AuthResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
@@ -164,7 +193,7 @@ class AuthActionSpec extends SpecBase {
           Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
         ) + Enrolment(models.Enrolment.Agent.key, Seq(EnrolmentIdentifier(models.Enrolment.Agent.value, "XARN1234567")), "Activated"))
 
-        val AuthResponse: Some[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
           new ~(new ~(
             Some(AffinityGroup.Agent),
             enrolments),
@@ -175,7 +204,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(AuthResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -191,7 +220,7 @@ class AuthActionSpec extends SpecBase {
           Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
         ) + Enrolment(models.Enrolment.Agent.key, Seq(EnrolmentIdentifier(models.Enrolment.Agent.value, "XARN1234567")), "Activated"))
 
-        val AuthResponse: Some[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
           new ~(new ~(
             Some(AffinityGroup.Agent),
             enrolments),
@@ -202,7 +231,7 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(AuthResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
@@ -218,7 +247,7 @@ class AuthActionSpec extends SpecBase {
           Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
         ))
 
-        val AuthResponse: Some[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
           new ~(new ~(
             Some(AffinityGroup.Agent),
             enrolments),
@@ -229,12 +258,55 @@ class AuthActionSpec extends SpecBase {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(AuthResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
           status(result) mustBe UNAUTHORIZED
         }
+      }
+    }
+    "must return UNAUTHORIZED when authConnector returns incorrect enrolments " in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      val enrolments: Enrolments = Enrolments(Set(
+        Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
+        Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
+      ))
+
+      val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+        new ~(new ~(
+          None,
+          enrolments),
+          ConfidenceLevel.L50)
+
+      running(application) {
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+    "must return UNAUTHORIZED when authConnector returns an exception " in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(new MissingBearerToken), appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+        status(result) mustBe UNAUTHORIZED
       }
     }
 
