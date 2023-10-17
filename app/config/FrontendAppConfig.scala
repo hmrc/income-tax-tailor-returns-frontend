@@ -52,4 +52,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val timeout: Int   = configuration.get[Int]("timeout-dialog.timeout")
   val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
+
+  val checkResidenceStatusUrl: String = configuration.get[String]("external-urls.checkResidenceStatus")
+
 }
