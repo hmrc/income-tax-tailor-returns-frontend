@@ -27,7 +27,7 @@ class FakeDataRetrievalActionProvider(dataToReturn: Option[UserAnswers], isAgent
   override def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
     new ActionTransformer[IdentifierRequest, OptionalDataRequest] {
       override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
-        Future.successful(OptionalDataRequest(request, "id", dataToReturn, isAgent))
+        Future.successful(OptionalDataRequest(request, "mtdItId", dataToReturn, isAgent))
 
       override protected def executionContext: ExecutionContext = ec
     }

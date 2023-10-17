@@ -44,6 +44,7 @@ class UserAnswersConnectorSpec
 
   implicit private lazy val hc: HeaderCarrier = HeaderCarrier()
   private val taxYear: Int = 2024
+  private val mtditId: String = "mtdItId"
 
   private lazy val app: Application =
     new GuiceApplicationBuilder()
@@ -56,7 +57,7 @@ class UserAnswersConnectorSpec
   private val keepAliveUrl = "/income-tax-tailor-return/keep-alive"
   private lazy val connector = app.injector.instanceOf[UserAnswersConnector]
 
-  private val answers = UserAnswers("mtditid", taxYear, lastUpdated = Instant.ofEpochSecond(1))
+  private val answers = UserAnswers(mtditId, taxYear, lastUpdated = Instant.ofEpochSecond(1))
 
   ".get" - {
 
@@ -67,7 +68,7 @@ class UserAnswersConnectorSpec
           .willReturn(ok(Json.toJson(answers).toString))
       )
 
-      val result = connector.get(taxYear).futureValue
+      val result = connector.get(mtditId, taxYear).futureValue
 
       result.value mustEqual answers
     }
@@ -79,7 +80,7 @@ class UserAnswersConnectorSpec
           .willReturn(notFound())
       )
 
-      val result = connector.get(taxYear).futureValue
+      val result = connector.get(mtditId, taxYear).futureValue
 
       result must not be defined
     }
@@ -91,7 +92,7 @@ class UserAnswersConnectorSpec
           .willReturn(serverError())
       )
 
-      connector.get(taxYear).failed.futureValue
+      connector.get(mtditId, taxYear).failed.futureValue
     }
   }
 
@@ -129,7 +130,7 @@ class UserAnswersConnectorSpec
           .willReturn(noContent())
       )
 
-      connector.keepAlive(taxYear).futureValue
+      connector.keepAlive(mtditId, taxYear).futureValue
     }
 
     "must return a failed future when the server returns an unexpected response code" in {
@@ -139,7 +140,7 @@ class UserAnswersConnectorSpec
           .willReturn(ok())
       )
 
-      connector.keepAlive(taxYear).failed.futureValue
+      connector.keepAlive(mtditId, taxYear).failed.futureValue
     }
   }
 
@@ -152,7 +153,7 @@ class UserAnswersConnectorSpec
           .willReturn(noContent())
       )
 
-      connector.clear(taxYear).futureValue
+      connector.clear(mtditId, taxYear).futureValue
     }
 
     "must return a failed future when the server returns an unexpected response code" in {
@@ -162,7 +163,7 @@ class UserAnswersConnectorSpec
           .willReturn(ok())
       )
 
-      connector.clear(taxYear).failed.futureValue
+      connector.clear(mtditId, taxYear).failed.futureValue
     }
   }
 

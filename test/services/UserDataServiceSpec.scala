@@ -59,10 +59,10 @@ class UserDataServiceSpec
 
     "must return user answers when they exist in the backend" in {
 
-      when[Future[Option[UserAnswers]]](mockConnector.get(any())(any()))
+      when[Future[Option[UserAnswers]]](mockConnector.get(any(), any())(any()))
         .thenReturn(Future.successful(Some(UserAnswers("anMtdItId", taxYear, Json.obj("aPage" -> "aValue")))))
 
-      service.get(taxYear).futureValue mustBe defined
+      service.get("anMtdItId", taxYear).futureValue mustBe defined
     }
   }
 
@@ -81,9 +81,9 @@ class UserDataServiceSpec
 
     "must keep the backend record alive" in {
 
-      when[Future[Done]](mockConnector.keepAlive(any())(any())) thenReturn Future.successful(Done)
+      when[Future[Done]](mockConnector.keepAlive(any(), any())(any())) thenReturn Future.successful(Done)
 
-      service.keepAlive(taxYear).futureValue mustEqual Done
+      service.keepAlive("anMtdItId", taxYear).futureValue mustEqual Done
     }
   }
 
@@ -91,9 +91,9 @@ class UserDataServiceSpec
 
     "must remove the record from the repository" in {
 
-      when[Future[Done]](mockConnector.clear(any())(any())) thenReturn Future.successful(Done)
+      when[Future[Done]](mockConnector.clear(any(), any())(any())) thenReturn Future.successful(Done)
 
-      service.clear(taxYear).futureValue mustEqual Done
+      service.clear("anMtdItId", taxYear).futureValue mustEqual Done
     }
   }
   override implicit val ec: ExecutionContext = ExecutionContext.Implicits.global

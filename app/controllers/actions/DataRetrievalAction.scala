@@ -44,8 +44,8 @@ class DataRetrievalActionImpl @Inject()(
 
     val hc = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    userDataService.get(taxYear)(hc).map {
-      OptionalDataRequest(request.request, request.userId, _, request.isAgent)
+    userDataService.get(request.mtdItId, taxYear)(hc).map {
+      OptionalDataRequest(request.request, request.mtdItId, _, request.isAgent)
     }
   }
 }

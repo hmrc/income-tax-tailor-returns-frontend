@@ -36,7 +36,7 @@ class KeepAliveController @Inject()(
       request.userAnswers
         .map {
           answers =>
-            userDataService.keepAlive(taxYear).map(_ => Ok)
+            userDataService.keepAlive(request.mtdItId, taxYear).map(_ => Ok)
         }
         .getOrElse(Future.successful(Ok))
   }
