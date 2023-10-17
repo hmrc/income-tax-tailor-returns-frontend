@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package models.requests
+package models
 
-import play.api.mvc.{Request, WrappedRequest}
-
-case class IdentifierRequest[A] (request: Request[A], mtdItId: String, isAgent: Boolean) extends WrappedRequest[A](request)
+object SessionValues {
+  val CLIENT_MTDITID = "ClientMTDID"
+}

@@ -19,13 +19,12 @@ package controllers.actions
 import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import controllers.routes
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,20 +36,33 @@ class AuthActionSpec extends SpecBase {
     def onPageLoad(): Action[AnyContent] = authAction { _ => Results.Ok }
   }
 
+  val mtdEnrollmentKey = "HMRC-MTD-IT"
+  val mtdEnrollmentIdentifier = "MTDITID"
+
   "Auth Action" - {
 
-    "when the user is authorised" - {
+    "when the user is an Organisation" - {
 
-      "must succeed with a identifier Request" in {
+      "must succeed with a identifier Request when fully authenticated" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
 
-          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+          val enrolments: Enrolments = Enrolments(Set(
+            Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
+          ))
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(Some("internalId")), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+            new ~(new ~(
+              Some(AffinityGroup.Organisation),
+              enrolments),
+              ConfidenceLevel.L250)
+
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -58,149 +70,253 @@ class AuthActionSpec extends SpecBase {
         }
       }
     }
-    "when the user hasn't logged in" - {
+    "when the user is an individual" - {
 
-      "must redirect the user to log in " in {
-
-        val application = applicationBuilder(userAnswers = None).build()
-
-        running(application) {
-          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
-
-          val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(new MissingBearerToken), appConfig, bodyParsers)(ec).apply(taxYear)
-          val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
-
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value must startWith(appConfig.loginUrl)
-        }
-      }
-    }
-
-    "the user's session has expired" - {
-
-      "must redirect the user to log in " in {
+      "must succeed with a identifier Request when fully authenticated" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(new BearerTokenExpired), appConfig, bodyParsers)(ec).apply(taxYear)
+          val enrolments: Enrolments = Enrolments(Set(
+            Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
+          ))
+
+          val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+            new ~(new ~(
+                Some(AffinityGroup.Individual),
+              enrolments),
+              ConfidenceLevel.L250)
+
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value must startWith(appConfig.loginUrl)
+          status(result) mustBe OK
         }
       }
-    }
 
-    "the user doesn't have sufficient enrolments" - {
-
-      "must redirect the user to the unauthorised page" in {
+      "must fail with a UNAUTHORIZED when missing mtditid enrolment" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(new InsufficientEnrolments), appConfig, bodyParsers)(ec).apply(taxYear)
+          val enrolments: Enrolments = Enrolments(Set(
+          ))
+
+          val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+            new ~(new ~(
+                Some(AffinityGroup.Individual),
+              enrolments),
+              ConfidenceLevel.L250)
+
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad(taxYear).url
+          status(result) mustBe UNAUTHORIZED
         }
       }
-    }
 
-    "the user doesn't have sufficient confidence level" - {
-
-      "must redirect the user to the unauthorised page" in {
+      "must fail with a Redirect to ivUplift when confidence is to low" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector
-          (new InsufficientConfidenceLevel), appConfig, bodyParsers)(ec).apply(taxYear)
+          val enrolments: Enrolments = Enrolments(Set(
+            Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
+          ))
+
+          val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+            new ~(new ~(
+                Some(AffinityGroup.Individual),
+              enrolments),
+              ConfidenceLevel.L200)
+
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad(taxYear).url
+          redirectLocation(result) mustBe Some("http://localhost:9302/update-and-submit-income-tax-return/iv-uplift")
         }
       }
     }
+    "when the user is authorised as an agent" - {
 
-    "the user used an unaccepted auth provider" - {
-
-      "must redirect the user to the unauthorised page" in {
+      "must succeed with a identifier Request" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
+        val enrolments: Enrolments = Enrolments(Set(
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
+        ) + Enrolment(models.Enrolment.Agent.key, Seq(EnrolmentIdentifier(models.Enrolment.Agent.value, "XARN1234567")), "Activated"))
+
+        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+          new ~(new ~(
+            Some(AffinityGroup.Agent),
+            enrolments),
+            ConfidenceLevel.L50)
+
         running(application) {
+
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector
-          (new UnsupportedAuthProvider), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad(taxYear).url
+          status(result) mustBe OK
         }
       }
-    }
-
-    "the user has an unsupported affinity group" - {
-
-      "must redirect the user to the unauthorised page" in {
+      "must fail with a UNAUTHORIZED when missing ClientMTDID from User Session" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
+        val enrolments: Enrolments = Enrolments(Set(
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
+        ) + Enrolment(models.Enrolment.Agent.key, Seq(EnrolmentIdentifier(models.Enrolment.Agent.value, "XARN1234567")), "Activated"))
+
+        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+          new ~(new ~(
+            Some(AffinityGroup.Agent),
+            enrolments),
+            ConfidenceLevel.L50)
+
         running(application) {
+
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector
-          (new UnsupportedAffinityGroup), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad(taxYear).url)
+          status(result) mustBe UNAUTHORIZED
         }
       }
-    }
-
-    "the user has an unsupported credential role" - {
-
-      "must redirect the user to the unauthorised page" in {
+      "must fail with a UNAUTHORIZED when ClientMTDID from User Session does not exist in users enrolments" in {
 
         val application = applicationBuilder(userAnswers = None).build()
 
+        val enrolments: Enrolments = Enrolments(Set(
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
+        ) + Enrolment(models.Enrolment.Agent.key, Seq(EnrolmentIdentifier(models.Enrolment.Agent.value, "XARN1234567")), "Activated"))
+
+        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+          new ~(new ~(
+            Some(AffinityGroup.Agent),
+            enrolments),
+            ConfidenceLevel.L50)
+
         running(application) {
+
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector
-          (new UnsupportedCredentialRole), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
-          val result = controller.onPageLoad()(FakeRequest())
+          val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some(routes.UnauthorisedController.onPageLoad(taxYear).url)
+          status(result) mustBe UNAUTHORIZED
+        }
+      }
+      "must fail with a UNAUTHORIZED when there is no AGENT REFERENCE NUMBER enrolment" in {
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        val enrolments: Enrolments = Enrolments(Set(
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
+          Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
+        ))
+
+        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+          new ~(new ~(
+            Some(AffinityGroup.Agent),
+            enrolments),
+            ConfidenceLevel.L50)
+
+        running(application) {
+
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val controller = new Harness(authAction)
+          val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+          status(result) mustBe UNAUTHORIZED
         }
       }
     }
+    "must return UNAUTHORIZED when authConnector returns incorrect enrolments " in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      val enrolments: Enrolments = Enrolments(Set(
+        Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
+        Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
+      ))
+
+      val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+        new ~(new ~(
+          None,
+          enrolments),
+          ConfidenceLevel.L50)
+
+      running(application) {
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+    "must return UNAUTHORIZED when authConnector returns an exception " in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(new MissingBearerToken), appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+
+
+
+
+
+
+
   }
 }
 

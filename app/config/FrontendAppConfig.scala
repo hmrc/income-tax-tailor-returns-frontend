@@ -29,16 +29,18 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val appName: String = configuration.get[String]("appName")
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier = "income-tax-tailor-returns-frontend"
+  private val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
 
   def feedbackUrl(implicit request: RequestHeader): java.net.URL =
     url"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
 
+
   val loginUrl: String         = configuration.get[String]("urls.login")
   val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   val signOutUrl: String       = configuration.get[String]("urls.signOut")
+  val incomeTaxSubmissionIvRedirect: String = configuration.get[String]("urls.ivUplift")
 
-  private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
+  private val exitSurveyBaseUrl: String = configuration.get[String]("feedback-frontend.host")
   val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/income-tax-tailor-returns-frontend"
 
   val languageTranslationEnabled: Boolean =

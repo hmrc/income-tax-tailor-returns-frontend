@@ -28,7 +28,7 @@ class FakeIdentifierAction @Inject()(isAgent: Boolean)(bodyParsers: PlayBodyPars
     override def parser: BodyParser[AnyContent] = bodyParsers.default
 
     override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-      block(IdentifierRequest(request, "id", isAgent))
+      block(IdentifierRequest(request, "mtdItId", isAgent))
 
     override protected def executionContext: ExecutionContext =
       scala.concurrent.ExecutionContext.Implicits.global

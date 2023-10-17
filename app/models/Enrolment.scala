@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package models.requests
+package models
 
-import play.api.mvc.{Request, WrappedRequest}
+abstract class Enrolment(val key: String, val value: String)
 
-case class IdentifierRequest[A] (request: Request[A], mtdItId: String, isAgent: Boolean) extends WrappedRequest[A](request)
+object Enrolment {
+  case object MtdIncomeTax extends Enrolment(key = "HMRC-MTD-IT", value = "MTDITID")
+
+  case object Agent extends Enrolment(key = "HMRC-AS-AGENT", value = "AgentReferenceNumber")
+}

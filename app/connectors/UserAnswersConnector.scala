@@ -33,10 +33,10 @@ class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClie
   private val userAnswersUrl = url"$baseUrl/income-tax-tailor-return/data"
   private val keepAliveUrl = url"$baseUrl/income-tax-tailor-return/keep-alive"
 
-  def get(taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
+  def get(mtdItId: String, taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     httpClient
       .get(url"$userAnswersUrl/$taxYear")
-      .setHeader(("MTDITID", "1234567890"))
+      .setHeader(("MTDITID", mtdItId))
       .execute[Option[UserAnswers]]
       .logFailureReason(connectorName = "UserAnswersConnector on get")
   }
@@ -44,7 +44,7 @@ class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClie
   def set(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] =
     httpClient
       .post(userAnswersUrl)
-      .setHeader(("MTDITID", "1234567890"))
+      .setHeader(("MTDITID", answers.mtdItId))
       .withBody(Json.toJson(answers))
       .execute[HttpResponse]
       .logFailureReason(connectorName = "UserAnswersConnector on set")
@@ -56,10 +56,10 @@ class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClie
         }
       }
 
-  def keepAlive(taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] =
+  def keepAlive(mtdItId: String, taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] =
     httpClient
       .post(url"$keepAliveUrl/$taxYear")
-      .setHeader(("MTDITID", "1234567890"))
+      .setHeader(("MTDITID", mtdItId))
       .execute[HttpResponse]
       .logFailureReason(connectorName = "UserAnswersConnector on keepAlive")
       .flatMap { response =>
@@ -70,10 +70,10 @@ class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClie
         }
       }
 
-  def clear(taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] =
+  def clear(mtdItId: String, taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] =
     httpClient
       .delete(url"$userAnswersUrl/$taxYear")
-      .setHeader(("MTDITID", "1234567890"))
+      .setHeader(("MTDITID", mtdItId))
       .execute[HttpResponse]
       .logFailureReason(connectorName = "UserAnswersConnector on clear")
       .flatMap { response =>

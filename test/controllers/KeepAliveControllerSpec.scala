@@ -37,7 +37,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar {
       "must keep the answers alive and return OK" in {
 
         val mockUserDataService = mock[UserDataService]
-        when(mockUserDataService.keepAlive(any())(any())) thenReturn Future.successful(Done)
+        when(mockUserDataService.keepAlive(any(), any())(any())) thenReturn Future.successful(Done)
 
         val application =
           applicationBuilder(Some(emptyUserAnswers))
@@ -51,7 +51,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          verify(mockUserDataService, times(1)).keepAlive(any())(any())
+          verify(mockUserDataService, times(1)).keepAlive(any(), any())(any())
         }
       }
     }
@@ -61,7 +61,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar {
       "must return OK" in {
 
         val mockUserDataService = mock[UserDataService]
-        when(mockUserDataService.keepAlive(any())(any())) thenReturn Future.successful(Done)
+        when(mockUserDataService.keepAlive(any(), any())(any())) thenReturn Future.successful(Done)
 
         val application =
           applicationBuilder(None)
@@ -75,7 +75,7 @@ class KeepAliveControllerSpec extends SpecBase with MockitoSugar {
           val result = route(application, request).value
 
           status(result) mustEqual OK
-          verify(mockUserDataService, never()).keepAlive(any())(any())
+          verify(mockUserDataService, never()).keepAlive(any(), any())(any())
         }
       }
     }
