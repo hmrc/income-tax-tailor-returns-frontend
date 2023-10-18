@@ -88,11 +88,12 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
       case Some(AffinityGroup.Agent) ~ enrolments ~ _ =>
         agentAuth(request, block, enrolments)
       case _ =>
-        logger.info(s"[AuthorisedAction][async] - User failed to authenticate")
+        logger.info(s"[AuthorisedAction][async] - User failed to authenticate no affinityGroup")
         unauthorized
     }.recover {
-      case _ =>
-        logger.info(s"[AuthorisedAction][async] - User failed to authenticate")
+      case e =>
+        logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
+        logger.debug(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
         Unauthorized
     }
   }
@@ -104,7 +105,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
         case Some(mtdItId) =>
           block(IdentifierRequest(request, mtdItId, isAgent = false))
         case None =>
-          logger.warn("User did not have MTDITID Enrolment")
+          logger.error("User did not have MTDITID Enrolment")
           unauthorized
       }
     }

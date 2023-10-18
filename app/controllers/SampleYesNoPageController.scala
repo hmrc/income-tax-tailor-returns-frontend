@@ -49,8 +49,7 @@ class SampleYesNoPageController @Inject()(
 
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear)) {
     implicit request =>
-
-      val preparedForm = request.userAnswers.getOrElse(UserAnswers(mtdItId="1234567890",taxYear)).get(SampleYesNoPagePage) match {
+      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)).get(SampleYesNoPagePage) match {
         case None => form(request.isAgent)
         case Some(value) => form(request.isAgent).fill(value)
       }
