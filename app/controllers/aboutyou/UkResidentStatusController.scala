@@ -18,7 +18,7 @@ package controllers.aboutyou
 
 import controllers.actions._
 import forms.aboutyou.UkResidentStatusFormProvider
-import models.{Mode, UserAnswers}
+import models.Mode
 import navigation.Navigator
 import pages.aboutyou.UkResidentStatusPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -45,10 +45,10 @@ class UkResidentStatusController @Inject()(
 
   def form(isAgent: Boolean) = formProvider(isAgent)
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear)) {
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).get(UkResidentStatusPage) match {
+      val preparedForm = request.userAnswers.get(UkResidentStatusPage) match {
         case None => form(request.isAgent)
         case Some(value) => form(request.isAgent).fill(value)
       }
@@ -60,7 +60,7 @@ class UkResidentStatusController @Inject()(
       }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear)).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(
@@ -73,7 +73,7 @@ class UkResidentStatusController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).set(UkResidentStatusPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UkResidentStatusPage, value))
             _              <- userDataService.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(UkResidentStatusPage, mode, updatedAnswers))
       )
