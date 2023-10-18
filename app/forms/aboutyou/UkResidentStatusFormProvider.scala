@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package generators
+package forms.aboutyou
 
+import forms.mappings.Mappings
 import models.aboutyou.UkResidentStatus
-import org.scalacheck.{Arbitrary, Gen}
+import play.api.data.Form
 
-trait ModelGenerators {
+import javax.inject.Inject
 
-  implicit lazy val arbitraryUkResidentStatus: Arbitrary[UkResidentStatus] =
-    Arbitrary {
-      Gen.oneOf(UkResidentStatus.values.toSeq)
-    }
+class UkResidentStatusFormProvider @Inject() extends Mappings {
 
-
+  def apply(isAgent: Boolean): Form[UkResidentStatus] = {
+    val error: String =
+      if (isAgent) {
+        "ukResidentStatus.agent.error.required"
+      } else {
+        "ukResidentStatus.error.required"
+      }
+    Form(
+      "value" -> enumerable[UkResidentStatus](error)
+    )
+  }
 }

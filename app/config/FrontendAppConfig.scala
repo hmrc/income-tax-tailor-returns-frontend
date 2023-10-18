@@ -20,8 +20,6 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
-
-import uk.gov.hmrc.http.StringContextOps
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
@@ -52,4 +50,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val timeout: Int   = configuration.get[Int]("timeout-dialog.timeout")
   val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
+
+  val checkResidenceStatusUrl: String = configuration.get[String]("external-urls.checkResidenceStatus")
 }

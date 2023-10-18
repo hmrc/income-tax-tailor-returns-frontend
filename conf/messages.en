@@ -64,3 +64,30 @@ sampleYesNoPage.checkYourAnswersLabel = sampleYesNoPage
 sampleYesNoPage.error.required = Select yes if sampleYesNoPage
 sampleYesNoPage.agent.error.required = Select yes if sampleYesNoPage
 sampleYesNoPage.change.hidden = SampleYesNoPage
+
+###################################  ABOUT YOU ###########################################################################################
+
+ukResidentStatus.title = Your residence status
+ukResidentStatus.agent.title = Your client’s residence status
+ukResidentStatus.detail.nonResidentStatus.summary = Understanding non-resident status
+ukResidentStatus.detail.nonResidentStatus.link = Check your UK residence status (opens in a new tab)
+ukResidentStatus.agent.detail.nonResidentStatus.link = Check your client's UK residence status (opens in a new tab)
+ukResidentStatus.detail.nonResidentStatus.p1 = You’re automatically non-resident if either:
+ukResidentStatus.agent.detail.nonResidentStatus.p1 = Your client is automatically non-resident if either:
+ukResidentStatus.detail.nonResidentStatus.bullet1 = you spent fewer than 16 days in the UK (or 46 days if you have not been classed as UK resident for the 3 previous tax years)
+ukResidentStatus.agent.detail.nonResidentStatus.bullet1 = they spent fewer than 16 days in the UK (or 46 days if they have not been classed as UK resident for the 3 previous tax years)
+ukResidentStatus.detail.nonResidentStatus.bullet2 = you work abroad full-time (averaging at least 35 hours a week) and spent fewer than 91 days in the UK, of which no more than 30 were spent working
+ukResidentStatus.agent.detail.nonResidentStatus.bullet2 = they work abroad full-time (averaging at least 35 hours a week) and spent fewer than 91 days in the UK, of which no more than 30 were spent working
+ukResidentStatus.detail.dualResidency.summary = Understanding dual residency
+ukResidentStatus.detail.dualResidency.p1 = You’re a dual resident if you’re resident in the UK under its domestic law and resident in another country under its law.
+ukResidentStatus.agent.detail.dualResidency.p1 = Your client is a dual resident if they're resident in the UK under its domestic law and resident in another country under its law.
+ukResidentStatus.legend = What was your residence status?
+ukResidentStatus.agent.legend = What was your client's residence status?
+ukResidentStatus.nonResident = I was not resident in the UK
+ukResidentStatus.dualResident = I was a dual resident in the UK and another country
+ukResidentStatus.agent.nonResident = My client was not resident in the UK
+ukResidentStatus.agent.dualResident = My client was a dual resident in the UK and another country
+ukResidentStatus.checkYourAnswersLabel = Your residence status
+ukResidentStatus.error.required = Select if you were not resident in the UK or dual resident in the UK and another country
+ukResidentStatus.agent.error.required = Select if your client was not resident in the UK or dual resident in the UK and another country
+ukResidentStatus.change.hidden = Your residence status

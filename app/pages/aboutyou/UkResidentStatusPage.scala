@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package generators
+package pages.aboutyou
 
 import models.aboutyou.UkResidentStatus
-import org.scalacheck.{Arbitrary, Gen}
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-trait ModelGenerators {
+case object UkResidentStatusPage extends QuestionPage[UkResidentStatus] {
 
-  implicit lazy val arbitraryUkResidentStatus: Arbitrary[UkResidentStatus] =
-    Arbitrary {
-      Gen.oneOf(UkResidentStatus.values.toSeq)
-    }
+  override def path: JsPath = JsPath \"aboutYou"\ toString
 
-
+  override def toString: String = "ukResidentStatus"
 }
