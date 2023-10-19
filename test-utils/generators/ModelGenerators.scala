@@ -16,12 +16,15 @@
 
 package generators
 
-import models._
-import models.aboutyou.UkResidenceStatus
-import org.scalacheck.Arbitrary.arbitrary
+import models.aboutyou.{UkResidenceStatus, YourResidenceStatus}
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryYourResidenceStatus: Arbitrary[YourResidenceStatus] =
+    Arbitrary {
+      Gen.oneOf(YourResidenceStatus.values.toSeq)
+    }
 
   implicit lazy val arbitraryUkResidenceStatus: Arbitrary[UkResidenceStatus] =
     Arbitrary {

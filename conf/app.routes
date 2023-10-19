@@ -18,14 +18,14 @@ GET        /account/signed-out                                                  
 
 GET        /unauthorised/:taxYear                                                   controllers.UnauthorisedController.onPageLoad(taxYear: Int)
 
-GET        /sampleYesNoPage/:taxYear                                                controllers.SampleYesNoPageController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /sampleYesNoPage/:taxYear                                                controllers.SampleYesNoPageController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeSampleYesNoPage/:taxYear                                          controllers.SampleYesNoPageController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeSampleYesNoPage/:taxYear                                          controllers.SampleYesNoPageController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
-
-GET        /:taxYear/start                                                          controllers.StartController.onPageLoad(taxYear: Int)
-
 GET        /:taxYear/about-you/uk-residence-status                                  controllers.aboutyou.UkResidenceStatusController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /:taxYear/about-you/uk-residence-status                                  controllers.aboutyou.UkResidenceStatusController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
 GET        /:taxYear/about-you/change-uk-residence-status                           controllers.aboutyou.UkResidenceStatusController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/about-you/change-uk-residence-status                           controllers.aboutyou.UkResidenceStatusController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /:taxYear/start                                                          controllers.StartController.onPageLoad(taxYear: Int)
+
+GET        /:taxYear/about-you/your-residence-status                                controllers.aboutyou.YourResidenceStatusController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/about-you/your-residence-status                                controllers.aboutyou.YourResidenceStatusController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/about-you/change-your-residence-status                         controllers.aboutyou.YourResidenceStatusController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/about-you/change-your-residence-status                         controllers.aboutyou.YourResidenceStatusController.onSubmit(mode: Mode = CheckMode, taxYear: Int)

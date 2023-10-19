@@ -14,65 +14,64 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import base.SpecBase
-import forms.SampleYesNoPageFormProvider
-import models.{NormalMode, UserAnswers, Done}
+import forms.aboutyou.YourResidenceStatusFormProvider
+import models.aboutyou.YourResidenceStatus
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.SampleYesNoPagePage
+import pages.aboutyou.YourResidenceStatusPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.SampleYesNoPageView
-import views.html.SampleYesNoPageAgentView
+import views.html.aboutyou.{YourResidenceStatusAgentView, YourResidenceStatusView}
 
 import scala.concurrent.Future
 
-class SampleYesNoPageControllerSpec extends SpecBase with MockitoSugar {
+class YourResidenceStatusControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new SampleYesNoPageFormProvider()
+  lazy val yourResidenceStatusRoute = controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, taxYear).url
+
+  val formProvider = new YourResidenceStatusFormProvider()
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
-  lazy val sampleYesNoPageRoute = routes.SampleYesNoPageController.onPageLoad(NormalMode, taxYear).url
-
-  "SampleYesNoPage Controller" - {
+  "YourResidenceStatus Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, sampleYesNoPageRoute)
+        val request = FakeRequest(GET, yourResidenceStatusRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[SampleYesNoPageView]
+        val view = application.injector.instanceOf[YourResidenceStatusView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
-    "must return OK and the correct view for a GET for an agent" in {
+    "must return OK and the correct view for a GET as an agent" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, sampleYesNoPageRoute
-        )
+        val request = FakeRequest(GET, yourResidenceStatusRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[SampleYesNoPageAgentView]
+        val view = application.injector.instanceOf[YourResidenceStatusAgentView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
@@ -81,38 +80,37 @@ class SampleYesNoPageControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(SampleYesNoPagePage, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(YourResidenceStatusPage, YourResidenceStatus.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, sampleYesNoPageRoute)
+        val request = FakeRequest(GET, yourResidenceStatusRoute)
 
-        val view = application.injector.instanceOf[SampleYesNoPageView]
+        val view = application.injector.instanceOf[YourResidenceStatusView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(YourResidenceStatus.values.head), NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(SampleYesNoPagePage, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(YourResidenceStatusPage, YourResidenceStatus.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, sampleYesNoPageRoute
-        )
+        val request = FakeRequest(GET, yourResidenceStatusRoute)
 
-        val view = application.injector.instanceOf[SampleYesNoPageAgentView]
+        val view = application.injector.instanceOf[YourResidenceStatusAgentView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(YourResidenceStatus.values.head), NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -132,8 +130,8 @@ class SampleYesNoPageControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, sampleYesNoPageRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+          FakeRequest(POST, yourResidenceStatusRoute)
+            .withFormUrlEncodedBody(("value", YourResidenceStatus.values.head.toString))
 
         val result = route(application, request).value
 
@@ -148,12 +146,12 @@ class SampleYesNoPageControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, sampleYesNoPageRoute)
-            .withFormUrlEncodedBody(("value", ""))
+          FakeRequest(POST, yourResidenceStatusRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("value" -> "invalid value"))
 
-        val view = application.injector.instanceOf[SampleYesNoPageView]
+        val view = application.injector.instanceOf[YourResidenceStatusView]
 
         val result = route(application, request).value
 
@@ -168,13 +166,12 @@ class SampleYesNoPageControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, sampleYesNoPageRoute
-        )
-        .withFormUrlEncodedBody(("value", ""))
+          FakeRequest(POST, yourResidenceStatusRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
 
-        val boundForm = agentForm.bind(Map("value" -> ""))
+        val boundForm = agentForm.bind(Map("value" -> "invalid value"))
 
-        val view = application.injector.instanceOf[SampleYesNoPageAgentView]
+        val view = application.injector.instanceOf[YourResidenceStatusAgentView]
 
         val result = route(application, request).value
 
@@ -183,5 +180,35 @@ class SampleYesNoPageControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, yourResidenceStatusRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+      }
+    }
+
+    "redirect to Journey Recovery for a POST if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, yourResidenceStatusRoute)
+            .withFormUrlEncodedBody(("value", YourResidenceStatus.values.head.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+      }
+    }
   }
 }
