@@ -28,9 +28,9 @@
 
     <p class="govuk-body">@messages("start.agent.p")</p>
 
-    @formHelper(action = routes.StartController.onSubmit(taxYear), Symbol("autoComplete") -> "off") {
-        @govukButton(
-            ButtonViewModel(messages("site.continue")).withCssClass("govuk-!-margin-top-4")
-        )
-    }
+    @govukButton(
+        ButtonViewModel(messages("site.continue"))
+            .asLink(routes.IndexController.onPageLoad(taxYear).url)
+            .withCssClass("govuk-!-margin-top-4")
+    )
 }

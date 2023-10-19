@@ -40,9 +40,4 @@ class StartController @Inject()(
         Ok(view(taxYear))
       }
   }
-
-  def onSubmit(taxYear: Int): Action[AnyContent] = identify(taxYear) {
-      // Change to add sections page when exists
-      Redirect(routes.IndexController.onPageLoad(taxYear))
-  }
 }
