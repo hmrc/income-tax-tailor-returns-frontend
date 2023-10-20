@@ -1,5 +1,3 @@
-service.name = income-tax-tailor-returns-frontend
-
 site.back = Yn ôl
 site.remove = Tynnu
 site.change = Newid
@@ -52,7 +50,24 @@ signedOut.guidance = Ni wnaethom gadw’ch atebion.
 unauthorised.title = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 
+sampleYesNoPage.title = sampleYesNoPage
+sampleYesNoPage.agent.title = sampleYesNoPage
+sampleYesNoPage.heading = sampleYesNoPage
+sampleYesNoPage.agent.heading = sampleYesNoPage
+sampleYesNoPage.checkYourAnswersLabel = sampleYesNoPage
+sampleYesNoPage.error.required = Select yes if sampleYesNoPage
+sampleYesNoPage.agent.error.required = Select yes if sampleYesNoPage
+sampleYesNoPage.change.hidden = SampleYesNoPage
+
+start.title = Diweddaru a chyflwyno Ffurflen Dreth Incwm
+start.agent.title = Diweddaru a chyflwyno Ffurflen Dreth Incwm
+start.heading = Diweddaru a chyflwyno Furflen Dreth
+start.agent.heading = Diweddaru a chyflwyno Furflen Dreth
+start.p = Gallwch ychwanegu adrannau drwy ateb ambell gwestiwn cyn diweddaru’ch Ffurflen Dreth, a’i chyflwyno.
+start.agent.p = Gallwch ychwanegu adrannau drwy ateb ambell gwestiwn byr cyn diweddaru Ffurflen Dreth eich cleient, a’i chyflwyno.
+
 ###################################  ABOUT YOU ###########################################################################################
+
 ukResidenceStatus.title = A oeddech yn breswylydd yn y DU rhwng 6 Ebrill 2022 a 5 Ebrill 2023?
 ukResidenceStatus.agent.title = A oedd eich cleient yn breswylydd yn y DU rhwng 6 Ebrill 2022 a 5 Ebrill 2023?
 ukResidenceStatus.heading = Statws preswyl yn y DU

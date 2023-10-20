@@ -56,6 +56,22 @@ signedOut.guidance = We did not save your answers.
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
+sampleYesNoPage.title = sampleYesNoPage
+sampleYesNoPage.agent.title = sampleYesNoPage
+sampleYesNoPage.heading = sampleYesNoPage
+sampleYesNoPage.agent.heading = sampleYesNoPage
+sampleYesNoPage.checkYourAnswersLabel = sampleYesNoPage
+sampleYesNoPage.error.required = Select yes if sampleYesNoPage
+sampleYesNoPage.agent.error.required = Select yes if sampleYesNoPage
+sampleYesNoPage.change.hidden = SampleYesNoPage
+
+start.title = Update and submit an Income Tax Return
+start.agent.title = Update and submit an Income Tax Return
+start.heading = Update and submit a Tax Return
+start.agent.heading = Update and submit a Tax Return
+start.p = You can add sections by answering a few short questions, before updating and submitting your return.
+start.agent.p = You can add sections by answering a few short questions, before updating and submitting your client’s return.
+
 ###################################  ABOUT YOU ###########################################################################################
 
 ukResidenceStatus.title = Were you a UK resident between 6 April 2022 and 5 April 2023?
