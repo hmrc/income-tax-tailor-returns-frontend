@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package forms
+package forms.aboutyou
+
+import forms.mappings.Mappings
+import models.aboutyou.YourResidenceStatus
+import play.api.data.Form
 
 import javax.inject.Inject
 
-import forms.mappings.Mappings
-import play.api.data.Form
+class YourResidenceStatusFormProvider @Inject() extends Mappings {
 
-class SampleYesNoPageFormProvider @Inject() extends Mappings {
-
-  def apply(isAgent: Boolean): Form[Boolean] = {
+  def apply(isAgent: Boolean): Form[YourResidenceStatus] = {
     val error: String =
       if (isAgent) {
-        "sampleYesNoPage.agent.error.required"
+        "yourResidenceStatus.agent.error.required"
       } else {
-        "sampleYesNoPage.error.required"
+        "yourResidenceStatus.error.required"
       }
     Form(
-      "value" -> boolean(error)
+      "value" -> enumerable[YourResidenceStatus](error)
     )
   }
 }

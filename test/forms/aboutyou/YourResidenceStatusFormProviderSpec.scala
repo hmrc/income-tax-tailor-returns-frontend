@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-package forms
+package forms.aboutyou
 
-import forms.behaviours.BooleanFieldBehaviours
+import forms.behaviours.OptionFieldBehaviours
+import models.aboutyou.YourResidenceStatus
 import play.api.data.FormError
 
-class SampleYesNoPageFormProviderSpec extends BooleanFieldBehaviours {
+class YourResidenceStatusFormProviderSpec extends OptionFieldBehaviours {
 
-  val requiredKey = "sampleYesNoPage.error.required"
-  val agentRequiredKey = "sampleYesNoPage.agent.error.required"
-  val invalidKey = "error.boolean"
-
-  val form = new SampleYesNoPageFormProvider()(false)
-  val agentForm = new SampleYesNoPageFormProvider()(true)
+  val form = new YourResidenceStatusFormProvider()(false)
+  val agentForm = new YourResidenceStatusFormProvider()(true)
 
   ".value" - {
 
     val fieldName = "value"
+    val requiredKey = "yourResidenceStatus.error.required"
 
-    behave like booleanField(
+    behave like optionsField[YourResidenceStatus](
       form,
       fieldName,
-      invalidError = FormError(fieldName, invalidKey)
+      validValues  = YourResidenceStatus.values,
+      invalidError = FormError(fieldName, "error.invalid")
     )
 
     behave like mandatoryField(
@@ -48,6 +47,7 @@ class SampleYesNoPageFormProviderSpec extends BooleanFieldBehaviours {
   ".value for an agent" - {
 
     val fieldName = "value"
+    val agentRequiredKey = "yourResidenceStatus.agent.error.required"
 
     behave like mandatoryField(
       agentForm,

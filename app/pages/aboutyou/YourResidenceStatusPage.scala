@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.aboutyou
 
+import models.aboutyou.YourResidenceStatus
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object SampleYesNoPagePage extends QuestionPage[Boolean] {
+case object YourResidenceStatusPage extends QuestionPage[YourResidenceStatus] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \"aboutYou"\ toString
 
-  override def toString: String = "sampleYesNoPage"
+  override def toString: String = "yourResidenceStatus"
 }
