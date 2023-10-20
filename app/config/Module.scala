@@ -16,21 +16,30 @@
 
 package config
 
-import com.google.inject.AbstractModule
 import controllers.actions._
+import play.api.inject.Binding
+import play.api.{Configuration, Environment}
 
-import java.time.{Clock, ZoneOffset}
+import java.time.Clock
 
-class Module extends AbstractModule {
+class Module extends play.api.inject.Module {
 
-  override def configure(): Unit = {
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
 
-    bind(classOf[DataRetrievalActionProvider]).to(classOf[DataRetrievalActionProviderImpl]).asEagerSingleton()
-    bind(classOf[DataRequiredActionProvider]).to(classOf[DataRequiredActionProviderImpl]).asEagerSingleton()
+    val authBinding: Binding[_] =
+      if (configuration.get[Boolean]("features.earlyPrivateLaunch")) {
+          bind[IdentifierActionProvider].to[EarlyPrivateLaunchIdentifierActionProviderImpl].eagerly()
+      } else {
+          bind[IdentifierActionProvider].to[IdentifierActionProviderImpl].eagerly()
+      }
 
-    // For session based storage instead of cred based, change to SessionIdentifierAction
-    bind(classOf[IdentifierActionProvider]).to(classOf[IdentifierActionProviderImpl]).asEagerSingleton()
+    Seq(
+      bind[DataRetrievalActionProvider].to[DataRetrievalActionProviderImpl].eagerly(),
+      bind[DataRequiredActionProvider].to[DataRequiredActionProviderImpl].eagerly(),
+      bind[Clock].toInstance(Clock.systemUTC()),
+      authBinding
+    )
 
-    bind(classOf[Clock]).toInstance(Clock.systemDefaultZone.withZone(ZoneOffset.UTC))
+
   }
 }

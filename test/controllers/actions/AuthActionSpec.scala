@@ -19,6 +19,7 @@ package controllers.actions
 import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -39,7 +40,7 @@ class AuthActionSpec extends SpecBase {
   val mtdEnrollmentKey = "HMRC-MTD-IT"
   val mtdEnrollmentIdentifier = "MTDITID"
 
-  "Auth Action" - {
+  "Auth Action [IdentifierActionProviderImpl]" - {
 
     "when the user is an Organisation" - {
 
@@ -310,12 +311,27 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
+  }
+  "Auth Action [EarlyPrivateLaunchIdentifierActionProviderImpl]" - {
 
+    "must succeed with a identifier Request" in {
 
+      val application = new GuiceApplicationBuilder()
+        .configure(Map("features.earlyPrivateLaunch" -> "true"))
+        .build()
 
+      running(application) {
 
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
+        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(), appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest())
 
+        status(result) mustBe OK
+      }
+    }
 
   }
 }

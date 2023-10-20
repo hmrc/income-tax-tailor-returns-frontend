@@ -138,3 +138,28 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     }
   }
 }
+
+class EarlyPrivateLaunchIdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
+                                             config: FrontendAppConfig,
+                                             parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
+  extends IdentifierActionProvider {
+
+  def apply(taxYear: Int): IdentifierAction = new EarlyPrivateLaunchIdentifierAction(taxYear)(authConnector, config, parser)
+}
+
+class EarlyPrivateLaunchIdentifierAction @Inject()(taxYear: Int)
+                                                     (override val authConnector: AuthConnector,
+                                                      config: FrontendAppConfig,
+                                                      val parser: BodyParsers.Default)
+                                                     (implicit val executionContext: ExecutionContext)
+  extends IdentifierAction with AuthorisedFunctions with Logging {
+
+  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
+
+    implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+    authorised() {
+      block(IdentifierRequest(request, "1234567890", isAgent = false))
+    }
+  }
+}
