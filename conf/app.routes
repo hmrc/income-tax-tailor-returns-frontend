@@ -31,3 +31,12 @@ GET        /:taxYear/about-you/your-residence-status                            
 POST       /:taxYear/about-you/your-residence-status                                controllers.aboutyou.YourResidenceStatusController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
 GET        /:taxYear/about-you/change-your-residence-status                         controllers.aboutyou.YourResidenceStatusController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/about-you/change-your-residence-status                         controllers.aboutyou.YourResidenceStatusController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /charitableDonations/:taxYear                        controllers.CharitableDonationsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /charitableDonations/:taxYear                        controllers.CharitableDonationsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeCharitableDonations/:taxYear                  controllers.CharitableDonationsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changeCharitableDonations/:taxYear                  controllers.CharitableDonationsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /fosterCarer/:taxYear                        controllers.FosterCarerController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /fosterCarer/:taxYear                        controllers.FosterCarerController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeFosterCarer/:taxYear                   controllers.FosterCarerController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changeFosterCarer/:taxYear                   controllers.FosterCarerController.onSubmit(mode: Mode = CheckMode, taxYear: Int)

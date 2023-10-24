@@ -143,7 +143,6 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
-          val environment = application.environment
 
           val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
