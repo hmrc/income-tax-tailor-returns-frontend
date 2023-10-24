@@ -91,6 +91,9 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
         logger.info(s"[AuthorisedAction][async] - User failed to authenticate no affinityGroup")
         unauthorized
     }.recover {
+      case _: NoActiveSession =>
+        logger.info(s"[AuthorisedAction][async] - No active session. Redirecting to sign in")
+        Redirect(config.signInUrl(taxYear))
       case e =>
         logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
         logger.debug(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")

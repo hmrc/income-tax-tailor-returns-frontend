@@ -20,6 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
+import uk.gov.hmrc.play.bootstrap.binders.{RedirectUrl, SafeRedirectUrl}
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
@@ -33,8 +34,13 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
 
 
-  val loginUrl: String         = configuration.get[String]("urls.login")
-  val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
+  //TODO add redirect to overview page
+  private lazy val loginOrigin = configuration.get[String]("appName")
+  def loginBaseUrl(taxYear: Int): String   = configuration.get[String]("urls.login")
+  lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
+  def signInUrl(taxYear: Int): String = s"${loginBaseUrl(taxYear)}?continue=$loginContinueUrl&origin=$loginOrigin"
+
+
   val signOutUrl: String       = configuration.get[String]("urls.signOut")
   val incomeTaxSubmissionIvRedirect: String = configuration.get[String]("urls.ivUplift")
 
