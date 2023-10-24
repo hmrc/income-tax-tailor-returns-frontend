@@ -20,26 +20,29 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
-import uk.gov.hmrc.play.bootstrap.binders.{RedirectUrl, SafeRedirectUrl}
-
+import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   val host: String    = configuration.get[String]("host")
   val appName: String = configuration.get[String]("appName")
 
+  val allowedRedirectUrls: Seq[String] = configuration.get[Seq[String]]("urls.allowedRedirects")
+
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
   def feedbackUrl(implicit request: RequestHeader): String =
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
 
+  private val loginUrl: String = RedirectUrl(configuration.get[String]("urls.login"))
+    .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
+    .url
 
-  //TODO add redirect to overview page
-  private lazy val loginOrigin = configuration.get[String]("appName")
-  def loginBaseUrl(taxYear: Int): String   = configuration.get[String]("urls.login")
-  lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  def signInUrl(taxYear: Int): String = s"${loginBaseUrl(taxYear)}?continue=$loginContinueUrl&origin=$loginOrigin"
-
+  private val loginContinueUrl: String = RedirectUrl(configuration.get[String]("urls.loginContinue"))
+    .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
+    .url
+  def loginUrl(taxYear: Int): String = s"$loginUrl?continue=$loginContinueUrl/$taxYear/start&origin=$appName"
 
   val signOutUrl: String       = configuration.get[String]("urls.signOut")
   val incomeTaxSubmissionIvRedirect: String = configuration.get[String]("urls.ivUplift")

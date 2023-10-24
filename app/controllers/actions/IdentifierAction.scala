@@ -93,7 +93,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     }.recover {
       case _: NoActiveSession =>
         logger.info(s"[AuthorisedAction][async] - No active session. Redirecting to sign in")
-        Redirect(config.signInUrl(taxYear))
+        Redirect(config.loginUrl(taxYear))
       case e =>
         logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
         logger.debug(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")

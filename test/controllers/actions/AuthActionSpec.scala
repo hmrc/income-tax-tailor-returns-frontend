@@ -106,8 +106,7 @@ class AuthActionSpec extends SpecBase {
 
         running(application) {
 
-          val enrolments: Enrolments = Enrolments(Set(
-          ))
+          val enrolments: Enrolments = Enrolments(Set())
 
           val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
             new ~(new ~(
@@ -144,6 +143,7 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val environment = application.environment
 
           val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
@@ -239,6 +239,7 @@ class AuthActionSpec extends SpecBase {
           status(result) mustBe UNAUTHORIZED
         }
       }
+
       "must fail with a UNAUTHORIZED when there is no AGENT REFERENCE NUMBER enrolment" in {
 
         val application = applicationBuilder(userAnswers = None).build()
@@ -294,6 +295,27 @@ class AuthActionSpec extends SpecBase {
         status(result) mustBe UNAUTHORIZED
       }
     }
+
+    "must redirect to sign in when the user does not have an active session " in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(InvalidBearerToken()), appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe "http://localhost:9949/auth-login-stub/gg-sign-in" +
+          "?continue=http://localhost:10007/update-and-submit-income-tax-return/tailor-return/2024/start" +
+          "&origin=income-tax-tailor-returns-frontend"
+      }
+    }
+
     "must return UNAUTHORIZED when authConnector returns an exception " in {
 
       val application = applicationBuilder(userAnswers = None).build()
@@ -303,7 +325,7 @@ class AuthActionSpec extends SpecBase {
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
         val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(new MissingBearerToken), appConfig, bodyParsers)(ec).apply(taxYear)
+        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(InternalError()), appConfig, bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
