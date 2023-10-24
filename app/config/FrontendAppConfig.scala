@@ -28,9 +28,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val host: String    = configuration.get[String]("host")
   val appName: String = configuration.get[String]("appName")
 
-  val allowedRedirectUrls: Seq[String] = configuration.get[Seq[String]]("urls.allowedRedirects")
+  private val allowedRedirectUrls: Seq[String] = configuration.get[Seq[String]]("urls.allowedRedirects")
 
-  private val contactHost = configuration.get[String]("contact-frontend.host")
+  private val contactHost = RedirectUrl(configuration.get[String]("contact-frontend.host"))
+    .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
+    .url
+
   private val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
   def feedbackUrl(implicit request: RequestHeader): String =
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
@@ -44,11 +47,19 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     .url
   def loginUrl(taxYear: Int): String = s"$loginUrl?continue=$loginContinueUrl/$taxYear/start&origin=$appName"
 
-  val signOutUrl: String       = configuration.get[String]("urls.signOut")
-  val incomeTaxSubmissionIvRedirect: String = configuration.get[String]("urls.ivUplift")
+  val signOutUrl: String       =  RedirectUrl(configuration.get[String]("urls.signOut"))
+    .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
+    .url
 
-  private val exitSurveyBaseUrl: String = configuration.get[String]("feedback-frontend.host")
-  val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/income-tax-tailor-returns-frontend"
+  val incomeTaxSubmissionIvRedirect: String = RedirectUrl(configuration.get[String]("urls.ivUplift"))
+    .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
+    .url
+
+  private val exitSurveyBaseUrl: String = RedirectUrl(configuration.get[String]("feedback-frontend.host"))
+    .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
+    .url
+
+  val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/$appName"
 
   val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("features.welsh-translation")
