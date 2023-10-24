@@ -136,3 +136,25 @@ yourResidenceStatus.checkYourAnswersLabel = Your residence status
 yourResidenceStatus.error.required = Select if you were not resident in the UK or dual resident in the UK and another country
 yourResidenceStatus.agent.error.required = Select if your client was not resident in the UK or dual resident in the UK and another country
 yourResidenceStatus.change.hidden = Your residence status
+
+charitableDonations.title = Charitable donations
+charitableDonations.agent.title = Charitable donations
+charitableDonations.heading = Charitable donations
+charitableDonations.agent.heading = Charitable donations
+charitableDonations.option1 = Option 1
+charitableDonations.option2 = Option 2
+charitableDonations.agent.option1 = Option 1
+charitableDonations.agent.option2 = Option 2
+charitableDonations.checkYourAnswersLabel = Charitable donations
+charitableDonations.error.required = Select charitableDonations
+charitableDonations.agent.error.required = Select charitableDonations
+charitableDonations.change.hidden = CharitableDonations
+
+fosterCarer.title = fosterCarer
+fosterCarer.agent.title = fosterCarer
+fosterCarer.heading = fosterCarer
+fosterCarer.agent.heading = fosterCarer
+fosterCarer.checkYourAnswersLabel = fosterCarer
+fosterCarer.error.required = Select yes if fosterCarer
+fosterCarer.agent.error.required = Select yes if fosterCarer
+fosterCarer.change.hidden = FosterCarer

@@ -14,28 +14,14 @@
  * limitations under the License.
  */
 
-package generators
+package pages
 
 import models.CharitableDonations
-import models.aboutyou.{UkResidenceStatus, YourResidenceStatus}
-import org.scalacheck.{Arbitrary, Gen}
+import play.api.libs.json.JsPath
 
-trait ModelGenerators {
+case object CharitableDonationsPage extends QuestionPage[Set[CharitableDonations]] {
 
-  implicit lazy val arbitraryCharitableDonations: Arbitrary[CharitableDonations] =
-    Arbitrary {
-      Gen.oneOf(CharitableDonations.values)
-    }
+  override def path: JsPath = JsPath \ toString
 
-  implicit lazy val arbitraryYourResidenceStatus: Arbitrary[YourResidenceStatus] =
-    Arbitrary {
-      Gen.oneOf(YourResidenceStatus.values.toSeq)
-    }
-
-  implicit lazy val arbitraryUkResidenceStatus: Arbitrary[UkResidenceStatus] =
-    Arbitrary {
-      Gen.oneOf(UkResidenceStatus.values.toSeq)
-    }
-
-
+  override def toString: String = "charitableDonations"
 }
