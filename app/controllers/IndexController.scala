@@ -17,20 +17,22 @@
 package controllers
 
 import controllers.actions.IdentifierActionProvider
+import controllers.actions.TaxYearAction.taxYearAction
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.IndexView
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  identify: IdentifierActionProvider,
                                  view: IndexView
-                               ) extends FrontendBaseController with I18nSupport {
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(taxYear: Int): Action[AnyContent] = identify(taxYear) { implicit request =>
+  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear)) { implicit request =>
     Ok(view(taxYear))
   }
 }

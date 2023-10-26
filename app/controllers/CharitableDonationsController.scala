@@ -16,8 +16,10 @@
 
 package controllers
 
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.CharitableDonationsFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
@@ -46,7 +48,8 @@ class CharitableDonationsController @Inject()(
 
   def form(isAgent: Boolean) = formProvider(isAgent)
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CharitableDonationsPage) match {
@@ -61,7 +64,8 @@ class CharitableDonationsController @Inject()(
       }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(

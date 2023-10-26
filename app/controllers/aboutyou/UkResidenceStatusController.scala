@@ -16,6 +16,7 @@
 
 package controllers.aboutyou
 
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.aboutyou.UkResidenceStatusFormProvider
 import models.{Mode, UserAnswers}
@@ -45,7 +46,7 @@ class UkResidenceStatusController @Inject()(
 
   def form(isAgent: Boolean) = formProvider(isAgent)
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear)){
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)){
     implicit request =>
 
       val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).get(UkResidenceStatusPage) match {
@@ -60,7 +61,7 @@ class UkResidenceStatusController @Inject()(
       }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear)).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)).async {
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(

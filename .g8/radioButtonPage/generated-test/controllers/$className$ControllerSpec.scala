@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.actions.TaxYearAction.taxYearAction
 import base.SpecBase
 import forms.$className$FormProvider
 import models.{NormalMode, $className$, UserAnswers, Done}
