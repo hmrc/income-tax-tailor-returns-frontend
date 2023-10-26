@@ -158,3 +158,70 @@ fosterCarer.checkYourAnswersLabel = fosterCarer
 fosterCarer.error.required = Select yes if fosterCarer
 fosterCarer.agent.error.required = Select yes if fosterCarer
 fosterCarer.change.hidden = FosterCarer
+
+childBenefit.title = childBenefit
+childBenefit.agent.title = childBenefit
+childBenefit.heading = childBenefit
+childBenefit.agent.heading = childBenefit
+childBenefit.checkYourAnswersLabel = childBenefit
+childBenefit.error.required = Select yes if childBenefit
+childBenefit.agent.error.required = Select yes if childBenefit
+childBenefit.change.hidden = ChildBenefit
+
+childBenefitIncome.title = childBenefitIncome
+childBenefitIncome.agent.title = childBenefitIncome
+childBenefitIncome.heading = childBenefitIncome
+childBenefitIncome.agent.heading = childBenefitIncome
+childBenefitIncome.checkYourAnswersLabel = childBenefitIncome
+childBenefitIncome.error.required = Select yes if childBenefitIncome
+childBenefitIncome.agent.error.required = Select yes if childBenefitIncome
+childBenefitIncome.change.hidden = ChildBenefitIncome
+
+highIncomeChildBenefitCharge.title = highIncomeChildBenefitCharge
+highIncomeChildBenefitCharge.agent.title = highIncomeChildBenefitCharge
+highIncomeChildBenefitCharge.heading = highIncomeChildBenefitCharge
+highIncomeChildBenefitCharge.agent.heading = highIncomeChildBenefitCharge
+highIncomeChildBenefitCharge.my income = My partner’s income
+highIncomeChildBenefitCharge.option2 = Option 2
+highIncomeChildBenefitCharge.agent.my income = My partner’s income
+highIncomeChildBenefitCharge.agent.option2 = Option 2
+highIncomeChildBenefitCharge.checkYourAnswersLabel = highIncomeChildBenefitCharge
+highIncomeChildBenefitCharge.error.required = Select highIncomeChildBenefitCharge
+highIncomeChildBenefitCharge.agent.error.required = Select highIncomeChildBenefitCharge
+highIncomeChildBenefitCharge.change.hidden = HighIncomeChildBenefitCharge
+
+marriageAllowance.title = marriageAllowance
+marriageAllowance.agent.title = marriageAllowance
+marriageAllowance.heading = marriageAllowance
+marriageAllowance.agent.heading = marriageAllowance
+marriageAllowance.checkYourAnswersLabel = marriageAllowance
+marriageAllowance.error.required = Select yes if marriageAllowance
+marriageAllowance.agent.error.required = Select yes if marriageAllowance
+marriageAllowance.change.hidden = MarriageAllowance
+
+patentRoyaltyPayments.title = patentRoyaltyPayments
+patentRoyaltyPayments.agent.title = patentRoyaltyPayments
+patentRoyaltyPayments.heading = patentRoyaltyPayments
+patentRoyaltyPayments.agent.heading = patentRoyaltyPayments
+patentRoyaltyPayments.checkYourAnswersLabel = patentRoyaltyPayments
+patentRoyaltyPayments.error.required = Select yes if patentRoyaltyPayments
+patentRoyaltyPayments.agent.error.required = Select yes if patentRoyaltyPayments
+patentRoyaltyPayments.change.hidden = PatentRoyaltyPayments
+
+taxAvoidanceSchemes.title = Tax avoidance schemes
+taxAvoidanceSchemes.agent.title = Tax avoidance schemes
+taxAvoidanceSchemes.heading = Tax avoidance schemes
+taxAvoidanceSchemes.agent.heading = Tax avoidance schemes
+taxAvoidanceSchemes.option1 = Option 1
+taxAvoidanceSchemes.option2 = Option 2
+taxAvoidanceSchemes.agent.option1 = Option 1
+taxAvoidanceSchemes.agent.option2 = Option 2
+taxAvoidanceSchemes.checkYourAnswersLabel = Tax avoidance schemes
+taxAvoidanceSchemes.error.required = Select taxAvoidanceSchemes
+taxAvoidanceSchemes.agent.error.required = Select taxAvoidanceSchemes
+taxAvoidanceSchemes.change.hidden = TaxAvoidanceSchemes
+
+taxReturnNotReady.title = taxReturnNotReady
+taxReturnNotReady.heading = taxReturnNotReady
+taxReturnNotReady.agent.title = taxReturnNotReady
+taxReturnNotReady.agent.heading = taxReturnNotReady
