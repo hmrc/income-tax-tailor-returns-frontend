@@ -14,23 +14,19 @@
  * limitations under the License.
  *@
 
+@import views.html.components.{Link, AgentTaskItem}
+@import viewmodels.Task
+
 @this(
-        layout: templates.Layout,
-        formHelper: FormWithCSRF,
-        govukButton: GovukButton
+    taskItem: AgentTaskItem,
+    link: Link
 )
 
-@(taxYear: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("start.title")), taxYear = taxYear) {
+@(sections: List[Task])(implicit messages: Messages)
 
-    <h1 class="govuk-heading-l">@messages("start.heading")</h1>
-
-    <p class="govuk-body">@messages("start.p")</p>
-
-    @govukButton(
-        ButtonViewModel(messages("site.continue"))
-            .asLink(routes.AddSectionsController.onPageLoad(taxYear).url)
-            .withCssClass("govuk-!-margin-top-4")
-    )
-}
+<ul class="app-task-list__items govuk-!-padding-left-0">
+    @for(task <- sections){
+        @taskItem(task)
+    }
+</ul>

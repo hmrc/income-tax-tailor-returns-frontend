@@ -8,6 +8,7 @@ site.start = Dechrau nawr
 site.startAgain = Dechrau eto
 site.signIn = Mewngofnodi
 site.govuk = GOV.UK
+site.caption = 6 Ebrill {0} i 5 Ebrill {1}
 
 date.day = Diwrnod
 date.month = Mis
@@ -50,21 +51,34 @@ signedOut.guidance = Ni wnaethom gadw’ch atebion.
 unauthorised.title = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 
-sampleYesNoPage.title = sampleYesNoPage
-sampleYesNoPage.agent.title = sampleYesNoPage
-sampleYesNoPage.heading = sampleYesNoPage
-sampleYesNoPage.agent.heading = sampleYesNoPage
-sampleYesNoPage.checkYourAnswersLabel = sampleYesNoPage
-sampleYesNoPage.error.required = Select yes if sampleYesNoPage
-sampleYesNoPage.agent.error.required = Select yes if sampleYesNoPage
-sampleYesNoPage.change.hidden = SampleYesNoPage
-
 start.title = Diweddaru a chyflwyno Ffurflen Dreth Incwm
 start.agent.title = Diweddaru a chyflwyno Ffurflen Dreth Incwm
 start.heading = Diweddaru a chyflwyno Furflen Dreth
 start.agent.heading = Diweddaru a chyflwyno Furflen Dreth
 start.p = Gallwch ychwanegu adrannau drwy ateb ambell gwestiwn cyn diweddaru’ch Ffurflen Dreth, a’i chyflwyno.
 start.agent.p = Gallwch ychwanegu adrannau drwy ateb ambell gwestiwn byr cyn diweddaru Ffurflen Dreth eich cleient, a’i chyflwyno.
+
+addSections.title = Ychwanegu adrannau at eich Ffurflen Dreth
+addSections.agent.title = Ychwanegu adrannau at eich Ffurflen Dreth
+addSections.heading = Ychwanegu adrannau at eich Ffurflen Dreth
+addSections.agent.heading = Ychwanegu adrannau at Ffurflen Dreth eich cleient
+addSections.incomplete = Heb lenwi
+addSections.completedSections = Rydych wedi llenwi {0} allan o 4 adran.
+addSections.aboutYou = Amdanoch chi
+addSections.agent.aboutYou = Ynglŷn â’ch cleient
+addSections.incomeFromWork = Incwm o’r gwaith a budd-daliadau’r wladwriaeth trethadwy
+addSections.agent.incomeFromWork = Incwm o’r gwaith a budd-daliadau’r wladwriaeth trethadwy
+addSections.incomeFromProperty = Incwm o eiddo, pensiynau a buddsoddiadau
+addSections.agent.incomeFromProperty = Incwm o eiddo, pensiynau a buddsoddiadau
+addSections.incomeFromGains = Incwm o enillion cyfalaf, ymddiriedolaethau ac ystadau
+addSections.agent.incomeFromGains = Incwm o enillion cyfalaf, ymddiriedolaethau ac ystadau
+addSections.pensions = Taliadau i bensiynau
+addSections.agent.pensions = Taliadau i bensiynau
+addSections.allowances = Lwfansau a rhyddhad treth
+addSections.agent.allowances = Lwfansau a rhyddhad treth
+addSections.status.notStarted = HEB DDECHRAU
+addSections.status.cannotStart = METHU DECHRAU ETO
+addSections.status.completed = WEDI’I GWBLHAU
 
 ###################################  ABOUT YOU ###########################################################################################
 

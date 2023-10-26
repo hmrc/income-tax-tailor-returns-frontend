@@ -14,23 +14,8 @@
  * limitations under the License.
  *@
 
-@this(
-        layout: templates.Layout,
-        formHelper: FormWithCSRF,
-        govukButton: GovukButton
-)
+@this()
 
-@(taxYear: Int)(implicit request: Request[_], messages: Messages)
+@(href: String, id: String = "", key: String, openInNewWindow: Boolean = false)(implicit messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("start.title")), taxYear = taxYear) {
-
-    <h1 class="govuk-heading-l">@messages("start.heading")</h1>
-
-    <p class="govuk-body">@messages("start.p")</p>
-
-    @govukButton(
-        ButtonViewModel(messages("site.continue"))
-            .asLink(routes.AddSectionsController.onPageLoad(taxYear).url)
-            .withCssClass("govuk-!-margin-top-4")
-    )
-}
+<a id="@id" href="@href" @if(openInNewWindow) {target="_blank" rel="noopener noreferrer"}>@messages(key)</a>

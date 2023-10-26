@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,26 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-        layout: templates.Layout,
-        formHelper: FormWithCSRF,
-        govukButton: GovukButton
-)
+package models
 
-@(taxYear: Int)(implicit request: Request[_], messages: Messages)
+import models.TagStatus.Completed
 
-@layout(pageTitle = titleNoForm(messages("start.title")), taxYear = taxYear) {
+sealed trait TagStatus {
+  def isCompleted: Boolean = this == Completed
+}
 
-    <h1 class="govuk-heading-l">@messages("start.heading")</h1>
+object TagStatus extends Enumerable.Implicits {
 
-    <p class="govuk-body">@messages("start.p")</p>
+  case object Completed extends WithName("completed") with TagStatus
+  case object NotStarted extends WithName("notStarted") with TagStatus
+  case object CannotStartYet extends WithName("cannotStart") with TagStatus
 
-    @govukButton(
-        ButtonViewModel(messages("site.continue"))
-            .asLink(routes.AddSectionsController.onPageLoad(taxYear).url)
-            .withCssClass("govuk-!-margin-top-4")
-    )
+  val values: Set[TagStatus] = Set(
+    Completed, NotStarted, CannotStartYet
+  )
+
+  implicit val enumerable: Enumerable[TagStatus] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }

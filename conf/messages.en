@@ -10,6 +10,7 @@ site.start = Start now
 site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
+site.caption = 6 April {0} to 5 April {1}
 
 date.day = Day
 date.month = Month
@@ -56,21 +57,34 @@ signedOut.guidance = We did not save your answers.
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
-sampleYesNoPage.title = sampleYesNoPage
-sampleYesNoPage.agent.title = sampleYesNoPage
-sampleYesNoPage.heading = sampleYesNoPage
-sampleYesNoPage.agent.heading = sampleYesNoPage
-sampleYesNoPage.checkYourAnswersLabel = sampleYesNoPage
-sampleYesNoPage.error.required = Select yes if sampleYesNoPage
-sampleYesNoPage.agent.error.required = Select yes if sampleYesNoPage
-sampleYesNoPage.change.hidden = SampleYesNoPage
-
 start.title = Update and submit an Income Tax Return
 start.agent.title = Update and submit an Income Tax Return
 start.heading = Update and submit a Tax Return
 start.agent.heading = Update and submit a Tax Return
 start.p = You can add sections by answering a few short questions, before updating and submitting your return.
 start.agent.p = You can add sections by answering a few short questions, before updating and submitting your client’s return.
+
+addSections.title = Add sections to your Tax Return
+addSections.agent.title = Add sections to your Tax Return
+addSections.heading = Add sections to your Tax Return
+addSections.agent.heading = Add sections to your client’s Tax Return
+addSections.incomplete = Incomplete
+addSections.completedSections = You have completed {0} of 4 sections.
+addSections.aboutYou = About you
+addSections.agent.aboutYou = About your client
+addSections.incomeFromWork = Income from work and taxable state benefits
+addSections.agent.incomeFromWork = Income from work and taxable state benefits
+addSections.incomeFromProperty = Income from property, pensions and investments
+addSections.agent.incomeFromProperty = Income from property, pensions and investments
+addSections.incomeFromGains = Income from capital gains, trusts and estates
+addSections.agent.incomeFromGains = Income from capital gains, trusts and estates
+addSections.pensions = Payments into pensions
+addSections.agent.pensions = Payments into pensions
+addSections.allowances = Allowances and tax reliefs
+addSections.agent.allowances = Allowances and tax reliefs
+addSections.status.notStarted = NOT STARTED
+addSections.status.cannotStart = CANNOT START YET
+addSections.status.completed = COMPLETED
 
 ###################################  ABOUT YOU ###########################################################################################
 
