@@ -14,8 +14,24 @@
  * limitations under the License.
  */
 
-//package viewmodels
-//
-//abstract class WithName(name: String) {
-//  override val toString: String = name
-//}
+package models
+
+import models.TagStatus.Completed
+
+sealed trait TagStatus {
+  def isCompleted: Boolean = this == Completed
+}
+
+object TagStatus extends Enumerable.Implicits {
+
+  case object Completed extends WithName("completed") with TagStatus
+  case object NotStarted extends WithName("notStarted") with TagStatus
+  case object CannotStartYet extends WithName("cannotStart") with TagStatus
+
+  val values: Set[TagStatus] = Set(
+    Completed, NotStarted, CannotStartYet
+  )
+
+  implicit val enumerable: Enumerable[TagStatus] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+}

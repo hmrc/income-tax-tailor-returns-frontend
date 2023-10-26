@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-//package viewmodels
-//
-//abstract class WithName(name: String) {
-//  override val toString: String = name
-//}
+@import views.html.components.{Link, AgentTaskItem}
+@import viewmodels.Task
+
+@this(
+    taskItem: AgentTaskItem,
+    link: Link
+)
+
+
+@(sections: List[Task])(implicit messages: Messages)
+
+<ul class="app-task-list__items govuk-!-padding-left-0">
+    @for(task <- sections){
+        @taskItem(task)
+    }
+</ul>

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-//package viewmodels
-//
-//abstract class WithName(name: String) {
-//  override val toString: String = name
-//}
+package viewmodels
+
+import models.TagStatus
+
+case class Task(link: Link, tag: TagStatus)
