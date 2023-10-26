@@ -26,7 +26,10 @@
 
 @layout(pageTitle = title(form, messages("fosterCarer.agent.title")), taxYear = taxYear) {
 
-    @formHelper(action = routes.FosterCarerController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.aboutyou.routes.FosterCarerController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+
+        <h1 class="govuk-heading-l">@messages("fosterCarer.agent.title")</h1>
+        <p class="govuk-body">@messages("fosterCarer.agent.p1")</p>
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -35,7 +38,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("fosterCarer.agent.heading")).asPageHeading()
+                LegendViewModel(messages("fosterCarer.agent.title")).visuallyHidden()
             )
         )
 

@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.FosterCarerFormProvider
+import forms.aboutyou.FosterCarerFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.FosterCarerPage
+import pages.aboutyou.FosterCarerPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.FosterCarerView
-import views.html.FosterCarerAgentView
+import views.html.aboutyou.{FosterCarerAgentView, FosterCarerView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
