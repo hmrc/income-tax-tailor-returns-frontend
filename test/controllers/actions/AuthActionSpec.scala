@@ -311,7 +311,7 @@ class AuthActionSpec extends SpecBase {
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe "http://localhost:9949/auth-login-stub/gg-sign-in" +
-          "?continue=http://localhost:10007/update-and-submit-income-tax-return/tailor-return/2024/start" +
+          "?continue=http://localhost:10007/update-and-submit-income-tax-return/tailored-return/2024/start" +
           "&origin=income-tax-tailor-returns-frontend"
       }
     }
