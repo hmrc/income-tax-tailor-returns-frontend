@@ -31,3 +31,45 @@ GET        /:taxYear/about-you/your-residence-status                            
 POST       /:taxYear/about-you/your-residence-status                                controllers.aboutyou.YourResidenceStatusController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
 GET        /:taxYear/about-you/change-your-residence-status                         controllers.aboutyou.YourResidenceStatusController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/about-you/change-your-residence-status                         controllers.aboutyou.YourResidenceStatusController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /charitableDonations/:taxYear                                            controllers.CharitableDonationsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeCharitableDonations/:taxYear                                      controllers.CharitableDonationsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /charitableDonations/:taxYear                                            controllers.CharitableDonationsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+POST       /changeCharitableDonations/:taxYear                                      controllers.CharitableDonationsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /fosterCarer/:taxYear                                                    controllers.FosterCarerController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /fosterCarer/:taxYear                                                    controllers.FosterCarerController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeFosterCarer/:taxYear                                              controllers.FosterCarerController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changeFosterCarer/:taxYear                                              controllers.FosterCarerController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /childBenefit/:taxYear                                                   controllers.ChildBenefitController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /childBenefit/:taxYear                                                   controllers.ChildBenefitController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeChildBenefit/:taxYear                                             controllers.ChildBenefitController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changeChildBenefit/:taxYear                                             controllers.ChildBenefitController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /childBenefitIncome/:taxYear                                             controllers.ChildBenefitIncomeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /childBenefitIncome/:taxYear                                             controllers.ChildBenefitIncomeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeChildBenefitIncome/:taxYear                                       controllers.ChildBenefitIncomeController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changeChildBenefitIncome/:taxYear                                       controllers.ChildBenefitIncomeController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /highIncomeChildBenefitCharge/:taxYear                                   controllers.HighIncomeChildBenefitChargeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /highIncomeChildBenefitCharge/:taxYear                                   controllers.HighIncomeChildBenefitChargeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeHighIncomeChildBenefitCharge/:taxYear                             controllers.HighIncomeChildBenefitChargeController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changeHighIncomeChildBenefitCharge/:taxYear                             controllers.HighIncomeChildBenefitChargeController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /marriageAllowance/:taxYear                                              controllers.MarriageAllowanceController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /marriageAllowance/:taxYear                                              controllers.MarriageAllowanceController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeMarriageAllowance/:taxYear                                        controllers.MarriageAllowanceController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changeMarriageAllowance/:taxYear                                        controllers.MarriageAllowanceController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /patentRoyaltyPayments/:taxYear                                          controllers.PatentRoyaltyPaymentsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /patentRoyaltyPayments/:taxYear                                          controllers.PatentRoyaltyPaymentsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changePatentRoyaltyPayments/:taxYear                                    controllers.PatentRoyaltyPaymentsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changePatentRoyaltyPayments/:taxYear                                    controllers.PatentRoyaltyPaymentsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /taxAvoidanceSchemes/:taxYear                                            controllers.TaxAvoidanceSchemesController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /taxAvoidanceSchemes/:taxYear                                            controllers.TaxAvoidanceSchemesController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /changeTaxAvoidanceSchemes/:taxYear                                      controllers.TaxAvoidanceSchemesController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /changeTaxAvoidanceSchemes/:taxYear                                      controllers.TaxAvoidanceSchemesController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /taxReturnNotReady/:taxYear                                              controllers.TaxReturnNotReadyController.onPageLoad(taxYear: Int)

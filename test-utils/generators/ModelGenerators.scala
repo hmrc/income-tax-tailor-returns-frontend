@@ -16,10 +16,26 @@
 
 package generators
 
-import models.aboutyou.{UkResidenceStatus, YourResidenceStatus}
+import models._
+import models.aboutyou._
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryTaxAvoidanceSchemes: Arbitrary[TaxAvoidanceSchemes] =
+    Arbitrary {
+      Gen.oneOf(TaxAvoidanceSchemes.values)
+    }
+
+  implicit lazy val arbitraryHighIncomeChildBenefitCharge: Arbitrary[HighIncomeChildBenefitCharge] =
+    Arbitrary {
+      Gen.oneOf(HighIncomeChildBenefitCharge.values.toSeq)
+    }
+
+  implicit lazy val arbitraryCharitableDonations: Arbitrary[CharitableDonations] =
+    Arbitrary {
+      Gen.oneOf(CharitableDonations.values)
+    }
 
   implicit lazy val arbitraryYourResidenceStatus: Arbitrary[YourResidenceStatus] =
     Arbitrary {
