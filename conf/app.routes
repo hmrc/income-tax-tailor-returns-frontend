@@ -20,6 +20,8 @@ GET        /account/signed-out                                                  
 
 GET        /unauthorised/:taxYear                                                   controllers.UnauthorisedController.onPageLoad(taxYear: Int)
 
+GET        /:taxYear/add-sections                                                   controllers.AddSectionsController.onPageLoad(taxYear: Int)
+
 #################       About you pages      ##############################
 
 GET        /:taxYear/about-you/uk-residence-status                                  controllers.aboutyou.UkResidenceStatusController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)

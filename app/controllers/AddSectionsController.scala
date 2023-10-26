@@ -19,6 +19,7 @@ package controllers
 import controllers.actions._
 import models.TagStatus._
 import models.NormalMode
+import models.SectionNames._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -43,10 +44,10 @@ class AddSectionsController @Inject()(
       // TODO: Pass tag status parameter as a dynamic value based on state of userAnswers,
       //  update links as controllers are added
       val sections = List(
-        Task(Link("aboutYou", controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), NotStarted),
-        Task(Link("incomeFromWork", controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
-        Task(Link("incomeFromProperty", controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
-        Task(Link("pensions", controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet)
+        Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), NotStarted),
+        Task(Link(IncomeFromWork.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
+        Task(Link(IncomeFromProperty.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
+        Task(Link(Pensions.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet)
       )
 
       val completedCount: Int = sections.map(_.tag).count(_.isCompleted)

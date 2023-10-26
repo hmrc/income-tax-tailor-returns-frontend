@@ -43,6 +43,7 @@
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))
+                .asLink(routes.TaxReturnNotReadyController.onPageLoad(taxYear).url)
                 .withCssClass("govuk-button--secondary")
         )
     }

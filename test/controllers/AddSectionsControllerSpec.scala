@@ -18,7 +18,8 @@ package controllers
 
 import base.SpecBase
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
-import models.{NormalMode, TagStatus}
+import models.NormalMode
+import models.SectionNames._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.{Link, Task}
@@ -29,11 +30,13 @@ import views.html.AddSectionsAgentView
 class AddSectionsControllerSpec extends SpecBase {
 
   private val sections: List[Task] = List(
-    Task(Link("aboutYou", controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), NotStarted),
-    Task(Link("incomeFromWork", controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
-    Task(Link("incomeFromProperty", controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
-    Task(Link("pensions", controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet)
+    Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), NotStarted),
+    Task(Link(IncomeFromWork.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
+    Task(Link(IncomeFromProperty.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
+    Task(Link(Pensions.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), CannotStartYet)
   )
+
+  private val completedCount: Int = sections.map(_.tag).count(_.isCompleted)
 
   "AddSections Controller" - {
 
@@ -49,7 +52,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AddSectionsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear, sections)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear, sections, completedCount)(request, messages(application)).toString
       }
     }
 
@@ -65,7 +68,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AddSectionsAgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear, sections)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear, sections, completedCount)(request, messages(application)).toString
       }
     }
   }
