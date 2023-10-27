@@ -80,6 +80,19 @@ addSections.status.notStarted = HEB DDECHRAU
 addSections.status.cannotStart = METHU DECHRAU ETO
 addSections.status.completed = WEDI’I GWBLHAU
 
+taxReturnNotReady.title = Nid yw’ch Ffurflen Dreth yn barod i’w llenwi ar hyn o bryd
+taxReturnNotReady.heading = Nid yw’ch Ffurflen Dreth yn barod i’w llenwi ar hyn o bryd
+taxReturnNotReady.agent.title = Nid yw Ffurflen Dreth eich cleient yn barod i lenwi eto
+taxReturnNotReady.agent.heading = Nid yw Ffurflen Dreth eich cleient yn barod i lenwi eto
+taxReturnNotReady.p = Mae angen i chi gwblhau’r adrannau canlynol:
+taxReturnNotReady.aboutYou = Amdanoch chi
+taxReturnNotReady.agent.aboutYou = Ynglŷn â’ch cleient
+taxReturnNotReady.incomeFromWork = Incwm o’r gwaith a budd-daliadau’r wladwriaeth trethadwy
+taxReturnNotReady.incomeFromProperty = Incwm o eiddo, pensiynau a buddsoddiadau
+taxReturnNotReady.incomeFromGains = Incwm o enillion cyfalaf, ymddiriedolaethau ac ystadau
+taxReturnNotReady.pensions = Taliadau i bensiynau
+taxReturnNotReady.allowances = Lwfansau a rhyddhad treth
+
 ###################################  ABOUT YOU ###########################################################################################
 
 ukResidenceStatus.title = A oeddech yn breswylydd yn y DU rhwng 6 Ebrill 2022 a 5 Ebrill 2023?

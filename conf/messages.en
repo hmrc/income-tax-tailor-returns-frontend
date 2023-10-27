@@ -86,6 +86,19 @@ addSections.status.notStarted = NOT STARTED
 addSections.status.cannotStart = CANNOT START YET
 addSections.status.completed = COMPLETED
 
+taxReturnNotReady.title = Your Tax Return is not ready to fill in yet
+taxReturnNotReady.heading = Your Tax Return is not ready to fill in yet
+taxReturnNotReady.agent.title = Your client’s Tax Return is not ready to fill in yet
+taxReturnNotReady.agent.heading = Your client’s Tax Return is not ready to fill in yet
+taxReturnNotReady.p = You need to complete the following sections:
+taxReturnNotReady.aboutYou = About you
+taxReturnNotReady.agent.aboutYou = About your client
+taxReturnNotReady.incomeFromWork = Income from work and taxable state benefits
+taxReturnNotReady.incomeFromProperty = Income from property rentals, pensions and investments
+taxReturnNotReady.incomeFromGains = Income from capital gains, trusts and estates
+taxReturnNotReady.pensions = Payments into pensions
+taxReturnNotReady.allowances = Allowances and tax reliefs
+
 ###################################  ABOUT YOU ###########################################################################################
 
 ukResidenceStatus.title = Were you a UK resident between 6 April 2022 and 5 April 2023?
@@ -242,8 +255,3 @@ taxAvoidanceSchemes.checkYourAnswersLabel = Tax avoidance schemes
 taxAvoidanceSchemes.error.required = Select taxAvoidanceSchemes
 taxAvoidanceSchemes.agent.error.required = Select taxAvoidanceSchemes
 taxAvoidanceSchemes.change.hidden = TaxAvoidanceSchemes
-
-taxReturnNotReady.title = taxReturnNotReady
-taxReturnNotReady.heading = taxReturnNotReady
-taxReturnNotReady.agent.title = taxReturnNotReady
-taxReturnNotReady.agent.heading = taxReturnNotReady

@@ -23,5 +23,22 @@
 
 @layout(pageTitle = titleNoForm(messages("taxReturnNotReady.title")), taxYear = taxYear) {
 
-    <h1 class="govuk-heading-xl">@messages("taxReturnNotReady.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("taxReturnNotReady.heading")</h1>
+
+    <p class="govuk-body">@messages("taxReturnNotReady.p")</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("taxReturnNotReady.aboutYou")</li>
+        <li>@messages("taxReturnNotReady.incomeFromWork")</li>
+        <li>@messages("taxReturnNotReady.incomeFromProperty")</li>
+        <li>@messages("taxReturnNotReady.incomeFromGains")</li>
+        <li>@messages("taxReturnNotReady.pensions")</li>
+        <li>@messages("taxReturnNotReady.allowances")</li>
+    </ul>
+
+    @govukButton(
+        ButtonViewModel(messages("site.continue"))
+            .asLink(routes.AddSectionsController.onPageLoad(taxYear).url
+        ).withCssClass("govuk-!-margin-top-2")
+    )
 }
