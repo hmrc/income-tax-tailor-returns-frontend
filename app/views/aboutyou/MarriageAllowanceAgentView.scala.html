@@ -15,13 +15,17 @@
  *@
 
 @import viewmodels.LegendSize
+@import components._
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    heading: Heading1,
+    list: BulletList,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
@@ -31,21 +35,21 @@
     @formHelper(action = controllers.aboutyou.routes.MarriageAllowanceController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
+            @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        <h1 class="govuk-heading-l">@messages("marriageAllowance.heading")</h1>
+        @heading(messages("marriageAllowance.heading"))
 
-        <p class="govuk-body">@messages("marriageAllowance.agent.p1")</p>
+        @paragraph(messages("marriageAllowance.agent.p1"))
 
-        <p class="govuk-body">@messages("marriageAllowance.agent.p2")</p>
+        @paragraph(messages("marriageAllowance.agent.p2"))
 
-        <ul class="govuk-list govuk-list--bullet">
-            <li>@messages("marriageAllowance.agent.bullet1")</li>
-            <li>@messages("marriageAllowance.agent.bullet2")</li>
-        </ul>
+        @list(elements = Seq(
+            Html(messages("marriageAllowance.agent.bullet1")),
+            Html(messages("marriageAllowance.agent.bullet2"))
+        ))
 
-        <p class="govuk-body">@messages("marriageAllowance.agent.p3")</p>
+        @paragraph(messages("marriageAllowance.agent.p3"))
 
         @govukRadios(
             RadiosViewModel.yesNo(

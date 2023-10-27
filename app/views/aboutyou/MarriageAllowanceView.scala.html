@@ -35,7 +35,7 @@
     @formHelper(action = controllers.aboutyou.routes.MarriageAllowanceController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
+            @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
         @heading(messages("marriageAllowance.heading"))
