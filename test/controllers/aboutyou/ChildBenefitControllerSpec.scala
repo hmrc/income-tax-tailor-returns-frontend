@@ -42,7 +42,7 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
-  lazy val childBenefitRoute = routes.ChildBenefitController.onPageLoad(NormalMode, taxYear).url
+  lazy val childBenefitRoute = controllers.aboutyou.routes.ChildBenefitController.onPageLoad(NormalMode, taxYear).url
 
   "ChildBenefit Controller" - {
 

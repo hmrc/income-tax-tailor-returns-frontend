@@ -16,7 +16,7 @@
 
 package viewmodels.checkAnswers
 
-import controllers.aboutyou.routes
+import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages.aboutyou.ChildBenefitPage
 import play.api.i18n.Messages
