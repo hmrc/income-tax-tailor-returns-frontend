@@ -16,6 +16,7 @@
 
 package controllers
 
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions.{DataRetrievalActionProvider, IdentifierActionProvider}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
@@ -31,11 +32,11 @@ class KeepAliveController @Inject()(
                                      userDataService: UserDataService
                                    )(implicit ec: ExecutionContext) extends FrontendBaseController {
 
-  def keepAlive(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear)).async {
+  def keepAlive(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)).async {
     implicit request =>
       request.userAnswers
         .map {
-          answers =>
+          _ =>
             userDataService.keepAlive(request.mtdItId, taxYear).map(_ => Ok)
         }
         .getOrElse(Future.successful(Ok))
