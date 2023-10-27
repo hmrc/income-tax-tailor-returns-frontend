@@ -36,7 +36,7 @@ object ChildBenefitSummary  {
           key     = "childBenefit.checkYourAnswersLabel",
           value   = ValueViewModel(value),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.ChildBenefitController.onPageLoad(CheckMode, answers.taxYear).url)
+            ActionItemViewModel("site.change", controllers.aboutyou.routes.ChildBenefitController.onPageLoad(CheckMode, answers.taxYear).url)
               .withVisuallyHiddenText(messages("childBenefit.change.hidden"))
           )
         )
