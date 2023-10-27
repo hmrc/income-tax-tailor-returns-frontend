@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -16,9 +17,10 @@ class $className$Controller @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        view: $className$View,
                                        agentView: $className$AgentView
-                                     ) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
+  def onPageLoad(taxYear: Int): Action[AnyContent] =
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
       if (request.isAgent) {
         Ok(agentView(taxYear))
