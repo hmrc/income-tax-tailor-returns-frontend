@@ -78,7 +78,7 @@ class UkResidenceStatusController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)).set(UkResidenceStatusPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(UkResidenceStatusPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(UkResidenceStatusPage, mode, updatedAnswers, taxYear))
       )
   }
 }

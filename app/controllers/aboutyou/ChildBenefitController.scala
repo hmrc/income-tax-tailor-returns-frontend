@@ -31,16 +31,16 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChildBenefitController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         userDataService: UserDataService,
-                                         navigator: Navigator,
-                                         identify: IdentifierActionProvider,
-                                         getData: DataRetrievalActionProvider,
-                                         requireData: DataRequiredActionProvider,
-                                         formProvider: ChildBenefitFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ChildBenefitView,
-                                         agentView: ChildBenefitAgentView
+                                        override val messagesApi: MessagesApi,
+                                        userDataService: UserDataService,
+                                        navigator: Navigator,
+                                        identify: IdentifierActionProvider,
+                                        getData: DataRetrievalActionProvider,
+                                        requireData: DataRequiredActionProvider,
+                                        formProvider: ChildBenefitFormProvider,
+                                        val controllerComponents: MessagesControllerComponents,
+                                        view: ChildBenefitView,
+                                        agentView: ChildBenefitAgentView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -75,7 +75,7 @@ class ChildBenefitController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ChildBenefitPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChildBenefitPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ChildBenefitPage, mode, updatedAnswers, taxYear))
       )
   }
 }

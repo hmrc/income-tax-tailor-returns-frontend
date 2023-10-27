@@ -19,8 +19,6 @@ package controllers
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.CharitableDonationsFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.CharitableDonationsPage
@@ -31,19 +29,20 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.CharitableDonationsView
 import views.html.CharitableDonationsAgentView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CharitableDonationsController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        userDataService: UserDataService,
-                                        navigator: Navigator,
-                                        identify: IdentifierActionProvider,
-                                        getData: DataRetrievalActionProvider,
-                                        requireData: DataRequiredActionProvider,
-                                        formProvider: CharitableDonationsFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CharitableDonationsView,
-                                        agentView: CharitableDonationsAgentView
+                                               override val messagesApi: MessagesApi,
+                                               userDataService: UserDataService,
+                                               navigator: Navigator,
+                                               identify: IdentifierActionProvider,
+                                               getData: DataRetrievalActionProvider,
+                                               requireData: DataRequiredActionProvider,
+                                               formProvider: CharitableDonationsFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: CharitableDonationsView,
+                                               agentView: CharitableDonationsAgentView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -80,7 +79,7 @@ class CharitableDonationsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CharitableDonationsPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CharitableDonationsPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(CharitableDonationsPage, mode, updatedAnswers, taxYear))
       )
   }
 }

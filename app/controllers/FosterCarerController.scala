@@ -19,8 +19,6 @@ package controllers
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.FosterCarerFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.FosterCarerPage
@@ -31,19 +29,20 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.FosterCarerView
 import views.html.FosterCarerAgentView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class FosterCarerController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         userDataService: UserDataService,
-                                         navigator: Navigator,
-                                         identify: IdentifierActionProvider,
-                                         getData: DataRetrievalActionProvider,
-                                         requireData: DataRequiredActionProvider,
-                                         formProvider: FosterCarerFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: FosterCarerView,
-                                         agentView: FosterCarerAgentView
+                                       override val messagesApi: MessagesApi,
+                                       userDataService: UserDataService,
+                                       navigator: Navigator,
+                                       identify: IdentifierActionProvider,
+                                       getData: DataRetrievalActionProvider,
+                                       requireData: DataRequiredActionProvider,
+                                       formProvider: FosterCarerFormProvider,
+                                       val controllerComponents: MessagesControllerComponents,
+                                       view: FosterCarerView,
+                                       agentView: FosterCarerAgentView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -80,7 +79,7 @@ class FosterCarerController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FosterCarerPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(FosterCarerPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(FosterCarerPage, mode, updatedAnswers, taxYear))
       )
   }
 }

@@ -19,8 +19,6 @@ package controllers
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.HighIncomeChildBenefitChargeFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.HighIncomeChildBenefitChargePage
@@ -28,22 +26,22 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.HighIncomeChildBenefitChargeView
-import views.html.HighIncomeChildBenefitChargeAgentView
+import views.html.{HighIncomeChildBenefitChargeAgentView, HighIncomeChildBenefitChargeView}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class HighIncomeChildBenefitChargeController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       userDataService: UserDataService,
-                                       navigator: Navigator,
-                                       identify: IdentifierActionProvider,
-                                       getData: DataRetrievalActionProvider,
-                                       requireData: DataRequiredActionProvider,
-                                       formProvider: HighIncomeChildBenefitChargeFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: HighIncomeChildBenefitChargeView,
-                                       agentView: HighIncomeChildBenefitChargeAgentView
+                                                        override val messagesApi: MessagesApi,
+                                                        userDataService: UserDataService,
+                                                        navigator: Navigator,
+                                                        identify: IdentifierActionProvider,
+                                                        getData: DataRetrievalActionProvider,
+                                                        requireData: DataRequiredActionProvider,
+                                                        formProvider: HighIncomeChildBenefitChargeFormProvider,
+                                                        val controllerComponents: MessagesControllerComponents,
+                                                        view: HighIncomeChildBenefitChargeView,
+                                                        agentView: HighIncomeChildBenefitChargeAgentView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -80,7 +78,7 @@ class HighIncomeChildBenefitChargeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HighIncomeChildBenefitChargePage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HighIncomeChildBenefitChargePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(HighIncomeChildBenefitChargePage, mode, updatedAnswers, taxYear))
       )
   }
 }
