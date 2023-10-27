@@ -18,10 +18,10 @@ package navigation
 
 import base.SpecBase
 import controllers.routes
-import pages._
 import models._
-import models.aboutyou.{UkResidenceStatus, YourResidenceStatus}
-import pages.aboutyou.{UkResidenceStatusPage, YourResidenceStatusPage}
+import models.aboutyou._
+import pages._
+import pages.aboutyou._
 
 import scala.concurrent.ExecutionContext
 
@@ -76,7 +76,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from CharitableDonations page to MarriageAllowance page when any value is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(CharitableDonationsPage, Set(CharitableDonations.values.head)).success.value
 
-        val expectedRoute = routes.MarriageAllowanceController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(CharitableDonationsPage, NormalMode, answers, taxYear) mustBe expectedRoute
       }
