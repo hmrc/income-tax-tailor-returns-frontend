@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import base.SpecBase
-import forms.MarriageAllowanceFormProvider
-import models.{NormalMode, UserAnswers, Done}
+import forms.aboutyou.MarriageAllowanceFormProvider
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.MarriageAllowancePage
+import pages.aboutyou.MarriageAllowancePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.MarriageAllowanceView
-import views.html.MarriageAllowanceAgentView
+import views.html.aboutyou.{MarriageAllowanceAgentView, MarriageAllowanceView}
 
 import scala.concurrent.Future
 
@@ -42,7 +41,7 @@ class MarriageAllowanceControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
-  lazy val marriageAllowanceRoute = routes.MarriageAllowanceController.onPageLoad(NormalMode, taxYear).url
+  lazy val marriageAllowanceRoute = controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, taxYear).url
 
   "MarriageAllowance Controller" - {
 
@@ -193,7 +192,7 @@ class MarriageAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
       }
     }
 
@@ -209,7 +208,7 @@ class MarriageAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
       }
     }
   }

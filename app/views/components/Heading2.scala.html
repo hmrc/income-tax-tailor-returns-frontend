@@ -14,8 +14,13 @@
  * limitations under the License.
  *@
 
-@this()
+@this(
+  captionHeader: CaptionHeader
+)
 
-@(id: String, text: String, call: Call, newTab: Boolean = true, classes: String = "govuk-link govuk-link--no-visited-state")(implicit messages: Messages)
+@(message: String, id: Option[String] = None, size: String = "m", extraClasses: Seq[String] = Seq.empty, caption: Option[String] = None)
 
-<a class="@classes" href="@call" @if(newTab) { target="_blank" rel="noopener noreferrer" } id="@id">@text@if(newTab){ @messages("site.opensInNewTab")}</a>
+<h2 class="govuk-heading-@size govuk-!-margin-top-6@if(extraClasses.nonEmpty) { @extraClasses.mkString("") }" @id.map{id => id="@id"}>
+  @caption.fold(Html(""))(captionHeader(_))
+  @message
+</h2>

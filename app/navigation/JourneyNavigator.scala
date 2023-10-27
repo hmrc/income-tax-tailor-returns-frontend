@@ -22,14 +22,14 @@ import controllers.routes
 import pages._
 import models._
 import models.aboutyou.UkResidenceStatus
-import pages.aboutyou.{UkResidenceStatusPage, YourResidenceStatusPage}
+import pages.aboutyou._
 
 @Singleton
 class JourneyNavigator @Inject()() extends Navigator {
   override def normalRoutes(taxYear: Int): Page => UserAnswers => Call = {
     case UkResidenceStatusPage => ukResidenceStatusRoute(_, taxYear)
     case YourResidenceStatusPage => _ => routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
-    case CharitableDonationsPage => _ => routes.MarriageAllowanceController.onPageLoad(NormalMode, taxYear)
+    case CharitableDonationsPage => _ => controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, taxYear)
     case MarriageAllowancePage => _ => routes.ChildBenefitController.onPageLoad(NormalMode, taxYear)
     case ChildBenefitPage => childBenefitRoute(_, taxYear)
     case ChildBenefitIncomePage => childBenefitIncomeRoute(_, taxYear)

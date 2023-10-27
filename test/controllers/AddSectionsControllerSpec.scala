@@ -17,14 +17,13 @@
 package controllers
 
 import base.SpecBase
-import models.TagStatus.{CannotStartYet, Completed, NotStarted}
 import models.NormalMode
 import models.SectionNames._
+import models.TagStatus.{CannotStartYet, NotStarted}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.{Link, Task}
-import views.html.AddSectionsView
-import views.html.AddSectionsAgentView
+import views.html.{AddSectionsAgentView, AddSectionsView}
 
 
 class AddSectionsControllerSpec extends SpecBase {

@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,26 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package forms.aboutyou
 
-@(id: String, text: String, call: Call, newTab: Boolean = true, classes: String = "govuk-link govuk-link--no-visited-state")(implicit messages: Messages)
+import forms.mappings.Mappings
+import play.api.data.Form
 
-<a class="@classes" href="@call" @if(newTab) { target="_blank" rel="noopener noreferrer" } id="@id">@text@if(newTab){ @messages("site.opensInNewTab")}</a>
+import javax.inject.Inject
+
+class MarriageAllowanceFormProvider @Inject() extends Mappings {
+
+  def apply(isAgent: Boolean): Form[Boolean] = {
+    val error: String =
+      if (isAgent) {
+        "marriageAllowance.agent.error.required"
+      } else {
+        "marriageAllowance.error.required"
+      }
+    Form(
+      "value" -> boolean(error)
+    )
+  }
+}

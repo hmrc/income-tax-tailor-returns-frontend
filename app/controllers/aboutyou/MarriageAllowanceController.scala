@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.MarriageAllowanceFormProvider
+import forms.aboutyou.MarriageAllowanceFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.MarriageAllowancePage
+import pages.aboutyou.MarriageAllowancePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{MarriageAllowanceAgentView, MarriageAllowanceView}
+import views.html.aboutyou.{MarriageAllowanceAgentView, MarriageAllowanceView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
