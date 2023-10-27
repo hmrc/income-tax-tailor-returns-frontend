@@ -17,6 +17,7 @@
 package config
 
 import controllers.actions._
+import navigation.{JourneyNavigator, Navigator, PrivateBetaNavigator}
 import play.api.inject.Binding
 import play.api.{Configuration, Environment}
 
@@ -33,11 +34,19 @@ class Module extends play.api.inject.Module {
           bind[IdentifierActionProvider].to[IdentifierActionProviderImpl].eagerly()
       }
 
+    val navigationBinding: Binding[_] =
+      if (configuration.get[Boolean]("features.privateBeta")) {
+        bind[Navigator].to[PrivateBetaNavigator]
+      } else {
+        bind[Navigator].to[JourneyNavigator]
+      }
+
     Seq(
       bind[DataRetrievalActionProvider].to[DataRetrievalActionProviderImpl].eagerly(),
       bind[DataRequiredActionProvider].to[DataRequiredActionProviderImpl].eagerly(),
       bind[Clock].toInstance(Clock.systemUTC()),
-      authBinding
+      authBinding,
+      navigationBinding
     )
 
 

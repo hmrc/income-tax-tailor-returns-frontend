@@ -16,29 +16,17 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
-
+import models.{Mode, UserAnswers}
+import pages.Page
 import play.api.mvc.Call
-import controllers.routes
-import pages._
-import models._
 
-@Singleton
-class Navigator @Inject()() {
-
+trait Navigator {
   // TODO: Pass tax year through to navigator for use in routes
-  private val normalRoutes: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad(2024)
-  }
+  protected def normalRoutes(taxYear: Int): Page => UserAnswers => Call
 
-  private val checkRouteMap: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad(2024)
-  }
+  protected val checkRouteMap: Page => UserAnswers => Call
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
-    case NormalMode =>
-      normalRoutes(page)(userAnswers)
-    case CheckMode =>
-      checkRouteMap(page)(userAnswers)
-  }
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, taxYear: Int): Call
 }
+
+

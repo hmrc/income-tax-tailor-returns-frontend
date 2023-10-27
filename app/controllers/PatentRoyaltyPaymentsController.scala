@@ -19,8 +19,6 @@ package controllers
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.PatentRoyaltyPaymentsFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.PatentRoyaltyPaymentsPage
@@ -31,19 +29,20 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.PatentRoyaltyPaymentsView
 import views.html.PatentRoyaltyPaymentsAgentView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PatentRoyaltyPaymentsController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         userDataService: UserDataService,
-                                         navigator: Navigator,
-                                         identify: IdentifierActionProvider,
-                                         getData: DataRetrievalActionProvider,
-                                         requireData: DataRequiredActionProvider,
-                                         formProvider: PatentRoyaltyPaymentsFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: PatentRoyaltyPaymentsView,
-                                         agentView: PatentRoyaltyPaymentsAgentView
+                                                 override val messagesApi: MessagesApi,
+                                                 userDataService: UserDataService,
+                                                 navigator: Navigator,
+                                                 identify: IdentifierActionProvider,
+                                                 getData: DataRetrievalActionProvider,
+                                                 requireData: DataRequiredActionProvider,
+                                                 formProvider: PatentRoyaltyPaymentsFormProvider,
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 view: PatentRoyaltyPaymentsView,
+                                                 agentView: PatentRoyaltyPaymentsAgentView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -80,7 +79,7 @@ class PatentRoyaltyPaymentsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PatentRoyaltyPaymentsPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PatentRoyaltyPaymentsPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(PatentRoyaltyPaymentsPage, mode, updatedAnswers, taxYear))
       )
   }
 }
