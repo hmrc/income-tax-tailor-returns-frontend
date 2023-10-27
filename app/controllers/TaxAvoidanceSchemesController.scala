@@ -32,16 +32,16 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class TaxAvoidanceSchemesController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        userDataService: UserDataService,
-                                        navigator: Navigator,
-                                        identify: IdentifierActionProvider,
-                                        getData: DataRetrievalActionProvider,
-                                        requireData: DataRequiredActionProvider,
-                                        formProvider: TaxAvoidanceSchemesFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: TaxAvoidanceSchemesView,
-                                        agentView: TaxAvoidanceSchemesAgentView
+                                               override val messagesApi: MessagesApi,
+                                               userDataService: UserDataService,
+                                               navigator: Navigator,
+                                               identify: IdentifierActionProvider,
+                                               getData: DataRetrievalActionProvider,
+                                               requireData: DataRequiredActionProvider,
+                                               formProvider: TaxAvoidanceSchemesFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: TaxAvoidanceSchemesView,
+                                               agentView: TaxAvoidanceSchemesAgentView
                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -78,7 +78,7 @@ class TaxAvoidanceSchemesController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TaxAvoidanceSchemesPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(TaxAvoidanceSchemesPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(TaxAvoidanceSchemesPage, mode, updatedAnswers, taxYear))
       )
   }
 }

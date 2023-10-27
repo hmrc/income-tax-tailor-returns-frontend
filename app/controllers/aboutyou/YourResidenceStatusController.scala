@@ -32,16 +32,16 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class YourResidenceStatusController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       userDataService: UserDataService,
-                                       navigator: Navigator,
-                                       identify: IdentifierActionProvider,
-                                       getData: DataRetrievalActionProvider,
-                                       requireData: DataRequiredActionProvider,
-                                       formProvider: YourResidenceStatusFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: YourResidenceStatusView,
-                                       agentView: YourResidenceStatusAgentView
+                                               override val messagesApi: MessagesApi,
+                                               userDataService: UserDataService,
+                                               navigator: Navigator,
+                                               identify: IdentifierActionProvider,
+                                               getData: DataRetrievalActionProvider,
+                                               requireData: DataRequiredActionProvider,
+                                               formProvider: YourResidenceStatusFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: YourResidenceStatusView,
+                                               agentView: YourResidenceStatusAgentView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -78,7 +78,7 @@ class YourResidenceStatusController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(YourResidenceStatusPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(YourResidenceStatusPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(YourResidenceStatusPage, mode, updatedAnswers, taxYear))
       )
   }
 }

@@ -19,8 +19,6 @@ package controllers
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.ChildBenefitIncomeFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.ChildBenefitIncomePage
@@ -31,19 +29,20 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ChildBenefitIncomeView
 import views.html.ChildBenefitIncomeAgentView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChildBenefitIncomeController @Inject()(
-                                         override val messagesApi: MessagesApi,
-                                         userDataService: UserDataService,
-                                         navigator: Navigator,
-                                         identify: IdentifierActionProvider,
-                                         getData: DataRetrievalActionProvider,
-                                         requireData: DataRequiredActionProvider,
-                                         formProvider: ChildBenefitIncomeFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ChildBenefitIncomeView,
-                                         agentView: ChildBenefitIncomeAgentView
+                                              override val messagesApi: MessagesApi,
+                                              userDataService: UserDataService,
+                                              navigator: Navigator,
+                                              identify: IdentifierActionProvider,
+                                              getData: DataRetrievalActionProvider,
+                                              requireData: DataRequiredActionProvider,
+                                              formProvider: ChildBenefitIncomeFormProvider,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: ChildBenefitIncomeView,
+                                              agentView: ChildBenefitIncomeAgentView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -79,7 +78,7 @@ class ChildBenefitIncomeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ChildBenefitIncomePage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChildBenefitIncomePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ChildBenefitIncomePage, mode, updatedAnswers, taxYear))
       )
   }
 }
