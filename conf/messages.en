@@ -182,14 +182,11 @@ childBenefit.error.required = Select yes if childBenefit
 childBenefit.agent.error.required = Select yes if childBenefit
 childBenefit.change.hidden = ChildBenefit
 
-childBenefitIncome.title = childBenefitIncome
-childBenefitIncome.agent.title = childBenefitIncome
-childBenefitIncome.heading = childBenefitIncome
-childBenefitIncome.agent.heading = childBenefitIncome
-childBenefitIncome.checkYourAnswersLabel = childBenefitIncome
-childBenefitIncome.error.required = Select yes if childBenefitIncome
-childBenefitIncome.agent.error.required = Select yes if childBenefitIncome
-childBenefitIncome.change.hidden = ChildBenefitIncome
+################################### CHILD BENEFIT INCOME ###########################################################################################
+childBenefitIncome.title = Was your income over £50,000?
+childBenefitIncome.agent.title = Was your client's income over £50,000?
+childBenefitIncome.error.required = Select yes if your income was over £50,000
+childBenefitIncome.agent.error.required = Select yes if your client's income was over £50,000
 
 highIncomeChildBenefitCharge.title = highIncomeChildBenefitCharge
 highIncomeChildBenefitCharge.agent.title = highIncomeChildBenefitCharge

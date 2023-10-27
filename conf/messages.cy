@@ -142,3 +142,10 @@ yourResidenceStatus.agent.nonResident = Nid oedd fy nghleient yn breswylydd yn y
 yourResidenceStatus.agent.dualResident = Roedd fy nghleient yn breswylydd deuol yn y DU ac mewn gwlad arall
 yourResidenceStatus.error.required = Dewiswch os nad oeddech yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
 yourResidenceStatus.agent.error.required = Dewiswch os nad oedd eich cleient yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
+
+################################### CHILD BENEFIT INCOME ###########################################################################################
+
+childBenefitIncome.title = A oedd eich incwm dros £50,000?
+childBenefitIncome.agent.title = A oedd incwm eich cleient dros £50,000?
+childBenefitIncome.error.required = Dewiswch ‘Iawn’ os oedd eich incwm dros £50,000
+childBenefitIncome.agent.error.required = Dewiswch ‘Iawn’ os oedd incwm eich cleient dros £50,000
