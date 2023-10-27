@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
@@ -24,18 +26,31 @@
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("marriageAllowance.title")), taxYear = taxYear) {
+@layout(pageTitle = title(form, messages("marriageAllowance.agent.title")), taxYear = taxYear) {
 
-    @formHelper(action = routes.MarriageAllowanceController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.aboutyou.routes.MarriageAllowanceController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form))
+            @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
+
+        <h1 class="govuk-heading-l">@messages("marriageAllowance.heading")</h1>
+
+        <p class="govuk-body">@messages("marriageAllowance.agent.p1")</p>
+
+        <p class="govuk-body">@messages("marriageAllowance.agent.p2")</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages("marriageAllowance.agent.bullet1")</li>
+            <li>@messages("marriageAllowance.agent.bullet2")</li>
+        </ul>
+
+        <p class="govuk-body">@messages("marriageAllowance.agent.p3")</p>
 
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("marriageAllowance.heading")).asPageHeading()
+                legend = LegendViewModel(messages("marriageAllowance.agent.legend")).withSize(LegendSize.Medium)
             )
         )
 

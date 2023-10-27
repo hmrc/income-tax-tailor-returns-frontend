@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package pages.aboutyou
 
-@(id: String, text: String, call: Call, newTab: Boolean = true, classes: String = "govuk-link govuk-link--no-visited-state")(implicit messages: Messages)
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-<a class="@classes" href="@call" @if(newTab) { target="_blank" rel="noopener noreferrer" } id="@id">@text@if(newTab){ @messages("site.opensInNewTab")}</a>
+case object MarriageAllowancePage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = JsPath \"aboutYou"\ toString
+
+  override def toString: String = "marriageAllowance"
+}

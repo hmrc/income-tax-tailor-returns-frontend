@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,26 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package forms
+@this()
 
-import javax.inject.Inject
+@(message: String, classes: String = "govuk-body", id: Option[String] = None, extraClasses: Seq[String] = Seq.empty)
 
-import forms.mappings.Mappings
-import play.api.data.Form
-
-class MarriageAllowanceFormProvider @Inject() extends Mappings {
-
-  def apply(isAgent: Boolean): Form[Boolean] = {
-    val error: String =
-      if (isAgent) {
-        "marriageAllowance.agent.error.required"
-      } else {
-        "marriageAllowance.error.required"
-      }
-    Form(
-      "value" -> boolean(error)
-    )
-  }
-}
+<p class="@classes@if(extraClasses.nonEmpty) { @extraClasses.mkString(" ") }" @id.map{id => id="@id" }>@Html(message)</p>

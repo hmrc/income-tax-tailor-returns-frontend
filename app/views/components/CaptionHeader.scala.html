@@ -16,6 +16,6 @@
 
 @this()
 
-@(id: String, text: String, call: Call, newTab: Boolean = true, classes: String = "govuk-link govuk-link--no-visited-state")(implicit messages: Messages)
+@(message: String, classes: String = "govuk-caption-l", id: Option[String] = Some("section-header"))
 
-<a class="@classes" href="@call" @if(newTab) { target="_blank" rel="noopener noreferrer" } id="@id">@text@if(newTab){ @messages("site.opensInNewTab")}</a>
+<span class="@classes" @id.map{id => id="@id"}>@message</span>
