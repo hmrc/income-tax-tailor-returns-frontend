@@ -173,14 +173,12 @@ fosterCarer.error.required = Select yes if fosterCarer
 fosterCarer.agent.error.required = Select yes if fosterCarer
 fosterCarer.change.hidden = FosterCarer
 
-childBenefit.title = childBenefit
-childBenefit.agent.title = childBenefit
-childBenefit.heading = childBenefit
-childBenefit.agent.heading = childBenefit
-childBenefit.checkYourAnswersLabel = childBenefit
-childBenefit.error.required = Select yes if childBenefit
-childBenefit.agent.error.required = Select yes if childBenefit
-childBenefit.change.hidden = ChildBenefit
+###################################  CHILD BENEFIT  ###########################################################################################
+
+childBenefit.title = Did you, your partner or someone else get Child Benefit for a child living with you?
+childBenefit.agent.title = Did your client, their partner or someone else get Child Benefit for a child living with them?
+childBenefit.error.required = Select yes if you, your partner or someone else got Child Benefit for a child living with you
+childBenefit.agent.error.required = Select yes if your client, their partner or someone else got Child Benefit for a child living with them
 
 childBenefitIncome.title = childBenefitIncome
 childBenefitIncome.agent.title = childBenefitIncome

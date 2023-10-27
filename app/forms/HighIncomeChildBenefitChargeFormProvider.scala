@@ -19,8 +19,8 @@ package forms
 import javax.inject.Inject
 
 import forms.mappings.Mappings
-import play.api.data.Form
 import models.HighIncomeChildBenefitCharge
+import play.api.data.Form
 
 class HighIncomeChildBenefitChargeFormProvider @Inject() extends Mappings {
 

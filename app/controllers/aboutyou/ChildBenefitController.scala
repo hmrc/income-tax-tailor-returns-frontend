@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import controllers.actions._
-import forms.ChildBenefitFormProvider
-import javax.inject.Inject
+import forms.aboutyou.ChildBenefitFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.ChildBenefitPage
+import pages.aboutyou.ChildBenefitPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChildBenefitView
-import views.html.ChildBenefitAgentView
+import views.html.aboutyou.{ChildBenefitAgentView, ChildBenefitView}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChildBenefitController @Inject()(

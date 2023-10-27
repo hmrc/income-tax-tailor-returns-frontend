@@ -142,3 +142,10 @@ yourResidenceStatus.agent.nonResident = Nid oedd fy nghleient yn breswylydd yn y
 yourResidenceStatus.agent.dualResident = Roedd fy nghleient yn breswylydd deuol yn y DU ac mewn gwlad arall
 yourResidenceStatus.error.required = Dewiswch os nad oeddech yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
 yourResidenceStatus.agent.error.required = Dewiswch os nad oedd eich cleient yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
+
+###################################  CHILD BENEFIT  ###########################################################################################
+
+childBenefit.title = A gawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi?
+childBenefit.agent.title = A gafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw?
+childBenefit.error.required = Dewiswch ‘Iawn’, os cawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi
+childBenefit.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw

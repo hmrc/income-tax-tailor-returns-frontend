@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.aboutyou
 
 import forms.mappings.Mappings
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class ChildBenefitFormProvider @Inject() extends Mappings {
 
