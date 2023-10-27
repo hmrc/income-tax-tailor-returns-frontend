@@ -38,7 +38,10 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("childBenefit.agent.title")).asPageHeading().withSize(LegendSize.Large).withCssClass("govuk-!-padding-bottom-5")
+                legend = LegendViewModel(messages("childBenefit.agent.title"))
+                        .asPageHeading()
+                        .withSize(LegendSize.Large)
+                        .withCssClass("govuk-!-padding-bottom-5")
             )
         )
 
