@@ -16,6 +16,7 @@
 
 package controllers
 
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 
 import javax.inject.Inject
@@ -23,6 +24,8 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.{TaxReturnNotReadyAgentView, TaxReturnNotReadyView}
+
+import scala.concurrent.ExecutionContext
 
 class TaxReturnNotReadyController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -32,9 +35,9 @@ class TaxReturnNotReadyController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        view: TaxReturnNotReadyView,
                                        agentView: TaxReturnNotReadyAgentView
-                                     ) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
+  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
       if (request.isAgent) {
         Ok(agentView(taxYear))

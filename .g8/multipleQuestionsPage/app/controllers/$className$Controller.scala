@@ -1,5 +1,6 @@
 package controllers
 
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.$className$FormProvider
 import javax.inject.Inject
@@ -28,7 +29,8 @@ class $className$Controller @Inject()(
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get($className$Page) match {
@@ -39,7 +41,8 @@ class $className$Controller @Inject()(
       Ok(view(preparedForm, mode, taxYear))
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
     implicit request =>
 
       form.bindFromRequest().fold(

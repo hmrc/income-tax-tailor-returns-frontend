@@ -16,13 +16,15 @@
 
 package controllers
 
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.{StartAgentView, StartView}
+
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class StartController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -30,9 +32,9 @@ class StartController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        view: StartView,
                                        agentView: StartAgentView
-                                     ) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(taxYear: Int): Action[AnyContent] = identify(taxYear) {
+  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear)) {
     implicit request =>
       if (request.isAgent) {
         Ok(agentView(taxYear))

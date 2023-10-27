@@ -16,6 +16,7 @@
 
 package controllers
 
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import models.TagStatus._
 import models.NormalMode
@@ -27,6 +28,7 @@ import viewmodels.{Link, Task}
 import views.html.{AddSectionsAgentView, AddSectionsView}
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class AddSectionsController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -35,9 +37,9 @@ class AddSectionsController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        view: AddSectionsView,
                                        agentView: AddSectionsAgentView
-                                     ) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear)) {
+  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)) {
     implicit request =>
       // TODO: How to determine if the journey has been completed
 
