@@ -28,7 +28,6 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PrivateBetaNavigator @Inject()() extends Navigator {
 
-  // TODO: Pass tax year through to navigator for use in routes
   override def normalRoutes(taxYear: Int): Page => UserAnswers => Call = {
     case UkResidenceStatusPage => ukResidenceStatusRoute(_, taxYear)
     case YourResidenceStatusPage => _ => routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)

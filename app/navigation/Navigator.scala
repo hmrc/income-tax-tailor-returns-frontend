@@ -21,7 +21,7 @@ import pages.Page
 import play.api.mvc.Call
 
 trait Navigator {
-  // TODO: Pass tax year through to navigator for use in routes
+
   protected def normalRoutes(taxYear: Int): Page => UserAnswers => Call
 
   protected val checkRouteMap: Page => UserAnswers => Call
