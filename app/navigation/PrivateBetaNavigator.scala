@@ -20,6 +20,7 @@ import controllers.routes
 import models._
 import models.aboutyou.UkResidenceStatus
 import pages._
+import pages.aboutyou._
 import pages.aboutyou.{UkResidenceStatusPage, YourResidenceStatusPage}
 import play.api.mvc.Call
 
@@ -31,7 +32,7 @@ class PrivateBetaNavigator @Inject()() extends Navigator {
   override def normalRoutes(taxYear: Int): Page => UserAnswers => Call = {
     case UkResidenceStatusPage => ukResidenceStatusRoute(_, taxYear)
     case YourResidenceStatusPage => _ => routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
-    case CharitableDonationsPage => _ => routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+    case CharitableDonationsPage => _ => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
     case FosterCarerPage => _ => routes.AddSectionsController.onPageLoad(taxYear)
     case _ => _ => routes.IndexController.onPageLoad(taxYear)
   }

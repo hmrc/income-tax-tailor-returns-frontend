@@ -177,7 +177,6 @@ marriageAllowance.legend = A ydych am drosglwyddo £1,260 o’ch Lwfans Personol
 marriageAllowance.agent.legend = A yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil?
 marriageAllowance.error.required = Dewiswch ‘Iawn’ os ydych am drosglwyddo £1,260 o’ch Lwfans Personol i’ch gŵr, gwraig neu bartner sifil
 marriageAllowance.agent.error.required = Dewiswch ‘Iawn’ os yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil
-###################################  FOSTER CARER  ###########################################################################################
 
 fosterCarer.title = A oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau?
 fosterCarer.agent.title = A oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau?

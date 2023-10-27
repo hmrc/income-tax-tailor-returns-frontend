@@ -180,8 +180,6 @@ charitableDonations.error.required = Select charitableDonations
 charitableDonations.agent.error.required = Select charitableDonations
 charitableDonations.change.hidden = CharitableDonations
 
-###################################  FOSTER CARER  ###########################################################################################
-
 fosterCarer.title = Were you a foster carer or shared lives carer?
 fosterCarer.agent.title = Was your client a foster carer or shared lives carer?
 fosterCarer.p1 = If you were a foster carer or shared lives carer, you’ll need to complete the self-employment section.
