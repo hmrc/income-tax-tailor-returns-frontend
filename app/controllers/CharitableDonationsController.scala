@@ -49,7 +49,7 @@ class CharitableDonationsController @Inject()(
   def form(isAgent: Boolean) = formProvider(isAgent)
 
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CharitableDonationsPage) match {
