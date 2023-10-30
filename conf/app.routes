@@ -49,10 +49,10 @@ POST       /:taxYear/about-you/child-benefit                                    
 GET        /:taxYear/about-you/change-child-benefit                                 controllers.aboutyou.ChildBenefitController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/about-you/change-child-benefit                                 controllers.aboutyou.ChildBenefitController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /childBenefitIncome/:taxYear                                             controllers.ChildBenefitIncomeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /childBenefitIncome/:taxYear                                             controllers.ChildBenefitIncomeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeChildBenefitIncome/:taxYear                                       controllers.ChildBenefitIncomeController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeChildBenefitIncome/:taxYear                                       controllers.ChildBenefitIncomeController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/about-you/child-benefit-income                                 controllers.aboutyou.ChildBenefitIncomeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/about-you/child-benefit-income                                 controllers.aboutyou.ChildBenefitIncomeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/about-you/change-child-benefit-income                          controllers.aboutyou.ChildBenefitIncomeController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/about-you/change-child-benefit-income                          controllers.aboutyou.ChildBenefitIncomeController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /highIncomeChildBenefitCharge/:taxYear                                   controllers.HighIncomeChildBenefitChargeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /highIncomeChildBenefitCharge/:taxYear                                   controllers.HighIncomeChildBenefitChargeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)

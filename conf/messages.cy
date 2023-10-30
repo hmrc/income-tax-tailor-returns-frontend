@@ -179,3 +179,10 @@ childBenefit.title = A gawsoch chi, eich partner neu rywun arall Fudd-dal Plant 
 childBenefit.agent.title = A gafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw?
 childBenefit.error.required = Dewiswch ‘Iawn’, os cawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi
 childBenefit.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw
+
+################################### CHILD BENEFIT INCOME ###########################################################################################
+
+childBenefitIncome.title = A oedd eich incwm dros £50,000?
+childBenefitIncome.agent.title = A oedd incwm eich cleient dros £50,000?
+childBenefitIncome.error.required = Dewiswch ‘Iawn’ os oedd eich incwm dros £50,000
+childBenefitIncome.agent.error.required = Dewiswch ‘Iawn’ os oedd incwm eich cleient dros £50,000

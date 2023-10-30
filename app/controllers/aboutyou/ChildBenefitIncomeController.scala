@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
-import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
+<<<<<<< HEAD:app/controllers/ChildBenefitIncomeController.scala
 import forms.ChildBenefitIncomeFormProvider
+=======
+import forms.aboutyou.ChildBenefitIncomeFormProvider
+>>>>>>> SASS-5700:app/controllers/aboutyou/ChildBenefitIncomeController.scala
 import models.Mode
 import navigation.Navigator
-import pages.ChildBenefitIncomePage
+import pages.aboutyou.ChildBenefitIncomePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChildBenefitIncomeView
-import views.html.ChildBenefitIncomeAgentView
+import views.html.aboutyou._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,8 +49,7 @@ class ChildBenefitIncomeController @Inject()(
 
   def form(isAgent: Boolean) = formProvider(isAgent)
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(ChildBenefitIncomePage) match {
@@ -63,7 +64,7 @@ class ChildBenefitIncomeController @Inject()(
       }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(
