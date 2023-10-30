@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.aboutyou
 
 import models.HighIncomeChildBenefitCharge
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 case object HighIncomeChildBenefitChargePage extends QuestionPage[HighIncomeChildBenefitCharge] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \"aboutYou"\ toString
 
   override def toString: String = "highIncomeChildBenefitCharge"
 }

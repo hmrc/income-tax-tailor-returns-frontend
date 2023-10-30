@@ -17,11 +17,7 @@
 package controllers.aboutyou
 
 import controllers.actions._
-<<<<<<< HEAD:app/controllers/ChildBenefitIncomeController.scala
-import forms.ChildBenefitIncomeFormProvider
-=======
 import forms.aboutyou.ChildBenefitIncomeFormProvider
->>>>>>> SASS-5700:app/controllers/aboutyou/ChildBenefitIncomeController.scala
 import models.Mode
 import navigation.Navigator
 import pages.aboutyou.ChildBenefitIncomePage

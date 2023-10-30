@@ -199,18 +199,31 @@ childBenefitIncome.agent.title = Was your client's income over £50,000?
 childBenefitIncome.error.required = Select yes if your income was over £50,000
 childBenefitIncome.agent.error.required = Select yes if your client's income was over £50,000
 
-highIncomeChildBenefitCharge.title = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.agent.title = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.heading = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.agent.heading = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.option1 = My partner’s income
-highIncomeChildBenefitCharge.option2 = Option 2
-highIncomeChildBenefitCharge.agent.option1 = My partner’s income
-highIncomeChildBenefitCharge.agent.option2 = Option 2
-highIncomeChildBenefitCharge.checkYourAnswersLabel = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.error.required = Select highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.agent.error.required = Select highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.change.hidden = HighIncomeChildBenefitCharge
+################################### HIGH INCOME CHILD BENEFIT CHARGE ###########################################################################################
+
+highIncomeChildBenefitCharge.title = High Income Child Benefit Charge
+highIncomeChildBenefitCharge.agent.title = High Income Child Benefit Charge
+highIncomeChildBenefitCharge.details.residence.summary = Understanding High Income Child Benefit Charge
+highIncomeChildBenefitCharge.details.residence.p2 = You may have to pay the High Income Child Benefit Charge if you or your partner have an individual income that’s over £50,000 and either:
+highIncomeChildBenefitCharge.details.agent.p2 = Your client may have to pay the High Income Child Benefit Charge if they or their partner have an individual income that’s over £50,000 and either:
+highIncomeChildBenefitCharge.details.residence.p3 = It does not matter if the child living with you is not your own child.
+highIncomeChildBenefitCharge.details.agent.p3 = It does not matter if the child living with your client is not their own child.
+highIncomeChildBenefitCharge.details.bullet1 = you or your partner get Child Benefit
+highIncomeChildBenefitCharge.agent.details.bullet1 = they or their partner get Child Benefit
+highIncomeChildBenefitCharge.details.bullet2 = someone else gets Child Benefit for a child living with you and they contribute ar least an equal amount towards the child's upkeep
+highIncomeChildBenefitCharge.agent.details.bullet2 = someone else gets Child Benefit for a child living with them and they contribute ar least an equal amount towards the child's upkeep
+highIncomeChildBenefitCharge.p1 = The partner with the higher income may have to pay High Income Child Benefit Charge.
+highIncomeChildBenefitCharge.agent.p1 = The partner with the higher income may have to pay High Income Child Benefit Charge.
+highIncomeChildBenefitCharge.heading = Whose income was higher?
+highIncomeChildBenefitCharge.agent.heading = Whose income was higher?
+highIncomeChildBenefitCharge.option1 = My income
+highIncomeChildBenefitCharge.option2 = My partner’s income
+highIncomeChildBenefitCharge.option3 = I do not have a partner
+highIncomeChildBenefitCharge.agent.option1 = My client's income
+highIncomeChildBenefitCharge.agent.option2 = My client's partner’s income
+highIncomeChildBenefitCharge.agent.option3 = My client does not have a partner
+highIncomeChildBenefitCharge.error.required = Select if your income was higher, your partner’s income was higher or you do not have a partner
+highIncomeChildBenefitCharge.agent.error.required = Select if your client’s income was higher, their partner’s income was higher or they do not have a partner
 
 marriageAllowance.title = Marriage Allowance
 marriageAllowance.heading = Marriage Allowance

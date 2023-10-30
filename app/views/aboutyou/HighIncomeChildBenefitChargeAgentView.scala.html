@@ -14,28 +14,52 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
+    govukDetails: GovukDetails,
     govukButton: GovukButton
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
+@insetContent1 = {
+<p>@messages("highIncomeChildBenefitCharge.details.agent.p2")</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>@messages("highIncomeChildBenefitCharge.agent.details.bullet1")</li>
+    <li>@messages("highIncomeChildBenefitCharge.agent.details.bullet2")</li> </ul>
+<p>@messages("highIncomeChildBenefitCharge.details.agent.p3")</p>
+}
+
 @layout(pageTitle = title(form, messages("highIncomeChildBenefitCharge.agent.title")), taxYear = taxYear) {
 
-    @formHelper(action = routes.HighIncomeChildBenefitChargeController.onSubmit(mode, taxYear), 'autoComplete -> "off") {
+    @formHelper(action = controllers.aboutyou.routes.HighIncomeChildBenefitChargeController.onSubmit(mode, taxYear), 'autoComplete -> "off") {
+
+
+        <h1 class="govuk-heading-l">@messages("highIncomeChildBenefitCharge.title")</h1>
+        <p class="govuk-body">@messages("highIncomeChildBenefitCharge.p1")</p>
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
 
+        @govukDetails(Details(
+            summary = Text(messages("highIncomeChildBenefitCharge.details.residence.summary")),
+            content = HtmlContent(insetContent1)
+            )
+        )
+
+
         @govukRadios(
             RadiosViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("highIncomeChildBenefitCharge.agent.heading")).asPageHeading(),
+                legend = LegendViewModel(messages("highIncomeChildBenefitCharge.agent.heading"))
+                        .asPageHeading()
+                        .withSize(LegendSize.Medium),
                 items  = HighIncomeChildBenefitCharge.agentOptions
             )
         )

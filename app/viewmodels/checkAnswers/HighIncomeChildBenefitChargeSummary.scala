@@ -16,9 +16,9 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
+import controllers.aboutyou.routes
 import models.{CheckMode, UserAnswers}
-import pages.HighIncomeChildBenefitChargePage
+import pages.aboutyou.HighIncomeChildBenefitChargePage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
