@@ -164,7 +164,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from FosterCarer page to PatentRoyaltyPayments page when true is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
 
-        val expectedRoute = routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(FosterCarerPage, NormalMode, answers, taxYear) mustBe expectedRoute
       }
@@ -172,7 +172,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from FosterCarer page to PatentRoyaltyPayments page when false is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, false).success.value
 
-        val expectedRoute = routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(FosterCarerPage, NormalMode, answers, taxYear) mustBe expectedRoute
       }

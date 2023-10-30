@@ -18,7 +18,7 @@ package viewmodels.checkAnswers
 
 import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.PatentRoyaltyPaymentsPage
+import pages.aboutyou.PatentRoyaltyPaymentsPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
@@ -36,7 +36,7 @@ object PatentRoyaltyPaymentsSummary  {
           key     = "patentRoyaltyPayments.checkYourAnswersLabel",
           value   = ValueViewModel(value),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.PatentRoyaltyPaymentsController.onPageLoad(CheckMode, answers.taxYear).url)
+            ActionItemViewModel("site.change", controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(CheckMode, answers.taxYear).url)
               .withVisuallyHiddenText(messages("patentRoyaltyPayments.change.hidden"))
           )
         )

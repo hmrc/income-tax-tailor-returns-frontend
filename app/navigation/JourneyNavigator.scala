@@ -34,7 +34,7 @@ class JourneyNavigator @Inject()() extends Navigator {
     case ChildBenefitPage => childBenefitRoute(_, taxYear)
     case ChildBenefitIncomePage => childBenefitIncomeRoute(_, taxYear)
     case HighIncomeChildBenefitChargePage => _ => routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
-    case FosterCarerPage => _ => routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
+    case FosterCarerPage => _ => controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
     case PatentRoyaltyPaymentsPage => _ => routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear)
     case TaxAvoidanceSchemesPage => _ => routes.AddSectionsController.onPageLoad(taxYear)
     case _ => _ => routes.IndexController.onPageLoad(taxYear)

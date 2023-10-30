@@ -242,14 +242,14 @@ marriageAllowance.agent.legend = Does your client want to transfer £1,260 of th
 marriageAllowance.error.required = Select yes if you want to transfer £1,260 of your Personal Allowance to your husband, wife or civil partner
 marriageAllowance.agent.error.required = Select yes if your client wants to transfer £1,260 of their Personal Allowance to their husband, wife or civil partner
 
-patentRoyaltyPayments.title = patentRoyaltyPayments
-patentRoyaltyPayments.agent.title = patentRoyaltyPayments
-patentRoyaltyPayments.heading = patentRoyaltyPayments
-patentRoyaltyPayments.agent.heading = patentRoyaltyPayments
-patentRoyaltyPayments.checkYourAnswersLabel = patentRoyaltyPayments
-patentRoyaltyPayments.error.required = Select yes if patentRoyaltyPayments
-patentRoyaltyPayments.agent.error.required = Select yes if patentRoyaltyPayments
-patentRoyaltyPayments.change.hidden = PatentRoyaltyPayments
+################################### ROYALTY PAYMENTS ###########################################################################################
+
+patentRoyaltyPayments.title = Did you make any patent royalty payments?
+patentRoyaltyPayments.agent.title = Did your client make any patent royalty payments?
+patentRoyaltyPayments.p1 = You must withhold 20% tax from the amount of patent royalties you pay. The withheld tax is paid as part of the tax due on your income.
+patentRoyaltyPayments.agent.p1 = Your client must withhold 20% tax from the amount of patent royalties they pay. The withheld tax is paid as part of the tax due on their income.
+patentRoyaltyPayments.error.required = Select yes if you made any patent royalty payments
+patentRoyaltyPayments.agent.error.required = Select yes if your client made any patent royalty payments
 
 taxAvoidanceSchemes.title = Tax avoidance schemes
 taxAvoidanceSchemes.agent.title = Tax avoidance schemes

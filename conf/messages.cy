@@ -213,3 +213,12 @@ highIncomeChildBenefitCharge.agent.option2 = Incwm partner fy nghleient
 highIncomeChildBenefitCharge.agent.option3 = Nid oes partner gan fy nghleient
 highIncomeChildBenefitCharge.error.required = Dewiswch a oedd eich incwm chi yn uwch, incwm eich partner yn uwch neu os nad oes gennych bartner
 highIncomeChildBenefitCharge.agent.error.required = Dewiswch a oedd incwm eich cleient yn uwch, incwm ei bartner yn uwch neu os nad oes gan eich cleient bartner
+
+################################### ROYALTY PAYMENTS ###########################################################################################
+
+patentRoyaltyPayments.title = A wnaethoch unrhyw freindaliadau patent?
+patentRoyaltyPayments.agent.title = A wnaeth eich cleient unrhyw freindaliadau patent?
+patentRoyaltyPayments.p1 = Mae’n rhaid i chi ddal 20% o dreth yn ôl o swm y breindaliadau patent a dalwch. Telir y dreth a ddelir yn ôl fel rhan o’r dreth sy’n ddyledus ar eich incwm.
+patentRoyaltyPayments.agent.p1 = Mae’n rhaid i’ch cleient ddal 20% o dreth yn ôl o swm y breindaliadau patent y mae’n ei dalu. Telir y dreth a ddelir yn ôl fel rhan o’r dreth sy’n ddyledus ar ei incwm.
+patentRoyaltyPayments.error.required = Dewiswch ‘Iawn’ os gwnaethoch unrhyw freindaliadau patent
+patentRoyaltyPayments.agent.error.required = Dewiswch ‘Iawn’ os gwnaeth eich cleient unrhyw freindaliadau patent
