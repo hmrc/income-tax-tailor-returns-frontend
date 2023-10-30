@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import base.SpecBase
-import forms.TaxAvoidanceSchemesFormProvider
-import models.{NormalMode, TaxAvoidanceSchemes, UserAnswers, Done}
+import controllers.routes
+import forms.aboutyou.TaxAvoidanceSchemesFormProvider
+import models.aboutyou.TaxAvoidanceSchemes
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TaxAvoidanceSchemesPage
+import pages.aboutyou.TaxAvoidanceSchemesPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.TaxAvoidanceSchemesView
-import views.html.TaxAvoidanceSchemesAgentView
+import views.html.aboutyou.{TaxAvoidanceSchemesAgentView, TaxAvoidanceSchemesView}
 
 import scala.concurrent.Future
 
@@ -38,7 +39,7 @@ class TaxAvoidanceSchemesControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val taxAvoidanceSchemesRoute = routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear).url
+  lazy val taxAvoidanceSchemesRoute = controllers.aboutyou.routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear).url
 
   val formProvider = new TaxAvoidanceSchemesFormProvider()
   val form = formProvider(isAgent = false)

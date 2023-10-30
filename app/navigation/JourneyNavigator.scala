@@ -21,63 +21,64 @@ import play.api.mvc.Call
 import controllers.routes
 import pages._
 import models._
-import models.aboutyou.UkResidenceStatus
+import models.aboutyou._
 import pages.aboutyou._
 
 @Singleton
 class JourneyNavigator @Inject()() extends Navigator {
-  override def normalRoutes(taxYear: Int): Page => UserAnswers => Call = {
-    case UkResidenceStatusPage => ukResidenceStatusRoute(_, taxYear)
-    case YourResidenceStatusPage => _ => routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
-    case CharitableDonationsPage => _ => controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, taxYear)
-    case MarriageAllowancePage => _ => routes.ChildBenefitController.onPageLoad(NormalMode, taxYear)
-    case ChildBenefitPage => childBenefitRoute(_, taxYear)
-    case ChildBenefitIncomePage => childBenefitIncomeRoute(_, taxYear)
-    case HighIncomeChildBenefitChargePage => _ => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
-    case FosterCarerPage => _ => routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
-    case PatentRoyaltyPaymentsPage => _ => routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear)
-    case TaxAvoidanceSchemesPage => _ => routes.AddSectionsController.onPageLoad(taxYear)
-    case _ => _ => routes.IndexController.onPageLoad(taxYear)
+
+  override val normalRoutes: Page => UserAnswers => Call = {
+    case UkResidenceStatusPage                => ukResidenceStatusRoute
+    case YourResidenceStatusPage              => ua => routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
+    case CharitableDonationsPage              => ua => controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, ua.taxYear)
+    case MarriageAllowancePage                => ua => routes.ChildBenefitController.onPageLoad(NormalMode, ua.taxYear)
+    case ChildBenefitPage                     => childBenefitRoute
+    case ChildBenefitIncomePage               => childBenefitIncomeRoute
+    case HighIncomeChildBenefitChargePage     => ua => routes.FosterCarerController.onPageLoad(NormalMode, ua.taxYear)
+    case FosterCarerPage                      => ua => routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, ua.taxYear)
+    case PatentRoyaltyPaymentsPage            => ua => controllers.aboutyou.routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, ua.taxYear)
+    case TaxAvoidanceSchemesPage              => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
+    case _                                    => ua => routes.IndexController.onPageLoad(ua.taxYear)
   }
 
   override val checkRouteMap: Page => UserAnswers => Call = {
     case _ => _ => routes.IndexController.onPageLoad(2024)
   }
 
-  def ukResidenceStatusRoute(userAnswers: UserAnswers, taxYear: Int): Call = {
+  def ukResidenceStatusRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(UkResidenceStatusPage) match {
       case Some(UkResidenceStatus.Uk) =>
-        routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
+        routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
 
       case Some(UkResidenceStatus.Domiciled) =>
-        routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
+        routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
 
       case Some(UkResidenceStatus.NonUK) =>
-        controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, taxYear)
+        controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, userAnswers.taxYear)
 
-      case _ => routes.IndexController.onPageLoad(taxYear)
+      case _ => routes.IndexController.onPageLoad(userAnswers.taxYear)
     }
   }
 
-  def childBenefitRoute(userAnswers: UserAnswers, taxYear: Int): Call = {
+  def childBenefitRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(ChildBenefitPage) match {
-      case Some(true) => routes.ChildBenefitIncomeController.onPageLoad(NormalMode, taxYear)
-      case Some(false) => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
-      case _ => routes.IndexController.onPageLoad(taxYear)
+      case Some(true) => routes.ChildBenefitIncomeController.onPageLoad(NormalMode, userAnswers.taxYear)
+      case Some(false) => routes.FosterCarerController.onPageLoad(NormalMode, userAnswers.taxYear)
+      case _ => routes.IndexController.onPageLoad(userAnswers.taxYear)
     }
   }
 
-  def childBenefitIncomeRoute(userAnswers: UserAnswers, taxYear: Int): Call = {
+  def childBenefitIncomeRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(ChildBenefitIncomePage) match {
-      case Some(true) => routes.HighIncomeChildBenefitChargeController.onPageLoad(NormalMode, taxYear)
-      case Some(false) => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
-      case _ => routes.IndexController.onPageLoad(taxYear)
+      case Some(true) => routes.HighIncomeChildBenefitChargeController.onPageLoad(NormalMode, userAnswers.taxYear)
+      case Some(false) => routes.FosterCarerController.onPageLoad(NormalMode, userAnswers.taxYear)
+      case _ => routes.IndexController.onPageLoad(userAnswers.taxYear)
     }
   }
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, taxYear: Int): Call = mode match {
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
-      normalRoutes(taxYear)(page)(userAnswers)
+      normalRoutes(page)(userAnswers)
     case CheckMode =>
       checkRouteMap(page)(userAnswers)
   }

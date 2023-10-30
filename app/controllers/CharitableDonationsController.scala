@@ -79,7 +79,7 @@ class CharitableDonationsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CharitableDonationsPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CharitableDonationsPage, mode, updatedAnswers, taxYear))
+          } yield Redirect(navigator.nextPage(CharitableDonationsPage, mode, updatedAnswers))
       )
   }
 }

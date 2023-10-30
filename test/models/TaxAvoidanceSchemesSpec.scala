@@ -17,6 +17,7 @@
 package models
 
 import generators.ModelGenerators
+import models.aboutyou.TaxAvoidanceSchemes
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.freespec.AnyFreeSpec

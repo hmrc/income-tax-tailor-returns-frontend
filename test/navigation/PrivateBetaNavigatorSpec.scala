@@ -38,7 +38,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from UkResidentStatus page to CharitableDonations page when yes is selected" in {
@@ -46,7 +46,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from UkResidentStatus page to CharitableDonations page when yes but... is selected" in {
@@ -54,7 +54,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from UkResidentStatus page to Index page when no value is found" in {
@@ -62,7 +62,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.IndexController.onPageLoad(taxYear)
 
-        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from YourResidenceStatus page to CharitableDonations page when any value is selected" in {
@@ -70,7 +70,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(YourResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(YourResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from CharitableDonations page to FosterCarer page when any value is selected" in {
@@ -78,7 +78,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(CharitableDonationsPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(CharitableDonationsPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from FosterCarer page to AddSections page when true is selected" in {
@@ -86,7 +86,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.AddSectionsController.onPageLoad(taxYear)
 
-        navigator.nextPage(FosterCarerPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(FosterCarerPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from FosterCarer page to AddSections page when false is selected" in {
@@ -94,13 +94,13 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.AddSectionsController.onPageLoad(taxYear)
 
-        navigator.nextPage(FosterCarerPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(FosterCarerPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from a page that doesn't exist in the route map to Index" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id", taxYear), taxYear) mustBe routes.IndexController.onPageLoad(taxYear)
+        navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id", taxYear)) mustBe routes.IndexController.onPageLoad(taxYear)
       }
     }
 
@@ -109,7 +109,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
       "must go from a page that doesn't exist in the edit route map to CheckYourAnswers" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id", taxYear), taxYear) mustBe routes.IndexController.onPageLoad(taxYear)
+        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id", taxYear)) mustBe routes.IndexController.onPageLoad(taxYear)
       }
     }
   }

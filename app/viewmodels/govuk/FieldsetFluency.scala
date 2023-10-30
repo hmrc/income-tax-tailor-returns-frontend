@@ -28,7 +28,9 @@ trait FieldsetFluency {
   object FieldsetViewModel {
 
     def apply(legend: Legend): Fieldset =
-      Fieldset(legend = Some(legend))
+      Fieldset(
+        legend = Some(legend)
+      )
   }
 
   implicit class FluentFieldset(fieldset: Fieldset) {
