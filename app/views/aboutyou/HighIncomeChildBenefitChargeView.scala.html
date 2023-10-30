@@ -15,32 +15,39 @@
  *@
 
 @import viewmodels.LegendSize
+@import components._
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
+    govukButton: GovukButton,
     govukDetails: GovukDetails,
-    govukButton: GovukButton
+    heading: Heading1,
+    list: BulletList,
+    paragraph: ParagraphBody
+
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
 @insetContent1 = {
-<p>@messages("highIncomeChildBenefitCharge.details.residence.p2")</p>
-<ul class="govuk-list govuk-list--bullet">
-    <li>@messages("highIncomeChildBenefitCharge.details.bullet1")</li>
-    <li>@messages("highIncomeChildBenefitCharge.details.bullet2")</li> </ul>
-<p>@messages("highIncomeChildBenefitCharge.details.residence.p3")</p>
+    @paragraph(messages("highIncomeChildBenefitCharge.details.residence.p2"))
+    @list(elements = Seq(
+        Html(messages("highIncomeChildBenefitCharge.details.bullet1")),
+        Html(messages("highIncomeChildBenefitCharge.details.bullet2"))
+    ))
+    @paragraph(messages("highIncomeChildBenefitCharge.details.residence.p3"))
+
 }
 
 @layout(pageTitle = title(form, messages("highIncomeChildBenefitCharge.title")), taxYear = taxYear) {
 
     @formHelper(action = controllers.aboutyou.routes.HighIncomeChildBenefitChargeController.onSubmit(mode, taxYear), 'autoComplete -> "off") {
 
-        <h1 class="govuk-heading-l">@messages("highIncomeChildBenefitCharge.title")</h1>
-        <p class="govuk-body">@messages("highIncomeChildBenefitCharge.p1")</p>
+        @heading(messages("highIncomeChildBenefitCharge.title"))
+        @paragraph(messages("highIncomeChildBenefitCharge.p1"))
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
@@ -56,7 +63,6 @@
             RadiosViewModel(
                 field  = form("value"),
                 legend = LegendViewModel(messages("highIncomeChildBenefitCharge.heading"))
-                        .asPageHeading()
                         .withSize(LegendSize.Medium),
                 items  = HighIncomeChildBenefitCharge.options
             )

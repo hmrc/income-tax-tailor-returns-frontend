@@ -14,12 +14,16 @@
  * limitations under the License.
  *@
 
+@import components._
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    heading: Heading1,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
@@ -28,8 +32,9 @@
 
     @formHelper(action = controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
-        <h1 class="govuk-heading-l">@messages("patentRoyaltyPayments.agent.title")</h1>
-        <p class="govuk-body">@messages("patentRoyaltyPayments.agent.p1")</p>
+        @heading(messages("patentRoyaltyPayments.agent.title"))
+        @paragraph(messages("patentRoyaltyPayments.agent.p1"))
+
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
