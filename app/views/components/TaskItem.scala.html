@@ -28,14 +28,14 @@
     <span class="app-task-link">
            @task.tag match {
             case CannotStartYet => {
-                <span class="app-task-list__task-name govuk-!-width-two-thirds"
+                <span class="app-task-list__task-name"
                       id="task-list__task--@{task.link.text}"
                       aria-describedby="task-list__task--@{task.link.text}__tag">
                     @messages(s"addSections.${task.link.text}")
                 </span>
             }
             case _ => {
-                <a class="govuk-link app-task-list__task-name govuk-!-width-two-thirds"
+                <a class="govuk-link app-task-list__task-name"
                    id="task-list__task-link--@{task.link.text}"
                    href="@{task.link.url}"
                    aria-describedby="task-list__task--@{task.link.text}__tag">
