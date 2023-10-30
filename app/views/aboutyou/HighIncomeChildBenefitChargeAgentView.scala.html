@@ -32,12 +32,12 @@
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
 @insetContent1 = {
-@paragraph(messages("highIncomeChildBenefitCharge.details.agent.p2"))
-@list(elements = Seq(
-Html(messages("highIncomeChildBenefitCharge.details.agent.bullet1")),
-Html(messages("highIncomeChildBenefitCharge.details.agent.bullet2"))
-))
-@paragraph(messages("highIncomeChildBenefitCharge.details.agent.p3"))
+    @paragraph(messages("highIncomeChildBenefitCharge.details.agent.p2"))
+    @list(elements = Seq(
+        Html(messages("highIncomeChildBenefitCharge.details.agent.bullet1")),
+        Html(messages("highIncomeChildBenefitCharge.details.agent.bullet2"))
+    ))
+    @paragraph(messages("highIncomeChildBenefitCharge.details.agent.p3"))
 
 }
 
