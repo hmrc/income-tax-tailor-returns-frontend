@@ -19,7 +19,7 @@ package models.aboutyou
 import models.{Enumerable, WithName}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Empty, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import viewmodels.govuk.checkbox._
 
 sealed trait TaxAvoidanceSchemes
@@ -47,11 +47,10 @@ object TaxAvoidanceSchemes extends Enumerable.Implicits {
         value match {
           case Divider =>
             CheckboxItemViewModel(
-              content = Empty,
               fieldId = "value",
               index = index,
               value = value.toString,
-              divider = Some("or")
+              divider = messages("site.or")
             )
           case _ =>
             CheckboxItemViewModel(
@@ -69,11 +68,10 @@ object TaxAvoidanceSchemes extends Enumerable.Implicits {
         value match {
           case Divider =>
             CheckboxItemViewModel(
-              content = Empty,
               fieldId = "value",
               index = index,
               value = value.toString,
-              divider = Some("or")
+              divider = messages("site.or")
             )
           case _ =>
             CheckboxItemViewModel(

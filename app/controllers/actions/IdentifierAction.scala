@@ -106,7 +106,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
       getMtdItId(enrolments) match {
         case Some(mtdItId) =>
-          block(IdentifierRequest(request, mtdItId, isAgent = true))
+          block(IdentifierRequest(request, mtdItId, isAgent = false))
         case None =>
           logger.error("User did not have MTDITID Enrolment")
           unauthorized
