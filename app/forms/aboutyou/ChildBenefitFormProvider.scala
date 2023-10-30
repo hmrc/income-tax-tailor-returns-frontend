@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-package pages
+package forms.aboutyou
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case object ChildBenefitPage extends QuestionPage[Boolean] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ toString
+class ChildBenefitFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "childBenefit"
+  def apply(isAgent: Boolean): Form[Boolean] = {
+    val error: String =
+      if (isAgent) {
+        "childBenefit.agent.error.required"
+      } else {
+        "childBenefit.error.required"
+      }
+    Form(
+      "value" -> boolean(error)
+    )
+  }
 }

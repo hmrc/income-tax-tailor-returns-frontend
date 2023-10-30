@@ -172,3 +172,10 @@ marriageAllowance.legend = A ydych am drosglwyddo £1,260 o’ch Lwfans Personol
 marriageAllowance.agent.legend = A yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil?
 marriageAllowance.error.required = Dewiswch ‘Iawn’ os ydych am drosglwyddo £1,260 o’ch Lwfans Personol i’ch gŵr, gwraig neu bartner sifil
 marriageAllowance.agent.error.required = Dewiswch ‘Iawn’ os yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil
+
+###################################  CHILD BENEFIT  ###########################################################################################
+
+childBenefit.title = A gawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi?
+childBenefit.agent.title = A gafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw?
+childBenefit.error.required = Dewiswch ‘Iawn’, os cawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi
+childBenefit.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw
