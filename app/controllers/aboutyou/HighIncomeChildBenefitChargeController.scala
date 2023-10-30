@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.HighIncomeChildBenefitChargeFormProvider
-
-import javax.inject.Inject
+import forms.aboutyou.HighIncomeChildBenefitChargeFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.HighIncomeChildBenefitChargePage
+import pages.aboutyou.HighIncomeChildBenefitChargePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.HighIncomeChildBenefitChargeView
-import views.html.HighIncomeChildBenefitChargeAgentView
+import views.html.aboutyou.{HighIncomeChildBenefitChargeAgentView, HighIncomeChildBenefitChargeView}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class HighIncomeChildBenefitChargeController @Inject()(

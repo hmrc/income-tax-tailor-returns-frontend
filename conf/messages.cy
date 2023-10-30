@@ -142,3 +142,18 @@ yourResidenceStatus.agent.nonResident = Nid oedd fy nghleient yn breswylydd yn y
 yourResidenceStatus.agent.dualResident = Roedd fy nghleient yn breswylydd deuol yn y DU ac mewn gwlad arall
 yourResidenceStatus.error.required = Dewiswch os nad oeddech yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
 yourResidenceStatus.agent.error.required = Dewiswch os nad oedd eich cleient yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
+
+################################### HIGH INCOME CHILD BENEFIT CHARGE ###########################################################################################
+
+highIncomeChildBenefitCharge.title = Tâl Treth Budd-dal Plant Incwm Uchel
+highIncomeChildBenefitCharge.agent.title = Tâl Treth Budd-dal Plant Incwm Uchel
+highIncomeChildBenefitCharge.heading = Whose income was higher?
+highIncomeChildBenefitCharge.agent.heading = Whose income was higher?
+highIncomeChildBenefitCharge.option1 = My income
+highIncomeChildBenefitCharge.option2 = My partner’s income
+highIncomeChildBenefitCharge.option3 = I do not have a partner
+highIncomeChildBenefitCharge.agent.option1 = My income
+highIncomeChildBenefitCharge.agent.option2 = My partner’s income
+highIncomeChildBenefitCharge.option3 = I do not have a partner
+highIncomeChildBenefitCharge.error.required = Select if your income was higher, your partner’s income was higher or you do not have a partner
+highIncomeChildBenefitCharge.agent.error.required = Select if your client’s income was higher, their partner’s income was higher or they do not have a partner

@@ -191,18 +191,22 @@ childBenefitIncome.error.required = Select yes if childBenefitIncome
 childBenefitIncome.agent.error.required = Select yes if childBenefitIncome
 childBenefitIncome.change.hidden = ChildBenefitIncome
 
-highIncomeChildBenefitCharge.title = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.agent.title = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.heading = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.agent.heading = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.option1 = My partner’s income
-highIncomeChildBenefitCharge.option2 = Option 2
-highIncomeChildBenefitCharge.agent.option1 = My partner’s income
-highIncomeChildBenefitCharge.agent.option2 = Option 2
-highIncomeChildBenefitCharge.checkYourAnswersLabel = highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.error.required = Select highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.agent.error.required = Select highIncomeChildBenefitCharge
-highIncomeChildBenefitCharge.change.hidden = HighIncomeChildBenefitCharge
+################################### HIGH INCOME CHILD BENEFIT CHARGE ###########################################################################################
+
+highIncomeChildBenefitCharge.title = High Income Child Benefit Charge
+highIncomeChildBenefitCharge.agent.title = High Income Child Benefit Charge
+highIncomeChildBenefitCharge.p1 = The partner with the higher income may have to pay High Income Child Benefit Charge.
+highIncomeChildBenefitCharge.agent.p1 = The partner with the higher income may have to pay High Income Child Benefit Charge.
+highIncomeChildBenefitCharge.heading = Whose income was higher?
+highIncomeChildBenefitCharge.agent.heading = Whose income was higher?
+highIncomeChildBenefitCharge.option1 = My income
+highIncomeChildBenefitCharge.option2 = My partner’s income
+highIncomeChildBenefitCharge.option3 = I do not have a partner
+highIncomeChildBenefitCharge.agent.option1 = My income
+highIncomeChildBenefitCharge.agent.option2 = My partner’s income
+highIncomeChildBenefitCharge.agent.option3 = I do not have a partner
+highIncomeChildBenefitCharge.error.required = Select if your income was higher, your partner’s income was higher or you do not have a partner
+highIncomeChildBenefitCharge.agent.error.required = Select if your client’s income was higher, their partner’s income was higher or they do not have a partner
 
 marriageAllowance.title = marriageAllowance
 marriageAllowance.agent.title = marriageAllowance

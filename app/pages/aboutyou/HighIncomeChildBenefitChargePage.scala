@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package forms
+package pages.aboutyou
 
-import javax.inject.Inject
-
-import forms.mappings.Mappings
-import play.api.data.Form
 import models.HighIncomeChildBenefitCharge
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-class HighIncomeChildBenefitChargeFormProvider @Inject() extends Mappings {
+case object HighIncomeChildBenefitChargePage extends QuestionPage[HighIncomeChildBenefitCharge] {
 
-  def apply(isAgent: Boolean): Form[HighIncomeChildBenefitCharge] = {
-    val error: String =
-      if (isAgent) {
-        "highIncomeChildBenefitCharge.agent.error.required"
-      } else {
-        "highIncomeChildBenefitCharge.error.required"
-      }
-    Form(
-      "value" -> enumerable[HighIncomeChildBenefitCharge](error)
-    )
-  }
+  override def path: JsPath = JsPath \"aboutYou"\ toString
+
+  override def toString: String = "highIncomeChildBenefitCharge"
 }

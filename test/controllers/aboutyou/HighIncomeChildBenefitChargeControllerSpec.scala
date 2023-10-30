@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import base.SpecBase
-import forms.HighIncomeChildBenefitChargeFormProvider
-import models.{NormalMode, HighIncomeChildBenefitCharge, UserAnswers, Done}
+import controllers.routes
+import forms.aboutyou.HighIncomeChildBenefitChargeFormProvider
+import models.{Done, HighIncomeChildBenefitCharge, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.HighIncomeChildBenefitChargePage
+import pages.aboutyou.HighIncomeChildBenefitChargePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.HighIncomeChildBenefitChargeView
-import views.html.HighIncomeChildBenefitChargeAgentView
+import views.html.{HighIncomeChildBenefitChargeAgentView, HighIncomeChildBenefitChargeView}
 
 import scala.concurrent.Future
 
