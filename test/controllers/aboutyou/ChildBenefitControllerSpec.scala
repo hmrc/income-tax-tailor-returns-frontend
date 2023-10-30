@@ -17,7 +17,6 @@
 package controllers.aboutyou
 
 import base.SpecBase
-import controllers.routes._
 import forms.aboutyou.ChildBenefitFormProvider
 import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
