@@ -161,6 +161,26 @@ yourResidenceStatus.agent.dualResident = Roedd fy nghleient yn breswylydd deuol 
 yourResidenceStatus.error.required = Dewiswch os nad oeddech yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
 yourResidenceStatus.agent.error.required = Dewiswch os nad oedd eich cleient yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
 
+charitableDonations.title = Cyfraniadau elusennol
+charitableDonations.heading = Cyfraniadau elusennol
+charitableDonations.detail.understandingQualifyingShares.summary = Deall cyfranddaliadau a gwarantau cymhwysol
+charitableDonations.detail.understandingQualifyingShares.p1 = Cyfranddaliadau a gwarantau cymhwysol yw:
+charitableDonations.detail.understandingQualifyingShares.bullet1 = y rheini a restrwyd ar gyfnewidfa stoc gydnabyddedig, neu sy’n cael eu masnachu mewn marchnad ddynodedig yn y DU
+charitableDonations.detail.understandingQualifyingShares.bullet2 = unedau mewn ymddiriedolaeth unedol awdurdodedig
+charitableDonations.detail.understandingQualifyingShares.bullet3 = cyfranddaliadau mewn cwmni buddsoddi penagored
+charitableDonations.detail.understandingQualifyingShares.bullet4 = buddiant mewn cronfa alltraeth
+charitableDonations.p1 = Gall rhai cyfraniadau i elusen leihau faint o dreth incwm y mae’n rhaid i chi ei thalu. Gelwir hyn yn rhyddhad treth.
+charitableDonations.agent.p1 = Gall rhai cyfraniadau at elusen leihau faint o dreth incwm y mae’n rhaid i’ch cleient ei thalu. Gelwir hyn yn rhyddhad treth.
+charitableDonations.legend = A wnaethoch gyfrannu at elusen?
+charitableDonations.agent.legend = A wnaeth eich cleient gyfraniad at elusen?
+charitableDonations.legend.hint = Dewiswch bob un sy’n berthnasol.
+charitableDonations.donationsUsingGiftAid = Cyfraniadau drwy Rodd Cymorth
+charitableDonations.donationsUsingGiftAid.hint = dylech ond dewis hwn os gwnaethoch lenwi datganiad Rhodd Cymorth pan wnaethoch gyfraniad
+charitableDonations.agent.donationsUsingGiftAid.hint = dewiswch hwn ond os yw’ch cleient wedi llenwi datganiad Rhodd Cymorth pan wnaeth gyfraniad
+charitableDonations.giftsOfSharesOrSecurities = Rhoddion o gyfranddaliadau neu warantau
+charitableDonations.giftsOfLandOrProperty = Rhoddion o dir neu eiddo
+charitableDonations.noDonations = Na, ni wnes i gyfraniad at elusen
+charitableDonations.agent.noDonations = Na, ni wnaeth fy nghleient gyfraniad at elusen
 
 marriageAllowance.title = Lwfans Priodasol
 marriageAllowance.heading = Lwfans Priodasol

@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import base.SpecBase
-import forms.CharitableDonationsFormProvider
-import models.{NormalMode, CharitableDonations, UserAnswers, Done}
+import controllers.routes
+import forms.aboutyou.CharitableDonationsFormProvider
+import models.aboutyou.CharitableDonations
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.CharitableDonationsPage
+import pages.aboutyou.CharitableDonationsPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.CharitableDonationsView
-import views.html.CharitableDonationsAgentView
+import views.html.aboutyou.{CharitableDonationsAgentView, CharitableDonationsView}
 
 import scala.concurrent.Future
 
@@ -38,7 +39,7 @@ class CharitableDonationsControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val charitableDonationsRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear).url
+  lazy val charitableDonationsRoute = controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear).url
 
   val formProvider = new CharitableDonationsFormProvider()
   val form = formProvider(isAgent = false)

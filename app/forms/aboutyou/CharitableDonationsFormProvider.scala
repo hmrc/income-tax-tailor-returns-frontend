@@ -14,26 +14,20 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.aboutyou
 
 import forms.mappings.Mappings
+import models.aboutyou.CharitableDonations
 import play.api.data.Form
 import play.api.data.Forms.set
-import models.CharitableDonations
+
+import javax.inject.Inject
 
 class CharitableDonationsFormProvider @Inject() extends Mappings {
 
   def apply(isAgent: Boolean): Form[Set[CharitableDonations]] = {
-    val error: String =
-      if (isAgent) {
-        "charitableDonations.agent.error.required"
-      } else {
-        "charitableDonations.error.required"
-      }
     Form(
-      "value" -> set(enumerable[CharitableDonations](error)).verifying(nonEmptySet(error))
+      "value" -> set(enumerable[CharitableDonations]())
     )
   }
 }

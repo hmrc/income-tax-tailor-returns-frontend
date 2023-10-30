@@ -20,7 +20,7 @@ import play.api.data.Form
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, Checkboxes}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Empty}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
 import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
@@ -81,13 +81,15 @@ trait CheckboxFluency {
                content: Content,
                fieldId: String,
                index: Int,
-               value: String
+               value: String,
+               hint: Option[Hint] = None
              ): CheckboxItem =
       CheckboxItem(
         content = content,
         id      = Some(s"${fieldId}_$index"),
         name    = Some(s"$fieldId[$index]"),
-        value   = value
+        value   = value,
+        hint = hint
       )
 
     def apply(

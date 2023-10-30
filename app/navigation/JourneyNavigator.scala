@@ -49,10 +49,10 @@ class JourneyNavigator @Inject()() extends Navigator {
   def ukResidenceStatusRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(UkResidenceStatusPage) match {
       case Some(UkResidenceStatus.Uk) =>
-        routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
+        controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
 
       case Some(UkResidenceStatus.Domiciled) =>
-        routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
+        controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
 
       case Some(UkResidenceStatus.NonUK) =>
         controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, userAnswers.taxYear)

@@ -36,10 +36,10 @@ POST       /:taxYear/about-you/your-residence-status                            
 GET        /:taxYear/about-you/change-your-residence-status                         controllers.aboutyou.YourResidenceStatusController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/about-you/change-your-residence-status                         controllers.aboutyou.YourResidenceStatusController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /charitableDonations/:taxYear                                            controllers.CharitableDonationsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeCharitableDonations/:taxYear                                      controllers.CharitableDonationsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /charitableDonations/:taxYear                                            controllers.CharitableDonationsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-POST       /changeCharitableDonations/:taxYear                                      controllers.CharitableDonationsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/about-you/charitable-donations                                 controllers.aboutyou.CharitableDonationsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/about-you/charitable-donations                                 controllers.aboutyou.CharitableDonationsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/about-you/change-charitable-donations                          controllers.aboutyou.CharitableDonationsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/about-you/change-charitable-donations                          controllers.aboutyou.CharitableDonationsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /:taxYear/about-you/foster-carer                                         controllers.aboutyou.FosterCarerController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /:taxYear/about-you/foster-carer                                         controllers.aboutyou.FosterCarerController.onSubmit(mode: Mode = NormalMode, taxYear: Int)

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package forms
+package forms.aboutyou
 
 import forms.behaviours.CheckboxFieldBehaviours
-import models.CharitableDonations
+import models.aboutyou.CharitableDonations
 import play.api.data.FormError
 
 class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
