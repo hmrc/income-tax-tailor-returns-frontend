@@ -1,4 +1,4 @@
-service.name = income-tax-tailor-returns-frontend
+service.name = Update and submit an Income Tax Return
 
 site.back = Back
 site.remove = Remove
