@@ -26,22 +26,27 @@
     govukButton: GovukButton,
     govukDetails: GovukDetails,
     heading: Heading1,
+    link: Link,
     config: FrontendAppConfig
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
+@understandingTaxAvoidance = @{ Call("GET", config.understandingTaxAvoidanceUrl) }
+
+@understandingRemuneration = @{ Call("GET", config.understandingRemunerationUrl) }
+
 @details = {
     <p class="govuk-body">
         @messages("taxAvoidanceSchemes.understandingAvoidance.summary.p")
-        <a class="govuk-link" target="_blank" href="@{config.understandingTaxAvoidanceUrl}">@messages("taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore")</a>
+        @link("understandingAvoidance", messages("taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore"), understandingTaxAvoidance, true)
     </p>
 }
 
 @details1 = {
     <p class="govuk-body">
         @messages("taxAvoidanceSchemes.understandingRemuneration.summary.p")
-        <a class="govuk-link" target="_blank" href="@{config.understandingRemunerationUrl}">@messages("taxAvoidanceSchemes.understandingRemuneration.summary.findOutMore")</a>
+        @link("understandingAvoidance", messages("taxAvoidanceSchemes.understandingRemuneration.summary.findOutMore"), understandingRemuneration, true)
     </p>
 }
 
