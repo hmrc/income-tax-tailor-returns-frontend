@@ -25,7 +25,7 @@
 
 <li class="app-task-list__item" id="task-list__item--@{task.link.text}">
 
-    <div class="app-task-link govuk-!-width-two-thirds">
+    <span class="app-task-link">
            @task.tag match {
             case CannotStartYet => {
                 <span class="app-task-list__task-name"
@@ -43,7 +43,7 @@
                 </a>
             }
         }
-    </div>
+    </span>
 
     @govukTag(Tag(
         content = Text(messages(s"addSections.status.${task.tag}")),
