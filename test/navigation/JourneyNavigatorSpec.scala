@@ -161,6 +161,14 @@ class JourneyNavigatorSpec extends SpecBase {
         navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers, taxYear) mustBe expectedRoute
       }
 
+      "must go from HighIncomeChildBenefitCharge page to FosterCarer page when Option3 is selected" in {
+        val answers = UserAnswers(mtdItId, taxYear).set(HighIncomeChildBenefitChargePage, HighIncomeChildBenefitCharge.NoPartner).success.value
+
+        val expectedRoute = routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers, taxYear) mustBe expectedRoute
+      }
+
       "must go from FosterCarer page to PatentRoyaltyPayments page when true is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
 
