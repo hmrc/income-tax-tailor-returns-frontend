@@ -64,10 +64,10 @@ POST       /:taxYear/about-you/marriage-allowance                               
 GET        /:taxYear/about-you/change-marriage-allowance                            controllers.aboutyou.MarriageAllowanceController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/about-you/change-marriage-allowance                            controllers.aboutyou.MarriageAllowanceController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /:taxYear/about-you/patent-royalty-payment                               controllers.aboutyou.PatentRoyaltyPaymentsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /:taxYear/about-you/patent-royalty-payment                               controllers.aboutyou.PatentRoyaltyPaymentsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /:taxYear/about-you/change-patent-royalty-payment                        controllers.aboutyou.PatentRoyaltyPaymentsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /:taxYear/about-you/change-patent-royalty-payment                        controllers.aboutyou.PatentRoyaltyPaymentsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/about-you/patent-royalty-payments                               controllers.aboutyou.PatentRoyaltyPaymentsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/about-you/patent-royalty-payments                               controllers.aboutyou.PatentRoyaltyPaymentsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/about-you/change-patent-royalty-payments                        controllers.aboutyou.PatentRoyaltyPaymentsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/about-you/change-patent-royalty-payments                        controllers.aboutyou.PatentRoyaltyPaymentsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /taxAvoidanceSchemes/:taxYear                                            controllers.TaxAvoidanceSchemesController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /taxAvoidanceSchemes/:taxYear                                            controllers.TaxAvoidanceSchemesController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
