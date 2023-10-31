@@ -16,6 +16,7 @@
 
 @import models.aboutyou.TaxAvoidanceSchemes
 @import viewmodels.LegendSize
+@import components._
 
 @this(
     layout: templates.Layout,
@@ -24,6 +25,7 @@
     govukCheckboxes: GovukCheckboxes,
     govukButton: GovukButton,
     govukDetails: GovukDetails,
+    heading: Heading1,
     config: FrontendAppConfig
 )
 
@@ -51,7 +53,7 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value_0")))
         }
 
-        <h1 class="govuk-heading-l">@messages("taxAvoidanceSchemes.agent.heading")</h1>
+        @heading(messages("taxAvoidanceSchemes.agent.heading"))
 
         @govukDetails(Details(
             summary = Text(messages("taxAvoidanceSchemes.understandingAvoidance.summary")),
