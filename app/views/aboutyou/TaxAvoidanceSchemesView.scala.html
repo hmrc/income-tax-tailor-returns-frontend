@@ -32,16 +32,16 @@
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
 @details = {
-    <p>
+    <p class="govuk-body">
         @messages("taxAvoidanceSchemes.understandingAvoidance.summary.p")
-        <a target="_blank" href="@{config.understandingTaxAvoidanceUrl}">@messages("taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore")</a>
+        <a class="govuk-link" target="_blank" href="@{config.understandingTaxAvoidanceUrl}">@messages("taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore")</a>
     </p>
 }
 
 @details1 = {
-    <p>
+    <p class="govuk-body">
         @messages("taxAvoidanceSchemes.understandingRemuneration.summary.p")
-        <a target="_blank" href="@{config.understandingRemunerationUrl}">@messages("taxAvoidanceSchemes.understandingRemuneration.summary.findOutMore")</a>
+        <a class="govuk-link" target="_blank" href="@{config.understandingRemunerationUrl}">@messages("taxAvoidanceSchemes.understandingRemuneration.summary.findOutMore")</a>
     </p>
 }
 
