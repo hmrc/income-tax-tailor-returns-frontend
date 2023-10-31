@@ -46,11 +46,10 @@ object CharitableDonations extends Enumerable.Implicits {
       case (value, index) =>
         value match {
           case Divider => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
-            divider = Some(messages(s"site.or"))
+            divider = messages(s"site.or")
           )
           case DonationsUsingGiftAid => CheckboxItemViewModel(
             content = Text(messages(s"charitableDonations.${value.toString}")),
@@ -73,11 +72,10 @@ object CharitableDonations extends Enumerable.Implicits {
       case (value, index) =>
         value match {
           case Divider => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
-            divider = Some(messages(s"site.or"))
+            divider = messages(s"site.or")
           )
           case DonationsUsingGiftAid => CheckboxItemViewModel(
             content = Text(messages(s"charitableDonations.${value.toString}")),

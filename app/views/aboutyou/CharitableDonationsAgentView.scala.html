@@ -61,7 +61,7 @@
                 name   = "value",
                 legend = LegendViewModel(messages("charitableDonations.agent.legend")).withSize(LegendSize.Medium),
                 items  = CharitableDonations.agentCheckboxItems
-            )
+            ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )
 
         @govukButton(

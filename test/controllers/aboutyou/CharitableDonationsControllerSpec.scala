@@ -31,7 +31,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.aboutyou.{CharitableDonationsAgentView, CharitableDonationsView}
+import views.html.{CharitableDonationsAgentView, CharitableDonationsView}
 
 import scala.concurrent.Future
 
@@ -140,6 +140,46 @@ class CharitableDonationsControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, charitableDonationsRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
+
+        val boundForm = form.bind(Map("value" -> "invalid value"))
+
+        val view = application.injector.instanceOf[CharitableDonationsView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, charitableDonationsRoute)
+            .withFormUrlEncodedBody(("value", "invalid value"))
+
+        val boundForm = agentForm.bind(Map("value" -> "invalid value"))
+
+        val view = application.injector.instanceOf[CharitableDonationsAgentView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
