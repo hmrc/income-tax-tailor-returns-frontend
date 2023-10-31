@@ -16,7 +16,6 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
 import models.{CheckMode, UserAnswers}
 import pages.aboutyou.CharitableDonationsPage
 import play.api.i18n.Messages
@@ -45,7 +44,7 @@ object CharitableDonationsSummary  {
           key     = "charitableDonations.checkYourAnswersLabel",
           value   = value,
           actions = Seq(
-            ActionItemViewModel("site.change", routes.CharitableDonationsController.onPageLoad(CheckMode, answers.taxYear).url)
+            ActionItemViewModel("site.change", controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(CheckMode, answers.taxYear).url)
               .withVisuallyHiddenText(messages("charitableDonations.change.hidden"))
           )
         )

@@ -31,7 +31,7 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.{CharitableDonationsAgentView, CharitableDonationsView}
+import views.html.aboutyou.{CharitableDonationsAgentView, CharitableDonationsView}
 
 import scala.concurrent.Future
 
