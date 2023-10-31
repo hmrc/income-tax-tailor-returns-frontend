@@ -32,13 +32,13 @@
 
     @formHelper(action = controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
-        @heading(messages("patentRoyaltyPayments.agent.title"))
-        @paragraph(messages("patentRoyaltyPayments.agent.p1"))
-
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
+
+        @heading(messages("patentRoyaltyPayments.agent.title"))
+        @paragraph(messages("patentRoyaltyPayments.agent.p1"))
 
         @govukRadios(
             RadiosViewModel.yesNo(
