@@ -108,7 +108,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from ChildBenefit page to FosterCarer page when false is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(ChildBenefitPage, false).success.value
 
-        val expectedRoute = routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(ChildBenefitPage, NormalMode, answers, taxYear) mustBe expectedRoute
       }
@@ -132,7 +132,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from ChildBenefitIncome page to FosterCarer page when false is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(ChildBenefitIncomePage, false).success.value
 
-        val expectedRoute = routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(ChildBenefitIncomePage, NormalMode, answers, taxYear) mustBe expectedRoute
       }
@@ -148,7 +148,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from HighIncomeChildBenefitCharge page to FosterCarer page when Option1 is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(HighIncomeChildBenefitChargePage, HighIncomeChildBenefitCharge.SelfIncome).success.value
 
-        val expectedRoute = routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers, taxYear) mustBe expectedRoute
       }
@@ -156,7 +156,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from HighIncomeChildBenefitCharge page to FosterCarer page when Option2 is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(HighIncomeChildBenefitChargePage, HighIncomeChildBenefitCharge.PartnerIncome).success.value
 
-        val expectedRoute = routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers, taxYear) mustBe expectedRoute
       }
@@ -164,7 +164,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from HighIncomeChildBenefitCharge page to FosterCarer page when Option3 is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(HighIncomeChildBenefitChargePage, HighIncomeChildBenefitCharge.NoPartner).success.value
 
-        val expectedRoute = routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers, taxYear) mustBe expectedRoute
       }

@@ -33,7 +33,7 @@ class JourneyNavigator @Inject()() extends Navigator {
     case MarriageAllowancePage => _ => controllers.aboutyou.routes.ChildBenefitController.onPageLoad(NormalMode, taxYear)
     case ChildBenefitPage => childBenefitRoute(_, taxYear)
     case ChildBenefitIncomePage => childBenefitIncomeRoute(_, taxYear)
-    case HighIncomeChildBenefitChargePage => _ => routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+    case HighIncomeChildBenefitChargePage => _ => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
     case FosterCarerPage => _ => controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
     case PatentRoyaltyPaymentsPage => _ => routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear)
     case TaxAvoidanceSchemesPage => _ => routes.AddSectionsController.onPageLoad(taxYear)
@@ -62,7 +62,7 @@ class JourneyNavigator @Inject()() extends Navigator {
   def childBenefitRoute(userAnswers: UserAnswers, taxYear: Int): Call = {
     userAnswers.get(ChildBenefitPage) match {
       case Some(true) => controllers.aboutyou.routes.ChildBenefitIncomeController.onPageLoad(NormalMode, taxYear)
-      case Some(false) => routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+      case Some(false) => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
       case _ => routes.IndexController.onPageLoad(taxYear)
     }
   }
@@ -70,7 +70,7 @@ class JourneyNavigator @Inject()() extends Navigator {
   def childBenefitIncomeRoute(userAnswers: UserAnswers, taxYear: Int): Call = {
     userAnswers.get(ChildBenefitIncomePage) match {
       case Some(true) => controllers.aboutyou.routes.HighIncomeChildBenefitChargeController.onPageLoad(NormalMode, taxYear)
-      case Some(false) => routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+      case Some(false) => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
       case _ => routes.IndexController.onPageLoad(taxYear)
     }
   }

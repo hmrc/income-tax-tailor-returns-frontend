@@ -43,7 +43,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages(""))
+                LegendViewModel(messages("patentRoyaltyPayments.agent.title")).visuallyHidden()
             )
         )
 

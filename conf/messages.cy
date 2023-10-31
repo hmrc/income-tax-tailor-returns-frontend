@@ -1,3 +1,5 @@
+service.name = Diweddaru a chyflwyno Ffurflen Dreth Incwm
+
 site.back = Yn ôl
 site.remove = Tynnu
 site.change = Newid
@@ -9,6 +11,9 @@ site.startAgain = Dechrau eto
 site.signIn = Mewngofnodi
 site.govuk = GOV.UK
 site.caption = 6 Ebrill {0} i 5 Ebrill {1}
+
+common.or = Neu
+common.selectAll = Dewiswch bob un sy’n berthnasol.
 
 date.day = Diwrnod
 date.month = Mis
@@ -222,3 +227,10 @@ patentRoyaltyPayments.p1 = Mae’n rhaid i chi ddal 20% o dreth yn ôl o swm y b
 patentRoyaltyPayments.agent.p1 = Mae’n rhaid i’ch cleient ddal 20% o dreth yn ôl o swm y breindaliadau patent y mae’n ei dalu. Telir y dreth a ddelir yn ôl fel rhan o’r dreth sy’n ddyledus ar ei incwm.
 patentRoyaltyPayments.error.required = Dewiswch ‘Iawn’ os gwnaethoch unrhyw freindaliadau patent
 patentRoyaltyPayments.agent.error.required = Dewiswch ‘Iawn’ os gwnaeth eich cleient unrhyw freindaliadau patent
+
+fosterCarer.title = A oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau?
+fosterCarer.agent.title = A oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau?
+fosterCarer.p1 = Os oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau, bydd angen i chi lenwi’r adran hunangyflogaeth.
+fosterCarer.agent.p1 = Os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau, bydd angen i chi lenwi’r adran hunangyflogaeth.
+fosterCarer.error.required = Dewiswch ‘Iawn’ os oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau
+fosterCarer.agent.error.required = Dewiswch ‘Iawn’ os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau

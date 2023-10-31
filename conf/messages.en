@@ -1,4 +1,4 @@
-service.name = income-tax-tailor-returns-frontend
+service.name = Update and submit an Income Tax Return
 
 site.back = Back
 site.remove = Remove
@@ -11,6 +11,9 @@ site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
 site.caption = 6 April {0} to 5 April {1}
+
+common.or = or
+common.selectAll = Select all that apply.
 
 date.day = Day
 date.month = Month
@@ -177,14 +180,13 @@ charitableDonations.error.required = Select charitableDonations
 charitableDonations.agent.error.required = Select charitableDonations
 charitableDonations.change.hidden = CharitableDonations
 
-fosterCarer.title = fosterCarer
-fosterCarer.agent.title = fosterCarer
-fosterCarer.heading = fosterCarer
-fosterCarer.agent.heading = fosterCarer
-fosterCarer.checkYourAnswersLabel = fosterCarer
-fosterCarer.error.required = Select yes if fosterCarer
-fosterCarer.agent.error.required = Select yes if fosterCarer
-fosterCarer.change.hidden = FosterCarer
+fosterCarer.title = Were you a foster carer or shared lives carer?
+fosterCarer.agent.title = Was your client a foster carer or shared lives carer?
+fosterCarer.p1 = If you were a foster carer or shared lives carer, you’ll need to complete the self-employment section.
+fosterCarer.agent.p1 = If your client was a foster carer or shared lives carer, you’ll need to complete the self-employment section.
+fosterCarer.error.required = Select yes if you were a foster carer or shared lives carer
+fosterCarer.agent.error.required = Select yes if your client was a foster carer or shared lives carer
+
 
 ###################################  CHILD BENEFIT  ###########################################################################################
 
