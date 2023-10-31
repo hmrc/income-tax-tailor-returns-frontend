@@ -181,6 +181,8 @@ charitableDonations.giftsOfSharesOrSecurities = Rhoddion o gyfranddaliadau neu w
 charitableDonations.giftsOfLandOrProperty = Rhoddion o dir neu eiddo
 charitableDonations.noDonations = Na, ni wnes i gyfraniad at elusen
 charitableDonations.agent.noDonations = Na, ni wnaeth fy nghleient gyfraniad at elusen
+charitableDonations.error.required = Dewiswch Rhoddion elusennol
+charitableDonations.agent.error.required = Dewiswch Rhoddion elusennol
 
 marriageAllowance.title = Lwfans Priodasol
 marriageAllowance.heading = Lwfans Priodasol
