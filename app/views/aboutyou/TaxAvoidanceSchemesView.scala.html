@@ -1,0 +1,86 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.aboutyou.TaxAvoidanceSchemes
+@import viewmodels.LegendSize
+@import components._
+
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukCheckboxes: GovukCheckboxes,
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    link: Link,
+    config: FrontendAppConfig
+)
+
+@(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@understandingTaxAvoidance = @{ Call("GET", config.understandingTaxAvoidanceUrl) }
+
+@understandingRemuneration = @{ Call("GET", config.understandingRemunerationUrl) }
+
+@details = {
+    <p class="govuk-body">
+        @messages("taxAvoidanceSchemes.understandingAvoidance.summary.p")
+        @link("understandingAvoidance", messages("taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore"), understandingTaxAvoidance, true)
+    </p>
+}
+
+@details1 = {
+    <p class="govuk-body">
+        @messages("taxAvoidanceSchemes.understandingRemuneration.summary.p")
+        @link("understandingRemuneration", messages("taxAvoidanceSchemes.understandingRemuneration.summary.findOutMore"), understandingRemuneration, true)
+    </p>
+}
+
+@layout(pageTitle = title(form, messages("taxAvoidanceSchemes.title")), taxYear = taxYear) {
+
+    @formHelper(action = controllers.aboutyou.routes.TaxAvoidanceSchemesController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value_0")))
+        }
+
+        @heading(messages("taxAvoidanceSchemes.heading"))
+
+        @govukDetails(Details(
+            summary = Text(messages("taxAvoidanceSchemes.understandingAvoidance.summary")),
+            content = HtmlContent(details)
+        ))
+
+        @govukDetails(Details(
+            summary = Text(messages("taxAvoidanceSchemes.understandingRemuneration.summary")),
+            content = HtmlContent(details1)
+        ))
+
+        @govukCheckboxes(
+            CheckboxesViewModel(
+                form   = form,
+                name   = "value",
+                legend = LegendViewModel(messages("taxAvoidanceSchemes.title")).withSize(LegendSize.Medium),
+                items  = TaxAvoidanceSchemes.checkboxItems
+            ).withHint(Hint(content = Text(messages("site.hint.selectAll"))))
+        )
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}

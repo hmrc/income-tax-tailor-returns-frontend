@@ -16,8 +16,9 @@
 
 package forms
 
+import forms.aboutyou.TaxAvoidanceSchemesFormProvider
 import forms.behaviours.CheckboxFieldBehaviours
-import models.TaxAvoidanceSchemes
+import models.aboutyou.TaxAvoidanceSchemes
 import play.api.data.FormError
 
 class TaxAvoidanceSchemesFormProviderSpec extends CheckboxFieldBehaviours {

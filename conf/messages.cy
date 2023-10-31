@@ -11,9 +11,9 @@ site.startAgain = Dechrau eto
 site.signIn = Mewngofnodi
 site.govuk = GOV.UK
 site.caption = 6 Ebrill {0} i 5 Ebrill {1}
-
-common.or = Neu
-common.selectAll = Dewiswch bob un sy’n berthnasol.
+site.or = Neu
+site.hint.selectAll = Dewiswch bob un sy’n berthnasol.
+site.opensInNewTab = (yn agor tab newydd)
 
 date.day = Diwrnod
 date.month = Mis
@@ -106,8 +106,8 @@ ukResidenceStatus.heading = Statws preswyl yn y DU
 ukResidenceStatus.agent.heading = Statws preswyl yn y DU
 ukResidenceStatus.details.residence.summary = Deall statws preswyl yn y DU
 ukResidenceStatus.agent.details.residence.summary = Deall statws preswyl yn y DU
-ukResidenceStatus.details.residence.link = Gwirio’ch statws preswyl yn y DU (yn agor mewn tab newydd)
-ukResidenceStatus.agent.details.residence.link = Gwirio statws preswyl yn y DU eich cleient (yn agor tab newydd)
+ukResidenceStatus.details.residence.link = Gwirio’ch statws preswyl yn y DU
+ukResidenceStatus.agent.details.residence.link = Gwirio statws preswyl yn y DU eich cleient
 ukResidenceStatus.details.residence.p1 = Gallwch fod yn breswyl o dan brofion awtomatig y DU os yw’r canlynol yn wir:
 ukResidenceStatus.agent.details.residence.p1 = Gall eich cleient fod yn breswyl o dan brofion awtomatig y DU os yw’r canlynol yn wir:
 ukResidenceStatus.details.bullet1 = gwnaethoch dreulio 183 diwrnod neu fwy yn y DU yn ystod y flwyddyn dreth
@@ -184,3 +184,24 @@ fosterCarer.p1 = Os oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau, byd
 fosterCarer.agent.p1 = Os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau, bydd angen i chi lenwi’r adran hunangyflogaeth.
 fosterCarer.error.required = Dewiswch ‘Iawn’ os oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau
 fosterCarer.agent.error.required = Dewiswch ‘Iawn’ os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau
+
+
+taxAvoidanceSchemes.title = A oeddech yn rhan o unrhyw gynlluniau arbed treth?
+taxAvoidanceSchemes.agent.title = A oedd eich cleient yn rhan o unrhyw gynlluniau arbed treth?
+taxAvoidanceSchemes.heading = Cynlluniau arbed treth
+taxAvoidanceSchemes.agent.heading = Cynlluniau arbed treth
+taxAvoidanceSchemes.taxAvoidance = Arbed treth
+taxAvoidanceSchemes.understandingAvoidance.summary = Deall cynlluniau arbed treth
+taxAvoidanceSchemes.understandingAvoidance.summary.p = Mae arbed treth yn ymwneud â phlygu rheolau’r system dreth i dalu llai o dreth. Mae’n aml yn cynnwys trafodion dyfeisgar sydd â’r bwriad o gynhyrchu’r fantais hon. Mae’n golygu glynu wrth lythyren, ond nid ysbryd, y gyfraith.
+taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore = Dysgwch ragor am arbed treth
+taxAvoidanceSchemes.understandingRemuneration.summary = Deall tâl cuddiedig
+taxAvoidanceSchemes.understandingRemuneration.summary.p = Trefniadau yw cynlluniau tâl cuddiedig sy’n talu benthyciadau yn lle incwm arferol er mwyn osgoi Treth Incwm a chyfraniadau Yswiriant Gwladol.
+taxAvoidanceSchemes.understandingRemuneration.summary.findOutMore = Dysgwch ragor am dâl cuddiedig
+taxAvoidanceSchemes.disguisedRemuneration = Tâl cuddiedig
+taxAvoidanceSchemes.noAvoidance = Na, nid oeddwn yn rhan o unrhyw gynlluniau arbed treth
+taxAvoidanceSchemes.agent.taxAvoidance = Arbed treth
+taxAvoidanceSchemes.agent.disguisedRemuneration = Tâl cuddiedig
+taxAvoidanceSchemes.agent.noAvoidance = Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth
+# TODO: Add error messages once received from design
+taxAvoidanceSchemes.error.required = Select taxAvoidanceSchemes
+taxAvoidanceSchemes.agent.error.required = Select taxAvoidanceSchemes

@@ -29,35 +29,35 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PrivateBetaNavigator @Inject()() extends Navigator {
 
-  override def normalRoutes(taxYear: Int): Page => UserAnswers => Call = {
-    case UkResidenceStatusPage => ukResidenceStatusRoute(_, taxYear)
-    case YourResidenceStatusPage => _ => routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
-    case CharitableDonationsPage => _ => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
-    case FosterCarerPage => _ => routes.AddSectionsController.onPageLoad(taxYear)
-    case _ => _ => routes.IndexController.onPageLoad(taxYear)
+  override val normalRoutes: Page => UserAnswers => Call = {
+    case UkResidenceStatusPage                => ukResidenceStatusRoute
+    case YourResidenceStatusPage              => ua => routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
+    case CharitableDonationsPage              => ua => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, ua.taxYear)
+    case FosterCarerPage                      => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
+    case _                                    => ua => routes.IndexController.onPageLoad(ua.taxYear)
   }
 
   override val checkRouteMap: Page => UserAnswers => Call = {
     case _ => _ => routes.IndexController.onPageLoad(2024)
   }
 
-  def ukResidenceStatusRoute(userAnswers: UserAnswers, taxYear: Int): Call = {
+  def ukResidenceStatusRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(UkResidenceStatusPage) match {
       case Some(UkResidenceStatus.Uk) =>
-        routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear: Int)
+        routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
 
       case Some(UkResidenceStatus.Domiciled) =>
-        routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
+        routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
 
       case Some(UkResidenceStatus.NonUK) =>
-        controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, taxYear)
+        controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, userAnswers.taxYear)
 
-      case _ => routes.IndexController.onPageLoad(taxYear)
+      case _ => routes.IndexController.onPageLoad(userAnswers.taxYear)
     }
   }
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, taxYear: Int): Call = mode match {
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
-      normalRoutes(taxYear)(page)(userAnswers)
+      normalRoutes(page)(userAnswers)
     case CheckMode =>
       checkRouteMap(page)(userAnswers)
   }

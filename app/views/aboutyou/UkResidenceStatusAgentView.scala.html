@@ -16,6 +16,7 @@
 
 @import models.aboutyou.UkResidenceStatus
 @import viewmodels.LegendSize
+@import components._
 
 @this(
     layout: templates.Layout,
@@ -24,14 +25,16 @@
     govukRadios: GovukRadios,
     govukButton: GovukButton,
     govukDetails: GovukDetails,
+    link: Link,
     config: FrontendAppConfig
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
+@checkResidenceStatus = @{ Call("GET", config.checkResidenceStatusUrl) }
+
 @insetContent1 = {
-<p>
-<a target="_blank" href="@{config.checkResidenceStatusUrl}">@messages("ukResidenceStatus.agent.details.residence.link")</a><p>
+    <p>@link("residenceStatusGuidance", messages("ukResidenceStatus.agent.details.residence.link"), checkResidenceStatus, true)<p>
     <p>@messages("ukResidenceStatus.agent.details.residence.p1")</p>
     <ul class="govuk-list govuk-list--bullet">
         <li>@messages("ukResidenceStatus.agent.details.bullet1")</li>

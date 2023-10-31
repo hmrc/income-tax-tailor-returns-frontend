@@ -78,7 +78,7 @@ class MarriageAllowanceController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(MarriageAllowancePage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(MarriageAllowancePage, mode, updatedAnswers, taxYear))
+          } yield Redirect(navigator.nextPage(MarriageAllowancePage, mode, updatedAnswers))
       )
   }
 }

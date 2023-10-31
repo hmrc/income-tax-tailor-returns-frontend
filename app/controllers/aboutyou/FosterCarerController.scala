@@ -78,7 +78,7 @@ class FosterCarerController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FosterCarerPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(FosterCarerPage, mode, updatedAnswers, taxYear))
+          } yield Redirect(navigator.nextPage(FosterCarerPage, mode, updatedAnswers))
       )
   }
 }

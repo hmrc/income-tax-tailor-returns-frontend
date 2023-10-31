@@ -22,11 +22,11 @@ import play.api.mvc.Call
 
 trait Navigator {
 
-  protected def normalRoutes(taxYear: Int): Page => UserAnswers => Call
+  protected val normalRoutes: Page => UserAnswers => Call
 
   protected val checkRouteMap: Page => UserAnswers => Call
 
-  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers, taxYear: Int): Call
+  def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call
 }
 
 

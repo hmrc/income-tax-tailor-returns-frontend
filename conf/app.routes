@@ -22,6 +22,8 @@ GET        /unauthorised/:taxYear                                               
 
 GET        /:taxYear/add-sections                                                   controllers.AddSectionsController.onPageLoad(taxYear: Int)
 
+GET        /:taxYear/tax-return-not-ready                                           controllers.TaxReturnNotReadyController.onPageLoad(taxYear: Int)
+
 #################       About you pages      ##############################
 
 GET        /:taxYear/about-you/uk-residence-status                                  controllers.aboutyou.UkResidenceStatusController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
@@ -69,9 +71,7 @@ POST       /patentRoyaltyPayments/:taxYear                                      
 GET        /changePatentRoyaltyPayments/:taxYear                                    controllers.PatentRoyaltyPaymentsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /changePatentRoyaltyPayments/:taxYear                                    controllers.PatentRoyaltyPaymentsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /taxAvoidanceSchemes/:taxYear                                            controllers.TaxAvoidanceSchemesController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /taxAvoidanceSchemes/:taxYear                                            controllers.TaxAvoidanceSchemesController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeTaxAvoidanceSchemes/:taxYear                                      controllers.TaxAvoidanceSchemesController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeTaxAvoidanceSchemes/:taxYear                                      controllers.TaxAvoidanceSchemesController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
-
-GET        /taxReturnNotReady/:taxYear                                              controllers.TaxReturnNotReadyController.onPageLoad(taxYear: Int)
+GET        /:taxYear/about-you/tax-avoidance-schemes                                controllers.aboutyou.TaxAvoidanceSchemesController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/about-you/tax-avoidance-schemes                                controllers.aboutyou.TaxAvoidanceSchemesController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/about-you/change-tax-avoidance-schemes                         controllers.aboutyou.TaxAvoidanceSchemesController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/about-you/change-tax-avoidance-schemes                         controllers.aboutyou.TaxAvoidanceSchemesController.onSubmit(mode: Mode = CheckMode, taxYear: Int)

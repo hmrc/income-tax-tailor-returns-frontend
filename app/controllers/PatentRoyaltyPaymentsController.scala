@@ -79,7 +79,7 @@ class PatentRoyaltyPaymentsController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PatentRoyaltyPaymentsPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(PatentRoyaltyPaymentsPage, mode, updatedAnswers, taxYear))
+          } yield Redirect(navigator.nextPage(PatentRoyaltyPaymentsPage, mode, updatedAnswers))
       )
   }
 }

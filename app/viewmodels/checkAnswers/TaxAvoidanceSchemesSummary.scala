@@ -16,9 +16,8 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.TaxAvoidanceSchemesPage
+import pages.aboutyou.TaxAvoidanceSchemesPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -37,7 +36,7 @@ object TaxAvoidanceSchemesSummary  {
             checkboxes.map {
               answer => HtmlFormat.escape(messages(s"taxAvoidanceSchemes.$answer")).toString
             }
-            .mkString(",<br>")
+              .mkString(",<br>")
           )
         )
 
@@ -45,7 +44,7 @@ object TaxAvoidanceSchemesSummary  {
           key     = "taxAvoidanceSchemes.checkYourAnswersLabel",
           value   = value,
           actions = Seq(
-            ActionItemViewModel("site.change", routes.TaxAvoidanceSchemesController.onPageLoad(CheckMode, answers.taxYear).url)
+            ActionItemViewModel("site.change", controllers.aboutyou.routes.TaxAvoidanceSchemesController.onPageLoad(CheckMode, answers.taxYear).url)
               .withVisuallyHiddenText(messages("taxAvoidanceSchemes.change.hidden"))
           )
         )

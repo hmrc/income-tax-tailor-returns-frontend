@@ -63,7 +63,9 @@ class ChildBenefitIncomeController @Inject()(
       }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
+
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(
@@ -78,7 +80,7 @@ class ChildBenefitIncomeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ChildBenefitIncomePage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChildBenefitIncomePage, mode, updatedAnswers, taxYear))
+          } yield Redirect(navigator.nextPage(ChildBenefitIncomePage, mode, updatedAnswers))
       )
   }
 }
