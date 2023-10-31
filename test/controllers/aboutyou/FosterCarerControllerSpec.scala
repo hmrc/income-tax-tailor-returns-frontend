@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import base.SpecBase
-import forms.FosterCarerFormProvider
-import models.{NormalMode, UserAnswers, Done}
+import controllers.aboutyou.routes
+import forms.aboutyou.FosterCarerFormProvider
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.FosterCarerPage
+import pages.aboutyou.FosterCarerPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.FosterCarerView
-import views.html.FosterCarerAgentView
+import views.html.aboutyou.{FosterCarerAgentView, FosterCarerView}
 
 import scala.concurrent.Future
 
@@ -193,7 +193,7 @@ class FosterCarerControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
       }
     }
 
@@ -209,7 +209,7 @@ class FosterCarerControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
       }
     }
   }

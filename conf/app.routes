@@ -39,10 +39,10 @@ GET        /changeCharitableDonations/:taxYear                                  
 POST       /charitableDonations/:taxYear                                            controllers.CharitableDonationsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
 POST       /changeCharitableDonations/:taxYear                                      controllers.CharitableDonationsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /fosterCarer/:taxYear                                                    controllers.FosterCarerController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /fosterCarer/:taxYear                                                    controllers.FosterCarerController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeFosterCarer/:taxYear                                              controllers.FosterCarerController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeFosterCarer/:taxYear                                              controllers.FosterCarerController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/about-you/foster-carer                                         controllers.aboutyou.FosterCarerController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/about-you/foster-carer                                         controllers.aboutyou.FosterCarerController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/about-you/change-foster-carer                                  controllers.aboutyou.FosterCarerController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/about-you/change-foster-carer                                  controllers.aboutyou.FosterCarerController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /childBenefit/:taxYear                                                   controllers.ChildBenefitController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /childBenefit/:taxYear                                                   controllers.ChildBenefitController.onSubmit(mode: Mode = NormalMode, taxYear: Int)

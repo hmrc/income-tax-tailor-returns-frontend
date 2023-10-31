@@ -21,7 +21,7 @@ import controllers.routes
 import models._
 import models.aboutyou.{UkResidenceStatus, YourResidenceStatus}
 import pages._
-import pages.aboutyou.{UkResidenceStatusPage, YourResidenceStatusPage}
+import pages.aboutyou._
 
 import scala.concurrent.ExecutionContext
 
@@ -76,7 +76,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
       "must go from CharitableDonations page to FosterCarer page when any value is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(CharitableDonationsPage, Set(CharitableDonations.values.head)).success.value
 
-        val expectedRoute = routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(CharitableDonationsPage, NormalMode, answers, taxYear) mustBe expectedRoute
       }
