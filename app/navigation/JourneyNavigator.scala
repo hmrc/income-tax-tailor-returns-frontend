@@ -34,7 +34,7 @@ class JourneyNavigator @Inject()() extends Navigator {
     case MarriageAllowancePage                => ua => routes.ChildBenefitController.onPageLoad(NormalMode, ua.taxYear)
     case ChildBenefitPage                     => childBenefitRoute
     case ChildBenefitIncomePage               => childBenefitIncomeRoute
-    case HighIncomeChildBenefitChargePage     => ua => routes.FosterCarerController.onPageLoad(NormalMode, ua.taxYear)
+    case HighIncomeChildBenefitChargePage     => ua => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, ua.taxYear)
     case FosterCarerPage                      => ua => routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, ua.taxYear)
     case PatentRoyaltyPaymentsPage            => ua => controllers.aboutyou.routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, ua.taxYear)
     case TaxAvoidanceSchemesPage              => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
@@ -63,7 +63,7 @@ class JourneyNavigator @Inject()() extends Navigator {
   def childBenefitRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(ChildBenefitPage) match {
       case Some(true) => routes.ChildBenefitIncomeController.onPageLoad(NormalMode, userAnswers.taxYear)
-      case Some(false) => routes.FosterCarerController.onPageLoad(NormalMode, userAnswers.taxYear)
+      case Some(false) => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, userAnswers.taxYear)
       case _ => routes.IndexController.onPageLoad(userAnswers.taxYear)
     }
   }
@@ -71,7 +71,7 @@ class JourneyNavigator @Inject()() extends Navigator {
   def childBenefitIncomeRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(ChildBenefitIncomePage) match {
       case Some(true) => routes.HighIncomeChildBenefitChargeController.onPageLoad(NormalMode, userAnswers.taxYear)
-      case Some(false) => routes.FosterCarerController.onPageLoad(NormalMode, userAnswers.taxYear)
+      case Some(false) => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, userAnswers.taxYear)
       case _ => routes.IndexController.onPageLoad(userAnswers.taxYear)
     }
   }

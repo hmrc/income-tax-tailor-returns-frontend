@@ -14,9 +14,6 @@ site.caption = 6 Ebrill {0} i 5 Ebrill {1}
 site.or = Neu
 site.hint.selectAll = Dewiswch bob un sy’n berthnasol.
 
-common.or = Neu
-common.selectAll = Dewiswch bob un sy’n berthnasol.
-
 date.day = Diwrnod
 date.month = Mis
 date.year = Blwyddyn
