@@ -18,12 +18,11 @@ package controllers
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import models.TagStatus._
-import models.{NormalMode, UserAnswers}
 import models.SectionNames._
+import models.NormalMode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.AddSectionsService
+import services.JourneyAddSectionsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.{Link, Task}
 import views.html.{AddSectionsAgentView, AddSectionsView}
@@ -35,7 +34,7 @@ class AddSectionsController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        identify: IdentifierActionProvider,
                                        getData: DataRetrievalActionProvider,
-                                       addSectionsService: AddSectionsService,
+                                       addSectionsService: JourneyAddSectionsService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: AddSectionsView,
                                        agentView: AddSectionsAgentView
@@ -44,7 +43,7 @@ class AddSectionsController @Inject()(
   def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)) {
     implicit request =>
 
-      val state = addSectionsService.getState(request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)))
+      val state = addSectionsService.getState(request.userAnswers)
 
       val sections = List(
         Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), state.aboutYou),

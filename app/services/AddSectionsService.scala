@@ -16,29 +16,9 @@
 
 package services
 
-import com.google.inject.Inject
-import config.FrontendAppConfig
-import models.{SectionState, TagStatus, UserAnswers}
-import models.TagStatus.{CannotStartYet, Completed, NotStarted}
-import pages.TaxAvoidanceSchemesPage
+import models.{SectionState, UserAnswers}
 
-class AddSectionsService @Inject()(frontendAppConfig: FrontendAppConfig) {
+trait AddSectionsService {
+  def getState(userAnswers: Option[UserAnswers]): SectionState
 
-  private val isPrivateBeta = frontendAppConfig.privateBeta
-  def getState(userAnswers: UserAnswers): SectionState = {
-
-    val aboutYou: TagStatus = if (userAnswers.get(TaxAvoidanceSchemesPage).isDefined) {
-      Completed
-    } else {
-      NotStarted
-    }
-
-    val incomeFromWork: TagStatus = if (aboutYou.isCompleted) {
-      NotStarted
-    } else {
-      CannotStartYet
-    }
-
-    SectionState(aboutYou, incomeFromWork, CannotStartYet, CannotStartYet)
-  }
 }
