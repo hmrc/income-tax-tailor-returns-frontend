@@ -14,28 +14,37 @@
  * limitations under the License.
  *@
 
+@import components._
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    heading: Heading1,
+    paragraph: ParagraphBody
+
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("childBenefitIncome.title")), taxYear = taxYear) {
+@layout(pageTitle = title(form, messages("patentRoyaltyPayments.title")), taxYear = taxYear) {
 
-    @formHelper(action = routes.ChildBenefitIncomeController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @heading(messages("patentRoyaltyPayments.title"))
+        @paragraph(messages("patentRoyaltyPayments.p1"))
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("childBenefitIncome.heading")).asPageHeading()
+                LegendViewModel(messages("patentRoyaltyPayments.title")).visuallyHidden()
             )
         )
 

@@ -14,36 +14,34 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.ChildBenefitIncomeFormProvider
+import forms.aboutyou.HighIncomeChildBenefitChargeFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.ChildBenefitIncomePage
+import pages.aboutyou.HighIncomeChildBenefitChargePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ChildBenefitIncomeView
-import views.html.ChildBenefitIncomeAgentView
-
+import views.html.aboutyou.{HighIncomeChildBenefitChargeAgentView, HighIncomeChildBenefitChargeView}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChildBenefitIncomeController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              userDataService: UserDataService,
-                                              navigator: Navigator,
-                                              identify: IdentifierActionProvider,
-                                              getData: DataRetrievalActionProvider,
-                                              requireData: DataRequiredActionProvider,
-                                              formProvider: ChildBenefitIncomeFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: ChildBenefitIncomeView,
-                                              agentView: ChildBenefitIncomeAgentView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class HighIncomeChildBenefitChargeController @Inject()(
+                                                        override val messagesApi: MessagesApi,
+                                                        userDataService: UserDataService,
+                                                        navigator: Navigator,
+                                                        identify: IdentifierActionProvider,
+                                                        getData: DataRetrievalActionProvider,
+                                                        requireData: DataRequiredActionProvider,
+                                                        formProvider: HighIncomeChildBenefitChargeFormProvider,
+                                                        val controllerComponents: MessagesControllerComponents,
+                                                        view: HighIncomeChildBenefitChargeView,
+                                                        agentView: HighIncomeChildBenefitChargeAgentView
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
 
@@ -51,7 +49,7 @@ class ChildBenefitIncomeController @Inject()(
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(ChildBenefitIncomePage) match {
+      val preparedForm = request.userAnswers.get(HighIncomeChildBenefitChargePage) match {
         case None => form(request.isAgent)
         case Some(value) => form(request.isAgent).fill(value)
       }
@@ -65,7 +63,6 @@ class ChildBenefitIncomeController @Inject()(
 
   def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
-
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(
@@ -78,9 +75,9 @@ class ChildBenefitIncomeController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChildBenefitIncomePage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(HighIncomeChildBenefitChargePage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChildBenefitIncomePage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(HighIncomeChildBenefitChargePage, mode, updatedAnswers))
       )
   }
 }

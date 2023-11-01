@@ -16,9 +16,8 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.ChildBenefitPage
+import pages.aboutyou.ChildBenefitPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
@@ -36,7 +35,7 @@ object ChildBenefitSummary  {
           key     = "childBenefit.checkYourAnswersLabel",
           value   = ValueViewModel(value),
           actions = Seq(
-            ActionItemViewModel("site.change", routes.ChildBenefitController.onPageLoad(CheckMode, answers.taxYear).url)
+            ActionItemViewModel("site.change", controllers.aboutyou.routes.ChildBenefitController.onPageLoad(CheckMode, answers.taxYear).url)
               .withVisuallyHiddenText(messages("childBenefit.change.hidden"))
           )
         )

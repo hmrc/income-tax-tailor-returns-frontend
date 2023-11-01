@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import base.SpecBase
-import forms.ChildBenefitIncomeFormProvider
-import models.{NormalMode, UserAnswers, Done}
+import controllers.routes
+import forms.aboutyou.ChildBenefitIncomeFormProvider
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.ChildBenefitIncomePage
+import pages.aboutyou.ChildBenefitIncomePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.ChildBenefitIncomeView
-import views.html.ChildBenefitIncomeAgentView
+import views.html.aboutyou._
 
 import scala.concurrent.Future
 
@@ -42,7 +42,7 @@ class ChildBenefitIncomeControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
-  lazy val childBenefitIncomeRoute = routes.ChildBenefitIncomeController.onPageLoad(NormalMode, taxYear).url
+  lazy val childBenefitIncomeRoute = controllers.aboutyou.routes.ChildBenefitIncomeController.onPageLoad(NormalMode, taxYear).url
 
   "ChildBenefitIncome Controller" - {
 

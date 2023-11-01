@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.PatentRoyaltyPaymentsFormProvider
+import forms.aboutyou.PatentRoyaltyPaymentsFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.PatentRoyaltyPaymentsPage
+import pages.aboutyou.PatentRoyaltyPaymentsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.PatentRoyaltyPaymentsView
-import views.html.PatentRoyaltyPaymentsAgentView
+import views.html.aboutyou.{PatentRoyaltyPaymentsAgentView, PatentRoyaltyPaymentsView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

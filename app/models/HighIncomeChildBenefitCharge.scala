@@ -24,11 +24,12 @@ sealed trait HighIncomeChildBenefitCharge
 
 object HighIncomeChildBenefitCharge extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with HighIncomeChildBenefitCharge
-  case object Option2 extends WithName("option2") with HighIncomeChildBenefitCharge
+  case object SelfIncome extends WithName("selfIncome") with HighIncomeChildBenefitCharge
+  case object PartnerIncome extends WithName("partnerIncome") with HighIncomeChildBenefitCharge
+  case object NoPartner extends WithName("noPartner") with HighIncomeChildBenefitCharge
 
   val values: Seq[HighIncomeChildBenefitCharge] = Seq(
-    Option1, Option2
+    SelfIncome, PartnerIncome, NoPartner
   )
 
   def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {

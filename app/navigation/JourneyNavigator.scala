@@ -31,14 +31,15 @@ class JourneyNavigator @Inject()() extends Navigator {
     case UkResidenceStatusPage                => ukResidenceStatusRoute
     case YourResidenceStatusPage              => ua => routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
     case CharitableDonationsPage              => ua => controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, ua.taxYear)
-    case MarriageAllowancePage                => ua => routes.ChildBenefitController.onPageLoad(NormalMode, ua.taxYear)
+    case MarriageAllowancePage                => ua => controllers.aboutyou.routes.ChildBenefitController.onPageLoad(NormalMode, ua.taxYear)
     case ChildBenefitPage                     => childBenefitRoute
     case ChildBenefitIncomePage               => childBenefitIncomeRoute
     case HighIncomeChildBenefitChargePage     => ua => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, ua.taxYear)
-    case FosterCarerPage                      => ua => routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, ua.taxYear)
+    case FosterCarerPage                      => ua => controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, ua.taxYear)
     case PatentRoyaltyPaymentsPage            => ua => controllers.aboutyou.routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, ua.taxYear)
     case TaxAvoidanceSchemesPage              => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
     case _                                    => ua => routes.IndexController.onPageLoad(ua.taxYear)
+
   }
 
   override val checkRouteMap: Page => UserAnswers => Call = {
@@ -62,7 +63,7 @@ class JourneyNavigator @Inject()() extends Navigator {
 
   def childBenefitRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(ChildBenefitPage) match {
-      case Some(true) => routes.ChildBenefitIncomeController.onPageLoad(NormalMode, userAnswers.taxYear)
+      case Some(true) => controllers.aboutyou.routes.ChildBenefitIncomeController.onPageLoad(NormalMode, userAnswers.taxYear)
       case Some(false) => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, userAnswers.taxYear)
       case _ => routes.IndexController.onPageLoad(userAnswers.taxYear)
     }
@@ -70,7 +71,7 @@ class JourneyNavigator @Inject()() extends Navigator {
 
   def childBenefitIncomeRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(ChildBenefitIncomePage) match {
-      case Some(true) => routes.HighIncomeChildBenefitChargeController.onPageLoad(NormalMode, userAnswers.taxYear)
+      case Some(true) => controllers.aboutyou.routes.HighIncomeChildBenefitChargeController.onPageLoad(NormalMode, userAnswers.taxYear)
       case Some(false) => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, userAnswers.taxYear)
       case _ => routes.IndexController.onPageLoad(userAnswers.taxYear)
     }

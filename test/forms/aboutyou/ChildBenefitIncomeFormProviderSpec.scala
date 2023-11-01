@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package forms
+package forms.aboutyou
 
-import forms.behaviours.OptionFieldBehaviours
-import models.HighIncomeChildBenefitCharge
+import forms.behaviours.BooleanFieldBehaviours
 import play.api.data.FormError
 
-class HighIncomeChildBenefitChargeFormProviderSpec extends OptionFieldBehaviours {
+class ChildBenefitIncomeFormProviderSpec extends BooleanFieldBehaviours {
 
-  val form = new HighIncomeChildBenefitChargeFormProvider()(false)
-  val agentForm = new HighIncomeChildBenefitChargeFormProvider()(true)
+  val requiredKey = "childBenefitIncome.error.required"
+  val agentRequiredKey = "childBenefitIncome.agent.error.required"
+  val invalidKey = "error.boolean"
+
+  val form = new ChildBenefitIncomeFormProvider()(false)
+  val agentForm = new ChildBenefitIncomeFormProvider()(true)
 
   ".value" - {
 
     val fieldName = "value"
-    val requiredKey = "highIncomeChildBenefitCharge.error.required"
 
-    behave like optionsField[HighIncomeChildBenefitCharge](
+    behave like booleanField(
       form,
       fieldName,
-      validValues  = HighIncomeChildBenefitCharge.values,
-      invalidError = FormError(fieldName, "error.invalid")
+      invalidError = FormError(fieldName, invalidKey)
     )
 
     behave like mandatoryField(
@@ -47,7 +48,6 @@ class HighIncomeChildBenefitChargeFormProviderSpec extends OptionFieldBehaviours
   ".value for an agent" - {
 
     val fieldName = "value"
-    val agentRequiredKey = "highIncomeChildBenefitCharge.agent.error.required"
 
     behave like mandatoryField(
       agentForm,

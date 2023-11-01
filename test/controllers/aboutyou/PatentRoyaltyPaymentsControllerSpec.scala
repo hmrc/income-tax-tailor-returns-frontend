@@ -14,48 +14,48 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import base.SpecBase
-import forms.ChildBenefitFormProvider
-import models.{NormalMode, UserAnswers, Done}
+import controllers.routes
+import forms.aboutyou.PatentRoyaltyPaymentsFormProvider
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.ChildBenefitPage
+import pages.aboutyou.PatentRoyaltyPaymentsPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.ChildBenefitView
-import views.html.ChildBenefitAgentView
+import views.html.aboutyou.{PatentRoyaltyPaymentsAgentView, PatentRoyaltyPaymentsView}
 
 import scala.concurrent.Future
 
-class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
+class PatentRoyaltyPaymentsControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ChildBenefitFormProvider()
+  val formProvider = new PatentRoyaltyPaymentsFormProvider()
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
-  lazy val childBenefitRoute = routes.ChildBenefitController.onPageLoad(NormalMode, taxYear).url
+  lazy val patentRoyaltyPaymentsRoute = controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear).url
 
-  "ChildBenefit Controller" - {
+  "PatentRoyaltyPayments Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, childBenefitRoute)
+        val request = FakeRequest(GET, patentRoyaltyPaymentsRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ChildBenefitView]
+        val view = application.injector.instanceOf[PatentRoyaltyPaymentsView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
@@ -67,12 +67,12 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, childBenefitRoute
+        val request = FakeRequest(GET, patentRoyaltyPaymentsRoute
         )
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ChildBenefitAgentView]
+        val view = application.injector.instanceOf[PatentRoyaltyPaymentsAgentView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
@@ -81,14 +81,14 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(ChildBenefitPage, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(PatentRoyaltyPaymentsPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, childBenefitRoute)
+        val request = FakeRequest(GET, patentRoyaltyPaymentsRoute)
 
-        val view = application.injector.instanceOf[ChildBenefitView]
+        val view = application.injector.instanceOf[PatentRoyaltyPaymentsView]
 
         val result = route(application, request).value
 
@@ -99,15 +99,15 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(ChildBenefitPage, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(PatentRoyaltyPaymentsPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, childBenefitRoute
+        val request = FakeRequest(GET, patentRoyaltyPaymentsRoute
         )
 
-        val view = application.injector.instanceOf[ChildBenefitAgentView]
+        val view = application.injector.instanceOf[PatentRoyaltyPaymentsAgentView]
 
         val result = route(application, request).value
 
@@ -132,7 +132,7 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, childBenefitRoute)
+          FakeRequest(POST, patentRoyaltyPaymentsRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -148,12 +148,12 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, childBenefitRoute)
+          FakeRequest(POST, patentRoyaltyPaymentsRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[ChildBenefitView]
+        val view = application.injector.instanceOf[PatentRoyaltyPaymentsView]
 
         val result = route(application, request).value
 
@@ -168,13 +168,13 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, childBenefitRoute
+          FakeRequest(POST, patentRoyaltyPaymentsRoute
         )
         .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = agentForm.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[ChildBenefitAgentView]
+        val view = application.injector.instanceOf[PatentRoyaltyPaymentsAgentView]
 
         val result = route(application, request).value
 
@@ -188,7 +188,7 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, childBenefitRoute)
+        val request = FakeRequest(GET, patentRoyaltyPaymentsRoute)
 
         val result = route(application, request).value
 
@@ -203,7 +203,7 @@ class ChildBenefitControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, childBenefitRoute)
+          FakeRequest(POST, patentRoyaltyPaymentsRoute)
             .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value

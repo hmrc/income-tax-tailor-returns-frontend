@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-package pages
+package forms.aboutyou
 
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import models.HighIncomeChildBenefitCharge
+import play.api.data.Form
+import javax.inject.Inject
 
-case object PatentRoyaltyPaymentsPage extends QuestionPage[Boolean] {
+class HighIncomeChildBenefitChargeFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "patentRoyaltyPayments"
+  def apply(isAgent: Boolean): Form[HighIncomeChildBenefitCharge] = {
+    val error: String =
+      if (isAgent) {
+        "highIncomeChildBenefitCharge.agent.error.required"
+      } else {
+        "highIncomeChildBenefitCharge.error.required"
+      }
+    Form(
+      "value" -> enumerable[HighIncomeChildBenefitCharge](error)
+    )
+  }
 }

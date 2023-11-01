@@ -14,6 +14,9 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
@@ -24,9 +27,9 @@
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("childBenefit.agent.title")), taxYear = taxYear) {
+@layout(pageTitle = title(form, messages("childBenefitIncome.title")), taxYear = taxYear) {
 
-    @formHelper(action = routes.ChildBenefitController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.aboutyou.routes.ChildBenefitIncomeController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -35,7 +38,9 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("childBenefit.agent.heading")).asPageHeading()
+                legend = LegendViewModel(messages("childBenefitIncome.title"))
+                        .asPageHeading()
+                        .withSize(LegendSize.Large)
             )
         )
 

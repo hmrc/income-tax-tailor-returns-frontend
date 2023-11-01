@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.ChildBenefitFormProvider
+import forms.aboutyou.ChildBenefitIncomeFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.ChildBenefitPage
+import pages.aboutyou.ChildBenefitIncomePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{ChildBenefitAgentView, ChildBenefitView}
+import views.html.aboutyou._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChildBenefitController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        userDataService: UserDataService,
-                                        navigator: Navigator,
-                                        identify: IdentifierActionProvider,
-                                        getData: DataRetrievalActionProvider,
-                                        requireData: DataRequiredActionProvider,
-                                        formProvider: ChildBenefitFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: ChildBenefitView,
-                                        agentView: ChildBenefitAgentView
+class ChildBenefitIncomeController @Inject()(
+                                              override val messagesApi: MessagesApi,
+                                              userDataService: UserDataService,
+                                              navigator: Navigator,
+                                              identify: IdentifierActionProvider,
+                                              getData: DataRetrievalActionProvider,
+                                              requireData: DataRequiredActionProvider,
+                                              formProvider: ChildBenefitIncomeFormProvider,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: ChildBenefitIncomeView,
+                                              agentView: ChildBenefitIncomeAgentView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
@@ -50,7 +50,7 @@ class ChildBenefitController @Inject()(
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(ChildBenefitPage) match {
+      val preparedForm = request.userAnswers.get(ChildBenefitIncomePage) match {
         case None => form(request.isAgent)
         case Some(value) => form(request.isAgent).fill(value)
       }
@@ -76,9 +76,9 @@ class ChildBenefitController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChildBenefitPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ChildBenefitIncomePage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(ChildBenefitPage, mode, updatedAnswers))
+          } yield Redirect(navigator.nextPage(ChildBenefitIncomePage, mode, updatedAnswers))
       )
   }
 }

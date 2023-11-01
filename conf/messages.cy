@@ -161,6 +161,7 @@ yourResidenceStatus.agent.dualResident = Roedd fy nghleient yn breswylydd deuol 
 yourResidenceStatus.error.required = Dewiswch os nad oeddech yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
 yourResidenceStatus.agent.error.required = Dewiswch os nad oedd eich cleient yn breswylydd yn y DU neu’n breswylydd deuol yn y DU ac mewn gwlad arall
 
+
 marriageAllowance.title = Lwfans Priodasol
 marriageAllowance.heading = Lwfans Priodasol
 marriageAllowance.p1 = Mae’r Lwfans Priodasol yn eich galluogi chi i drosglwyddo £1,260 o’ch Lwfans Personol i’ch gŵr, gwraig neu bartner sifil. Gall hyn ostwng treth eich gŵr, gwraig neu bartner sifil hyd at £252 yn ystod y flwyddyn dreth (6 Ebrill i 5 Ebrill y flwyddyn nesaf).
@@ -177,6 +178,55 @@ marriageAllowance.legend = A ydych am drosglwyddo £1,260 o’ch Lwfans Personol
 marriageAllowance.agent.legend = A yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil?
 marriageAllowance.error.required = Dewiswch ‘Iawn’ os ydych am drosglwyddo £1,260 o’ch Lwfans Personol i’ch gŵr, gwraig neu bartner sifil
 marriageAllowance.agent.error.required = Dewiswch ‘Iawn’ os yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil
+
+###################################  CHILD BENEFIT  ###########################################################################################
+
+childBenefit.title = A gawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi?
+childBenefit.agent.title = A gafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw?
+childBenefit.error.required = Dewiswch ‘Iawn’, os cawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi
+childBenefit.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw
+
+################################### CHILD BENEFIT INCOME ###########################################################################################
+
+childBenefitIncome.title = A oedd eich incwm dros £50,000?
+childBenefitIncome.agent.title = A oedd incwm eich cleient dros £50,000?
+childBenefitIncome.error.required = Dewiswch ‘Iawn’ os oedd eich incwm dros £50,000
+childBenefitIncome.agent.error.required = Dewiswch ‘Iawn’ os oedd incwm eich cleient dros £50,000
+
+################################### HIGH INCOME CHILD BENEFIT CHARGE ###########################################################################################
+
+highIncomeChildBenefitCharge.title = Tâl Treth Budd-dal Plant Incwm Uchel
+highIncomeChildBenefitCharge.agent.title = Tâl Treth Budd-dal Plant Incwm Uchel
+highIncomeChildBenefitCharge.details.residence.summary = Deall y Tâl Treth Budd-dal Plant Incwm Uchel
+highIncomeChildBenefitCharge.details.residence.p2 = Mae’n bosibl y bydd yn rhaid i chi dalu’r Tâl Treth Budd-dal Plant Incwm Uchel os oes gennych chi neu’ch partner incwm unigol dros £50,000 a bod y naill neu’r llall o’r canlynol yn wir:
+highIncomeChildBenefitCharge.details.agent.p2 = Mae’n bosibl y bydd yn rhaid i’ch cleient dalu’r Tâl Treth Budd-dal Plant Incwm Uchel os oes gan eich cleient neu’i bartner incwm unigol dros £50,000 a bod un o’r canlynol yn wir:
+highIncomeChildBenefitCharge.details.residence.p3 = Does dim ots os nad eich plentyn eich hun yw’r plentyn sy’n byw gyda chi.
+highIncomeChildBenefitCharge.details.agent.p3 = Does dim ots os nad eich plentyn ei hun yw’r plentyn sy’n byw gyda’ch cleient.
+highIncomeChildBenefitCharge.details.bullet1 = rydych chi neu’ch partner yn cael Budd-dal Plant
+highIncomeChildBenefitCharge.details.agent.bullet1 = mae’ch cleient neu’i bartner yn cael Budd-dal Plant
+highIncomeChildBenefitCharge.details.bullet2 = mae rhywun arall yn cael Budd-dal Plant ar gyfer plentyn sy’n byw gyda chi a bod y person hwnnw’n cyfrannu swm sydd o leiaf yn gyfartal â’r swm rydych chi’n ei dalu tuag at gostau cynnal y plentyn
+highIncomeChildBenefitCharge.details.agent.bullet2 = mae rhywun arall yn cael Budd-dal Plant ar gyfer plentyn sy’n byw gyda’ch cleient a bod y person hwnnw’n cyfrannu swm sydd o leiaf yn gyfartal â’r swm y mae’ch cleient yn ei dalu tuag at gostau cynnal y plentyn
+highIncomeChildBenefitCharge.p1 = Mae’n bosibl y bydd yn rhaid i’r partner â’r incwm uchaf dalu’r Tâl Treth Budd-dal Plant Incwm Uchel.
+highIncomeChildBenefitCharge.agent.p1 = Mae’n bosibl y bydd yn rhaid i’r partner â’r incwm uchaf dalu’r Tâl Treth Budd-dal Plant Incwm Uchel.
+highIncomeChildBenefitCharge.heading = Incwm pwy oedd yr uchaf?
+highIncomeChildBenefitCharge.agent.heading = Incwm pwy oedd yr uchaf?
+highIncomeChildBenefitCharge.selfIncome = Fy incwm i
+highIncomeChildBenefitCharge.partnerIncome = Incwm fy mhartner
+highIncomeChildBenefitCharge.noPartner = Nid oes gennyf bartner
+highIncomeChildBenefitCharge.agent.selfIncome = Incwm fy nghleient
+highIncomeChildBenefitCharge.agent.partnerIncome = Incwm partner fy nghleient
+highIncomeChildBenefitCharge.agent.noPartner = Nid oes partner gan fy nghleient
+highIncomeChildBenefitCharge.error.required = Dewiswch a oedd eich incwm chi yn uwch, incwm eich partner yn uwch neu os nad oes gennych bartner
+highIncomeChildBenefitCharge.agent.error.required = Dewiswch a oedd incwm eich cleient yn uwch, incwm ei bartner yn uwch neu os nad oes gan eich cleient bartner
+
+################################### ROYALTY PAYMENTS ###########################################################################################
+
+patentRoyaltyPayments.title = A wnaethoch unrhyw freindaliadau patent?
+patentRoyaltyPayments.agent.title = A wnaeth eich cleient unrhyw freindaliadau patent?
+patentRoyaltyPayments.p1 = Mae’n rhaid i chi ddal 20% o dreth yn ôl o swm y breindaliadau patent a dalwch. Telir y dreth a ddelir yn ôl fel rhan o’r dreth sy’n ddyledus ar eich incwm.
+patentRoyaltyPayments.agent.p1 = Mae’n rhaid i’ch cleient ddal 20% o dreth yn ôl o swm y breindaliadau patent y mae’n ei dalu. Telir y dreth a ddelir yn ôl fel rhan o’r dreth sy’n ddyledus ar ei incwm.
+patentRoyaltyPayments.error.required = Dewiswch ‘Iawn’ os gwnaethoch unrhyw freindaliadau patent
+patentRoyaltyPayments.agent.error.required = Dewiswch ‘Iawn’ os gwnaeth eich cleient unrhyw freindaliadau patent
 
 fosterCarer.title = A oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau?
 fosterCarer.agent.title = A oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau?

@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.aboutyou
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import models.HighIncomeChildBenefitCharge
 
-class HighIncomeChildBenefitChargeFormProvider @Inject() extends Mappings {
+import javax.inject.Inject
 
-  def apply(isAgent: Boolean): Form[HighIncomeChildBenefitCharge] = {
+class ChildBenefitFormProvider @Inject() extends Mappings {
+
+  def apply(isAgent: Boolean): Form[Boolean] = {
     val error: String =
       if (isAgent) {
-        "highIncomeChildBenefitCharge.agent.error.required"
+        "childBenefit.agent.error.required"
       } else {
-        "highIncomeChildBenefitCharge.error.required"
+        "childBenefit.error.required"
       }
     Form(
-      "value" -> enumerable[HighIncomeChildBenefitCharge](error)
+      "value" -> boolean(error)
     )
   }
 }
