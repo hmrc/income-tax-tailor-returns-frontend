@@ -268,7 +268,7 @@ taxAvoidanceSchemes.disguisedRemuneration = Disguised remuneration
 taxAvoidanceSchemes.noAvoidance = No, I was not in any tax avoidance schemes
 taxAvoidanceSchemes.agent.taxAvoidance = Tax avoidance
 taxAvoidanceSchemes.agent.disguisedRemuneration = Disguised remuneration
-taxAvoidanceSchemes.agent.noAvoidance = No, my client not in any tax avoidance schemes
+taxAvoidanceSchemes.agent.noAvoidance = No, my client was not in any tax avoidance schemes
 # TODO: Add error messages once received from design
 taxAvoidanceSchemes.error.required = Select taxAvoidanceSchemes
 taxAvoidanceSchemes.agent.error.required = Select taxAvoidanceSchemes
