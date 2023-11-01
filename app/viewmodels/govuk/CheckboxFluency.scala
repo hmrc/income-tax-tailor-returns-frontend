@@ -20,7 +20,7 @@ import play.api.data.Form
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, Checkboxes}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Content
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Empty}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.label.Label
@@ -36,24 +36,28 @@ trait CheckboxFluency {
                form: Form[_],
                name: String,
                items: Seq[CheckboxItem],
-               legend: Legend
+               legend: Legend,
+               hint: Option[Hint] = None
              )(implicit messages: Messages): Checkboxes =
       apply(
         form = form,
         name = name,
         items = items,
+        hint = hint,
         fieldset = FieldsetViewModel(legend)
       )
 
     def apply(
                form: Form[_],
                name: String,
+               hint: Option[Hint],
                items: Seq[CheckboxItem],
                fieldset: Fieldset
              )(implicit messages: Messages): Checkboxes =
       Checkboxes(
         fieldset     = Some(fieldset),
         name         = name,
+        hint         = hint,
         errorMessage = errorMessage(form(name)),
         items        = items.map {
           item =>
@@ -66,6 +70,9 @@ trait CheckboxFluency {
 
     def describedBy(value: String): Checkboxes =
       checkboxes.copy(describedBy = Some(value))
+
+    def withHint(hint: Hint): Checkboxes =
+      checkboxes.copy(hint = Some(hint))
   }
 
   object CheckboxItemViewModel {
@@ -81,6 +88,20 @@ trait CheckboxFluency {
         id      = Some(s"${fieldId}_$index"),
         name    = Some(s"$fieldId[$index]"),
         value   = value
+      )
+
+    def apply(
+               fieldId: String,
+               index: Int,
+               value: String,
+               divider: String
+             ): CheckboxItem =
+      CheckboxItem(
+        content = Empty,
+        id = Some(s"${fieldId}_$index"),
+        name = Some(s"$fieldId[$index]"),
+        value = value,
+        divider = Some(divider)
       )
   }
 

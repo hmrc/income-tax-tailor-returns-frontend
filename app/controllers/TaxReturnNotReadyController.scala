@@ -31,13 +31,12 @@ class TaxReturnNotReadyController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        identify: IdentifierActionProvider,
                                        getData: DataRetrievalActionProvider,
-                                       requireData: DataRequiredActionProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: TaxReturnNotReadyView,
                                        agentView: TaxReturnNotReadyAgentView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
+  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)) {
     implicit request =>
       if (request.isAgent) {
         Ok(agentView(taxYear))

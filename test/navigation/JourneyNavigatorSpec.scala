@@ -38,7 +38,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from UkResidentStatus page to CharitableDonations page when yes is selected" in {
@@ -46,7 +46,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from UkResidentStatus page to CharitableDonations page when yes but... is selected" in {
@@ -54,7 +54,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from UkResidentStatus page to Index page when no value is found" in {
@@ -62,7 +62,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.IndexController.onPageLoad(taxYear)
 
-        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from YourResidenceStatus page to CharitableDonations page when any value is selected" in {
@@ -70,7 +70,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(YourResidenceStatusPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(YourResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from CharitableDonations page to MarriageAllowance page when any value is selected" in {
@@ -78,7 +78,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(CharitableDonationsPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(CharitableDonationsPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from MarriageAllowance page to ChildBenefit page when true is selected" in {
@@ -86,7 +86,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.ChildBenefitController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(MarriageAllowancePage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(MarriageAllowancePage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from MarriageAllowance page to ChildBenefit page when false is selected" in {
@@ -94,7 +94,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.ChildBenefitController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(MarriageAllowancePage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(MarriageAllowancePage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from ChildBenefit page to ChildBenefitIncome page when true is selected" in {
@@ -102,7 +102,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.ChildBenefitIncomeController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(ChildBenefitPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(ChildBenefitPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from ChildBenefit page to FosterCarer page when false is selected" in {
@@ -110,7 +110,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(ChildBenefitPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(ChildBenefitPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from ChildBenefit page to Index page when no value is found" in {
@@ -118,7 +118,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.IndexController.onPageLoad(taxYear)
 
-        navigator.nextPage(ChildBenefitPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(ChildBenefitPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from ChildBenefitIncome page to HighIncomeChildBenefitCharge page when true is selected" in {
@@ -126,7 +126,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.HighIncomeChildBenefitChargeController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(ChildBenefitIncomePage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(ChildBenefitIncomePage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from ChildBenefitIncome page to FosterCarer page when false is selected" in {
@@ -134,7 +134,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(ChildBenefitIncomePage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(ChildBenefitIncomePage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from ChildBenefitIncome page to Index page when no value is found" in {
@@ -142,7 +142,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.IndexController.onPageLoad(taxYear)
 
-        navigator.nextPage(ChildBenefitIncomePage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(ChildBenefitIncomePage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from HighIncomeChildBenefitCharge page to FosterCarer page when selfIncome is selected" in {
@@ -150,7 +150,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from HighIncomeChildBenefitCharge page to FosterCarer page when partnerIncome is selected" in {
@@ -158,7 +158,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from HighIncomeChildBenefitCharge page to FosterCarer page when noPartner is selected" in {
@@ -166,7 +166,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(HighIncomeChildBenefitChargePage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from FosterCarer page to PatentRoyaltyPayments page when true is selected" in {
@@ -174,7 +174,7 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(FosterCarerPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(FosterCarerPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from FosterCarer page to PatentRoyaltyPayments page when false is selected" in {
@@ -182,23 +182,23 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(FosterCarerPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(FosterCarerPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from PatentRoyaltyPayments page to TaxAvoidanceSchemes page when true is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(PatentRoyaltyPaymentsPage, true).success.value
 
-        val expectedRoute = routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(PatentRoyaltyPaymentsPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(PatentRoyaltyPaymentsPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from PatentRoyaltyPayments page to TaxAvoidanceSchemes page when false is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(PatentRoyaltyPaymentsPage, false).success.value
 
-        val expectedRoute = routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, taxYear)
 
-        navigator.nextPage(PatentRoyaltyPaymentsPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(PatentRoyaltyPaymentsPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from TaxAvoidanceSchemes page to AddSections page when any value is selected" in {
@@ -206,13 +206,13 @@ class JourneyNavigatorSpec extends SpecBase {
 
         val expectedRoute = routes.AddSectionsController.onPageLoad(taxYear)
 
-        navigator.nextPage(TaxAvoidanceSchemesPage, NormalMode, answers, taxYear) mustBe expectedRoute
+        navigator.nextPage(TaxAvoidanceSchemesPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from a page that doesn't exist in the route map to Index" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id", taxYear), taxYear) mustBe routes.IndexController.onPageLoad(taxYear)
+        navigator.nextPage(UnknownPage, NormalMode, UserAnswers("id", taxYear)) mustBe routes.IndexController.onPageLoad(taxYear)
       }
     }
 
@@ -221,7 +221,7 @@ class JourneyNavigatorSpec extends SpecBase {
       "must go from a page that doesn't exist in the edit route map to CheckYourAnswers" in {
 
         case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id", taxYear), taxYear) mustBe routes.IndexController.onPageLoad(taxYear)
+        navigator.nextPage(UnknownPage, CheckMode, UserAnswers("id", taxYear)) mustBe routes.IndexController.onPageLoad(taxYear)
       }
     }
   }

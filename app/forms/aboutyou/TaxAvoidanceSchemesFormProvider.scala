@@ -14,14 +14,26 @@
  * limitations under the License.
  */
 
-package pages
+package forms.aboutyou
 
-import models.TaxAvoidanceSchemes
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import models.aboutyou.TaxAvoidanceSchemes
+import play.api.data.Form
+import play.api.data.Forms.set
 
-case object TaxAvoidanceSchemesPage extends QuestionPage[Set[TaxAvoidanceSchemes]] {
+import javax.inject.Inject
 
-  override def path: JsPath = JsPath \ toString
+class TaxAvoidanceSchemesFormProvider @Inject() extends Mappings {
 
-  override def toString: String = "taxAvoidanceSchemes"
+  def apply(isAgent: Boolean): Form[Set[TaxAvoidanceSchemes]] = {
+    val error: String =
+      if (isAgent) {
+        "taxAvoidanceSchemes.agent.error.required"
+      } else {
+        "taxAvoidanceSchemes.error.required"
+      }
+    Form(
+      "value" -> set(enumerable[TaxAvoidanceSchemes](error)).verifying(nonEmptySet(error))
+    )
+  }
 }

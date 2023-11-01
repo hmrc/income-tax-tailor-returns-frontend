@@ -78,7 +78,7 @@ class YourResidenceStatusController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(YourResidenceStatusPage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(YourResidenceStatusPage, mode, updatedAnswers, taxYear))
+          } yield Redirect(navigator.nextPage(YourResidenceStatusPage, mode, updatedAnswers))
       )
   }
 }

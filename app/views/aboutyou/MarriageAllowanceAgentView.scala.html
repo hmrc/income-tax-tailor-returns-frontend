@@ -30,7 +30,7 @@
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("marriageAllowance.agent.title")), taxYear = taxYear) {
+@layout(pageTitle = title(form, messages("marriageAllowance.title")), taxYear = taxYear) {
 
     @formHelper(action = controllers.aboutyou.routes.MarriageAllowanceController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 

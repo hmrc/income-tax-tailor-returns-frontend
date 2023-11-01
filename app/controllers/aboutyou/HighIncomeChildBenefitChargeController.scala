@@ -77,7 +77,7 @@ class HighIncomeChildBenefitChargeController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HighIncomeChildBenefitChargePage, value))
             _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HighIncomeChildBenefitChargePage, mode, updatedAnswers, taxYear))
+          } yield Redirect(navigator.nextPage(HighIncomeChildBenefitChargePage, mode, updatedAnswers))
       )
   }
 }
