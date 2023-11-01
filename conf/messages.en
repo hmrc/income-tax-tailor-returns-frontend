@@ -197,9 +197,9 @@ childBenefit.agent.error.required = Select yes if your client, their partner or 
 
 ################################### CHILD BENEFIT INCOME ###########################################################################################
 childBenefitIncome.title = Was your income over £50,000?
-childBenefitIncome.agent.title = Was your client's income over £50,000?
+childBenefitIncome.agent.title = Was your client’s income over £50,000?
 childBenefitIncome.error.required = Select yes if your income was over £50,000
-childBenefitIncome.agent.error.required = Select yes if your client's income was over £50,000
+childBenefitIncome.agent.error.required = Select yes if your client’s income was over £50,000
 
 ################################### HIGH INCOME CHILD BENEFIT CHARGE ###########################################################################################
 
