@@ -35,11 +35,9 @@
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
-        @heading(messages("fosterCarer.title"))
-
-        @paragraph(messages("fosterCarer.p1"))
 
         @heading(messages("fosterCarer.title"))
+
         @paragraph(messages("fosterCarer.p1"))
 
         @govukRadios(
