@@ -32,12 +32,12 @@
 
     @formHelper(action = controllers.aboutyou.routes.FosterCarerController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
-        @heading(messages("fosterCarer.agent.title"))
-        @paragraph(messages("fosterCarer.agent.p1"))
-
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
+
+        @heading(messages("fosterCarer.agent.title"))
+        @paragraph(messages("fosterCarer.agent.p1"))
 
         @govukRadios(
             RadiosViewModel.yesNo(
