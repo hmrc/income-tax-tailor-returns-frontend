@@ -55,6 +55,5 @@ class Module extends play.api.inject.Module {
       authBinding
     ) ++ privateBetaBinding
 
-
   }
 }

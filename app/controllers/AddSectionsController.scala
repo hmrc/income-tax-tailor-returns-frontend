@@ -22,7 +22,7 @@ import models.SectionNames._
 import models.NormalMode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.JourneyAddSectionsService
+import services.AddSectionsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.{Link, Task}
 import views.html.{AddSectionsAgentView, AddSectionsView}
@@ -34,7 +34,7 @@ class AddSectionsController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        identify: IdentifierActionProvider,
                                        getData: DataRetrievalActionProvider,
-                                       addSectionsService: JourneyAddSectionsService,
+                                       addSectionsService: AddSectionsService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: AddSectionsView,
                                        agentView: AddSectionsAgentView

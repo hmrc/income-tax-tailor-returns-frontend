@@ -18,13 +18,12 @@ package services
 
 import base.SpecBase
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
-import models.{SectionState, TaxAvoidanceSchemes, UserAnswers}
+import models.{SectionState, UserAnswers}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.TaxAvoidanceSchemesPage
 import pages.aboutyou.FosterCarerPage
 import play.api.test.Helpers.running
 

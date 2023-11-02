@@ -18,7 +18,7 @@ package services
 
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
 import models.{SectionState, TagStatus, UserAnswers}
-import pages.TaxAvoidanceSchemesPage
+import pages.aboutyou.TaxAvoidanceSchemesPage
 
 class JourneyAddSectionsService extends AddSectionsService {
   def getState(userAnswers: Option[UserAnswers]): SectionState = {
