@@ -18,7 +18,7 @@ package models.aboutyou
 
 import models.{Enumerable, WithName}
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
+import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, ExclusiveCheckbox}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import viewmodels.govuk.checkbox._
 
@@ -52,6 +52,14 @@ object TaxAvoidanceSchemes extends Enumerable.Implicits {
               value = value.toString,
               divider = messages("site.or")
             )
+          case NoAvoidance =>
+            CheckboxItemViewModel(
+              content = Text(messages(s"taxAvoidanceSchemes.${value.toString}")),
+              fieldId = "value",
+              index = index,
+              value = value.toString,
+              behaviour = Some(ExclusiveCheckbox)
+            )
           case _ =>
             CheckboxItemViewModel(
               content = Text(messages(s"taxAvoidanceSchemes.${value.toString}")),
@@ -72,6 +80,14 @@ object TaxAvoidanceSchemes extends Enumerable.Implicits {
               index = index,
               value = value.toString,
               divider = messages("site.or")
+            )
+          case NoAvoidance =>
+            CheckboxItemViewModel(
+              content = Text(messages(s"taxAvoidanceSchemes.agent.${value.toString}")),
+              fieldId = "value",
+              index = index,
+              value = value.toString,
+              behaviour = Some(ExclusiveCheckbox)
             )
           case _ =>
             CheckboxItemViewModel(

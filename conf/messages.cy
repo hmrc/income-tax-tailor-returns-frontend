@@ -171,6 +171,8 @@ charitableDonations.detail.understandingQualifyingShares.bullet3 = cyfranddaliad
 charitableDonations.detail.understandingQualifyingShares.bullet4 = buddiant mewn cronfa alltraeth
 charitableDonations.p1 = Gall rhai cyfraniadau i elusen leihau faint o dreth incwm y mae’n rhaid i chi ei thalu. Gelwir hyn yn rhyddhad treth.
 charitableDonations.agent.p1 = Gall rhai cyfraniadau at elusen leihau faint o dreth incwm y mae’n rhaid i’ch cleient ei thalu. Gelwir hyn yn rhyddhad treth.
+charitableDonations.p2 = Do not include any donations you made via Payroll Giving. These get tax relief at source, so we already know about them.
+charitableDonations.agent.p2 = Do not include any donations your client made via Payroll Giving. These get tax relief at source, so we already know about them.
 charitableDonations.legend = A wnaethoch gyfrannu at elusen?
 charitableDonations.agent.legend = A wnaeth eich cleient gyfraniad at elusen?
 charitableDonations.legend.hint = Dewiswch bob un sy’n berthnasol.
@@ -181,8 +183,8 @@ charitableDonations.giftsOfSharesOrSecurities = Rhoddion o gyfranddaliadau neu w
 charitableDonations.giftsOfLandOrProperty = Rhoddion o dir neu eiddo
 charitableDonations.noDonations = Na, ni wnes i gyfraniad at elusen
 charitableDonations.agent.noDonations = Na, ni wnaeth fy nghleient gyfraniad at elusen
-charitableDonations.error.required = Dewiswch Rhoddion elusennol
-charitableDonations.agent.error.required = Dewiswch Rhoddion elusennol
+charitableDonations.error.required = Dewiswch roddion elusennol neu dewiswch ‘Na, wnes i ddim rhoi i elusen’
+charitableDonations.agent.error.required = Dewiswch roddion elusennol neu dewiswch ‘Na, wnes i ddim rhoi i elusen’
 
 marriageAllowance.title = Lwfans Priodasol
 marriageAllowance.heading = Lwfans Priodasol
@@ -275,5 +277,5 @@ taxAvoidanceSchemes.agent.taxAvoidance = Arbed treth
 taxAvoidanceSchemes.agent.disguisedRemuneration = Tâl cuddiedig
 taxAvoidanceSchemes.agent.noAvoidance = Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth
 # TODO: Add error messages once received from design
-taxAvoidanceSchemes.error.required = Select taxAvoidanceSchemes
-taxAvoidanceSchemes.agent.error.required = Select taxAvoidanceSchemes
+taxAvoidanceSchemes.error.required = Select taxAvoidanceSchemes or select ’No, I was not in any tax avoidance schemes’
+taxAvoidanceSchemes.agent.error.required = Select taxAvoidanceSchemes or select ’No, I was not in any tax avoidance schemes’

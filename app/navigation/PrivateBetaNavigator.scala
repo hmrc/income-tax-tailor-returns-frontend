@@ -30,7 +30,7 @@ class PrivateBetaNavigator @Inject()() extends Navigator {
 
   override val normalRoutes: Page => UserAnswers => Call = {
     case UkResidenceStatusPage                => ukResidenceStatusRoute
-    case YourResidenceStatusPage              => ua => routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
+    case YourResidenceStatusPage              => ua => controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
     case CharitableDonationsPage              => ua => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, ua.taxYear)
     case FosterCarerPage                      => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
     case _                                    => ua => routes.IndexController.onPageLoad(ua.taxYear)

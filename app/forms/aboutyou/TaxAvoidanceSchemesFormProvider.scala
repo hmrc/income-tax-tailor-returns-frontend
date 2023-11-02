@@ -18,6 +18,7 @@ package forms.aboutyou
 
 import forms.mappings.Mappings
 import models.aboutyou.TaxAvoidanceSchemes
+import models.aboutyou.TaxAvoidanceSchemes.NoAvoidance
 import play.api.data.Form
 import play.api.data.Forms.set
 
@@ -33,7 +34,7 @@ class TaxAvoidanceSchemesFormProvider @Inject() extends Mappings {
         "taxAvoidanceSchemes.error.required"
       }
     Form(
-      "value" -> set(enumerable[TaxAvoidanceSchemes](error)).verifying(nonEmptySet(error))
+      "value" -> set(enumerable[TaxAvoidanceSchemes](error)).verifying(nonEmptySet(error), exclusiveItemInSet(error, NoAvoidance.toString))
     )
   }
 }

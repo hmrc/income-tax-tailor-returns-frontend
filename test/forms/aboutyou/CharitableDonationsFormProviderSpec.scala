@@ -18,6 +18,7 @@ package forms.aboutyou
 
 import forms.behaviours.CheckboxFieldBehaviours
 import models.aboutyou.CharitableDonations
+import models.aboutyou.CharitableDonations.{GiftsOfLandOrProperty, NoDonations}
 import play.api.data.FormError
 
 class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
@@ -42,6 +43,14 @@ class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
       fieldName,
       requiredKey
     )
+
+    behave like exclusiveCheckboxField(
+      form,
+      NoDonations.toString,
+      fieldName,
+      GiftsOfLandOrProperty.toString,
+      requiredKey
+    )
   }
 
   ".value for an agent" - {
@@ -52,6 +61,14 @@ class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
     behave like mandatoryCheckboxField(
       agentForm,
       fieldName,
+      requiredKey
+    )
+
+    behave like exclusiveCheckboxField(
+      agentForm,
+      NoDonations.toString,
+      fieldName,
+      GiftsOfLandOrProperty.toString,
       requiredKey
     )
   }

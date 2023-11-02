@@ -18,7 +18,7 @@ package models.aboutyou
 
 import models.{Enumerable, WithName}
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
+import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, ExclusiveCheckbox}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import viewmodels.govuk.checkbox._
@@ -57,6 +57,13 @@ object CharitableDonations extends Enumerable.Implicits {
             index = index,
             value = value.toString
           ).withHint(Hint(content = Text(messages(s"charitableDonations.donationsUsingGiftAid.hint"))))
+          case NoDonations => CheckboxItemViewModel(
+            content = Text(messages(s"charitableDonations.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            behaviour = Some(ExclusiveCheckbox)
+          )
           case _ => CheckboxItemViewModel(
             content = Text(messages(s"charitableDonations.${value.toString}")),
             fieldId = "value",
@@ -87,7 +94,8 @@ object CharitableDonations extends Enumerable.Implicits {
             content = Text(messages(s"charitableDonations.agent.${value.toString}")),
             fieldId = "value",
             index = index,
-            value = value.toString
+            value = value.toString,
+            behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
             content = Text(messages(s"charitableDonations.${value.toString}")),

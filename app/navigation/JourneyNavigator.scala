@@ -29,7 +29,7 @@ class JourneyNavigator @Inject()() extends Navigator {
 
   override val normalRoutes: Page => UserAnswers => Call = {
     case UkResidenceStatusPage                => ukResidenceStatusRoute
-    case YourResidenceStatusPage              => ua => routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
+    case YourResidenceStatusPage              => ua => controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
     case CharitableDonationsPage              => ua => controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, ua.taxYear)
     case MarriageAllowancePage                => ua => controllers.aboutyou.routes.ChildBenefitController.onPageLoad(NormalMode, ua.taxYear)
     case ChildBenefitPage                     => childBenefitRoute

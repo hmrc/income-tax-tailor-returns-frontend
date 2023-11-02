@@ -18,6 +18,7 @@ package forms.aboutyou
 
 import forms.mappings.Mappings
 import models.aboutyou.CharitableDonations
+import models.aboutyou.CharitableDonations.NoDonations
 import play.api.data.Form
 import play.api.data.Forms.set
 
@@ -33,7 +34,7 @@ class CharitableDonationsFormProvider @Inject() extends Mappings {
         "charitableDonations.error.required"
       }
     Form(
-      "value" -> set(enumerable[CharitableDonations](error)).verifying(nonEmptySet(error))
+      "value" -> set(enumerable[CharitableDonations](error)).verifying(nonEmptySet(error), exclusiveItemInSet(error, NoDonations.toString))
     )
   }
 }

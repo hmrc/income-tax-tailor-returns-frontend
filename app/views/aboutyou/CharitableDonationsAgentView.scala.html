@@ -46,6 +46,10 @@
 
     @formHelper(action = controllers.aboutyou.routes.CharitableDonationsController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "CharitableDonations")))
+        }
+
         @heading(messages("charitableDonations.heading"))
 
         @govukDetails(Details(
@@ -55,10 +59,13 @@
 
         @paragraph(messages("charitableDonations.agent.p1"))
 
+        @paragraph(messages("charitableDonations.agent.p2"))
+
         @govukCheckboxes(
             CheckboxesViewModel(
                 form   = form,
-                name   = "value",
+                idPrefix = "CharitableDonations",
+                name   = "value[]",
                 legend = LegendViewModel(messages("charitableDonations.agent.legend")).withSize(LegendSize.Medium),
                 items  = CharitableDonations.agentCheckboxItems
             ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))

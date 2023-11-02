@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package forms
+package forms.aboutyou
 
-import forms.aboutyou.TaxAvoidanceSchemesFormProvider
 import forms.behaviours.CheckboxFieldBehaviours
 import models.aboutyou.TaxAvoidanceSchemes
+import models.aboutyou.TaxAvoidanceSchemes.{NoAvoidance, TaxAvoidance}
 import play.api.data.FormError
 
 class TaxAvoidanceSchemesFormProviderSpec extends CheckboxFieldBehaviours {
@@ -43,6 +43,14 @@ class TaxAvoidanceSchemesFormProviderSpec extends CheckboxFieldBehaviours {
       fieldName,
       requiredKey
     )
+
+    behave like exclusiveCheckboxField(
+      form,
+      NoAvoidance.toString,
+      fieldName,
+      TaxAvoidance.toString,
+      requiredKey
+    )
   }
 
   ".value for an agent" - {
@@ -53,6 +61,14 @@ class TaxAvoidanceSchemesFormProviderSpec extends CheckboxFieldBehaviours {
     behave like mandatoryCheckboxField(
       agentForm,
       fieldName,
+      requiredKey
+    )
+
+    behave like exclusiveCheckboxField(
+      agentForm,
+      NoAvoidance.toString,
+      fieldName,
+      TaxAvoidance.toString,
       requiredKey
     )
   }
