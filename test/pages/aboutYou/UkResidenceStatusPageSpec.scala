@@ -17,6 +17,7 @@
 package pages.aboutYou
 
 import models.UserAnswers
+import models.aboutyou.{UkResidenceStatus, YourResidenceStatus}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.aboutyou.{UkResidenceStatusPage, YourResidenceStatusPage}
 import pages.behaviours.PageBehaviours
@@ -25,41 +26,38 @@ class UkResidenceStatusPageSpec extends PageBehaviours {
 
   "UkResidenceStatusPage" must {
 
-    beRetrievable[Boolean](UkResidenceStatusPage)
+    beRetrievable[UkResidenceStatus](UkResidenceStatusPage)
 
-    beSettable[Boolean](UkResidenceStatusPage)
+    beSettable[UkResidenceStatus](UkResidenceStatusPage)
 
-    beRemovable[Boolean](UkResidenceStatusPage)
   }
 
-  "remove relevant data when TrustHaveAUTRPage is set to false" in {
+  "remove relevant data when UkResidenceStatus is set to Uk" in {
 
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
+    forAll(arbitrary[UserAnswers]) {
+      initial =>
 
-        val answers = initial.set(YourResidenceStatusPage, str).success.value
+        val answers = initial.set(YourResidenceStatusPage, YourResidenceStatus.NonResident).success.value
 
-        val result = answers.set(UkResidenceStatusPage, "Uk").success.value
+        val result = answers.set(UkResidenceStatusPage, UkResidenceStatus.Uk).success.value
 
-        result.get(WhatIsTheUTRPage) mustNot be (defined)
-        result.get(PostcodeForTheTrustPage) mustNot be (defined)
+        result.get(YourResidenceStatusPage) mustNot be (defined)
     }
 
   }
 
-  "remove relevant data when TrustHaveAUTRPage is set to true" in {
+  "remove relevant data when UkResidenceStatus is set to Domiciled" in {
 
-    forAll(arbitrary[UserAnswers], arbitrary[Boolean]) {
-      (initial, bool) =>
+    forAll(arbitrary[UserAnswers]) {
+      initial =>
 
-        val answers = initial
-          .set(TaxLiabilityInCurrentTaxYearYesNoPage, bool).success.value
-          .set(UndeclaredTaxLiabilityYesNoPage, bool).success.value
+        val answers = initial.set(YourResidenceStatusPage, YourResidenceStatus.NonResident).success.value
 
-        val result = answers.set(TrustHaveAUTRPage, true).success.value
+        val result = answers.set(UkResidenceStatusPage, UkResidenceStatus.Domiciled).success.value
 
-        result.get(TaxLiabilityInCurrentTaxYearYesNoPage) mustNot be (defined)
-        result.get(UndeclaredTaxLiabilityYesNoPage) mustNot be (defined)
+        result.get(YourResidenceStatusPage) mustNot be(defined)
     }
+
   }
+
 }
