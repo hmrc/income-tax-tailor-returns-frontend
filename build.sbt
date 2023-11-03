@@ -70,6 +70,7 @@ lazy val root = (project in file("."))
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   fork := true,
+  javaOptions += "-Dconfig.resource=test.application.conf",
   unmanagedSourceDirectories += baseDirectory.value / "test-utils"
 )
 

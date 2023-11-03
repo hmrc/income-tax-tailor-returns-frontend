@@ -20,6 +20,7 @@ import controllers.actions._
 import navigation.{JourneyNavigator, Navigator, PrivateBetaNavigator}
 import play.api.inject.Binding
 import play.api.{Configuration, Environment}
+import services.{AddSectionsService, JourneyAddSectionsService, PrivateBetaAddSectionsService}
 
 import java.time.Clock
 
@@ -34,21 +35,25 @@ class Module extends play.api.inject.Module {
           bind[IdentifierActionProvider].to[IdentifierActionProviderImpl].eagerly()
       }
 
-    val navigationBinding: Binding[_] =
+    val privateBetaBinding: Seq[Binding[_]] =
       if (configuration.get[Boolean]("features.privateBeta")) {
-        bind[Navigator].to[PrivateBetaNavigator]
+        Seq(
+          bind[Navigator].to[PrivateBetaNavigator],
+          bind[AddSectionsService].to[PrivateBetaAddSectionsService]
+        )
       } else {
-        bind[Navigator].to[JourneyNavigator]
+        Seq(
+          bind[Navigator].to[JourneyNavigator],
+          bind[AddSectionsService].to[JourneyAddSectionsService]
+        )
       }
 
     Seq(
       bind[DataRetrievalActionProvider].to[DataRetrievalActionProviderImpl].eagerly(),
       bind[DataRequiredActionProvider].to[DataRequiredActionProviderImpl].eagerly(),
       bind[Clock].toInstance(Clock.systemUTC()),
-      authBinding,
-      navigationBinding
-    )
-
+      authBinding
+    ) ++ privateBetaBinding
 
   }
 }
