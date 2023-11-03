@@ -85,7 +85,7 @@ object CharitableDonations extends Enumerable.Implicits {
             divider = messages(s"site.or")
           )
           case DonationsUsingGiftAid => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.${value.toString}")),
+            content = Text(messages(s"charitableDonations.agent.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
@@ -98,7 +98,7 @@ object CharitableDonations extends Enumerable.Implicits {
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.${value.toString}")),
+            content = Text(messages(s"charitableDonations.agent.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString

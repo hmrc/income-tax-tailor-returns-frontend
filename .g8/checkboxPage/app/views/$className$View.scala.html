@@ -13,14 +13,13 @@
     @formHelper(action = routes.$className$Controller.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value")))
+            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value_0")))
         }
 
         @govukCheckboxes(
             CheckboxesViewModel(
                 form   = form,
-                idPrefix = "value",
-                name   = "value[]",
+                name   = "value",
                 legend = LegendViewModel(messages("$className;format="decap"$.heading")).asPageHeading(),
                 items  = $className$.checkboxItems
             )
