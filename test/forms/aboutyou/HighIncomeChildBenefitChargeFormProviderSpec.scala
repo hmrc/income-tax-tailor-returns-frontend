@@ -17,7 +17,7 @@
 package forms.aboutyou
 
 import forms.behaviours.OptionFieldBehaviours
-import models.HighIncomeChildBenefitCharge
+import models.aboutyou.HighIncomeChildBenefitCharge
 import play.api.data.FormError
 
 class HighIncomeChildBenefitChargeFormProviderSpec extends OptionFieldBehaviours {

@@ -19,7 +19,8 @@ package controllers.aboutyou
 import base.SpecBase
 import controllers.routes
 import forms.aboutyou.HighIncomeChildBenefitChargeFormProvider
-import models.{Done, HighIncomeChildBenefitCharge, NormalMode, UserAnswers}
+import models.aboutyou.HighIncomeChildBenefitCharge
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
