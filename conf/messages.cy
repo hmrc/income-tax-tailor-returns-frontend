@@ -189,7 +189,7 @@ charitableDonations.agent.giftsOfLandOrProperty = Rhoddion o dir neu eiddo
 charitableDonations.noDonations = Na, ni wnes i gyfraniad at elusen
 charitableDonations.agent.noDonations = Na, ni wnaeth fy nghleient gyfraniad at elusen
 charitableDonations.error.required = Select if you donated to charity using Gift Aid, gifts of shares or securities, gifts of land or property, or you did not donate to charity
-charitableDonations.agent.error.required = Select if your client donated to charity using Gift Aid, gifts of shares or securities, gifts of land or property, or your client did not donate to charity
+charitableDonations.agent.error.required = Select if your client donated to charity using Gift Aid, gifts of shares or securities, gifts of land or property, or they did not donate to charity
 charitableDonations.error.invalid = Select which charitable donations you made, or select 'No, I did not donate to charity'
 charitableDonations.agent.error.invalid = Select which charitable donations your client made, or select 'No, my client did not donate to charity'
 
