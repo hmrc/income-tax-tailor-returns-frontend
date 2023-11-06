@@ -16,9 +16,8 @@
 
 package viewmodels.checkAnswers
 
-import controllers.routes
 import models.{CheckMode, UserAnswers}
-import pages.CharitableDonationsPage
+import pages.aboutyou.CharitableDonationsPage
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -37,7 +36,7 @@ object CharitableDonationsSummary  {
             checkboxes.map {
               answer => HtmlFormat.escape(messages(s"charitableDonations.$answer")).toString
             }
-            .mkString(",<br>")
+              .mkString(",<br>")
           )
         )
 
@@ -45,7 +44,7 @@ object CharitableDonationsSummary  {
           key     = "charitableDonations.checkYourAnswersLabel",
           value   = value,
           actions = Seq(
-            ActionItemViewModel("site.change", routes.CharitableDonationsController.onPageLoad(CheckMode, answers.taxYear).url)
+            ActionItemViewModel("site.change", controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(CheckMode, answers.taxYear).url)
               .withVisuallyHiddenText(messages("charitableDonations.change.hidden"))
           )
         )

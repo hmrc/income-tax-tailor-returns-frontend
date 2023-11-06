@@ -19,7 +19,7 @@ package viewmodels.govuk
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, Checkboxes}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxBehaviour, CheckboxItem, Checkboxes}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Empty}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
@@ -34,6 +34,7 @@ trait CheckboxFluency {
 
     def apply(
                form: Form[_],
+               idPrefix: String,
                name: String,
                items: Seq[CheckboxItem],
                legend: Legend,
@@ -41,6 +42,7 @@ trait CheckboxFluency {
              )(implicit messages: Messages): Checkboxes =
       apply(
         form = form,
+        idPrefix = idPrefix,
         name = name,
         items = items,
         hint = hint,
@@ -49,6 +51,7 @@ trait CheckboxFluency {
 
     def apply(
                form: Form[_],
+               idPrefix: String,
                name: String,
                hint: Option[Hint],
                items: Seq[CheckboxItem],
@@ -56,9 +59,10 @@ trait CheckboxFluency {
              )(implicit messages: Messages): Checkboxes =
       Checkboxes(
         fieldset     = Some(fieldset),
+        idPrefix     = Some(idPrefix),
         name         = name,
         hint         = hint,
-        errorMessage = errorMessage(form(name)),
+        errorMessage = errorMessage(form("value")),
         items        = items.map {
           item =>
             item.copy(checked = form.data.exists(data => data._2 == item.value))
@@ -81,13 +85,15 @@ trait CheckboxFluency {
                content: Content,
                fieldId: String,
                index: Int,
-               value: String
+               value: String,
+               hint: Option[Hint] = None,
+               behaviour: Option[CheckboxBehaviour] = None
              ): CheckboxItem =
       CheckboxItem(
         content = content,
-        id      = Some(s"${fieldId}_$index"),
-        name    = Some(s"$fieldId[$index]"),
-        value   = value
+        value   = value,
+        hint = hint,
+        behaviour = behaviour
       )
 
     def apply(
@@ -98,8 +104,7 @@ trait CheckboxFluency {
              ): CheckboxItem =
       CheckboxItem(
         content = Empty,
-        id = Some(s"${fieldId}_$index"),
-        name = Some(s"$fieldId[$index]"),
+        name = Some(s"$fieldId"),
         value = value,
         divider = Some(divider)
       )

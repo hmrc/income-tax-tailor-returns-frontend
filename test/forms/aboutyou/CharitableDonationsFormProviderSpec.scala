@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package forms
+package forms.aboutyou
 
 import forms.behaviours.CheckboxFieldBehaviours
-import models.CharitableDonations
+import models.aboutyou.CharitableDonations
+import models.aboutyou.CharitableDonations.{GiftsOfLandOrProperty, NoDonations}
 import play.api.data.FormError
 
 class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
@@ -29,18 +30,27 @@ class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
 
     val fieldName = "value"
     val requiredKey = "charitableDonations.error.required"
+    val invalidErrorKey = "charitableDonations.error.invalid"
 
     behave like checkboxField[CharitableDonations](
       form,
       fieldName,
       validValues  = CharitableDonations.values,
-      invalidError = FormError(s"$fieldName[0]", "error.invalid")
+      invalidError = FormError(s"$fieldName[0]", invalidErrorKey)
     )
 
     behave like mandatoryCheckboxField(
       form,
       fieldName,
       requiredKey
+    )
+
+    behave like exclusiveCheckboxField(
+      form,
+      NoDonations.toString,
+      fieldName,
+      GiftsOfLandOrProperty.toString,
+      invalidErrorKey
     )
   }
 
@@ -48,11 +58,20 @@ class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
 
     val fieldName = "value"
     val requiredKey = "charitableDonations.agent.error.required"
+    val invalidErrorKey = "charitableDonations.agent.error.invalid"
 
     behave like mandatoryCheckboxField(
       agentForm,
       fieldName,
       requiredKey
+    )
+
+    behave like exclusiveCheckboxField(
+      agentForm,
+      NoDonations.toString,
+      fieldName,
+      GiftsOfLandOrProperty.toString,
+      invalidErrorKey
     )
   }
 }

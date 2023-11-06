@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package pages
+package pages.aboutyou
 
-import models.CharitableDonations
+import models.aboutyou.CharitableDonations
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 case object CharitableDonationsPage extends QuestionPage[Set[CharitableDonations]] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \ "aboutYou" \ toString
 
   override def toString: String = "charitableDonations"
 }

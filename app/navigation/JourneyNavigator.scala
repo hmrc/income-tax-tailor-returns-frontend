@@ -29,7 +29,7 @@ class JourneyNavigator @Inject()() extends Navigator {
 
   override val normalRoutes: Page => UserAnswers => Call = {
     case UkResidenceStatusPage                => ukResidenceStatusRoute
-    case YourResidenceStatusPage              => ua => routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
+    case YourResidenceStatusPage              => ua => controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
     case CharitableDonationsPage              => ua => controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, ua.taxYear)
     case MarriageAllowancePage                => ua => controllers.aboutyou.routes.ChildBenefitController.onPageLoad(NormalMode, ua.taxYear)
     case ChildBenefitPage                     => childBenefitRoute
@@ -49,10 +49,10 @@ class JourneyNavigator @Inject()() extends Navigator {
   def ukResidenceStatusRoute(userAnswers: UserAnswers): Call = {
     userAnswers.get(UkResidenceStatusPage) match {
       case Some(UkResidenceStatus.Uk) =>
-        routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
+        controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
 
       case Some(UkResidenceStatus.Domiciled) =>
-        routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
+        controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, userAnswers.taxYear)
 
       case Some(UkResidenceStatus.NonUK) =>
         controllers.aboutyou.routes.YourResidenceStatusController.onPageLoad(NormalMode, userAnswers.taxYear)

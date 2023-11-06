@@ -109,4 +109,14 @@ trait Constraints {
       case _ =>
         Invalid(errorKey)
     }
+
+  protected def exclusiveItemInSet(errorKey: String, itemName: String): Constraint[Set[_]] =
+    Constraint {
+      case set if set.map(_.toString).contains(itemName) & set.size == 1 =>
+        Valid
+      case set if !set.map(_.toString).contains(itemName) =>
+        Valid
+      case _ =>
+        Invalid(errorKey)
+    }
 }

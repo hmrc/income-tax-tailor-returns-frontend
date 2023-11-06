@@ -55,7 +55,7 @@
     @formHelper(action = controllers.aboutyou.routes.TaxAvoidanceSchemesController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "value_0")))
+            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "TaxAvoidance")))
         }
 
         @heading(messages("taxAvoidanceSchemes.heading"))
@@ -73,7 +73,8 @@
         @govukCheckboxes(
             CheckboxesViewModel(
                 form   = form,
-                name   = "value",
+                idPrefix = "TaxAvoidance",
+                name   = "value[]",
                 legend = LegendViewModel(messages("taxAvoidanceSchemes.title")).withSize(LegendSize.Medium),
                 items  = TaxAvoidanceSchemes.checkboxItems
             ).withHint(Hint(content = Text(messages("site.hint.selectAll"))))

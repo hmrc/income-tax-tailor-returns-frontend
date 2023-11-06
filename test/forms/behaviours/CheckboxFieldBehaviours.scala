@@ -60,4 +60,19 @@ trait CheckboxFieldBehaviours extends FormSpec {
       form.bind(data).errors must contain(FormError(s"$fieldName[0]", requiredKey))
     }
   }
+
+  def exclusiveCheckboxField(form: Form[_],
+                             exclusiveFieldName: String,
+                             fieldName: String,
+                             validFieldValue : String,
+                             requiredKey: String): Unit = {
+
+    "fail to bind when answers are selected with exclusive field" in {
+      val data = Map(
+        s"$fieldName[0]" -> exclusiveFieldName,
+        s"$fieldName[1]" -> validFieldValue
+      )
+      form.bind(data).errors must contain(FormError(s"$fieldName", requiredKey))
+    }
+  }
 }

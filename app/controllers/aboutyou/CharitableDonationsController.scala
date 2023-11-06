@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.aboutyou
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.CharitableDonationsFormProvider
+import forms.aboutyou.CharitableDonationsFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.CharitableDonationsPage
+import pages.aboutyou.CharitableDonationsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CharitableDonationsView
-import views.html.CharitableDonationsAgentView
+import views.html.aboutyou.{CharitableDonationsAgentView, CharitableDonationsView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

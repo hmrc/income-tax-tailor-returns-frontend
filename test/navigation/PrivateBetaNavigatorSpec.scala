@@ -19,7 +19,7 @@ package navigation
 import base.SpecBase
 import controllers.routes
 import models._
-import models.aboutyou.{UkResidenceStatus, YourResidenceStatus}
+import models.aboutyou._
 import pages._
 import pages.aboutyou._
 
@@ -44,7 +44,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
       "must go from UkResidentStatus page to CharitableDonations page when yes is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(UkResidenceStatusPage, UkResidenceStatus.Uk).success.value
 
-        val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
@@ -52,7 +52,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
       "must go from UkResidentStatus page to CharitableDonations page when yes but... is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(UkResidenceStatusPage, UkResidenceStatus.Domiciled).success.value
 
-        val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(UkResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
@@ -68,7 +68,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
       "must go from YourResidenceStatus page to CharitableDonations page when any value is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(YourResidenceStatusPage, YourResidenceStatus.NonResident).success.value
 
-        val expectedRoute = routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
+        val expectedRoute = controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, taxYear)
 
         navigator.nextPage(YourResidenceStatusPage, NormalMode, answers) mustBe expectedRoute
       }
