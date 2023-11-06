@@ -18,7 +18,7 @@ package pages.aboutyou
 
 import models.UserAnswers
 import models.aboutyou.UkResidenceStatus
-import models.aboutyou.UkResidenceStatus.{Domiciled, NonUK, Uk}
+import models.aboutyou.UkResidenceStatus.{Domiciled, Uk}
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
