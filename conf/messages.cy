@@ -100,8 +100,8 @@ taxReturnNotReady.allowances = Lwfansau a rhyddhad treth
 
 ###################################  ABOUT YOU ###########################################################################################
 
-ukResidenceStatus.title = A oeddech yn breswylydd yn y DU rhwng 6 Ebrill 2022 a 5 Ebrill 2023?
-ukResidenceStatus.agent.title = A oedd eich cleient yn breswylydd yn y DU rhwng 6 Ebrill 2022 a 5 Ebrill 2023?
+ukResidenceStatus.title = Statws preswyl yn y DU
+ukResidenceStatus.agent.title = Statws preswyl yn y DU
 ukResidenceStatus.heading = Statws preswyl yn y DU
 ukResidenceStatus.agent.heading = Statws preswyl yn y DU
 ukResidenceStatus.details.residence.summary = Deall statws preswyl yn y DU
@@ -267,8 +267,8 @@ fosterCarer.error.required = Dewiswch ‘Iawn’ os oeddech yn ofalwr maeth neu�
 fosterCarer.agent.error.required = Dewiswch ‘Iawn’ os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau
 
 
-taxAvoidanceSchemes.title = A oeddech yn rhan o unrhyw gynlluniau arbed treth?
-taxAvoidanceSchemes.agent.title = A oedd eich cleient yn rhan o unrhyw gynlluniau arbed treth?
+taxAvoidanceSchemes.title = Cynlluniau arbed treth
+taxAvoidanceSchemes.agent.title = Cynlluniau arbed treth
 taxAvoidanceSchemes.heading = Cynlluniau arbed treth
 taxAvoidanceSchemes.agent.heading = Cynlluniau arbed treth
 taxAvoidanceSchemes.taxAvoidance = Arbed treth

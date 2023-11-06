@@ -16,7 +16,7 @@
 
 package pages.aboutyou
 
-import models.HighIncomeChildBenefitCharge
+import models.aboutyou.HighIncomeChildBenefitCharge
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 

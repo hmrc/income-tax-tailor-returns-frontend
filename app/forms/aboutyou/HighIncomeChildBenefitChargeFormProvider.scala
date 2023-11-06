@@ -17,7 +17,7 @@
 package forms.aboutyou
 
 import forms.mappings.Mappings
-import models.HighIncomeChildBenefitCharge
+import models.aboutyou.HighIncomeChildBenefitCharge
 import play.api.data.Form
 import javax.inject.Inject
 

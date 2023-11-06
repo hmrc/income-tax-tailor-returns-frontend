@@ -104,8 +104,8 @@ taxReturnNotReady.allowances = Allowances and tax reliefs
 
 ###################################  ABOUT YOU ###########################################################################################
 
-ukResidenceStatus.title = Were you a UK resident between 6 April 2022 and 5 April 2023?
-ukResidenceStatus.agent.title = Was your client a UK resident between 6 April 2022 and 5 April 2023?
+ukResidenceStatus.title = UK residence status
+ukResidenceStatus.agent.title = UK residence status
 ukResidenceStatus.heading = UK residence status
 ukResidenceStatus.agent.heading = UK residence status
 ukResidenceStatus.details.residence.summary = Understanding UK residence status
@@ -272,8 +272,8 @@ patentRoyaltyPayments.agent.p1 = Your client must withhold 20% tax from the amou
 patentRoyaltyPayments.error.required = Select yes if you made any patent royalty payments
 patentRoyaltyPayments.agent.error.required = Select yes if your client made any patent royalty payments
 
-taxAvoidanceSchemes.title = Were you in any tax avoidance schemes?
-taxAvoidanceSchemes.agent.title = Was your client in any tax avoidance schemes?
+taxAvoidanceSchemes.title = Tax avoidance schemes
+taxAvoidanceSchemes.agent.title = Tax avoidance schemes
 taxAvoidanceSchemes.heading = Tax avoidance schemes
 taxAvoidanceSchemes.agent.heading = Tax avoidance schemes
 taxAvoidanceSchemes.taxAvoidance = Tax avoidance

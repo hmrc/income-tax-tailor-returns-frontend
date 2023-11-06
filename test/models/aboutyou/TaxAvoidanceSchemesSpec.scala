@@ -14,50 +14,50 @@
  * limitations under the License.
  */
 
-package models
+package models.aboutyou
 
+import generators.ModelGenerators
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, JsString, Json}
 
-class HighIncomeChildBenefitChargeSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues {
+class TaxAvoidanceSchemesSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
 
-  "HighIncomeChildBenefitCharge" - {
+  "TaxAvoidanceSchemes" - {
 
     "must deserialise valid values" in {
 
-      val gen = Gen.oneOf(HighIncomeChildBenefitCharge.values.toSeq)
+      val gen = arbitrary[TaxAvoidanceSchemes]
 
       forAll(gen) {
-        highIncomeChildBenefitCharge =>
+        taxAvoidanceSchemes =>
 
-          JsString(highIncomeChildBenefitCharge.toString).validate[HighIncomeChildBenefitCharge].asOpt.value mustEqual highIncomeChildBenefitCharge
+          JsString(taxAvoidanceSchemes.toString).validate[TaxAvoidanceSchemes].asOpt.value mustEqual taxAvoidanceSchemes
       }
     }
 
     "must fail to deserialise invalid values" in {
 
-      val gen = arbitrary[String] suchThat (!HighIncomeChildBenefitCharge.values.map(_.toString).contains(_))
+      val gen = arbitrary[String] suchThat (!TaxAvoidanceSchemes.values.map(_.toString).contains(_))
 
       forAll(gen) {
         invalidValue =>
 
-          JsString(invalidValue).validate[HighIncomeChildBenefitCharge] mustEqual JsError("error.invalid")
+          JsString(invalidValue).validate[TaxAvoidanceSchemes] mustEqual JsError("error.invalid")
       }
     }
 
     "must serialise" in {
 
-      val gen = Gen.oneOf(HighIncomeChildBenefitCharge.values.toSeq)
+      val gen = arbitrary[TaxAvoidanceSchemes]
 
       forAll(gen) {
-        highIncomeChildBenefitCharge =>
+        taxAvoidanceSchemes =>
 
-          Json.toJson(highIncomeChildBenefitCharge) mustEqual JsString(highIncomeChildBenefitCharge.toString)
+          Json.toJson(taxAvoidanceSchemes) mustEqual JsString(taxAvoidanceSchemes.toString)
       }
     }
   }
