@@ -19,7 +19,6 @@ package viewmodels.govuk
 import play.api.data.Form
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import uk.gov.hmrc.govukfrontend.views.Aliases.{ErrorMessage, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxBehaviour, CheckboxItem, Checkboxes}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, Empty}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
@@ -63,7 +62,7 @@ trait CheckboxFluency {
         idPrefix     = Some(idPrefix),
         name         = name,
         hint         = hint,
-        errorMessage = form.errors.headOption.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*)))),
+        errorMessage = errorMessage(form("value")),
         items        = items.map {
           item =>
             item.copy(checked = form.data.exists(data => data._2 == item.value))

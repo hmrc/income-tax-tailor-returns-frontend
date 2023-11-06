@@ -193,8 +193,10 @@ charitableDonations.giftsOfLandOrProperty = Gifts of land or property
 charitableDonations.agent.giftsOfLandOrProperty = Gifts of land or property
 charitableDonations.noDonations = No, I did not donate to charity
 charitableDonations.agent.noDonations = No, my client did not donate to charity
-charitableDonations.error.required = Select charitable donations or select ‘No, I did not donate to charity‘
-charitableDonations.agent.error.required = Select charitable donations or select ‘No, I did not donate to charity‘
+charitableDonations.error.required = Select if you donated to charity using Gift Aid, gifts of shares or securities, gifts of land or property, or you did not donate to charity
+charitableDonations.agent.error.required = Select if you donated to charity using Gift Aid, gifts of shares or securities, gifts of land or property, or you did not donate to charity
+charitableDonations.error.invalid = Select which charitable donations you made, or select 'No, I did not donate to charity'
+charitableDonations.agent.error.invalid = Select which charitable donations you made, or select 'No, I did not donate to charity'
 charitableDonations.checkYourAnswersLabel = Charitable donations
 charitableDonations.change.hidden = CharitableDonations
 

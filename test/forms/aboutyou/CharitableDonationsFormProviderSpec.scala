@@ -30,12 +30,13 @@ class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
 
     val fieldName = "value"
     val requiredKey = "charitableDonations.error.required"
+    val invalidErrorKey = "charitableDonations.error.invalid"
 
     behave like checkboxField[CharitableDonations](
       form,
       fieldName,
       validValues  = CharitableDonations.values,
-      invalidError = FormError(s"$fieldName[0]", "error.invalid")
+      invalidError = FormError(s"$fieldName[0]", invalidErrorKey)
     )
 
     behave like mandatoryCheckboxField(
@@ -49,7 +50,7 @@ class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
       NoDonations.toString,
       fieldName,
       GiftsOfLandOrProperty.toString,
-      requiredKey
+      invalidErrorKey
     )
   }
 
@@ -57,6 +58,7 @@ class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
 
     val fieldName = "value"
     val requiredKey = "charitableDonations.agent.error.required"
+    val invalidErrorKey = "charitableDonations.agent.error.invalid"
 
     behave like mandatoryCheckboxField(
       agentForm,
@@ -69,7 +71,7 @@ class CharitableDonationsFormProviderSpec extends CheckboxFieldBehaviours {
       NoDonations.toString,
       fieldName,
       GiftsOfLandOrProperty.toString,
-      requiredKey
+      invalidErrorKey
     )
   }
 }
