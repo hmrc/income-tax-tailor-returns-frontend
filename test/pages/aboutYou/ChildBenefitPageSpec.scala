@@ -16,9 +16,10 @@
 
 package pages.aboutYou
 
-import models.{HighIncomeChildBenefitCharge, UserAnswers}
+import models.UserAnswers
+import models.aboutyou.HighIncomeChildBenefitCharge
 import org.scalacheck.Arbitrary.arbitrary
-import pages.aboutyou.{ChildBenefitIncomePage, ChildBenefitPage, HighIncomeChildBenefitChargePage, UkResidenceStatusPage, YourResidenceStatusPage}
+import pages.aboutyou.{ChildBenefitIncomePage, ChildBenefitPage, HighIncomeChildBenefitChargePage}
 import pages.behaviours.PageBehaviours
 
 class ChildBenefitPageSpec extends PageBehaviours {
