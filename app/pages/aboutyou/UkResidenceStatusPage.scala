@@ -16,13 +16,25 @@
 
 package pages.aboutyou
 
+import models.UserAnswers
 import models.aboutyou.UkResidenceStatus
+import models.aboutyou.UkResidenceStatus.{Domiciled, Uk}
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object UkResidenceStatusPage extends QuestionPage[UkResidenceStatus] {
 
   override def path: JsPath = JsPath \"aboutYou"\ toString
 
   override def toString: String = "ukResidenceStatus"
+
+  override def cleanup(value: Option[UkResidenceStatus], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(Uk) | Some(Domiciled) =>
+        userAnswers.remove(YourResidenceStatusPage)
+      case _ =>
+        super.cleanup(value, userAnswers)
+    }
 }

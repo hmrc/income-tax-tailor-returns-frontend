@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-package pages.aboutyou
+package generators
 
-import models.UserAnswers
-import pages.QuestionPage
-import play.api.libs.json.JsPath
+import org.scalacheck.Arbitrary
+import pages.aboutyou.{ChildBenefitIncomePage, ChildBenefitPage, UkResidenceStatusPage}
 
-import scala.util.Try
+trait PageGenerators {
 
-case object ChildBenefitIncomePage extends QuestionPage[Boolean] {
+  implicit lazy val arbitraryUkResidenceStatusPage: Arbitrary[UkResidenceStatusPage.type] =
+    Arbitrary(UkResidenceStatusPage)
 
-  override def path: JsPath = JsPath \"aboutYou"\ toString
+  implicit lazy val arbitraryChildBenefitPage: Arbitrary[ChildBenefitPage.type] =
+    Arbitrary(ChildBenefitPage)
 
-  override def toString: String = "childBenefitIncome"
+  implicit lazy val arbitraryChildBenefitIncomePage: Arbitrary[ChildBenefitIncomePage.type] =
+    Arbitrary(ChildBenefitIncomePage)
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(false) =>
-        userAnswers.remove(HighIncomeChildBenefitChargePage)
-      case _ =>
-        super.cleanup(value, userAnswers)
-    }
+
 }
