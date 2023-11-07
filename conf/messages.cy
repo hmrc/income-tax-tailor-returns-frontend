@@ -64,7 +64,7 @@ start.p = Gallwch ychwanegu adrannau drwy ateb ambell gwestiwn cyn diweddaru’c
 start.agent.p = Gallwch ychwanegu adrannau drwy ateb ambell gwestiwn byr cyn diweddaru Ffurflen Dreth eich cleient, a’i chyflwyno.
 
 addSections.title = Ychwanegu adrannau at eich Ffurflen Dreth
-addSections.agent.title = Ychwanegu adrannau at eich Ffurflen Dreth
+addSections.agent.title = Ychwanegu adrannau at Ffurflen Dreth eich cleient
 addSections.heading = Ychwanegu adrannau at eich Ffurflen Dreth
 addSections.agent.heading = Ychwanegu adrannau at Ffurflen Dreth eich cleient
 addSections.incomplete = Heb lenwi
@@ -188,8 +188,8 @@ charitableDonations.giftsOfLandOrProperty = Rhoddion o dir neu eiddo
 charitableDonations.agent.giftsOfLandOrProperty = Rhoddion o dir neu eiddo
 charitableDonations.noDonations = Na, ni wnes i gyfraniad at elusen
 charitableDonations.agent.noDonations = Na, ni wnaeth fy nghleient gyfraniad at elusen
-charitableDonations.error.required = Select if you donated to charity using Gift Aid, gifts of shares or securities, gifts of land or property, or you did not donate to charity
-charitableDonations.agent.error.required = Select if your client donated to charity using Gift Aid, gifts of shares or securities, gifts of land or property, or they did not donate to charity
+charitableDonations.error.required = Select which charitable donations you made, or select 'No, I did not donate to charity'
+charitableDonations.agent.error.required = Select which charitable donations your client made, or select 'No, my client did not donate to charity'
 charitableDonations.error.invalid = Select which charitable donations you made, or select 'No, I did not donate to charity'
 charitableDonations.agent.error.invalid = Select which charitable donations your client made, or select 'No, my client did not donate to charity'
 
@@ -283,6 +283,5 @@ taxAvoidanceSchemes.noAvoidance = Na, nid oeddwn yn rhan o unrhyw gynlluniau arb
 taxAvoidanceSchemes.agent.taxAvoidance = Arbed treth
 taxAvoidanceSchemes.agent.disguisedRemuneration = Tâl cuddiedig
 taxAvoidanceSchemes.agent.noAvoidance = Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth
-# TODO: Add error messages once received from design
-taxAvoidanceSchemes.error.required = Select taxAvoidanceSchemes or select ’No, I was not in any tax avoidance schemes’
-taxAvoidanceSchemes.agent.error.required = Select taxAvoidanceSchemes or select ’No, I was not in any tax avoidance schemes’
+taxAvoidanceSchemes.error.required = Select which tax avoidance schemes you were in or select ’No, I was not in any tax avoidance schemes’
+taxAvoidanceSchemes.agent.error.required = Select which tax avoidance schemes your client was in or select ’No, I was not in any tax avoidance schemes’
