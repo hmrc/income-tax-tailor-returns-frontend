@@ -17,7 +17,9 @@ class $className$FormProvider @Inject() extends Mappings {
         "$className;format="decap"$.error.required"
       }
     Form(
-      "value" -> set(enumerable[$className$](error)).verifying(nonEmptySet(error))
+      "value" -> set(enumerable[$className$](error)).verifying(
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, $className$.ExclusiveOption.toString))
+      )
     )
   }
 }

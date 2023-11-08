@@ -26,6 +26,14 @@ class $className$FormProviderSpec extends CheckboxFieldBehaviours {
       fieldName,
       requiredKey
     )
+
+    behave like exclusiveCheckboxField(
+      form,
+      $className$.ExclusiveOption.toString,
+      fieldName,
+      $className$.Option1.toString,
+      requiredKey
+    )
   }
 
   ".value for an agent" - {
@@ -36,6 +44,14 @@ class $className$FormProviderSpec extends CheckboxFieldBehaviours {
     behave like mandatoryCheckboxField(
       agentForm,
       fieldName,
+      requiredKey
+    )
+
+    behave like exclusiveCheckboxField(
+      agentForm,
+      $className$.ExclusiveOption.toString,
+      fieldName,
+      $className$.Option1.toString,
       requiredKey
     )
   }
