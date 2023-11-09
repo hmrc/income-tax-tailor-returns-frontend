@@ -16,11 +16,41 @@
 
 package generators
 
-import models._
 import models.aboutyou._
+import models.propertypensionsinvestments._
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryUkInterest: Arbitrary[UkInterest] =
+    Arbitrary {
+      Gen.oneOf(UkInterest.values)
+    }
+
+  implicit lazy val arbitraryUkInsuranceGains: Arbitrary[UkInsuranceGains] =
+    Arbitrary {
+      Gen.oneOf(UkInsuranceGains.values)
+    }
+
+  implicit lazy val arbitraryUkDividendsSharesLoans: Arbitrary[UkDividendsSharesLoans] =
+    Arbitrary {
+      Gen.oneOf(UkDividendsSharesLoans.values)
+    }
+
+  implicit lazy val arbitraryRentalIncome: Arbitrary[RentalIncome] =
+    Arbitrary {
+      Gen.oneOf(RentalIncome.values)
+    }
+
+  implicit lazy val arbitraryPensions: Arbitrary[Pensions] =
+    Arbitrary {
+      Gen.oneOf(Pensions.values)
+    }
+
+  implicit lazy val arbitraryNonUkInterestDividendsInsurance: Arbitrary[NonUkInterestDividendsInsurance] =
+    Arbitrary {
+      Gen.oneOf(NonUkInterestDividendsInsurance.values)
+    }
 
   implicit lazy val arbitraryTaxAvoidanceSchemes: Arbitrary[TaxAvoidanceSchemes] =
     Arbitrary {
