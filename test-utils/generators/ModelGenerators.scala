@@ -16,6 +16,7 @@
 
 package generators
 
+import models.pensions._
 import models.aboutyou._
 import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
 import models.propertypensionsinvestments._
@@ -31,6 +32,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryAboutYourWork: Arbitrary[AboutYourWork] =
     Arbitrary {
       Gen.oneOf(AboutYourWork.values)
+    }
+
+  implicit lazy val arbitraryPaymentsIntoPensions: Arbitrary[PaymentsIntoPensions] =
+    Arbitrary {
+      Gen.oneOf(PaymentsIntoPensions.values)
     }
 
   implicit lazy val arbitraryUkInterest: Arbitrary[UkInterest] =
