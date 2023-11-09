@@ -125,7 +125,7 @@ POST       /nonUkInterestDividendsInsurance/:taxYear                            
 GET        /changeNonUkInterestDividendsInsurance/:taxYear                          controllers.propertypensionsinvestments.NonUkInterestDividendsInsuranceController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /changeNonUkInterestDividendsInsurance/:taxYear                          controllers.propertypensionsinvestments.NonUkInterestDividendsInsuranceController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /pensions/:taxYear                                                       controllers.propertypen        sionsinvestments.PensionsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+GET        /pensions/:taxYear                                                       controllers.propertypensionsinvestments.PensionsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /pensions/:taxYear                                                       controllers.propertypensionsinvestments.PensionsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
 GET        /changePensions/:taxYear                                                 controllers.propertypensionsinvestments.PensionsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /changePensions/:taxYear                                                 controllers.propertypensionsinvestments.PensionsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
