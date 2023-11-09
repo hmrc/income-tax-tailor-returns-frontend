@@ -16,6 +16,7 @@
 
 package generators
 
+import models._
 import models.aboutyou._
 import org.scalacheck.{Arbitrary, Gen}
 

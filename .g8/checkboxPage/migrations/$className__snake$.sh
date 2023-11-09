@@ -22,6 +22,8 @@ echo "$className;format="decap"$.$option1key;format="decap"$ = $option1msg$" >> 
 echo "$className;format="decap"$.$option2key;format="decap"$ = $option2msg$" >> ../conf/messages.en
 echo "$className;format="decap"$.agent.$option1key;format="decap"$ = $option1msg$" >> ../conf/messages.en
 echo "$className;format="decap"$.agent.$option2key;format="decap"$ = $option2msg$" >> ../conf/messages.en
+echo "$className;format="decap"$.exclusive = Exclusive" >> ../conf/messages.en
+echo "$className;format="decap"$.agent.exclusive = Exclusive" >> ../conf/messages.en
 echo "$className;format="decap"$.checkYourAnswersLabel = $title$" >> ../conf/messages.en
 echo "$className;format="decap"$.error.required = Select $className;format="decap"$" >> ../conf/messages.en
 echo "$className;format="decap"$.agent.error.required = Select $className;format="decap"$" >> ../conf/messages.en
