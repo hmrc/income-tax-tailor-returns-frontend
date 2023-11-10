@@ -39,6 +39,10 @@ error.number = Nodwch rif dilys
 error.required = Nodwch werth
 error.summary.title = Mae problem wedi codi
 
+index.title = income-tax-tailor-returns-frontend
+index.heading = income-tax-tailor-returns-frontend
+index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
+
 checkYourAnswers.title = Gwirio’ch Atebion
 checkYourAnswers.heading = Gwirio’ch Atebion
 
@@ -132,7 +136,6 @@ ukResidenceStatus.uk = Iawn
 ukResidenceStatus.agent.uk = Iawn
 ukResidenceStatus.nonUK = Na
 ukResidenceStatus.agent.nonUK = Na
-
 ukResidenceStatus.domiciled = Iawn, ond roedd fy nghartref parhaol (‘domisil’) dramor ac rwy’n hawlio’r sail trosglwyddo
 ukResidenceStatus.agent.domiciled = Iawn, ond roedd ei gartref parhaol (‘domisil’) dramor ac mae’n hawlio’r sail trosglwyddo
 ukResidenceStatus.error.required = Dewiswch a oeddech yn breswylydd yn y DU, yn breswylydd yn y DU a oedd yn byw dramor ac sydd am hawlio’r sail trosglwyddo, neu os nad oeddech yn breswylydd yn y DU
@@ -210,21 +213,15 @@ marriageAllowance.agent.legend = A yw’ch cleient am drosglwyddo £1,260 o’i 
 marriageAllowance.error.required = Dewiswch ‘Iawn’ os ydych am drosglwyddo £1,260 o’ch Lwfans Personol i’ch gŵr, gwraig neu bartner sifil
 marriageAllowance.agent.error.required = Dewiswch ‘Iawn’ os yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil
 
-###################################  CHILD BENEFIT  ###########################################################################################
-
 childBenefit.title = A gawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi?
 childBenefit.agent.title = A gafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw?
 childBenefit.error.required = Dewiswch ‘Iawn’, os cawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi
 childBenefit.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw
 
-################################### CHILD BENEFIT INCOME ###########################################################################################
-
 childBenefitIncome.title = A oedd eich incwm dros £50,000?
 childBenefitIncome.agent.title = A oedd incwm eich cleient dros £50,000?
 childBenefitIncome.error.required = Dewiswch ‘Iawn’ os oedd eich incwm dros £50,000
 childBenefitIncome.agent.error.required = Dewiswch ‘Iawn’ os oedd incwm eich cleient dros £50,000
-
-################################### HIGH INCOME CHILD BENEFIT CHARGE ###########################################################################################
 
 highIncomeChildBenefitCharge.title = Tâl Treth Budd-dal Plant Incwm Uchel
 highIncomeChildBenefitCharge.agent.title = Tâl Treth Budd-dal Plant Incwm Uchel
@@ -250,8 +247,6 @@ highIncomeChildBenefitCharge.agent.noPartner = Nid oes partner gan fy nghleient
 highIncomeChildBenefitCharge.error.required = Dewiswch a oedd eich incwm chi yn uwch, incwm eich partner yn uwch neu os nad oes gennych bartner
 highIncomeChildBenefitCharge.agent.error.required = Dewiswch a oedd incwm eich cleient yn uwch, incwm ei bartner yn uwch neu os nad oes gan eich cleient bartner
 
-################################### ROYALTY PAYMENTS ###########################################################################################
-
 patentRoyaltyPayments.title = A wnaethoch unrhyw freindaliadau patent?
 patentRoyaltyPayments.agent.title = A wnaeth eich cleient unrhyw freindaliadau patent?
 patentRoyaltyPayments.p1 = Mae’n rhaid i chi ddal 20% o dreth yn ôl o swm y breindaliadau patent a dalwch. Telir y dreth a ddelir yn ôl fel rhan o’r dreth sy’n ddyledus ar eich incwm.
@@ -266,7 +261,6 @@ fosterCarer.agent.p1 = Os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysyl
 fosterCarer.error.required = Dewiswch ‘Iawn’ os oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau
 fosterCarer.agent.error.required = Dewiswch ‘Iawn’ os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau
 
-
 taxAvoidanceSchemes.title = Cynlluniau arbed treth
 taxAvoidanceSchemes.agent.title = Cynlluniau arbed treth
 taxAvoidanceSchemes.heading = Cynlluniau arbed treth
@@ -278,6 +272,8 @@ taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore = Dysgwch ragor a
 taxAvoidanceSchemes.understandingRemuneration.summary = Deall tâl cuddiedig
 taxAvoidanceSchemes.understandingRemuneration.summary.p = Trefniadau yw cynlluniau tâl cuddiedig sy’n talu benthyciadau yn lle incwm arferol er mwyn osgoi Treth Incwm a chyfraniadau Yswiriant Gwladol.
 taxAvoidanceSchemes.understandingRemuneration.summary.findOutMore = Dysgwch ragor am dâl cuddiedig
+taxAvoidanceSchemes.legend = A oeddech yn rhan o unrhyw gynlluniau arbed treth?
+taxAvoidanceSchemes.agent.legend = A oedd eich cleient yn rhan o unrhyw gynlluniau arbed treth?
 taxAvoidanceSchemes.disguisedRemuneration = Tâl cuddiedig
 taxAvoidanceSchemes.noAvoidance = Na, nid oeddwn yn rhan o unrhyw gynlluniau arbed treth
 taxAvoidanceSchemes.agent.taxAvoidance = Arbed treth
@@ -285,3 +281,189 @@ taxAvoidanceSchemes.agent.disguisedRemuneration = Tâl cuddiedig
 taxAvoidanceSchemes.agent.noAvoidance = Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth
 taxAvoidanceSchemes.error.required = Select which tax avoidance schemes you were in or select ’No, I was not in any tax avoidance schemes’
 taxAvoidanceSchemes.agent.error.required = Select which tax avoidance schemes your client was in or select ’No, I was not in any tax avoidance schemes’
+
+###################################  Work And Benefits ###########################################################################################
+
+aboutYourWork.title = About Your Work
+aboutYourWork.agent.title = About Your Work
+aboutYourWork.heading = About Your Work
+aboutYourWork.agent.heading = About Your Work
+aboutYourWork.option1 = Option 1
+aboutYourWork.option2 = Option 2
+aboutYourWork.agent.option1 = Option 1
+aboutYourWork.agent.option2 = Option 2
+aboutYourWork.exclusive = Exclusive
+aboutYourWork.agent.exclusive = Exclusive
+aboutYourWork.checkYourAnswersLabel = About Your Work
+aboutYourWork.error.required = Select aboutYourWork
+aboutYourWork.agent.error.required = Select aboutYourWork
+aboutYourWork.change.hidden = AboutYourWork
+
+constructionIndustryScheme.title = constructionIndustryScheme
+constructionIndustryScheme.agent.title = constructionIndustryScheme
+constructionIndustryScheme.heading = constructionIndustryScheme
+constructionIndustryScheme.agent.heading = constructionIndustryScheme
+constructionIndustryScheme.checkYourAnswersLabel = constructionIndustryScheme
+constructionIndustryScheme.error.required = Select yes if constructionIndustryScheme
+constructionIndustryScheme.agent.error.required = Select yes if constructionIndustryScheme
+constructionIndustryScheme.change.hidden = ConstructionIndustryScheme
+
+employmentLumpSums.title = employmentLumpSums
+employmentLumpSums.agent.title = employmentLumpSums
+employmentLumpSums.heading = employmentLumpSums
+employmentLumpSums.agent.heading = employmentLumpSums
+employmentLumpSums.checkYourAnswersLabel = employmentLumpSums
+employmentLumpSums.error.required = Select yes if employmentLumpSums
+employmentLumpSums.agent.error.required = Select yes if employmentLumpSums
+employmentLumpSums.change.hidden = EmploymentLumpSums
+
+jobseekersAllowance.title = Jobseeker’s Allowance and Employment and Support Allowance
+jobseekersAllowance.agent.title = Jobseeker’s Allowance and Employment and Support Allowance
+jobseekersAllowance.heading = Jobseeker’s Allowance and Employment and Support Allowance
+jobseekersAllowance.agent.heading = Jobseeker’s Allowance and Employment and Support Allowance
+jobseekersAllowance.option1 = Option 1
+jobseekersAllowance.option2 = Option 2
+jobseekersAllowance.agent.option1 = Option 1
+jobseekersAllowance.agent.option2 = Option 2
+jobseekersAllowance.exclusive = Exclusive
+jobseekersAllowance.agent.exclusive = Exclusive
+jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employment and Support Allowance
+jobseekersAllowance.error.required = Select jobseekersAllowance
+jobseekersAllowance.agent.error.required = Select jobseekersAllowance
+jobseekersAllowance.change.hidden = JobseekersAllowance
+
+shareSchemes.title = Cynlluniau cyfranddaliadau yn eich gwaith
+shareSchemes.agent.title = Cynlluniau cyfranddaliadau yng ngweithle eich cleient
+shareSchemes.heading = Cynlluniau cyfranddaliadau yn eich gwaith
+shareSchemes.agent.heading = Cynlluniau cyfranddaliadau yng ngweithle eich cleient
+shareSchemes.p1 = Nid oes angen i ni wybod am gyfranddaliadau oni bai bod eich cyflogwr:
+shareSchemes.agent.p1 = Nid oes angen i ni wybod am gyfranddaliadau oni bai bod cyflogwr eich cleient:
+shareSchemes.bullet1 = heb eu trethu’n llawn
+shareSchemes.bullet2 = wedi defnyddio prisiad is nag y dylai i gyfrifo’r swm trethadwy
+shareSchemes.p2 = Nid oes angen i chi roi gwybod i ni am unrhyw symiau sydd ar eich P60 neu P45 o gynllun cyfranddaliad gan fod y rhain eisoes wedi’u trethu. Os nad ydych yn siŵr o hyd, dylai’ch cyflogwr allu cadarnhau hyn.
+shareSchemes.agent.p2 = Nid oes angen i chi roi gwybod i ni am unrhyw symiau sydd ar P60 neu P45 eich cleient o gynllun cyfranddaliad gan fod y rhain eisoes wedi’u trethu. Os nad ydych yn siŵr o hyd, dylai cyflogwr eich cleient allu cadarnhau hyn.
+shareSchemes.legend = A gawsoch unrhyw incwm heb ei drethu o gynlluniau cyfranddaliadau?
+shareSchemes.agent.legend = A gafodd eich cleient unrhyw incwm heb ei drethu o gynlluniau cyfranddaliadau?
+shareSchemes.checkYourAnswersLabel = shareSchemes
+shareSchemes.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw incwm heb ei drethu o gynlluniau cyfranddaliadau
+shareSchemes.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw incwm heb ei drethu o gynlluniau cyfranddaliadau
+shareSchemes.change.hidden = ShareSchemes
+
+statutoryBenefits.title = statutoryBenefits
+statutoryBenefits.agent.title = statutoryBenefits
+statutoryBenefits.heading = statutoryBenefits
+statutoryBenefits.agent.heading = statutoryBenefits
+statutoryBenefits.checkYourAnswersLabel = statutoryBenefits
+statutoryBenefits.error.required = Select yes if statutoryBenefits
+statutoryBenefits.agent.error.required = Select yes if statutoryBenefits
+statutoryBenefits.change.hidden = StatutoryBenefits
+
+taxRefunds.title = taxRefunds
+taxRefunds.agent.title = taxRefunds
+taxRefunds.heading = taxRefunds
+taxRefunds.agent.heading = taxRefunds
+taxRefunds.checkYourAnswersLabel = taxRefunds
+taxRefunds.error.required = Select yes if taxRefunds
+taxRefunds.agent.error.required = Select yes if taxRefunds
+taxRefunds.change.hidden = TaxRefunds
+
+taxableStateBenefits.title = taxableStateBenefits
+taxableStateBenefits.agent.title = taxableStateBenefits
+taxableStateBenefits.heading = taxableStateBenefits
+taxableStateBenefits.agent.heading = taxableStateBenefits
+taxableStateBenefits.checkYourAnswersLabel = taxableStateBenefits
+taxableStateBenefits.error.required = Select yes if taxableStateBenefits
+taxableStateBenefits.agent.error.required = Select yes if taxableStateBenefits
+taxableStateBenefits.change.hidden = TaxableStateBenefits
+
+###################################  Income From Property Pensions Investments ###########################################################################################
+
+nonUkInterestDividendsInsurance.title = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.agent.title = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.heading = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.agent.heading = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.option1 = Option 1
+nonUkInterestDividendsInsurance.option2 = Option 2
+nonUkInterestDividendsInsurance.agent.option1 = Option 1
+nonUkInterestDividendsInsurance.agent.option2 = Option 2
+nonUkInterestDividendsInsurance.exclusive = Exclusive
+nonUkInterestDividendsInsurance.agent.exclusive = Exclusive
+nonUkInterestDividendsInsurance.checkYourAnswersLabel = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.error.required = Select nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.agent.error.required = Select nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.change.hidden = NonUkInterestDividendsInsurance
+
+pensions.title = pensions
+pensions.agent.title = pensions
+pensions.heading = pensions
+pensions.agent.heading = pensions
+pensions.option1 = Option 1
+pensions.option2 = Option 2
+pensions.agent.option1 = Option 1
+pensions.agent.option2 = Option 2
+pensions.exclusive = Exclusive
+pensions.agent.exclusive = Exclusive
+pensions.checkYourAnswersLabel = pensions
+pensions.error.required = Select pensions
+pensions.agent.error.required = Select pensions
+pensions.change.hidden = Pensions
+
+rentalIncome.title = rentalIncome
+rentalIncome.agent.title = rentalIncome
+rentalIncome.heading = rentalIncome
+rentalIncome.agent.heading = rentalIncome
+rentalIncome.option1 = Option 1
+rentalIncome.option2 = Option 2
+rentalIncome.agent.option1 = Option 1
+rentalIncome.agent.option2 = Option 2
+rentalIncome.exclusive = Exclusive
+rentalIncome.agent.exclusive = Exclusive
+rentalIncome.checkYourAnswersLabel = rentalIncome
+rentalIncome.error.required = Select rentalIncome
+rentalIncome.agent.error.required = Select rentalIncome
+rentalIncome.change.hidden = RentalIncome
+
+ukDividendsSharesLoans.title = ukDividendsSharesLoans
+ukDividendsSharesLoans.agent.title = ukDividendsSharesLoans
+ukDividendsSharesLoans.heading = ukDividendsSharesLoans
+ukDividendsSharesLoans.agent.heading = ukDividendsSharesLoans
+ukDividendsSharesLoans.option1 = Option 1
+ukDividendsSharesLoans.option2 = Option 2
+ukDividendsSharesLoans.agent.option1 = Option 1
+ukDividendsSharesLoans.agent.option2 = Option 2
+ukDividendsSharesLoans.exclusive = Exclusive
+ukDividendsSharesLoans.agent.exclusive = Exclusive
+ukDividendsSharesLoans.checkYourAnswersLabel = ukDividendsSharesLoans
+ukDividendsSharesLoans.error.required = Select ukDividendsSharesLoans
+ukDividendsSharesLoans.agent.error.required = Select ukDividendsSharesLoans
+ukDividendsSharesLoans.change.hidden = UkDividendsSharesLoans
+
+ukInsuranceGains.title = ukInsuranceGains
+ukInsuranceGains.agent.title = ukInsuranceGains
+ukInsuranceGains.heading = ukInsuranceGains
+ukInsuranceGains.agent.heading = ukInsuranceGains
+ukInsuranceGains.option1 = Option 1
+ukInsuranceGains.option2 = Option 2
+ukInsuranceGains.agent.option1 = Option 1
+ukInsuranceGains.agent.option2 = Option 2
+ukInsuranceGains.exclusive = Exclusive
+ukInsuranceGains.agent.exclusive = Exclusive
+ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
+ukInsuranceGains.error.required = Select ukInsuranceGains
+ukInsuranceGains.agent.error.required = Select ukInsuranceGains
+ukInsuranceGains.change.hidden = UkInsuranceGains
+
+ukInterest.title = ukInterest
+ukInterest.agent.title = ukInterest
+ukInterest.heading = ukInterest
+ukInterest.agent.heading = ukInterest
+ukInterest.option1 = Option 1
+ukInterest.option2 = Option 2
+ukInterest.agent.option1 = Option 1
+ukInterest.agent.option2 = Option 2
+ukInterest.exclusive = Exclusive
+ukInterest.agent.exclusive = Exclusive
+ukInterest.checkYourAnswersLabel = ukInterest
+ukInterest.error.required = Select ukInterest
+ukInterest.agent.error.required = Select ukInterest
+ukInterest.change.hidden = UkInterest

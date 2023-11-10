@@ -14,12 +14,18 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+@import components._
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    heading: Heading1,
+    p: ParagraphBody,
+    bullets: BulletList
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
@@ -32,10 +38,21 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @heading(messages("shareSchemes.agent.heading"))
+
+        @p(messages("shareSchemes.agent.p1"))
+
+        @bullets(Seq(
+            Html(messages("shareSchemes.bullet1")),
+            Html(messages("shareSchemes.bullet2"))
+        ))
+
+        @p(messages("shareSchemes.agent.p2"))
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("shareSchemes.agent.heading")).asPageHeading()
+                legend = LegendViewModel(messages("shareSchemes.agent.legend")).withSize(LegendSize.Medium)
             )
         )
 

@@ -21,7 +21,7 @@ import play.api.libs.json.JsPath
 
 case object ShareSchemesPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \"workAndBenefits"\ toString
 
   override def toString: String = "shareSchemes"
 }
