@@ -17,10 +17,21 @@
 package generators
 
 import models.aboutyou._
+import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
 import models.propertypensionsinvestments._
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {
+
+  implicit lazy val arbitraryJobseekersAllowance: Arbitrary[JobseekersAllowance] =
+    Arbitrary {
+      Gen.oneOf(JobseekersAllowance.values)
+    }
+
+  implicit lazy val arbitraryAboutYourWork: Arbitrary[AboutYourWork] =
+    Arbitrary {
+      Gen.oneOf(AboutYourWork.values)
+    }
 
   implicit lazy val arbitraryUkInterest: Arbitrary[UkInterest] =
     Arbitrary {
