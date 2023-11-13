@@ -14,15 +14,32 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+@import components._
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    list: BulletList,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@insetContent1 = {
+    @paragraph(messages("constructionIndustryScheme.agent.p1"))
+    @list(elements = Seq(
+        Html(messages("constructionIndustryScheme.agent.bullet1")),
+        Html(messages("constructionIndustryScheme.agent.bullet2"))
+    ))
+
+}
+
 
 @layout(pageTitle = title(form, messages("constructionIndustryScheme.agent.title")), taxYear = taxYear) {
 
@@ -32,10 +49,18 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @heading(messages("constructionIndustryScheme.title"))
+
+        @govukDetails(Details(
+            summary = Text(messages("constructionIndustryScheme.summary")),
+            content = HtmlContent(insetContent1)
+            )
+        )
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("constructionIndustryScheme.agent.heading")).asPageHeading()
+                legend = LegendViewModel(messages("constructionIndustryScheme.agent.heading")).withSize(LegendSize.Medium)
             )
         )
 
