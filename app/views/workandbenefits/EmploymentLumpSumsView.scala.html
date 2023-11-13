@@ -14,15 +14,47 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+@import components._
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    list: BulletList,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@insetContent1 = {
+    @paragraph(messages("employmentLumpSums.details.understandingRedundancyCompensation.p"))
+    @list(elements = Seq(
+        Html(messages("employmentLumpSums.details.understandingRedundancyCompensation.bullet1")),
+        Html(messages("employmentLumpSums.details.understandingRedundancyCompensation.bullet2")),
+        Html(messages("employmentLumpSums.details.understandingRedundancyCompensation.bullet3"))
+    ), classes="govuk-!-padding-left-7")
+}
+
+@insetContent2 = {
+    @paragraph(messages("employmentLumpSums.details.understandingTaxableLumpSums.p"))
+    @list(elements = Seq(
+        Html(messages("employmentLumpSums.details.understandingTaxableLumpSums.bullet1")),
+        Html(messages("employmentLumpSums.details.understandingTaxableLumpSums.bullet2")),
+        Html(messages("employmentLumpSums.details.understandingTaxableLumpSums.bullet3")),
+        Html(messages("employmentLumpSums.details.understandingTaxableLumpSums.bullet4")),
+        Html(messages("employmentLumpSums.details.understandingTaxableLumpSums.bullet5")),
+        Html(messages("employmentLumpSums.details.understandingTaxableLumpSums.bullet6"))
+    ), classes="govuk-!-padding-left-7")
+}
+
+@insetContent3 = {
+    @paragraph(messages("employmentLumpSums.details.understandingEmployerFinancedRetirement.p"))
+}
 
 @layout(pageTitle = title(form, messages("employmentLumpSums.title")), taxYear = taxYear) {
 
@@ -32,10 +64,44 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @heading(messages("employmentLumpSums.heading"))
+
+        @govukDetails(Details(
+            summary = Text(messages("employmentLumpSums.details.understandingRedundancyCompensation.summary")),
+            content = HtmlContent(insetContent1)
+            )
+        )
+
+        @govukDetails(Details(
+            summary = Text(messages("employmentLumpSums.details.understandingTaxableLumpSums.summary")),
+            content = HtmlContent(insetContent2)
+            )
+        )
+
+        @govukDetails(Details(
+            summary = Text(messages("employmentLumpSums.details.understandingEmployerFinancedRetirement.summary")),
+            content = HtmlContent(insetContent3)
+            )
+        )
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li>
+                @messages("employmentLumpSums.bullet1")
+                <span class="govuk-hint">@messages("employmentLumpSums.bullet1.hint")</span>
+            </li>
+            <li>
+                @messages("employmentLumpSums.bullet2")
+                <span class="govuk-hint">@messages("employmentLumpSums.bullet2.hint")</span>
+            </li>
+            <li>
+                @messages("employmentLumpSums.bullet3")
+            </li>
+        </ul>
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("employmentLumpSums.heading")).asPageHeading()
+                legend = LegendViewModel(messages("employmentLumpSums.legend")).withSize(LegendSize.Medium)
             )
         )
 

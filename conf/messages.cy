@@ -132,7 +132,6 @@ ukResidenceStatus.uk = Iawn
 ukResidenceStatus.agent.uk = Iawn
 ukResidenceStatus.nonUK = Na
 ukResidenceStatus.agent.nonUK = Na
-
 ukResidenceStatus.domiciled = Iawn, ond roedd fy nghartref parhaol (‘domisil’) dramor ac rwy’n hawlio’r sail trosglwyddo
 ukResidenceStatus.agent.domiciled = Iawn, ond roedd ei gartref parhaol (‘domisil’) dramor ac mae’n hawlio’r sail trosglwyddo
 ukResidenceStatus.error.required = Dewiswch a oeddech yn breswylydd yn y DU, yn breswylydd yn y DU a oedd yn byw dramor ac sydd am hawlio’r sail trosglwyddo, neu os nad oeddech yn breswylydd yn y DU
@@ -208,21 +207,15 @@ marriageAllowance.agent.legend = A yw’ch cleient am drosglwyddo £1,260 o’i 
 marriageAllowance.error.required = Dewiswch ‘Iawn’ os ydych am drosglwyddo £1,260 o’ch Lwfans Personol i’ch gŵr, gwraig neu bartner sifil
 marriageAllowance.agent.error.required = Dewiswch ‘Iawn’ os yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil
 
-###################################  CHILD BENEFIT  ###########################################################################################
-
 childBenefit.title = A gawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi?
 childBenefit.agent.title = A gafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw?
 childBenefit.error.required = Dewiswch ‘Iawn’, os cawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi
 childBenefit.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw
 
-################################### CHILD BENEFIT INCOME ###########################################################################################
-
 childBenefitIncome.title = A oedd eich incwm dros £50,000?
 childBenefitIncome.agent.title = A oedd incwm eich cleient dros £50,000?
 childBenefitIncome.error.required = Dewiswch ‘Iawn’ os oedd eich incwm dros £50,000
 childBenefitIncome.agent.error.required = Dewiswch ‘Iawn’ os oedd incwm eich cleient dros £50,000
-
-################################### HIGH INCOME CHILD BENEFIT CHARGE ###########################################################################################
 
 highIncomeChildBenefitCharge.title = Tâl Treth Budd-dal Plant Incwm Uchel
 highIncomeChildBenefitCharge.agent.title = Tâl Treth Budd-dal Plant Incwm Uchel
@@ -248,8 +241,6 @@ highIncomeChildBenefitCharge.agent.noPartner = Nid oes partner gan fy nghleient
 highIncomeChildBenefitCharge.error.required = Dewiswch a oedd eich incwm chi yn uwch, incwm eich partner yn uwch neu os nad oes gennych bartner
 highIncomeChildBenefitCharge.agent.error.required = Dewiswch a oedd incwm eich cleient yn uwch, incwm ei bartner yn uwch neu os nad oes gan eich cleient bartner
 
-################################### ROYALTY PAYMENTS ###########################################################################################
-
 patentRoyaltyPayments.title = A wnaethoch unrhyw freindaliadau patent?
 patentRoyaltyPayments.agent.title = A wnaeth eich cleient unrhyw freindaliadau patent?
 patentRoyaltyPayments.p1 = Mae’n rhaid i chi ddal 20% o dreth yn ôl o swm y breindaliadau patent a dalwch. Telir y dreth a ddelir yn ôl fel rhan o’r dreth sy’n ddyledus ar eich incwm.
@@ -264,12 +255,13 @@ fosterCarer.agent.p1 = Os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysyl
 fosterCarer.error.required = Dewiswch ‘Iawn’ os oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau
 fosterCarer.agent.error.required = Dewiswch ‘Iawn’ os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau
 
-
 taxAvoidanceSchemes.title = Cynlluniau arbed treth
 taxAvoidanceSchemes.agent.title = Cynlluniau arbed treth
 taxAvoidanceSchemes.heading = Cynlluniau arbed treth
 taxAvoidanceSchemes.agent.heading = Cynlluniau arbed treth
 taxAvoidanceSchemes.taxAvoidance = Arbed treth
+taxAvoidanceSchemes.legend = A oeddech yn rhan o unrhyw gynlluniau arbed treth?
+taxAvoidanceSchemes.agent.legend = A oedd eich cleient yn rhan o unrhyw gynlluniau arbed treth?
 taxAvoidanceSchemes.understandingAvoidance.summary = Deall cynlluniau arbed treth
 taxAvoidanceSchemes.understandingAvoidance.summary.p = Mae arbed treth yn ymwneud â phlygu rheolau’r system dreth i dalu llai o dreth. Mae’n aml yn cynnwys trafodion dyfeisgar sydd â’r bwriad o gynhyrchu’r fantais hon. Mae’n golygu glynu wrth lythyren, ond nid ysbryd, y gyfraith.
 taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore = Dysgwch ragor am arbed treth
@@ -283,3 +275,40 @@ taxAvoidanceSchemes.agent.disguisedRemuneration = Tâl cuddiedig
 taxAvoidanceSchemes.agent.noAvoidance = Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth
 taxAvoidanceSchemes.error.required = Dewiswch pa gynlluniau arbed treth yr oeddech yn rhan ohonynt, neu dewiswch ‘Na, nid oeddwn yn rhan o unrhyw gynlluniau arbed treth’
 taxAvoidanceSchemes.agent.error.required = Dewiswch pa gynlluniau arbed treth yr oedd eich cleient yn rhan ohonynt, neu dewiswch ‘Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth’
+
+###################################  Income From Property Pensions Investments ###########################################################################################
+
+employmentLumpSums.title = Cyfandaliadau cyflogaeth
+employmentLumpSums.agent.title = Cyfandaliadau cyflogaeth
+employmentLumpSums.heading = Cyfandaliadau cyflogaeth
+employmentLumpSums.agent.heading = Cyfandaliadau cyflogaeth
+employmentLumpSums.details.understandingRedundancyCompensation.summary = Deall taliadau o iawndal diswyddo
+employmentLumpSums.details.understandingRedundancyCompensation.p = Taliadau gan eich cyn-gyflogwr yw’r rhain, gan gynnwys:
+employmentLumpSums.agent.details.understandingRedundancyCompensation.p = Taliadau gan gyn-gyflogwr eich cleient yw’r rhain, gan gynnwys:
+employmentLumpSums.details.understandingRedundancyCompensation.bullet1 = tâl diswyddo
+employmentLumpSums.details.understandingRedundancyCompensation.bullet2 = cyflog rhybudd ôl-gyflogaeth
+employmentLumpSums.details.understandingRedundancyCompensation.bullet3 = iawndal am golli swydd
+employmentLumpSums.details.understandingTaxableLumpSums.summary = Deall cyfandaliadau trethadwy ac incwm penodol
+employmentLumpSums.details.understandingTaxableLumpSums.p = Taliadau mawr (fel arfer mewn arian parod ac eithrio pensiynau) neu fuddiannau oddi wrth eich cyflogwr neu’ch cyn-gyflogwr yw’r rhain. Maent yn cynnwys:
+employmentLumpSums.agent.details.understandingTaxableLumpSums.p = Taliadau mawr (fel arfer mewn arian parod ac eithrio pensiynau) neu fuddiannau oddi wrth gyflogwr neu gyn-gyflogwr eich cleient yw’r rhain. Maent yn cynnwys:
+employmentLumpSums.details.understandingTaxableLumpSums.bullet1 = cyflog
+employmentLumpSums.details.understandingTaxableLumpSums.bullet2 = tâl gwyliau
+employmentLumpSums.details.understandingTaxableLumpSums.bullet3 = bonysau
+employmentLumpSums.details.understandingTaxableLumpSums.bullet4 = taliadau yn lle rhybudd diswyddo (PILON)
+employmentLumpSums.details.understandingTaxableLumpSums.bullet5 = iawndal pan fydd telerau’ch cyflogaeth yn newid
+employmentLumpSums.agent.details.understandingTaxableLumpSums.bullet5 = compensation for changes in your client's employment terms
+employmentLumpSums.details.understandingTaxableLumpSums.bullet6 = taliadau a wnaed er mwyn gwarantu’ch ymddygiad yn y dyfodol (‘cyfamod cyfyngu’), er enghraifft, cytuno i beidio â chystadlu â’ch cyflogwr blaenorol
+employmentLumpSums.agent.details.understandingTaxableLumpSums.bullet6 = taliadau a wnaed er mwyn gwarantu ymddygiad eich cleient yn y dyfodol (‘cyfamod cyfyngu’), er enghraifft, cytuno i beidio â chystadlu â’i gyflogwr blaenorol
+employmentLumpSums.details.understandingEmployerFinancedRetirement.summary = Deall Cynlluniau Budd-daliadau Ymddeol a Ariannwyd gan y Cyflogwr (CBYAC)
+employmentLumpSums.details.understandingEmployerFinancedRetirement.p = Cynlluniau sy’n darparu buddiannau ymddeol neu fuddiannau marwolaeth yw’r rhain. Fel arfer, maent wedi’u trefnu gan gyflogwyr ond ni chofrestrwyd gyda CThEF. Os nad yw cynllun pensiwn wedi’i gofrestru, efallai ei fod yn CBYAC.
+employmentLumpSums.bullet1 = Taliadau o iawndal diswyddo
+employmentLumpSums.bullet1.hint = er enghraifft, cyflog rhybudd ôl-gyflogaeth neu iawndal am golli swydd
+employmentLumpSums.bullet2 = Cyfandaliadau trethadwy ac incwm penodol
+employmentLumpSums.bullet2.hint = er enghraifft, tâl gwyliau neu daliadau yn lle rhybudd diswyddo (PILON)
+employmentLumpSums.bullet3 = Cynlluniau Budd-daliadau Ymddeol a Ariannwyd gan y Cyflogwr
+employmentLumpSums.legend = Did you get any lump sums from employers?
+employmentLumpSums.agent.legend = Did your client get any lump sums from employers?
+employmentLumpSums.error.required = Select yes if you got any lump sums from employers
+employmentLumpSums.agent.error.required = Select yes if your client got any lump sums from employers
+employmentLumpSums.checkYourAnswersLabel = Cyfandaliadau cyflogaeth
+employmentLumpSums.change.hidden = Cyfandaliadau cyflogaeth

@@ -88,10 +88,10 @@ POST       /constructionIndustryScheme/:taxYear                                 
 GET        /changeConstructionIndustryScheme/:taxYear                               controllers.workandbenefits.ConstructionIndustrySchemeController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /changeConstructionIndustryScheme/:taxYear                               controllers.workandbenefits.ConstructionIndustrySchemeController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /employmentLumpSums/:taxYear                                             controllers.workandbenefits.EmploymentLumpSumsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /employmentLumpSums/:taxYear                                             controllers.workandbenefits.EmploymentLumpSumsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeEmploymentLumpSums/:taxYear                                       controllers.workandbenefits.EmploymentLumpSumsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeEmploymentLumpSums/:taxYear                                       controllers.workandbenefits.EmploymentLumpSumsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/employment-lump-sums                         controllers.workandbenefits.EmploymentLumpSumsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/employment-lump-sums                         controllers.workandbenefits.EmploymentLumpSumsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/change-employment-lump-sums                  controllers.workandbenefits.EmploymentLumpSumsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/change-employment-lump-sums                  controllers.workandbenefits.EmploymentLumpSumsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /jobseekersAllowance/:taxYear                                            controllers.workandbenefits.JobseekersAllowanceController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /jobseekersAllowance/:taxYear                                            controllers.workandbenefits.JobseekersAllowanceController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
