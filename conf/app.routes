@@ -103,10 +103,10 @@ POST       /shareSchemes/:taxYear                                               
 GET        /changeShareSchemes/:taxYear                                             controllers.workandbenefits.ShareSchemesController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /changeShareSchemes/:taxYear                                             controllers.workandbenefits.ShareSchemesController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /statutoryBenefits/:taxYear                                              controllers.workandbenefits.StatutoryBenefitsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /statutoryBenefits/:taxYear                                              controllers.workandbenefits.StatutoryBenefitsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeStatutoryBenefits/:taxYear                                        controllers.workandbenefits.StatutoryBenefitsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeStatutoryBenefits/:taxYear                                        controllers.workandbenefits.StatutoryBenefitsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/statutory-benefits                           controllers.workandbenefits.StatutoryBenefitsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/statutory-benefits                           controllers.workandbenefits.StatutoryBenefitsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/change-statutory-benefits                    controllers.workandbenefits.StatutoryBenefitsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/change-statutory-benefits                    controllers.workandbenefits.StatutoryBenefitsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /taxRefunds/:taxYear                                                     controllers.workandbenefits.TaxRefundsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /taxRefunds/:taxYear                                                     controllers.workandbenefits.TaxRefundsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)

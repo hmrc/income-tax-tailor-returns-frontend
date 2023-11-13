@@ -14,12 +14,19 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+@import components._
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukWarningText: GovukWarningText,
+    heading: Heading1,
+    bullets: BulletList,
+    p: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
@@ -32,10 +39,29 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @heading(messages("statutoryBenefits.agent.heading"))
+
+        @govukWarningText(
+            WarningText(
+                content = messages("statutoryBenefits.agent.alert")
+            )
+        )
+
+        @bullets(
+            elements = Seq(
+                Html(messages("statutoryBenefits.bullet1")),
+                Html(messages("statutoryBenefits.bullet2")),
+                Html(messages("statutoryBenefits.bullet3")),
+                Html(messages("statutoryBenefits.bullet4")),
+                Html(messages("statutoryBenefits.bullet5"))
+            )
+        )
+
         @govukRadios(
-            RadiosViewModel.yesNo(
+            RadiosViewModel.yesNoConditional(
                 field = form("value"),
-                legend = LegendViewModel(messages("statutoryBenefits.agent.heading")).asPageHeading()
+                legend = LegendViewModel(messages("statutoryBenefits.agent.legend")).withSize(LegendSize.Medium),
+                conditional = p(messages("statutoryBenefits.agent.conditionalText"))
             )
         )
 
