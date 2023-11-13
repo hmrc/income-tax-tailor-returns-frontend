@@ -34,7 +34,7 @@ class TaxAvoidanceSchemesFormProvider @Inject() extends Mappings {
         "taxAvoidanceSchemes.error.required"
       }
     Form(
-      "value" -> set(enumerable[TaxAvoidanceSchemes](error)).verifying(nonEmptySet(error), exclusiveItemInSet(error, NoAvoidance.toString))
+      "value" -> set(enumerable[TaxAvoidanceSchemes](error)).verifying(firstError(nonEmptySet(error), exclusiveItemInSet(error, NoAvoidance.toString)))
     )
   }
 }

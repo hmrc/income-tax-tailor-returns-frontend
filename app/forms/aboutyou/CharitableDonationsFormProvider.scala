@@ -27,23 +27,16 @@ import javax.inject.Inject
 class CharitableDonationsFormProvider @Inject() extends Mappings {
 
   def apply(isAgent: Boolean): Form[Set[CharitableDonations]] = {
-    val errorRequired: String =
+    val error: String =
       if (isAgent) {
         "charitableDonations.agent.error.required"
       } else {
         "charitableDonations.error.required"
       }
 
-    val errorInvalid: String =
-      if (isAgent) {
-        "charitableDonations.agent.error.invalid"
-      } else {
-        "charitableDonations.error.invalid"
-      }
-
     Form(
-      "value" -> set(enumerable[CharitableDonations](errorRequired, errorInvalid)).verifying(
-        firstError(nonEmptySet(errorRequired), exclusiveItemInSet(errorInvalid, NoDonations.toString)))
+      "value" -> set(enumerable[CharitableDonations](error)).verifying(
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, NoDonations.toString)))
     )
   }
 }
