@@ -513,9 +513,9 @@ ukInsuranceGains.agent.voidedISA = Voided ISA (a policy cancelled by your client
 ukInsuranceGains.noOption = No, I did not make any UK insurance gains
 ukInsuranceGains.agent.noOption = No, my client did not make any UK insurance gains
 ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
-ukInsuranceGains.error.required = Select ukInsuranceGains
-ukInsuranceGains.agent.error.required = Select ukInsuranceGains
-ukInsuranceGains.change.hidden = UkInsuranceGains
+ukInsuranceGains.error.required = Select if you got rental income from UK property, Non-Uk property or you did not get rental income from property
+ukInsuranceGains.agent.error.required = Select if your client got rental income from UK property, Non-UK property or they did not get rental income from property
+
 
 paymentsIntoPensions.title = paymentsIntoPensions
 paymentsIntoPensions.agent.title = paymentsIntoPensions
