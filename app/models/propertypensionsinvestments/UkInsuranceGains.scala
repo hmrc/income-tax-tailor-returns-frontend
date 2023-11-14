@@ -28,11 +28,18 @@ object UkInsuranceGains extends Enumerable.Implicits {
 
   case object Option1 extends WithName("option1") with UkInsuranceGains
   case object Option2 extends WithName("option2") with UkInsuranceGains
+  case object Option3 extends WithName("option3") with UkInsuranceGains
+  case object Option4 extends WithName("option4") with UkInsuranceGains
+  case object Divider extends UkInsuranceGains
+
   case object ExclusiveOption extends WithName("exclusive") with UkInsuranceGains
 
   val values: Seq[UkInsuranceGains] = Seq(
     Option1,
     Option2,
+    Option3,
+    Option4,
+    Divider,
     ExclusiveOption
   )
 
@@ -40,6 +47,12 @@ object UkInsuranceGains extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
           case ExclusiveOption => CheckboxItemViewModel(
             content = Text(messages(s"ukInsuranceGains.${value.toString}")),
             fieldId = "value",
@@ -60,6 +73,12 @@ object UkInsuranceGains extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
           case ExclusiveOption => CheckboxItemViewModel(
             content = Text(messages(s"ukInsuranceGains.agent.${value.toString}")),
             fieldId = "value",

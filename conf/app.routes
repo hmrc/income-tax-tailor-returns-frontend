@@ -140,10 +140,10 @@ POST       /ukDividendsSharesLoans/:taxYear                                     
 GET        /changeUkDividendsSharesLoans/:taxYear                                                                       controllers.propertypensionsinvestments.UkDividendsSharesLoansController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /changeUkDividendsSharesLoans/:taxYear                                                                       controllers.propertypensionsinvestments.UkDividendsSharesLoansController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /ukInsuranceGains/:taxYear                                                                                   controllers.propertypensionsinvestments.UkInsuranceGainsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /ukInsuranceGains/:taxYear                                                                                   controllers.propertypensionsinvestments.UkInsuranceGainsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeUkInsuranceGains/:taxYear                                                                             controllers.propertypensionsinvestments.UkInsuranceGainsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeUkInsuranceGains/:taxYear                                                                             controllers.propertypensionsinvestments.UkInsuranceGainsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/property-pensions-investments/uk-insurance-gains               controllers.propertypensionsinvestments.UkInsuranceGainsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/property-pensions-investments/uk-insurance-gains               controllers.propertypensionsinvestments.UkInsuranceGainsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/property-pensions-investments/change-uk-insurance-gains        controllers.propertypensionsinvestments.UkInsuranceGainsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/property-pensions-investments/change-uk-insurance-gains        controllers.propertypensionsinvestments.UkInsuranceGainsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /paymentsIntoPensions/:taxYear                                                                               controllers.pensions.PaymentsIntoPensionsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /paymentsIntoPensions/:taxYear                                                                               controllers.pensions.PaymentsIntoPensionsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
