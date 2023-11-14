@@ -34,7 +34,7 @@ class UkInsuranceGainsFormProvider @Inject() extends Mappings {
       }
     Form(
       "value" -> set(enumerable[UkInsuranceGains](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, UkInsuranceGains.ExclusiveOption.toString))
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, UkInsuranceGains.noOption.toString))
       )
     )
   }

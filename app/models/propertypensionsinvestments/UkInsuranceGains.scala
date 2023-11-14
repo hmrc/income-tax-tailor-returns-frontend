@@ -26,21 +26,21 @@ sealed trait UkInsuranceGains
 
 object UkInsuranceGains extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with UkInsuranceGains
-  case object Option2 extends WithName("option2") with UkInsuranceGains
-  case object Option3 extends WithName("option3") with UkInsuranceGains
-  case object Option4 extends WithName("option4") with UkInsuranceGains
+  case object lifeInsurance extends WithName("lifeInsurance") with UkInsuranceGains
+  case object lifeAnnuity extends WithName("lifeAnnuity") with UkInsuranceGains
+  case object capitalRedemption extends WithName("capitalRedemption") with UkInsuranceGains
+  case object voidedISA extends WithName("voidedISA") with UkInsuranceGains
   case object Divider extends UkInsuranceGains
 
-  case object ExclusiveOption extends WithName("exclusive") with UkInsuranceGains
+  case object noOption extends WithName("noOption") with UkInsuranceGains
 
   val values: Seq[UkInsuranceGains] = Seq(
-    Option1,
-    Option2,
-    Option3,
-    Option4,
+    lifeInsurance,
+    lifeAnnuity,
+    capitalRedemption,
+    voidedISA,
     Divider,
-    ExclusiveOption
+    noOption
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
@@ -53,7 +53,7 @@ object UkInsuranceGains extends Enumerable.Implicits {
             value = value.toString,
             divider = messages(s"site.or")
           )
-          case ExclusiveOption => CheckboxItemViewModel(
+          case `noOption` => CheckboxItemViewModel(
             content = Text(messages(s"ukInsuranceGains.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -79,7 +79,7 @@ object UkInsuranceGains extends Enumerable.Implicits {
             value = value.toString,
             divider = messages(s"site.or")
           )
-          case ExclusiveOption => CheckboxItemViewModel(
+          case `noOption` => CheckboxItemViewModel(
             content = Text(messages(s"ukInsuranceGains.agent.${value.toString}")),
             fieldId = "value",
             index = index,
