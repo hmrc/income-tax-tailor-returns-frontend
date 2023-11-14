@@ -28,7 +28,6 @@ object RentalIncome extends Enumerable.Implicits {
 
   case object Uk extends WithName("uk") with RentalIncome
   case object NonUk extends WithName("nonUk") with RentalIncome
-
   case object Divider extends RentalIncome
   case object No extends WithName("none") with RentalIncome
 
