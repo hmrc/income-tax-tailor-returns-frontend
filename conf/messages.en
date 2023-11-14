@@ -584,8 +584,8 @@ ukDividendsSharesAndLoansFromLimitedCompanies.agent.noUkDividendsSharesOrLoans =
 ukDividendsSharesAndLoansFromLimitedCompanies.exclusive = Exclusive
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.exclusive = Exclusive
 ukDividendsSharesAndLoansFromLimitedCompanies.checkYourAnswersLabel = Did you get any UK dividends, shares or loans?
-ukDividendsSharesAndLoansFromLimitedCompanies.error.required = Select ukDividendsSharesAndLoansFromLimitedCompanies
-ukDividendsSharesAndLoansFromLimitedCompanies.agent.error.required = Select ukDividendsSharesAndLoansFromLimitedCompanies
+ukDividendsSharesAndLoansFromLimitedCompanies.error.required = Select if you had any UK dividends, shares or loans, or No, I did not get any UK dividends, shares, or loans
+ukDividendsSharesAndLoansFromLimitedCompanies.agent.error.required = Select if your client had any UK dividends, shares or loans, or No, they did not have any UK dividends, shares or loans
 ukDividendsSharesAndLoansFromLimitedCompanies.change.hidden = UkDividendsSharesAndLoansFromLimitedCompanies
 
 ###################################  Payments into pensions ###########################################################################################
