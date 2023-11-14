@@ -283,7 +283,7 @@ taxAvoidanceSchemes.agent.noAvoidance = No, my client was not in any tax avoidan
 taxAvoidanceSchemes.error.required = Select which tax avoidance schemes you were in or select ‘No, I was not in any tax avoidance schemes’
 taxAvoidanceSchemes.agent.error.required = Select which tax avoidance schemes your client was in, or select ‘No, my client was not in any tax avoidance schemes’
 
-###################################  Work And Benefits ###########################################################################################
+###################################  Work And Benefits ##########################################################################################
 
 aboutYourWork.title = About Your Work
 aboutYourWork.agent.title = About Your Work
@@ -370,14 +370,32 @@ taxRefunds.error.required = Select yes if taxRefunds
 taxRefunds.agent.error.required = Select yes if taxRefunds
 taxRefunds.change.hidden = TaxRefunds
 
-taxableStateBenefits.title = taxableStateBenefits
-taxableStateBenefits.agent.title = taxableStateBenefits
-taxableStateBenefits.heading = taxableStateBenefits
-taxableStateBenefits.agent.heading = taxableStateBenefits
-taxableStateBenefits.checkYourAnswersLabel = taxableStateBenefits
-taxableStateBenefits.error.required = Select yes if taxableStateBenefits
-taxableStateBenefits.agent.error.required = Select yes if taxableStateBenefits
-taxableStateBenefits.change.hidden = TaxableStateBenefits
+################################### Taxable state benefits ###########################################################################################
+
+taxableStateBenefits.title = Taxable state benefits
+taxableStateBenefits.agent.title = Taxable state benefits
+taxableStateBenefits.heading = Taxable state benefits
+taxableStateBenefits.agent.heading = Taxable state benefits
+taxableStateBenefits.details.stateBenefits.summary = Understanding taxable state benefits
+taxableStateBenefits.agent.details.stateBenefits.summary = Understanding taxable state benefits
+taxableStateBenefits.details.p1 = You only need to include the state benefits listed on this page. This is because they are taxable and all other state benefits are tax-free.
+taxableStateBenefits.agent.details.p1 = Your client only needs to include the state benefits listed on this page. This is because they are taxable and all other state benefits are tax-free.
+taxableStateBenefits.bullet1 = Carer’s Allowance (Carer's Allowance Supplementary Payment in Northern Ireland)
+taxableStateBenefits.agent.bullet1 = Carer’s Allowance (Carer's Allowance Supplementary Payment in Northern Ireland)
+taxableStateBenefits.bullet2 = Carer's Allowance Supplement (Scotland only)
+taxableStateBenefits.agent.bullet2 = Carer's Allowance Supplement (Scotland only)
+taxableStateBenefits.bullet3 = Industrial Death Benefit
+taxableStateBenefits.agent.bullet3 = Industrial Death Benefit
+taxableStateBenefits.bullet4 = Statutory Parental Bereavement Pay
+taxableStateBenefits.agent.bullet4 = Statutory Parental Bereavement Pay
+taxableStateBenefits.bullet5 = Widowed Parent's Allowance or Widowed Mother's Allowance
+taxableStateBenefits.agent.bullet5 = Widowed Parent's Allowance or Widowed Mother's Allowance
+taxableStateBenefits.legend = Did you get any of these taxable state benefits?
+taxableStateBenefits.agent.legend = Did your client get any of these taxable state benefits?
+taxableStateBenefits.p.addStateBenefitsSectionToReturn = We’ll add the ‘Other state benefits’ section to your return
+taxableStateBenefits.agent.p.addStateBenefitsSectionToReturn = We’ll add the ‘Other state benefits’ section to your client's return
+taxableStateBenefits.error.required = Select yes if you got any of the taxable state benefits listed on this page
+taxableStateBenefits.agent.error.required = Select yes if your client got any of the taxable state benefits listed on this page
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
 rentalIncome.title = Rental income from property

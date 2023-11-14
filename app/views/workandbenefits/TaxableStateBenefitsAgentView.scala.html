@@ -14,15 +14,27 @@
  * limitations under the License.
  *@
 
+@import components._
+@import viewmodels.LegendSize
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    paragraph: ParagraphBody,
+    heading: Heading1,
+    list: BulletList,
+    p: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@insetContent1 = {
+    @paragraph(messages("taxableStateBenefits.agent.details.p1"))
+}
 
 @layout(pageTitle = title(form, messages("taxableStateBenefits.agent.title")), taxYear = taxYear) {
 
@@ -32,10 +44,26 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @govukRadios(
-            RadiosViewModel.yesNo(
+        @heading(messages("taxableStateBenefits.agent.heading"))
+
+                @govukDetails(Details(
+                        summary = Text(messages("taxableStateBenefits.agent.details.stateBenefits.summary")),
+                        content = HtmlContent(insetContent1)
+                    ))
+
+                @list(elements = Seq(
+                    Html(messages("taxableStateBenefits.agent.bullet1")),
+                    Html(messages("taxableStateBenefits.agent.bullet2")),
+                    Html(messages("taxableStateBenefits.agent.bullet3")),
+                    Html(messages("taxableStateBenefits.agent.bullet4")),
+                    Html(messages("taxableStateBenefits.agent.bullet5"))
+                ))
+
+       @govukRadios(
+            RadiosViewModel.yesNoConditional(
                 field = form("value"),
-                legend = LegendViewModel(messages("taxableStateBenefits.agent.heading")).asPageHeading()
+                legend = LegendViewModel(messages("taxableStateBenefits.agent.legend")).withSize(LegendSize.Medium),
+                conditional = p(messages("taxableStateBenefits.agent.p.addStateBenefitsSectionToReturn"))
             )
         )
 

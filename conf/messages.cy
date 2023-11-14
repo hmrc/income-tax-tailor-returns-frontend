@@ -451,3 +451,30 @@ ukInsuranceGains.agent.none = No, my client did not make any UK insurance gains
 ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
 ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or ‘No, I did not make any UK insurance gains’
 ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or ‘No, my client did not make any UK insurance gains’
+
+################################### Taxable state benefits ###########################################################################################
+
+taxableStateBenefits.title = Budd-daliadau trethadwy’r wladwriaeth
+taxableStateBenefits.agent.title = Budd-daliadau trethadwy’r wladwriaeth
+taxableStateBenefits.heading = Budd-daliadau trethadwy’r wladwriaeth
+taxableStateBenefits.agent.heading = Budd-daliadau trethadwy’r wladwriaeth
+taxableStateBenefits.details.stateBenefits.summary = Deall budd-daliadau trethadwy’r wladwriaeth
+taxableStateBenefits.agent.details.stateBenefits.summary = Deall budd-daliadau trethadwy’r wladwriaeth
+taxableStateBenefits.details.p1 = Dim ond budd-daliadau’r wladwriaeth a restrir ar y dudalen hon y mae angen i chi eu cynnwys. Mae hyn oherwydd bod y rhain yn drethadwy, ac mae holl fudd-daliadau eraill y wladwriaeth yn rhydd o dreth.
+taxableStateBenefits.agent.details.p1 = Dim ond budd-daliadau’r wladwriaeth a restrir ar y dudalen hon y mae angen i’ch cleient eu cynnwys. Mae hyn oherwydd bod y rhain yn drethadwy, ac mae holl fudd-daliadau eraill y wladwriaeth yn rhydd o dreth.
+taxableStateBenefits.bullet1 = Lwfans Gofalwr (Taliad Atodol i Lwfans Gofalwr yng Ngogledd Iwerddon)
+taxableStateBenefits.agent.bullet1 = Lwfans Gofalwr (Taliad Atodol i Lwfans Gofalwr yng Ngogledd Iwerddon)
+taxableStateBenefits.bullet2 = Atodiad Lwfans Gofalwr (dim ond yn yr Alban)
+taxableStateBenefits.agent.bullet2 = Atodiad Lwfans Gofalwr (dim ond yn yr Alban)
+taxableStateBenefits.bullet3 = Budd-dal Marwolaeth Ddiwydiannol
+taxableStateBenefits.agent.bullet3 = Budd-dal Marwolaeth Ddiwydiannol
+taxableStateBenefits.bullet4 = Tâl Statudol Rhieni mewn Profedigaeth
+taxableStateBenefits.agent.bullet4 = Tâl Statudol Rhieni mewn Profedigaeth
+taxableStateBenefits.bullet5 = Lwfans Rhiant Gweddw neu Lwfans Mam Weddw
+taxableStateBenefits.agent.bullet5 = Lwfans Rhiant Gweddw neu Lwfans Mam Weddw
+taxableStateBenefits.legend = A gawsoch unrhyw rai o fudd-daliadau trethadwy’r wladwriaeth hyn?
+taxableStateBenefits.agent.legend = A gafodd eich cleient unrhyw rai o fudd-daliadau trethadwy’r wladwriaeth hyn?
+taxableStateBenefits.p.addStateBenefitsSectionToReturn = Byddwn yn ychwanegu’r adran, ‘Budd-daliadau eraill y wladwriaeth’, at eich Ffurflen Dreth
+taxableStateBenefits.agent.p.addStateBenefitsSectionToReturn = Byddwn yn ychwanegu’r adran, ‘Budd-daliadau eraill y wladwriaeth’, at Ffurflen Dreth eich cleient
+taxableStateBenefits.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw rai o fudd-daliadau trethadwy’r wladwriaeth a restrir ar y dudalen hon
+taxableStateBenefits.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw rai o fudd-daliadau trethadwy’r wladwriaeth a restrir ar y dudalen hon

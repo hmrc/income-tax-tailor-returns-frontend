@@ -113,10 +113,11 @@ POST       /taxRefunds/:taxYear                                                 
 GET        /changeTaxRefunds/:taxYear                                                                                   controllers.workandbenefits.TaxRefundsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /changeTaxRefunds/:taxYear                                                                                   controllers.workandbenefits.TaxRefundsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /taxableStateBenefits/:taxYear                                                                               controllers.workandbenefits.TaxableStateBenefitsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /taxableStateBenefits/:taxYear                                                                               controllers.workandbenefits.TaxableStateBenefitsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeTaxableStateBenefits/:taxYear                                                                         controllers.workandbenefits.TaxableStateBenefitsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeTaxableStateBenefits/:taxYear                                                                         controllers.workandbenefits.TaxableStateBenefitsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /:taxYear/about-you/work-and-benefits/taxable-state-benefits                                                 controllers.workandbenefits.TaxableStateBenefitsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/about-you/work-and-benefits/taxable-state-benefits                                                 controllers.workandbenefits.TaxableStateBenefitsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/about-you/work-and-benefits/change-taxable-state-benefits                                          controllers.workandbenefits.TaxableStateBenefitsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/about-you/work-and-benefits/change-taxable-state-benefits                                          controllers.workandbenefits.TaxableStateBenefitsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 #################       Income From Property Pensions And Investments      ##############################
 
