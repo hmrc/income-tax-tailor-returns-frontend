@@ -14,17 +14,41 @@
  * limitations under the License.
  *@
 
+@import components._
+@import viewmodels.LegendSize
 @import models.propertypensionsinvestments.RentalIncome
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
+    config: FrontendAppConfig,
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    p: ParagraphBody,
+    bullets: BulletList,
+    link: Link
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@checkResidenceStatus = @{ Call("GET", config.checkResidenceStatusUrl) }
+
+@detailsContent = {
+
+    @p(messages("rentalIncome.details.p"))
+
+    @bullets(Seq(
+            Html(messages("rentalIncome.agent.details.bullet1")),
+            Html(messages("rentalIncome.agent.details.bullet2")),
+            Html(messages("rentalIncome.details.bullet3")),
+            Html(messages("rentalIncome.agent.details.bullet4"))
+    ))
+
+    @link("check-residence-status", messages("rentalIncome.agent.details.link"), checkResidenceStatus, true)
+}
 
 @layout(pageTitle = title(form, messages("rentalIncome.agent.title")), taxYear = taxYear) {
 
@@ -34,14 +58,23 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "RentalIncome")))
         }
 
+        @heading(messages("rentalIncome.agent.heading"))
+
+        @govukDetails(
+            Details(
+                summary = Text(messages("rentalIncome.details.understandingIncomeFromProperty")),
+                content = HtmlContent(detailsContent)
+            )
+        )
+
         @govukCheckboxes(
             CheckboxesViewModel(
                 form     = form,
                 idPrefix = "RentalIncome",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("rentalIncome.agent.heading")).asPageHeading(),
+                legend   = LegendViewModel(messages("rentalIncome.agent.legend")).withSize(LegendSize.Medium),
                 items    = RentalIncome.agentCheckboxItems
-            )
+            ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )
 
         @govukButton(

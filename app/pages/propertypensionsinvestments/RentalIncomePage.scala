@@ -22,7 +22,7 @@ import play.api.libs.json.JsPath
 
 case object RentalIncomePage extends QuestionPage[Set[RentalIncome]] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \"propertyPensionsInvestments"\ toString
 
   override def toString: String = "rentalIncome"
 }

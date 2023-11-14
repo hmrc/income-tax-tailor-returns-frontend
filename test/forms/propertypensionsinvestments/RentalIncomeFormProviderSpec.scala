@@ -45,9 +45,9 @@ class RentalIncomeFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       form,
-      RentalIncome.ExclusiveOption.toString,
+      RentalIncome.No.toString,
       fieldName,
-      RentalIncome.Option1.toString,
+      RentalIncome.Uk.toString,
       requiredKey
     )
   }
@@ -65,9 +65,9 @@ class RentalIncomeFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       agentForm,
-      RentalIncome.ExclusiveOption.toString,
+      RentalIncome.No.toString,
       fieldName,
-      RentalIncome.Option1.toString,
+      RentalIncome.Uk.toString,
       requiredKey
     )
   }

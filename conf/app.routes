@@ -130,10 +130,10 @@ POST       /pensions/:taxYear                                                   
 GET        /changePensions/:taxYear                                                 controllers.propertypensionsinvestments.PensionsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /changePensions/:taxYear                                                 controllers.propertypensionsinvestments.PensionsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /rentalIncome/:taxYear                                                   controllers.propertypensionsinvestments.RentalIncomeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /rentalIncome/:taxYear                                                   controllers.propertypensionsinvestments.RentalIncomeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeRentalIncome/:taxYear                                             controllers.propertypensionsinvestments.RentalIncomeController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeRentalIncome/:taxYear                                             controllers.propertypensionsinvestments.RentalIncomeController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/property-pensions-investments/rental-income                    controllers.propertypensionsinvestments.RentalIncomeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/property-pensions-investments/rental-income                    controllers.propertypensionsinvestments.RentalIncomeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/property-pensions-investments/change-rental-income             controllers.propertypensionsinvestments.RentalIncomeController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/property-pensions-investments/change-rental-income             controllers.propertypensionsinvestments.RentalIncomeController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /ukDividendsSharesLoans/:taxYear                                         controllers.propertypensionsinvestments.UkDividendsSharesLoansController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /ukDividendsSharesLoans/:taxYear                                         controllers.propertypensionsinvestments.UkDividendsSharesLoansController.onSubmit(mode: Mode = NormalMode, taxYear: Int)

@@ -299,3 +299,33 @@ constructionIndustryScheme.agent.bullet1 = gwneud didyniadau a’u rhoi i CThEF
 constructionIndustryScheme.agent.bullet2 = rhoi datganiad misol i’ch cleient o daliadau a didyniadau
 constructionIndustryScheme.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog
 constructionIndustryScheme.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’i gyflog
+
+###################################  Income From Property Pensions Investments ###########################################################################################
+
+rentalIncome.title = Rental income from property
+rentalIncome.agent.title = Rental income from property
+rentalIncome.heading = Rental income from property
+rentalIncome.agent.heading = Rental income from property
+rentalIncome.details.understandingIncomeFromProperty = Understanding income from property
+rentalIncome.details.p = Income from property includes:
+rentalIncome.details.bullet1 = any UK rent you received, including for land
+rentalIncome.agent.details.bullet1 = any UK rent your client received, including for land
+rentalIncome.details.bullet2 = any non-UK rent you received, including for land
+rentalIncome.agent.details.bullet2 = any non-UK rent your client received, including for land
+rentalIncome.details.bullet3 = furnished holiday lettings in the UK or European Economic Area (EEA)
+rentalIncome.details.bullet4 = letting furnished rooms in your own home if you did not provide meals or other services
+rentalIncome.agent.details.bullet4 = letting furnished rooms in your client's own home if they did not provide meals or other services
+rentalIncome.details.link = Check your UK residence status
+rentalIncome.agent.details.link = Check your client's UK residence status
+rentalIncome.legend = Did you get rental income from property?
+rentalIncome.agent.legend = Did your client get rental income from property?
+rentalIncome.uk = UK property
+rentalIncome.nonUk = Non-UK property
+rentalIncome.none = No, I did not get rental income from property
+rentalIncome.agent.uk = UK property
+rentalIncome.agent.nonUk = Non-UK property
+rentalIncome.agent.none = No, my client did not get rental income from property
+rentalIncome.checkYourAnswersLabel = rentalIncome
+rentalIncome.error.required = Select rentalIncome
+rentalIncome.agent.error.required = Select rentalIncome
+rentalIncome.change.hidden = RentalIncome
