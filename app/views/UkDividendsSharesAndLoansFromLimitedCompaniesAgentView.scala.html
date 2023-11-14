@@ -1,0 +1,33 @@
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    govukErrorSummary: GovukErrorSummary,
+    govukCheckboxes: GovukCheckboxes,
+    govukButton: GovukButton
+)
+
+@(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = title(form, messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.title")), taxYear = taxYear) {
+
+    @formHelper(action = routes.UkDividendsSharesAndLoansFromLimitedCompaniesController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+
+        @if(form.errors.nonEmpty) {
+            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "UkDividendsSharesAndLoansFromLimitedCompanies")))
+        }
+
+        @govukCheckboxes(
+            CheckboxesViewModel(
+                form     = form,
+                idPrefix = "UkDividendsSharesAndLoansFromLimitedCompanies",
+                name     = "value[]",
+                legend   = LegendViewModel(messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.heading")).asPageHeading(),
+                items    = UkDividendsSharesAndLoansFromLimitedCompanies.agentCheckboxItems
+            )
+        )
+
+        @govukButton(
+            ButtonViewModel(messages("site.continue"))
+        )
+    }
+}
