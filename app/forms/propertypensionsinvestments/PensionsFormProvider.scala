@@ -34,7 +34,7 @@ class PensionsFormProvider @Inject() extends Mappings {
       }
     Form(
       "value" -> set(enumerable[Pensions](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, Pensions.ExclusiveOption.toString))
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, Pensions.NoPensions.toString))
       )
     )
   }

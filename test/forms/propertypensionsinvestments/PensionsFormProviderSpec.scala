@@ -45,9 +45,9 @@ class PensionsFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       form,
-      Pensions.ExclusiveOption.toString,
+      Pensions.NoPensions.toString,
       fieldName,
-      Pensions.Option1.toString,
+      Pensions.StatePension.toString,
       requiredKey
     )
   }
@@ -65,9 +65,9 @@ class PensionsFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       agentForm,
-      Pensions.ExclusiveOption.toString,
+      Pensions.NoPensions.toString,
       fieldName,
-      Pensions.Option1.toString,
+      Pensions.StatePension.toString,
       requiredKey
     )
   }
