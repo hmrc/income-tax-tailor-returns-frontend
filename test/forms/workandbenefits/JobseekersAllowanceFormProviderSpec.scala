@@ -45,9 +45,9 @@ class JobseekersAllowanceFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       form,
-      JobseekersAllowance.ExclusiveOption.toString,
+      JobseekersAllowance.No.toString,
       fieldName,
-      JobseekersAllowance.Option1.toString,
+      JobseekersAllowance.Jsa.toString,
       requiredKey
     )
   }
@@ -65,9 +65,9 @@ class JobseekersAllowanceFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       agentForm,
-      JobseekersAllowance.ExclusiveOption.toString,
+      JobseekersAllowance.No.toString,
       fieldName,
-      JobseekersAllowance.Option1.toString,
+      JobseekersAllowance.Jsa.toString,
       requiredKey
     )
   }

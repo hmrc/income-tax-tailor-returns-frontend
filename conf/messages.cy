@@ -331,3 +331,24 @@ rentalIncome.checkYourAnswersLabel = rentalIncome
 rentalIncome.error.required = Select if you got rental income from UK property, Non-UK property or ‘No, I did not get rental income from property’
 rentalIncome.agent.error.required = Select if your client got rental income from UK property, Non-UK property or ‘No, my client did not get rental income from property’
 rentalIncome.change.hidden = RentalIncome
+
+
+jobseekersAllowance.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.agent.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.heading = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.agent.heading = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.details.summary = Deall Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.details.p = Nid oes modd hawlio Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth ar yr un pryd, ond mae’n bosibl eich bod wedi hawlio pob budd-dal ar adegau gwahanol yn ystod yr un flwyddyn dreth.
+jobseekersAllowance.agent.details.p = Nid oes modd hawlio Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth ar yr un pryd, ond mae’n bosibl bod eich cleient wedi hawlio pob budd-dal ar adegau gwahanol yn ystod yr un flwyddyn dreth.
+jobseekersAllowance.legend = A gawsoch Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau?
+jobseekersAllowance.agent.legend = A gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau?
+jobseekersAllowance.jsa = Lwfans Ceisio Gwaith
+jobseekersAllowance.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
+jobseekersAllowance.agent.jsa = Lwfans Ceisio Gwaith
+jobseekersAllowance.agent.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
+jobseekersAllowance.none = Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn
+jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r wladwriaeth hyn
+jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employment and Support Allowance
+jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance
+jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance
+jobseekersAllowance.change.hidden = JobseekersAllowance

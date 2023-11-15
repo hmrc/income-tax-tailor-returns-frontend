@@ -26,21 +26,29 @@ sealed trait JobseekersAllowance
 
 object JobseekersAllowance extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with JobseekersAllowance
-  case object Option2 extends WithName("option2") with JobseekersAllowance
-  case object ExclusiveOption extends WithName("exclusive") with JobseekersAllowance
+  case object Jsa extends WithName("jsa") with JobseekersAllowance
+  case object Esa extends WithName("esa") with JobseekersAllowance
+  case object Divider extends JobseekersAllowance
+  case object No extends WithName("none") with JobseekersAllowance
 
   val values: Seq[JobseekersAllowance] = Seq(
-    Option1,
-    Option2,
-    ExclusiveOption
+    Jsa,
+    Esa,
+    Divider,
+    No
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"jobseekersAllowance.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -60,7 +68,13 @@ object JobseekersAllowance extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"jobseekersAllowance.agent.${value.toString}")),
             fieldId = "value",
             index = index,

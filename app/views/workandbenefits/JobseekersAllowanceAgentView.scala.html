@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import components._
+@import viewmodels.LegendSize
 @import models.workandbenefits.JobseekersAllowance
 
 @this(
@@ -21,10 +23,17 @@
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    p: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@detailsContent = {
+    @p(messages("jobseekersAllowance.agent.details.p"))
+}
 
 @layout(pageTitle = title(form, messages("jobseekersAllowance.agent.title")), taxYear = taxYear) {
 
@@ -34,14 +43,21 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "JobseekersAllowance")))
         }
 
+        @heading(messages("jobseekersAllowance.agent.heading"))
+
+        @govukDetails(Details(
+            summary = Text(messages("jobseekersAllowance.details.summary")),
+            content = HtmlContent(detailsContent)
+        ))
+
         @govukCheckboxes(
             CheckboxesViewModel(
                 form     = form,
                 idPrefix = "JobseekersAllowance",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("jobseekersAllowance.agent.heading")).asPageHeading(),
+                legend   = LegendViewModel(messages("jobseekersAllowance.agent.legend")).withSize(LegendSize.Medium),
                 items    = JobseekersAllowance.agentCheckboxItems
-            )
+            ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )
 
         @govukButton(
