@@ -283,3 +283,19 @@ taxAvoidanceSchemes.agent.disguisedRemuneration = Tâl cuddiedig
 taxAvoidanceSchemes.agent.noAvoidance = Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth
 taxAvoidanceSchemes.error.required = Dewiswch pa gynlluniau arbed treth yr oeddech yn rhan ohonynt, neu dewiswch ‘Na, nid oeddwn yn rhan o unrhyw gynlluniau arbed treth’
 taxAvoidanceSchemes.agent.error.required = Dewiswch pa gynlluniau arbed treth yr oedd eich cleient yn rhan ohonynt, neu dewiswch ‘Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth’
+
+###################################  Work And Benefits ###########################################################################################
+
+constructionIndustryScheme.title = Cynllun y Diwydiant Adeiladu (CIS)
+constructionIndustryScheme.agent.title = Cynllun y Diwydiant Adeiladu (CIS)
+constructionIndustryScheme.heading = A gawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog?
+constructionIndustryScheme.agent.heading = A gafodd eich cleient unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’i gyflog?
+constructionIndustryScheme.summary = Deall didyniadau CIS
+constructionIndustryScheme.p1 = Mae Cynllun y Diwydiant Adeiladu (CIS) yn cwmpasu’r rhan fwyaf o waith perthnasol i adeiladau, gan gynnwys gwaith o baratoi’r safle, gwaith addurno a gwaith adnewyddu. Os oeddech wedi gweithio fel isgontractwr, dylai’r contractwr fod wedi:
+constructionIndustryScheme.agent.p1 = Mae Cynllun y Diwydiant Adeiladu (CIS) yn cwmpasu’r rhan fwyaf o waith adeiladu i adeiladau, gan gynnwys gwaith o baratoi’r safle, gwaith addurno a gwaith adnewyddu. Os oedd eich cleient wedi gweithio fel isgontractwr, dylai’r contractwr fod wedi:
+constructionIndustryScheme.bullet1 = gwneud didyniadau a’u rhoi i CThEF
+constructionIndustryScheme.bullet2 = rhoi datganiad misol i chi o daliadau a didyniadau
+constructionIndustryScheme.agent.bullet1 = gwneud didyniadau a’u rhoi i CThEF
+constructionIndustryScheme.agent.bullet2 = rhoi datganiad misol i’ch cleient o daliadau a didyniadau
+constructionIndustryScheme.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog
+constructionIndustryScheme.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’i gyflog

@@ -298,14 +298,19 @@ aboutYourWork.error.required = Select aboutYourWork
 aboutYourWork.agent.error.required = Select aboutYourWork
 aboutYourWork.change.hidden = AboutYourWork
 
-constructionIndustryScheme.title = constructionIndustryScheme
-constructionIndustryScheme.agent.title = constructionIndustryScheme
-constructionIndustryScheme.heading = constructionIndustryScheme
-constructionIndustryScheme.agent.heading = constructionIndustryScheme
-constructionIndustryScheme.checkYourAnswersLabel = constructionIndustryScheme
-constructionIndustryScheme.error.required = Select yes if constructionIndustryScheme
-constructionIndustryScheme.agent.error.required = Select yes if constructionIndustryScheme
-constructionIndustryScheme.change.hidden = ConstructionIndustryScheme
+constructionIndustryScheme.title = Construction Industry Scheme (CIS)
+constructionIndustryScheme.agent.title = Construction Industry Scheme (CIS)
+constructionIndustryScheme.heading = Did you have any Construction Industry Scheme deductions taken from your pay?
+constructionIndustryScheme.agent.heading = Did your client have any Construction Industry Scheme deductions taken from their pay?
+constructionIndustryScheme.summary = Understanding CIS deductions
+constructionIndustryScheme.p1 = The Construction Industry Scheme (CIS) covers most construction work to buildings, including site preparation, decorating and refurbishment. If you worked as a subcontractor, the contractor should have:
+constructionIndustryScheme.agent.p1 = The Construction Industry Scheme (CIS) covers most construction work to buildings, including site preparation, decorating and refurbishment. If your client worked as a subcontractor, the contractor should have:
+constructionIndustryScheme.bullet1 = made deductions and passed them to HMRC
+constructionIndustryScheme.bullet2 = given you a monthly payment and deduction statement
+constructionIndustryScheme.agent.bullet1 = made deductions and passed them to HMRC
+constructionIndustryScheme.agent.bullet2 = given your client a monthly payment and deduction statement
+constructionIndustryScheme.error.required = Select yes if you had any Construction Industry Scheme deductions taken from your pay
+constructionIndustryScheme.agent.error.required = Select yes if your client had any Construction Industry Scheme deductions taken from their pay
 
 employmentLumpSums.title = employmentLumpSums
 employmentLumpSums.agent.title = employmentLumpSums
