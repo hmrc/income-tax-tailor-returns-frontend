@@ -287,6 +287,7 @@ taxAvoidanceSchemes.agent.error.required = Dewiswch pa gynlluniau arbed treth yr
 ###################################  Work And Benefits ###########################################################################################
 
 constructionIndustryScheme.title = Cynllun y Diwydiant Adeiladu (CIS)
+constructionIndustryScheme.agent.title = Cynllun y Diwydiant Adeiladu (CIS)
 constructionIndustryScheme.heading = A gawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog?
 constructionIndustryScheme.agent.heading = A gafodd eich cleient unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’i gyflog?
 constructionIndustryScheme.summary = Deall didyniadau CIS
