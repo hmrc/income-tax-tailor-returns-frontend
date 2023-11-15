@@ -34,7 +34,7 @@ class JobseekersAllowanceFormProvider @Inject() extends Mappings {
       }
     Form(
       "value" -> set(enumerable[JobseekersAllowance](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, JobseekersAllowance.ExclusiveOption.toString))
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, JobseekersAllowance.No.toString))
       )
     )
   }
