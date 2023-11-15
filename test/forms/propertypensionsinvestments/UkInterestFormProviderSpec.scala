@@ -45,9 +45,9 @@ class UkInterestFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       form,
-      UkInterest.ExclusiveOption.toString,
+      UkInterest.NoInterest.toString,
       fieldName,
-      UkInterest.Option1.toString,
+      UkInterest.FromUkBanks.toString,
       requiredKey
     )
   }
@@ -65,9 +65,9 @@ class UkInterestFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       agentForm,
-      UkInterest.ExclusiveOption.toString,
+      UkInterest.NoInterest.toString,
       fieldName,
-      UkInterest.Option1.toString,
+      UkInterest.FromUkBanks.toString,
       requiredKey
     )
   }

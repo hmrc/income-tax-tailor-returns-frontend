@@ -26,21 +26,31 @@ sealed trait UkInterest
 
 object UkInterest extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with UkInterest
-  case object Option2 extends WithName("option2") with UkInterest
-  case object ExclusiveOption extends WithName("exclusive") with UkInterest
+  case object FromUkBanks extends WithName("fromUkBanks") with UkInterest
+  case object FromUkTrustFunds extends WithName("fromUkTrustFunds") with UkInterest
+  case object FromGiltEdged extends WithName("fromGiltEdged") with UkInterest
+  case object Divider extends UkInterest
+  case object NoInterest extends WithName("noInterest") with UkInterest
 
   val values: Seq[UkInterest] = Seq(
-    Option1,
-    Option2,
-    ExclusiveOption
+    FromUkBanks,
+    FromUkTrustFunds,
+    FromGiltEdged,
+    Divider,
+    NoInterest
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case NoInterest => CheckboxItemViewModel(
             content = Text(messages(s"ukInterest.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -48,7 +58,7 @@ object UkInterest extends Enumerable.Implicits {
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text (messages(s"ukInterest.${value.toString}")),
+            content = Text(messages(s"ukInterest.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
@@ -60,15 +70,21 @@ object UkInterest extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case NoInterest => CheckboxItemViewModel(
             content = Text(messages(s"ukInterest.agent.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
           )
-          case _ => CheckboxItemViewModel (
-            content = Text (messages(s"ukInterest.agent.${value.toString}")),
+          case _ => CheckboxItemViewModel(
+            content = Text(messages(s"ukInterest.agent.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString

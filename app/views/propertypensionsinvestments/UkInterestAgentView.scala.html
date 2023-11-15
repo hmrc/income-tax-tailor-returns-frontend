@@ -15,16 +15,36 @@
  *@
 
 @import models.propertypensionsinvestments.UkInterest
+@import components._
+@import viewmodels.LegendSize
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    heading: Heading1,
+    bullets: BulletList,
+    govukDetails: GovukDetails,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@insetContent1 = {
+
+    @paragraph(messages("ukInterest.agent.details.p1"))
+
+    @bullets(Seq(
+        Html(messages("ukInterest.agent.details.bullet1")),
+        Html(messages("ukInterest.agent.details.bullet2")),
+        Html(messages("ukInterest.agent.details.bullet3")),
+        Html(messages("ukInterest.agent.details.bullet4")),
+        Html(messages("ukInterest.agent.details.bullet5")),
+        Html(messages("ukInterest.agent.details.bullet6"))
+    ))
+}
 
 @layout(pageTitle = title(form, messages("ukInterest.agent.title")), taxYear = taxYear) {
 
@@ -34,14 +54,21 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "UkInterest")))
         }
 
+        @heading(messages("ukInterest.agent.heading"))
+
+        @govukDetails(Details(
+                summary = Text(messages("ukInterest.agent.details.interest.summary")),
+                content = HtmlContent(insetContent1)
+        ))
+
         @govukCheckboxes(
             CheckboxesViewModel(
                 form     = form,
                 idPrefix = "UkInterest",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("ukInterest.agent.heading")).asPageHeading(),
+                legend   = LegendViewModel(messages("ukInterest.agent.legend")).withSize(LegendSize.Medium),
                 items    = UkInterest.agentCheckboxItems
-            )
+            ).withHint(Hint(content = Text(messages("site.hint.selectAll"))))
         )
 
         @govukButton(
