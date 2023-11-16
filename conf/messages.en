@@ -97,10 +97,15 @@ taxReturnNotReady.p = You need to complete the following sections:
 taxReturnNotReady.aboutYou = About you
 taxReturnNotReady.agent.aboutYou = About your client
 taxReturnNotReady.incomeFromWork = Income from work and taxable state benefits
+taxReturnNotReady.agent.incomeFromWork = Income from work and taxable state benefits
 taxReturnNotReady.incomeFromProperty = Income from property rentals, pensions and investments
+taxReturnNotReady.agent.incomeFromProperty = Income from property rentals, pensions and investments
 taxReturnNotReady.incomeFromGains = Income from capital gains, trusts and estates
+taxReturnNotReady.agent.incomeFromGains = Income from capital gains, trusts and estates
 taxReturnNotReady.pensions = Payments into pensions
+taxReturnNotReady.agent.pensions = Payments into pensions
 taxReturnNotReady.allowances = Allowances and tax reliefs
+taxReturnNotReady.agent.allowances = Allowances and tax reliefs
 
 ###################################  ABOUT YOU ###########################################################################################
 

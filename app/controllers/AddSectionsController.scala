@@ -45,13 +45,19 @@ class AddSectionsController @Inject()(
 
       val state = addSectionsService.getState(request.userAnswers)
 
+      val prefix: String = if (request.isAgent) {
+        "addSections.agent"
+      } else {
+        "addSections"
+      }
+
       val sections = List(
-        Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), state.aboutYou),
+        Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), state.aboutYou, prefix),
         Task(Link(
-          IncomeFromWork.toString, controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url), state.incomeFromWork),
+          IncomeFromWork.toString, controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url), state.incomeFromWork, prefix),
         Task(Link(
-          IncomeFromProperty.toString, controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url), state.incomeFromProperty),
-        Task(Link(Pensions.toString, controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url), state.pensions)
+          IncomeFromProperty.toString, controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url), state.incomeFromProperty, prefix),
+        Task(Link(Pensions.toString, controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url), state.pensions, prefix)
       )
 
       val completedCount: Int = sections.map(_.tag).count(_.isCompleted)

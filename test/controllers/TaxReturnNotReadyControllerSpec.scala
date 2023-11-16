@@ -19,11 +19,21 @@ package controllers
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import models.SectionState
+import models.TagStatus._
+import viewmodels.TaxReturnNotReadyViewModel
 import views.html.TaxReturnNotReadyView
 import views.html.TaxReturnNotReadyAgentView
 
 
 class TaxReturnNotReadyControllerSpec extends SpecBase {
+
+  private val state = SectionState(NotStarted, CannotStartYet, CannotStartYet, CannotStartYet)
+
+  private val vm = TaxReturnNotReadyViewModel(state, "taxReturnNotReady")
+
+  private val agentVm = TaxReturnNotReadyViewModel(state, "taxReturnNotReady.agent")
+
 
   "TaxReturnNotReady Controller" - {
 
@@ -39,7 +49,7 @@ class TaxReturnNotReadyControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[TaxReturnNotReadyView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear, vm)(request, messages(application)).toString
       }
     }
 
@@ -55,7 +65,7 @@ class TaxReturnNotReadyControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[TaxReturnNotReadyAgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear, agentVm)(request, messages(application)).toString
       }
     }
   }

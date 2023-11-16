@@ -22,7 +22,9 @@ import controllers.actions._
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.AddSectionsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.TaxReturnNotReadyViewModel
 import views.html.{TaxReturnNotReadyAgentView, TaxReturnNotReadyView}
 
 import scala.concurrent.ExecutionContext
@@ -31,6 +33,7 @@ class TaxReturnNotReadyController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        identify: IdentifierActionProvider,
                                        getData: DataRetrievalActionProvider,
+                                       addSectionsService: AddSectionsService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: TaxReturnNotReadyView,
                                        agentView: TaxReturnNotReadyAgentView
@@ -38,10 +41,15 @@ class TaxReturnNotReadyController @Inject()(
 
   def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)) {
     implicit request =>
+
+      val state = addSectionsService.getState(request.userAnswers)
+
       if (request.isAgent) {
-        Ok(agentView(taxYear))
+        val vm = TaxReturnNotReadyViewModel(state, "taxReturnNotReady.agent")
+        Ok(agentView(taxYear, vm))
       } else {
-        Ok(view(taxYear))
+        val vm = TaxReturnNotReadyViewModel(state, "taxReturnNotReady")
+        Ok(view(taxYear, vm))
       }
   }
 }

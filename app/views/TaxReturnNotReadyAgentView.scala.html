@@ -14,26 +14,26 @@
  * limitations under the License.
  *@
 
+@import viewmodels.TaxReturnNotReadyViewModel
+@import components._
+
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        govukButton: GovukButton,
+        bullets: BulletList,
+        p: ParagraphBody,
+        heading: Heading1
 )
 
-@(taxYear: Int)(implicit request: Request[_], messages: Messages)
+@(taxYear: Int, vm: TaxReturnNotReadyViewModel)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("taxReturnNotReady.agent.title")), taxYear = taxYear) {
-    <h1 class="govuk-heading-l">@messages("taxReturnNotReady.agent.heading")</h1>
 
-    <p class="govuk-body">@messages("taxReturnNotReady.p")</p>
+    @heading(messages("taxReturnNotReady.agent.heading"))
 
-    <ul class="govuk-list govuk-list--bullet">
-        <li>@messages("taxReturnNotReady.agent.aboutYou")</li>
-        <li>@messages("taxReturnNotReady.incomeFromWork")</li>
-        <li>@messages("taxReturnNotReady.incomeFromProperty")</li>
-        <li>@messages("taxReturnNotReady.incomeFromGains")</li>
-        <li>@messages("taxReturnNotReady.pensions")</li>
-        <li>@messages("taxReturnNotReady.allowances")</li>
-    </ul>
+    @p(messages("taxReturnNotReady.p"))
+
+    @bullets(vm.getBulletItems)
 
     @govukButton(
         ButtonViewModel(messages("site.continue"))

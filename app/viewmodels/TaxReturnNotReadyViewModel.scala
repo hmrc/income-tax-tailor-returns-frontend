@@ -16,11 +16,25 @@
 
 package viewmodels
 
-import models.TagStatus
+import models.TagStatus.Completed
+import models.{SectionState, TagStatus}
 import play.api.i18n.Messages
+import play.twirl.api.Html
 
-case class Task(link: Link, tag: TagStatus, prefix: String) {
-  def linkText()(implicit messages: Messages): String = {
-    messages(s"$prefix.${link.text}")
+case class TaxReturnNotReadyViewModel(state: SectionState, prefix: String) {
+
+  def getBulletItems()(implicit messages: Messages): Seq[Html] = {
+
+    val listItems: Seq[(String, TagStatus)] = Seq[(String, TagStatus)](
+      (messages(s"$prefix.aboutYou"), state.aboutYou),
+      (messages(s"$prefix.incomeFromWork"), state.incomeFromWork),
+      (messages(s"$prefix.incomeFromProperty"), state.incomeFromProperty),
+      (messages(s"$prefix.pensions"), state.pensions)
+    )
+
+    listItems.filterNot(_._2 == Completed).map(value =>
+      Html(value._1)
+    )
   }
+
 }

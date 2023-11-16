@@ -93,10 +93,15 @@ taxReturnNotReady.p = Mae angen i chi gwblhau’r adrannau canlynol:
 taxReturnNotReady.aboutYou = Amdanoch chi
 taxReturnNotReady.agent.aboutYou = Ynglŷn â’ch cleient
 taxReturnNotReady.incomeFromWork = Incwm o’r gwaith a budd-daliadau’r wladwriaeth trethadwy
+taxReturnNotReady.agent.incomeFromWork = Incwm o’r gwaith a budd-daliadau’r wladwriaeth trethadwy
 taxReturnNotReady.incomeFromProperty = Incwm o eiddo, pensiynau a buddsoddiadau
+taxReturnNotReady.agent.incomeFromProperty = Incwm o eiddo, pensiynau a buddsoddiadau
 taxReturnNotReady.incomeFromGains = Incwm o enillion cyfalaf, ymddiriedolaethau ac ystadau
+taxReturnNotReady.agent.incomeFromGains = Incwm o enillion cyfalaf, ymddiriedolaethau ac ystadau
 taxReturnNotReady.pensions = Taliadau i bensiynau
+taxReturnNotReady.agent.pensions = Taliadau i bensiynau
 taxReturnNotReady.allowances = Lwfansau a rhyddhad treth
+taxReturnNotReady.agent.allowances = Lwfansau a rhyddhad treth
 
 ###################################  ABOUT YOU ###########################################################################################
 
