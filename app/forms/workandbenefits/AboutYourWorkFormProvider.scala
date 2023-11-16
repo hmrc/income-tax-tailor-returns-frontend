@@ -34,7 +34,7 @@ class AboutYourWorkFormProvider @Inject() extends Mappings {
       }
     Form(
       "value" -> set(enumerable[AboutYourWork](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, AboutYourWork.ExclusiveOption.toString))
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, AboutYourWork.No.toString))
       )
     )
   }
