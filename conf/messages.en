@@ -510,11 +510,11 @@ ukInsuranceGains.agent.lifeInsurance = Life Insurance
 ukInsuranceGains.agent.lifeAnnuity = Life Annuity
 ukInsuranceGains.agent.capitalRedemption = Capital Redemption
 ukInsuranceGains.agent.voidedISA = Voided ISA (a policy cancelled by your client’s ISA manager)
-ukInsuranceGains.noOption = No, I did not make any UK insurance gains
-ukInsuranceGains.agent.noOption = No, my client did not make any UK insurance gains
+ukInsuranceGains.none = No, I did not make any UK insurance gains
+ukInsuranceGains.agent.none = No, my client did not make any UK insurance gains
 ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
-ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or No, I did not make any UK insurance gains
-ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or No, they did not make any UK insurance gains
+ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or select ‘No, I did not make any UK insurance gains’
+ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or select ‘No, my client did not make any UK insurance gains’
 
 
 paymentsIntoPensions.title = paymentsIntoPensions

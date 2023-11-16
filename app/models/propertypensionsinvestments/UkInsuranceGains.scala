@@ -32,7 +32,7 @@ object UkInsuranceGains extends Enumerable.Implicits {
   case object VoidedISA extends WithName("voidedISA") with UkInsuranceGains
   case object Divider extends UkInsuranceGains
 
-  case object No extends WithName("noOption") with UkInsuranceGains
+  case object No extends WithName("none") with UkInsuranceGains
 
   val values: Seq[UkInsuranceGains] = Seq(
     LifeInsurance,
