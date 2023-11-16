@@ -26,21 +26,21 @@ sealed trait UkInsuranceGains
 
 object UkInsuranceGains extends Enumerable.Implicits {
 
-  case object lifeInsurance extends WithName("lifeInsurance") with UkInsuranceGains
-  case object lifeAnnuity extends WithName("lifeAnnuity") with UkInsuranceGains
-  case object capitalRedemption extends WithName("capitalRedemption") with UkInsuranceGains
-  case object voidedISA extends WithName("voidedISA") with UkInsuranceGains
+  case object LifeInsurance extends WithName("lifeInsurance") with UkInsuranceGains
+  case object LifeAnnuity extends WithName("lifeAnnuity") with UkInsuranceGains
+  case object CapitalRedemption extends WithName("capitalRedemption") with UkInsuranceGains
+  case object VoidedISA extends WithName("voidedISA") with UkInsuranceGains
   case object Divider extends UkInsuranceGains
 
-  case object noOption extends WithName("noOption") with UkInsuranceGains
+  case object No extends WithName("noOption") with UkInsuranceGains
 
   val values: Seq[UkInsuranceGains] = Seq(
-    lifeInsurance,
-    lifeAnnuity,
-    capitalRedemption,
-    voidedISA,
+    LifeInsurance,
+    LifeAnnuity,
+    CapitalRedemption,
+    VoidedISA,
     Divider,
-    noOption
+    No
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
@@ -53,7 +53,7 @@ object UkInsuranceGains extends Enumerable.Implicits {
             value = value.toString,
             divider = messages(s"site.or")
           )
-          case `noOption` => CheckboxItemViewModel(
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"ukInsuranceGains.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -79,7 +79,7 @@ object UkInsuranceGains extends Enumerable.Implicits {
             value = value.toString,
             divider = messages(s"site.or")
           )
-          case `noOption` => CheckboxItemViewModel(
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"ukInsuranceGains.agent.${value.toString}")),
             fieldId = "value",
             index = index,

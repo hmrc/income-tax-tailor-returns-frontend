@@ -277,6 +277,37 @@ taxAvoidanceSchemes.agent.noAvoidance = Na, nid oedd fy nghleient yn rhan o unrh
 taxAvoidanceSchemes.error.required = Dewiswch pa gynlluniau arbed treth yr oeddech yn rhan ohonynt, neu dewiswch ‘Na, nid oeddwn yn rhan o unrhyw gynlluniau arbed treth’
 taxAvoidanceSchemes.agent.error.required = Dewiswch pa gynlluniau arbed treth yr oedd eich cleient yn rhan ohonynt, neu dewiswch ‘Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth’
 
+
+
+
+ukInsuranceGains.title = UK insurance gains
+ukInsuranceGains.agent.title = UK insurance gains
+ukInsuranceGains.legend = Did you make gains from UK insurance policies or voided ISAs?
+ukInsuranceGains.agent.legend = Did your client make gains from UK insurance policies or voided ISAs?
+ukInsuranceGains.summary = Understanding insurance gains
+ukInsuranceGains.p1 = The most common occasions you’ll make a gain are when:
+ukInsuranceGains.p2 = If the calculations which take place after these events show that a gain has been made, your insurer should send you a chargeable event certificate showing the gain.
+ukInsuranceGains.p3 = Life annuity contracts do not include pension annuities.
+ukInsuranceGains.agent.p1 = The most common occasions your client will make a gain are when:
+ukInsuranceGains.agent.p2 = If the calculations which take place after these events show that a gain has been made, your client's insurer should send them a chargeable event certificate showing the gain.
+ukInsuranceGains.agent.p3 = Life annuity contracts do not include pension annuities.
+ukInsuranceGains.details.bullet1 = cash or other benefits were received on a full or part surrender of a policy
+ukInsuranceGains.details.bullet2 = a policy matured or was ended by the death of the life insured
+ukInsuranceGains.details.bullet3 = there was a sale or assignment of a UK policy, or part of a policy, for value
+ukInsuranceGains.details.bullet4 = the policy was a Personal Portfolio Bond, even if the insurer had not paid cash or other benefits during the year
+ukInsuranceGains.lifeInsurance = Life Insurance
+ukInsuranceGains.lifeAnnuity = Life Annuity
+ukInsuranceGains.capitalRedemption = Capital Redemption
+ukInsuranceGains.voidedISA = Voided ISA (a policy cancelled by your ISA manager)
+ukInsuranceGains.agent.lifeInsurance = Life Insurance
+ukInsuranceGains.agent.lifeAnnuity = Life Annuity
+ukInsuranceGains.agent.capitalRedemption = Capital Redemption
+ukInsuranceGains.agent.voidedISA = Voided ISA (a policy cancelled by your client's ISA manager)
+ukInsuranceGains.noOption = No, I did not make any UK insurance gains
+ukInsuranceGains.agent.noOption = No, my client did not make any UK insurance gains
+ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
+ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or No, I did not make any UK insurance gains
+ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or No, they did not make any UK insurance gains
 ###################################  Work And Benefits ###########################################################################################
 
 constructionIndustryScheme.title = Cynllun y Diwydiant Adeiladu (CIS)
