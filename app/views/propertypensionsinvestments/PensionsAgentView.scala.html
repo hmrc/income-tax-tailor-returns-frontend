@@ -27,11 +27,14 @@
     govukDetails: GovukDetails,
     heading: Heading1,
     list: BulletList,
+    link: Link,
     paragraph: ParagraphBody,
     config: FrontendAppConfig
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@unauthorisedPayments = @{ Call("GET", config.unauthorisedPaymentsUrl) }
 
 @insetContent1 = {
     @paragraph(messages("pensions.agent.details.understandingIncomeFromPensions.p1"))
@@ -57,7 +60,7 @@
         </ul>
     </ul>
     <p class="govuk-body">@messages("pensions.details.understandingUnauthorisedPayments.p2")
-        <a target="_blank" class="govuk-link" href="@{config.unauthorisedPaymentsUrl}">@messages("pensions.details.understandingUnauthorisedPayments.p2.linkText")</a>.
+        @link("unauthorisedPayments", messages("pensions.details.understandingUnauthorisedPayments.p2.linkText"), unauthorisedPayments, true)
     </p>
 }
 
