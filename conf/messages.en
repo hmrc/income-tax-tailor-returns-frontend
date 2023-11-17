@@ -438,8 +438,8 @@ pensions.nonUkPensions = Non-UK pensions
 pensions.agent.nonUkPensions = Non-UK pensions
 pensions.noPensions = No, I did not get any income from pensions
 pensions.agent.noPensions = No, my client did not get any income from pensions
-pensions.error.required = Select if you got any income from pensions
-pensions.agent.error.required = Select if your client got any income from pensions
+pensions.error.required = Select if you got any income from pensions, or ‘No, I did not get any income from pensions’
+pensions.agent.error.required = Select if your client got any income from pensions, or ‘No, my client did not get any income from pensions’
 pensions.checkYourAnswersLabel = pensions
 pensions.change.hidden = Pensions
 
