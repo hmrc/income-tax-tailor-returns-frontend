@@ -302,6 +302,17 @@ aboutYourWork.selfEmployed.agent.hint = Your client worked for themselves and in
 aboutYourWork.error.required = Select what you did for work
 aboutYourWork.agent.error.required = Select what your client did for work
 
+aboutYourWorkRadioPage.title = About your work
+aboutYourWorkRadioPage.agent.title = About your client’s work
+aboutYourWorkRadioPage.heading = Were you employed?
+aboutYourWorkRadioPage.agent.heading = Were you employed?
+aboutYourWorkRadioPage.p1 = Because you were a foster carer or shared lives carer, we've included the following section:
+aboutYourWorkRadioPage.agent.p1 = Because your client was a foster carer or shared lives carer, we've included the following section:
+aboutYourWorkRadioPage.bullet1 = Self-employed
+aboutYourWorkRadioPage.error.required = Select yes if you were employed
+aboutYourWorkRadioPage.agent.error.required = Select yes if your client was employed
+
+
 
 constructionIndustryScheme.title = Construction Industry Scheme (CIS)
 constructionIndustryScheme.agent.title = Construction Industry Scheme (CIS)
