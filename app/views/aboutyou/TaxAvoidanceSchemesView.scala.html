@@ -75,7 +75,7 @@
                 form   = form,
                 idPrefix = "TaxAvoidance",
                 name   = "value[]",
-                legend = LegendViewModel(messages("taxAvoidanceSchemes.title")).withSize(LegendSize.Medium),
+                legend = LegendViewModel(messages("taxAvoidanceSchemes.legend")).withSize(LegendSize.Medium),
                 items  = TaxAvoidanceSchemes.checkboxItems
             ).withHint(Hint(content = Text(messages("site.hint.selectAll"))))
         )

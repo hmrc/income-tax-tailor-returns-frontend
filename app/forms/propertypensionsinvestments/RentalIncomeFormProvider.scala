@@ -34,7 +34,7 @@ class RentalIncomeFormProvider @Inject() extends Mappings {
       }
     Form(
       "value" -> set(enumerable[RentalIncome](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, RentalIncome.ExclusiveOption.toString))
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, RentalIncome.No.toString))
       )
     )
   }
