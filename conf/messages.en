@@ -513,8 +513,8 @@ ukInsuranceGains.agent.voidedISA = Voided ISA (a policy cancelled by your client
 ukInsuranceGains.none = No, I did not make any UK insurance gains
 ukInsuranceGains.agent.none = No, my client did not make any UK insurance gains
 ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
-ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or 'No, I did not make any UK insurance gains'
-ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or 'No, my client did not make any UK insurance gains'
+ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or ‘No, I did not make any UK insurance gains’
+ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or ‘No, my client did not make any UK insurance gains’
 
 
 paymentsIntoPensions.title = paymentsIntoPensions
