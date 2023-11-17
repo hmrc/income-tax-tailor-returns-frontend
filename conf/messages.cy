@@ -310,6 +310,7 @@ pensions.details.understandingIncomeFromPensions.bullet4 = workplace pensions wi
 pensions.details.understandingUnauthorisedPayments.summary = Understanding unauthorised payments from pension schemes
 pensions.details.understandingUnauthorisedPayments.p1 = Payments made outside the tax rules are classed as unauthorised and tax charges are payable. Common examples of unauthorised payments include:
 pensions.details.understandingUnauthorisedPayments.bullet1 = taking the whole of your pension as cash (known as a trivial lump sum) if the amount is over £30,000
+pensions.agent.details.understandingUnauthorisedPayments.bullet1 = taking the whole of a pension as cash (known as a trivial lump sum) if the amount is over £30,000
 pensions.details.understandingUnauthorisedPayments.bullet2 = continued payments after the member’s death
 pensions.details.understandingUnauthorisedPayments.bullet3 = when a scheme realises it incorrectly calculated your pension pot after a transfer of funds or purchase of an annuity and the balancing payment is made directly to you
 pensions.agent.details.understandingUnauthorisedPayments.bullet3 = when a scheme realises it incorrectly calculated your client's pension pot after a transfer of funds or purchase of an annuity and the balancing payment is made directly to them
