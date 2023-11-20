@@ -26,21 +26,34 @@ sealed trait UkInsuranceGains
 
 object UkInsuranceGains extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with UkInsuranceGains
-  case object Option2 extends WithName("option2") with UkInsuranceGains
-  case object ExclusiveOption extends WithName("exclusive") with UkInsuranceGains
+  case object LifeInsurance extends WithName("lifeInsurance") with UkInsuranceGains
+  case object LifeAnnuity extends WithName("lifeAnnuity") with UkInsuranceGains
+  case object CapitalRedemption extends WithName("capitalRedemption") with UkInsuranceGains
+  case object VoidedISA extends WithName("voidedISA") with UkInsuranceGains
+  case object Divider extends UkInsuranceGains
+
+  case object No extends WithName("none") with UkInsuranceGains
 
   val values: Seq[UkInsuranceGains] = Seq(
-    Option1,
-    Option2,
-    ExclusiveOption
+    LifeInsurance,
+    LifeAnnuity,
+    CapitalRedemption,
+    VoidedISA,
+    Divider,
+    No
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"ukInsuranceGains.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -60,7 +73,13 @@ object UkInsuranceGains extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"ukInsuranceGains.agent.${value.toString}")),
             fieldId = "value",
             index = index,

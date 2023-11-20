@@ -45,9 +45,9 @@ class UkInsuranceGainsFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       form,
-      UkInsuranceGains.ExclusiveOption.toString,
+      UkInsuranceGains.No.toString,
       fieldName,
-      UkInsuranceGains.Option1.toString,
+      UkInsuranceGains.LifeInsurance.toString,
       requiredKey
     )
   }
@@ -65,9 +65,9 @@ class UkInsuranceGainsFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       agentForm,
-      UkInsuranceGains.ExclusiveOption.toString,
+      UkInsuranceGains.No.toString,
       fieldName,
-      UkInsuranceGains.Option1.toString,
+      UkInsuranceGains.LifeInsurance.toString,
       requiredKey
     )
   }

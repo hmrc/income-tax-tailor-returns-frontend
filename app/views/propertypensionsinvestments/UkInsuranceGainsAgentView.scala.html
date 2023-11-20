@@ -14,6 +14,9 @@
  * limitations under the License.
  *@
 
+@import components._
+@import viewmodels.LegendSize
+
 @import models.propertypensionsinvestments.UkInsuranceGains
 
 @this(
@@ -21,10 +24,28 @@
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    list: BulletList,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+
+@insetContent1 = {
+    @paragraph(messages("ukInsuranceGains.agent.p1"))
+    @list(elements = Seq(
+        Html(messages("ukInsuranceGains.details.bullet1")),
+        Html(messages("ukInsuranceGains.details.bullet2")),
+        Html(messages("ukInsuranceGains.details.bullet3")),
+        Html(messages("ukInsuranceGains.details.bullet4"))
+    ))
+    @paragraph(messages("ukInsuranceGains.agent.p2"))
+    @paragraph(messages("ukInsuranceGains.agent.p3"))
+
+}
 
 @layout(pageTitle = title(form, messages("ukInsuranceGains.agent.title")), taxYear = taxYear) {
 
@@ -34,14 +55,22 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "UkInsuranceGains")))
         }
 
+        @heading(messages("ukInsuranceGains.agent.title"))
+
+        @govukDetails(Details(
+            summary = Text(messages("ukInsuranceGains.summary")),
+            content = HtmlContent(insetContent1)
+            )
+        )
+
         @govukCheckboxes(
             CheckboxesViewModel(
                 form     = form,
                 idPrefix = "UkInsuranceGains",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("ukInsuranceGains.agent.heading")).asPageHeading(),
+                legend   = LegendViewModel(messages("ukInsuranceGains.agent.legend")).withSize(LegendSize.Medium),
                 items    = UkInsuranceGains.agentCheckboxItems
-            )
+            ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )
 
         @govukButton(
