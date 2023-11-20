@@ -208,21 +208,15 @@ marriageAllowance.agent.legend = A yw’ch cleient am drosglwyddo £1,260 o’i 
 marriageAllowance.error.required = Dewiswch ‘Iawn’ os ydych am drosglwyddo £1,260 o’ch Lwfans Personol i’ch gŵr, gwraig neu bartner sifil
 marriageAllowance.agent.error.required = Dewiswch ‘Iawn’ os yw’ch cleient am drosglwyddo £1,260 o’i Lwfans Personol i’w ŵr, gwraig neu bartner sifil
 
-###################################  CHILD BENEFIT  ###########################################################################################
-
 childBenefit.title = A gawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi?
 childBenefit.agent.title = A gafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw?
 childBenefit.error.required = Dewiswch ‘Iawn’, os cawsoch chi, eich partner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda chi
 childBenefit.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient, ei bartner neu rywun arall Fudd-dal Plant ar gyfer plentyn sy’n byw gyda nhw
 
-################################### CHILD BENEFIT INCOME ###########################################################################################
-
 childBenefitIncome.title = A oedd eich incwm dros £50,000?
 childBenefitIncome.agent.title = A oedd incwm eich cleient dros £50,000?
 childBenefitIncome.error.required = Dewiswch ‘Iawn’ os oedd eich incwm dros £50,000
 childBenefitIncome.agent.error.required = Dewiswch ‘Iawn’ os oedd incwm eich cleient dros £50,000
-
-################################### HIGH INCOME CHILD BENEFIT CHARGE ###########################################################################################
 
 highIncomeChildBenefitCharge.title = Tâl Treth Budd-dal Plant Incwm Uchel
 highIncomeChildBenefitCharge.agent.title = Tâl Treth Budd-dal Plant Incwm Uchel
@@ -248,8 +242,6 @@ highIncomeChildBenefitCharge.agent.noPartner = Nid oes partner gan fy nghleient
 highIncomeChildBenefitCharge.error.required = Dewiswch a oedd eich incwm chi yn uwch, incwm eich partner yn uwch neu os nad oes gennych bartner
 highIncomeChildBenefitCharge.agent.error.required = Dewiswch a oedd incwm eich cleient yn uwch, incwm ei bartner yn uwch neu os nad oes gan eich cleient bartner
 
-################################### ROYALTY PAYMENTS ###########################################################################################
-
 patentRoyaltyPayments.title = A wnaethoch unrhyw freindaliadau patent?
 patentRoyaltyPayments.agent.title = A wnaeth eich cleient unrhyw freindaliadau patent?
 patentRoyaltyPayments.p1 = Mae’n rhaid i chi ddal 20% o dreth yn ôl o swm y breindaliadau patent a dalwch. Telir y dreth a ddelir yn ôl fel rhan o’r dreth sy’n ddyledus ar eich incwm.
@@ -263,7 +255,6 @@ fosterCarer.p1 = Os oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau, byd
 fosterCarer.agent.p1 = Os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau, bydd angen i chi lenwi’r adran hunangyflogaeth.
 fosterCarer.error.required = Dewiswch ‘Iawn’ os oeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau
 fosterCarer.agent.error.required = Dewiswch ‘Iawn’ os oedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau
-
 
 taxAvoidanceSchemes.title = Cynlluniau arbed treth
 taxAvoidanceSchemes.agent.title = Cynlluniau arbed treth
@@ -304,6 +295,54 @@ constructionIndustryScheme.agent.error.required = Dewiswch ‘Iawn’ os cafodd 
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
 
+pensions.title = Income from pensions
+pensions.agent.title = Income from pensions
+pensions.heading = Income from pensions
+pensions.agent.heading = Income from pensions
+pensions.details.understandingIncomeFromPensions.summary = Understanding income from pensions
+pensions.details.understandingIncomeFromPensions.p1 = You should only include money received from pensions. You can tell us about money paid into pensions later.
+pensions.agent.details.understandingIncomeFromPensions.p1 = You should only include money your client received from pensions. You can tell us about money paid into pensions later.
+pensions.details.understandingIncomeFromPensions.p2 = You should include:
+pensions.details.understandingIncomeFromPensions.bullet1 = relief at source pension payments
+pensions.details.understandingIncomeFromPensions.bullet2 = pensions without tax relief claimed
+pensions.details.understandingIncomeFromPensions.bullet3 = retirement annuity contract payments
+pensions.details.understandingIncomeFromPensions.bullet4 = workplace pensions without tax relief claimed
+pensions.details.understandingUnauthorisedPayments.summary = Understanding unauthorised payments from pension schemes
+pensions.details.understandingUnauthorisedPayments.p1 = Payments made outside the tax rules are classed as unauthorised and tax charges are payable. Common examples of unauthorised payments include:
+pensions.details.understandingUnauthorisedPayments.bullet1 = taking the whole of your pension as cash (known as a trivial lump sum) if the amount is over £30,000
+pensions.agent.details.understandingUnauthorisedPayments.bullet1 = taking the whole of a pension as cash (known as a trivial lump sum) if the amount is over £30,000
+pensions.details.understandingUnauthorisedPayments.bullet2 = continued payments after the member’s death
+pensions.details.understandingUnauthorisedPayments.bullet3 = when a scheme realises it incorrectly calculated your pension pot after a transfer of funds or purchase of an annuity and the balancing payment is made directly to you
+pensions.agent.details.understandingUnauthorisedPayments.bullet3 = when a scheme realises it incorrectly calculated your client's pension pot after a transfer of funds or purchase of an annuity and the balancing payment is made directly to them
+pensions.details.understandingUnauthorisedPayments.bullet4 = most lump sum payments to cash-in or access pension funds before age 55 except when:
+pensions.details.understandingUnauthorisedPayments.bullet4.subtext1 = you retire due to ill health
+pensions.agent.details.understandingUnauthorisedPayments.bullet4.subtext1 = your client retires due to ill health
+pensions.details.understandingUnauthorisedPayments.bullet4.subtext2 = if before 6 April 2006 you were allowed to take your pension before age 55
+pensions.agent.details.understandingUnauthorisedPayments.bullet4.subtext2 = if before 6 April 2006 your client was allowed to take their pension before age 55
+pensions.details.understandingUnauthorisedPayments.p2 = Certain movements of pension funds within a pension scheme are also unauthorised payments.
+pensions.details.understandingUnauthorisedPayments.p2.linkText = Learn more about unauthorised payments from pension schemes
+pensions.details.understandingShortService.summary = Understanding short service refunds
+pensions.details.understandingShortService.p = If you left an employer’s pension scheme after fewer than 2 years, you may have received a refund of your contributions. This is known as a short service refund.
+pensions.agent.details.understandingShortService.p = If your client left an employer’s pension scheme after fewer than 2 years, they may have received a refund of their contributions. This is known as a short service refund.
+pensions.legend = Did you get any income from pensions?
+pensions.agent.legend = Did your client get any income from pensions?
+pensions.statePension = State Pension
+pensions.agent.statePension = State Pension
+pensions.otherUkPensions = Other UK pensions (occupational and private)
+pensions.agent.otherUkPensions = Other UK pensions (occupational and private)
+pensions.unauthorisedPayments = Unauthorised payments from pension schemes
+pensions.agent.unauthorisedPayments = Unauthorised payments from pension schemes
+pensions.shortServiceRefunds = Short service refunds from pensions
+pensions.agent.shortServiceRefunds = Short service refunds from pensions
+pensions.nonUkPensions = Non-UK pensions
+pensions.agent.nonUkPensions = Non-UK pensions
+pensions.noPensions = No, I did not get any income from pensions
+pensions.agent.noPensions = No, my client did not get any income from pensions
+pensions.error.required = Select if you got any income from pensions, or ‘No, I did not get any income from pensions’
+pensions.agent.error.required = Select if your client got any income from pensions, or ‘No, my client did not get any income from pensions’
+pensions.checkYourAnswersLabel = pensions
+pensions.change.hidden = Pensions
+
 rentalIncome.title = Rental income from property
 rentalIncome.agent.title = Rental income from property
 rentalIncome.heading = Rental income from property
@@ -331,7 +370,6 @@ rentalIncome.checkYourAnswersLabel = rentalIncome
 rentalIncome.error.required = Select if you got rental income from UK property, Non-UK property or ‘No, I did not get rental income from property’
 rentalIncome.agent.error.required = Select if your client got rental income from UK property, Non-UK property or ‘No, my client did not get rental income from property’
 rentalIncome.change.hidden = RentalIncome
-
 
 jobseekersAllowance.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
 jobseekersAllowance.agent.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth

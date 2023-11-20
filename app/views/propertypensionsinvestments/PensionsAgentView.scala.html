@@ -15,16 +15,58 @@
  *@
 
 @import models.propertypensionsinvestments.Pensions
+@import viewmodels.LegendSize
+@import components._
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    list: BulletList,
+    link: Link,
+    paragraph: ParagraphBody,
+    config: FrontendAppConfig
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@unauthorisedPayments = @{ Call("GET", config.unauthorisedPaymentsUrl) }
+
+@insetContent1 = {
+    @paragraph(messages("pensions.agent.details.understandingIncomeFromPensions.p1"))
+    @paragraph(messages("pensions.details.understandingIncomeFromPensions.p2"))
+    @list(elements = Seq(
+        Html(messages("pensions.details.understandingIncomeFromPensions.bullet1")),
+        Html(messages("pensions.details.understandingIncomeFromPensions.bullet2")),
+        Html(messages("pensions.details.understandingIncomeFromPensions.bullet3")),
+        Html(messages("pensions.details.understandingIncomeFromPensions.bullet4"))
+    ))
+}
+
+@insetContent2 = {
+    @paragraph(messages("pensions.details.understandingUnauthorisedPayments.p1"))
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("pensions.agent.details.understandingUnauthorisedPayments.bullet1")</li>
+        <li>@messages("pensions.details.understandingUnauthorisedPayments.bullet2")</li>
+        <li>@messages("pensions.agent.details.understandingUnauthorisedPayments.bullet3")</li>
+        <li>@messages("pensions.details.understandingUnauthorisedPayments.bullet4")</li>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>@messages("pensions.agent.details.understandingUnauthorisedPayments.bullet4.subtext1")</li>
+            <li>@messages("pensions.agent.details.understandingUnauthorisedPayments.bullet4.subtext2")</li>
+        </ul>
+    </ul>
+    <p class="govuk-body">@messages("pensions.details.understandingUnauthorisedPayments.p2")
+        @link("unauthorisedPayments", messages("pensions.details.understandingUnauthorisedPayments.p2.linkText"), unauthorisedPayments, true)
+    </p>
+}
+
+@insetContent3 = {
+    @paragraph(messages("pensions.agent.details.understandingShortService.p"))
+}
 
 @layout(pageTitle = title(form, messages("pensions.agent.title")), taxYear = taxYear) {
 
@@ -34,14 +76,31 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "Pensions")))
         }
 
+        @heading(messages("pensions.agent.heading"))
+
+        @govukDetails(Details(
+            summary = Text(messages("pensions.details.understandingIncomeFromPensions.summary")),
+            content = HtmlContent(insetContent1)
+        ))
+
+        @govukDetails(Details(
+            summary = Text(messages("pensions.details.understandingUnauthorisedPayments.summary")),
+            content = HtmlContent(insetContent2)
+        ))
+
+        @govukDetails(Details(
+            summary = Text(messages("pensions.details.understandingShortService.summary")),
+            content = HtmlContent(insetContent3)
+        ))
+
         @govukCheckboxes(
             CheckboxesViewModel(
                 form     = form,
                 idPrefix = "Pensions",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("pensions.agent.heading")).asPageHeading(),
+                legend   = LegendViewModel(messages("pensions.agent.legend")).withSize(LegendSize.Medium),
                 items    = Pensions.agentCheckboxItems
-            )
+            ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )
 
         @govukButton(

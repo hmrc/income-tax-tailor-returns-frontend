@@ -26,21 +26,35 @@ sealed trait Pensions
 
 object Pensions extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with Pensions
-  case object Option2 extends WithName("option2") with Pensions
-  case object ExclusiveOption extends WithName("exclusive") with Pensions
+  case object StatePension extends WithName("statePension") with Pensions
+  case object OtherUkPensions extends WithName("otherUkPensions") with Pensions
+  case object UnauthorisedPayments  extends WithName("unauthorisedPayments") with Pensions
+  case object ShortServiceRefunds extends WithName("shortServiceRefunds") with Pensions
+  case object NonUkPensions extends WithName("nonUkPensions") with Pensions
+  case object Divider extends Pensions
+  case object NoPensions extends WithName("noPensions") with Pensions
 
   val values: Seq[Pensions] = Seq(
-    Option1,
-    Option2,
-    ExclusiveOption
+    StatePension,
+    OtherUkPensions,
+    UnauthorisedPayments,
+    ShortServiceRefunds,
+    NonUkPensions,
+    Divider,
+    NoPensions
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case NoPensions => CheckboxItemViewModel(
             content = Text(messages(s"pensions.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -60,7 +74,13 @@ object Pensions extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case NoPensions => CheckboxItemViewModel(
             content = Text(messages(s"pensions.agent.${value.toString}")),
             fieldId = "value",
             index = index,
