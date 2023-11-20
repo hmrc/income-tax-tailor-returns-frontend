@@ -26,7 +26,9 @@
     govukButton: GovukButton,
     govukDetails: GovukDetails,
     heading: Heading1,
-    paragraph: ParagraphBody
+    paragraph: ParagraphBody,
+    config: FrontendAppConfig,
+    link: Link
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
@@ -39,7 +41,6 @@
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p1"))
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p2"))
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p3"))
-    @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4"))
 }
 
 @insetContent3 = {
@@ -96,7 +97,7 @@
                 form     = form,
                 idPrefix  = "UkDividendsSharesAndLoansFromLimitedCompanies",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("ukDividendsSharesAndLoansFromLimitedCompanies.legend")).asPageHeading(),
+                legend   = LegendViewModel(messages("ukDividendsSharesAndLoansFromLimitedCompanies.legend")).withSize(LegendSize.Medium),
                 items    = UkDividendsSharesAndLoansFromLimitedCompanies.checkboxItems
             ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )

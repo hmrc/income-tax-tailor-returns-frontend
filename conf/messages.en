@@ -548,30 +548,33 @@ nonUkInterestDividendsInsurance.error.required = Select nonUkInterestDividendsIn
 nonUkInterestDividendsInsurance.agent.error.required = Select nonUkInterestDividendsInsurance
 nonUkInterestDividendsInsurance.change.hidden = NonUkInterestDividendsInsurance
 
+#################################### uk Dividends Shares and Loans From Limited Companies ####################################
+
 ukDividendsSharesAndLoansFromLimitedCompanies.title = UK dividends, shares and loans from limited companies
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.title = UK dividends, shares and loans from limited companies
 ukDividendsSharesAndLoansFromLimitedCompanies.heading = UK dividends, shares and loans from limited companies
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.heading = UK dividends, shares and loans from limited companies
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.summary = Understanding dividends
-ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.p1 = You may get a dividend payment if you own shares in a company. Dividends can be cash or ‘stock’ (shares). You can earn a total of £1,000 from UK and non-UK dividends each year without paying tax. You must tell us about all of your dividend income, even if it’s less than £1,000. Learn more about tax on dividends (opens in a new tab)
+ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.p1 = You may get a dividend payment if you own shares in a company. Dividends can be cash or ‘stock’ (shares). You can earn a total of £1,000 from UK and non-UK dividends each year without paying tax. You must tell us about all of your dividend income, even if it’s less than £1,000.
+ukDividendsSharesAndLoansFromLimitedCompanies.detail.taxOnDividends.link = Learn more about tax on dividends (opens in a new tab)
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.summary = Understanding dividends from unit trusts or investment companies
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p1 = Investment trusts make money through buying and selling shares or assets in other companies.
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p2 = Unit trusts make money by buying and selling bonds or shares on the stock market. The fund is split into units which investors buy. A fund manager creates and cancels units when investors join and leave the trust.
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p3 = Open-ended investment companies are like unit trusts, but create and cancel shares, rather than units, when investors join or leave.
-ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4 = Find out more about authorised investment funds (opens in a new tab)
+ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4.link = Find out more about authorised investment funds (opens in a new tab)
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.summary = Understanding free or redeemable shares
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p1 = You can hold both free and redeemable shares.
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p2 = Redeemable shares are ones a company can buy back at an agreed price on a future date.
-ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p3 = Free additional shares are also known as 'bonus issues of securities'.
+ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p3 = Free additional shares are also known as ''bonus issues of securities''.
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingCloseCompanyLoans.summary = Understanding close company loans
-ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingCloseCompanyLoans.p1 = A close company is a limited company with 5 or fewer 'participators', or in which all the participators are also directors. If you get a loan or advance from a close company as a participator and the company releases or writes it off, it counts as your income.
+ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingCloseCompanyLoans.p1 = A close company is a limited company with 5 or fewer ''participators'', or in which all the participators are also directors. If you get a loan or advance from a close company as a participator and the company releases or writes it off, it counts as your income.
 ukDividendsSharesAndLoansFromLimitedCompanies.legend = Did you get any UK dividends, shares or loans?
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.legend = Did you get any UK dividends, shares or loans?
 ukDividendsSharesAndLoansFromLimitedCompanies.cashDividendsUkStocksAndShares = Cash dividends from UK stocks and shares
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.cashDividendsUkStocksAndShares = Cash dividends from UK stocks and shares
 ukDividendsSharesAndLoansFromLimitedCompanies.stockDividendsUkCompanies = Stock dividends from UK companies
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.stockDividendsUkCompanies = Stock dividends from UK companies
-ukDividendsSharesAndLoansFromLimitedCompanies.dividends.hint = You must include all dividends except for dividends from ISAs
+ukDividendsSharesAndLoansFromLimitedCompanies.dividends.hint = you must include all dividends except for dividends from ISAs
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.dividends.hint = you must include all dividends except for dividends from ISAs
 ukDividendsSharesAndLoansFromLimitedCompanies.dividendsUnitTrustsInvestmentCompanies = Dividends from unit trusts or investment companies
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.dividendsUnitTrustsInvestmentCompanies = Dividends from unit trusts or investment companies
@@ -584,8 +587,8 @@ ukDividendsSharesAndLoansFromLimitedCompanies.agent.noUkDividendsSharesOrLoans =
 ukDividendsSharesAndLoansFromLimitedCompanies.exclusive = Exclusive
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.exclusive = Exclusive
 ukDividendsSharesAndLoansFromLimitedCompanies.checkYourAnswersLabel = Did you get any UK dividends, shares or loans?
-ukDividendsSharesAndLoansFromLimitedCompanies.error.required = Select if you had any UK dividends, shares or loans, or No, I did not get any UK dividends, shares, or loans
-ukDividendsSharesAndLoansFromLimitedCompanies.agent.error.required = Select if your client had any UK dividends, shares or loans, or No, they did not have any UK dividends, shares or loans
+ukDividendsSharesAndLoansFromLimitedCompanies.error.required = Select if you had any UK dividends, shares or loans, or ''No, I did not get any UK dividends, shares, or loans''
+ukDividendsSharesAndLoansFromLimitedCompanies.agent.error.required = Select if your client had any UK dividends, shares or loans, or ''No, my client did not have any UK dividends, shares or loans''
 ukDividendsSharesAndLoansFromLimitedCompanies.change.hidden = UkDividendsSharesAndLoansFromLimitedCompanies
 
 ###################################  Payments into pensions ###########################################################################################
