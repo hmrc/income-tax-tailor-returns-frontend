@@ -390,3 +390,41 @@ jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employme
 jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, I did not get either of these state benefits’
 jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, my client did not get either of these state benefits’
 jobseekersAllowance.change.hidden = JobseekersAllowance
+
+###################################  UK interest ###########################################################################################
+
+ukInterest.title = UK interest
+ukInterest.agent.title = UK interest
+ukInterest.heading = UK interest
+ukInterest.agent.heading = UK interest
+ukInterest.details.interest.summary = Understanding interest
+ukInterest.agent.details.interest.summary = Understanding interest
+ukInterest.details.p1 = Do not include any interest from:
+ukInterest.agent.details.p1 = Do not include any interest from:
+ukInterest.details.bullet1 = Individual Savings Account (ISAs)
+ukInterest.details.bullet2 = Ulster Savings Certificates
+ukInterest.details.bullet3 = Save As You Earn schemes
+ukInterest.details.bullet4 = awards by UK courts for damages
+ukInterest.details.bullet5 = UK government securities (gilts)
+ukInterest.details.bullet6 = bonds, loan notes or securities issued by UK companies
+ukInterest.agent.details.bullet1 = Individual Savings Account (ISAs)
+ukInterest.agent.details.bullet2 = Ulster Savings Certificates
+ukInterest.agent.details.bullet3 = Save As You Earn schemes
+ukInterest.agent.details.bullet4 = awards by UK courts for damages
+ukInterest.agent.details.bullet5 = UK government securities (gilts)
+ukInterest.agent.details.bullet6 = bonds, loan notes or securities issued by UK companies
+ukInterest.legend = Did you get income from UK interest?
+ukInterest.agent.legend = Did your client get income from UK interest?
+
+ukInterest.fromUkBanks = Interest from UK banks and building societies
+ukInterest.fromUkTrustFunds = Interest from UK trust funds or bonds
+ukInterest.fromGiltEdged = Interest from gilt-edged or accrued income securities
+ukInterest.noInterest = No, I did not get any income from UK interest
+
+ukInterest.agent.fromUkBanks = Interest from UK banks and building societies
+ukInterest.agent.fromUkTrustFunds = Interest from UK trust funds or bonds
+ukInterest.agent.fromGiltEdged= Interest from gilt-edged or accrued income securities
+ukInterest.agent.noInterest = No, my client did not get any income from UK interest
+
+ukInterest.error.required = Select if you got income from UK interest, or 'No, I did not get any income from UK interest'
+ukInterest.agent.error.required = Select if your client got income from UK interest, or 'No, my client did not get any income from UK interest'

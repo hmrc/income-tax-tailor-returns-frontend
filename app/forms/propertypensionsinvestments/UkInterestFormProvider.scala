@@ -34,7 +34,7 @@ class UkInterestFormProvider @Inject() extends Mappings {
       }
     Form(
       "value" -> set(enumerable[UkInterest](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, UkInterest.ExclusiveOption.toString))
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, UkInterest.NoInterest.toString))
       )
     )
   }
