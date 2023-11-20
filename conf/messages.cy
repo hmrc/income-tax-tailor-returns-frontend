@@ -277,39 +277,7 @@ taxAvoidanceSchemes.agent.noAvoidance = Na, nid oedd fy nghleient yn rhan o unrh
 taxAvoidanceSchemes.error.required = Dewiswch pa gynlluniau arbed treth yr oeddech yn rhan ohonynt, neu dewiswch ‘Na, nid oeddwn yn rhan o unrhyw gynlluniau arbed treth’
 taxAvoidanceSchemes.agent.error.required = Dewiswch pa gynlluniau arbed treth yr oedd eich cleient yn rhan ohonynt, neu dewiswch ‘Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth’
 
-
-
-
-ukInsuranceGains.title = UK insurance gains
-ukInsuranceGains.agent.title = UK insurance gains
-ukInsuranceGains.legend = Did you make gains from UK insurance policies or voided ISAs?
-ukInsuranceGains.agent.legend = Did your client make gains from UK insurance policies or voided ISAs?
-ukInsuranceGains.summary = Understanding insurance gains
-ukInsuranceGains.p1 = The most common occasions you’ll make a gain are when:
-ukInsuranceGains.p2 = If the calculations which take place after these events show that a gain has been made, your insurer should send you a chargeable event certificate showing the gain.
-ukInsuranceGains.p3 = Life annuity contracts do not include pension annuities.
-ukInsuranceGains.agent.p1 = The most common occasions your client will make a gain are when:
-ukInsuranceGains.agent.p2 = If the calculations which take place after these events show that a gain has been made, your client’s insurer should send them a chargeable event certificate showing the gain.
-ukInsuranceGains.agent.p3 = Life annuity contracts do not include pension annuities.
-ukInsuranceGains.details.bullet1 = cash or other benefits were received on a full or part surrender of a policy
-ukInsuranceGains.details.bullet2 = a policy matured or was ended by the death of the life insured
-ukInsuranceGains.details.bullet3 = there was a sale or assignment of a UK policy, or part of a policy, for value
-ukInsuranceGains.details.bullet4 = the policy was a Personal Portfolio Bond, even if the insurer had not paid cash or other benefits during the year
-ukInsuranceGains.lifeInsurance = Life Insurance
-ukInsuranceGains.lifeAnnuity = Life Annuity
-ukInsuranceGains.capitalRedemption = Capital Redemption
-ukInsuranceGains.voidedISA = Voided ISA (a policy cancelled by your ISA manager)
-ukInsuranceGains.agent.lifeInsurance = Life Insurance
-ukInsuranceGains.agent.lifeAnnuity = Life Annuity
-ukInsuranceGains.agent.capitalRedemption = Capital Redemption
-ukInsuranceGains.agent.voidedISA = Voided ISA (a policy cancelled by your client’s ISA manager)
-ukInsuranceGains.none = No, I did not make any UK insurance gains
-ukInsuranceGains.agent.none = No, my client did not make any UK insurance gains
-ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
-ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or ‘No, I did not make any UK insurance gains’
-ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or ‘No, my client did not make any UK insurance gains’
 ###################################  Work And Benefits ###########################################################################################
-
 constructionIndustryScheme.title = Cynllun y Diwydiant Adeiladu (CIS)
 constructionIndustryScheme.agent.title = Cynllun y Diwydiant Adeiladu (CIS)
 constructionIndustryScheme.heading = A gawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog?
@@ -323,6 +291,26 @@ constructionIndustryScheme.agent.bullet1 = gwneud didyniadau a’u rhoi i CThEF
 constructionIndustryScheme.agent.bullet2 = rhoi datganiad misol i’ch cleient o daliadau a didyniadau
 constructionIndustryScheme.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog
 constructionIndustryScheme.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’i gyflog
+
+jobseekersAllowance.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.agent.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.heading = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.agent.heading = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.details.summary = Deall Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
+jobseekersAllowance.details.p = Nid oes modd hawlio Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth ar yr un pryd, ond mae’n bosibl eich bod wedi hawlio pob budd-dal ar adegau gwahanol yn ystod yr un flwyddyn dreth.
+jobseekersAllowance.agent.details.p = Nid oes modd hawlio Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth ar yr un pryd, ond mae’n bosibl bod eich cleient wedi hawlio pob budd-dal ar adegau gwahanol yn ystod yr un flwyddyn dreth.
+jobseekersAllowance.legend = A gawsoch Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau?
+jobseekersAllowance.agent.legend = A gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau?
+jobseekersAllowance.jsa = Lwfans Ceisio Gwaith
+jobseekersAllowance.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
+jobseekersAllowance.agent.jsa = Lwfans Ceisio Gwaith
+jobseekersAllowance.agent.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
+jobseekersAllowance.none = Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn
+jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r wladwriaeth hyn
+jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employment and Support Allowance
+jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, I did not get either of these state benefits’
+jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, my client did not get either of these state benefits’
+jobseekersAllowance.change.hidden = JobseekersAllowance
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
 
@@ -402,28 +390,6 @@ rentalIncome.error.required = Select if you got rental income from UK property, 
 rentalIncome.agent.error.required = Select if your client got rental income from UK property, Non-UK property or ‘No, my client did not get rental income from property’
 rentalIncome.change.hidden = RentalIncome
 
-jobseekersAllowance.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
-jobseekersAllowance.agent.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
-jobseekersAllowance.heading = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
-jobseekersAllowance.agent.heading = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
-jobseekersAllowance.details.summary = Deall Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
-jobseekersAllowance.details.p = Nid oes modd hawlio Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth ar yr un pryd, ond mae’n bosibl eich bod wedi hawlio pob budd-dal ar adegau gwahanol yn ystod yr un flwyddyn dreth.
-jobseekersAllowance.agent.details.p = Nid oes modd hawlio Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth ar yr un pryd, ond mae’n bosibl bod eich cleient wedi hawlio pob budd-dal ar adegau gwahanol yn ystod yr un flwyddyn dreth.
-jobseekersAllowance.legend = A gawsoch Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau?
-jobseekersAllowance.agent.legend = A gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau?
-jobseekersAllowance.jsa = Lwfans Ceisio Gwaith
-jobseekersAllowance.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
-jobseekersAllowance.agent.jsa = Lwfans Ceisio Gwaith
-jobseekersAllowance.agent.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
-jobseekersAllowance.none = Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn
-jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r wladwriaeth hyn
-jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employment and Support Allowance
-jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, I did not get either of these state benefits’
-jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, my client did not get either of these state benefits’
-jobseekersAllowance.change.hidden = JobseekersAllowance
-
-###################################  UK interest ###########################################################################################
-
 ukInterest.title = UK interest
 ukInterest.agent.title = UK interest
 ukInterest.heading = UK interest
@@ -446,16 +412,42 @@ ukInterest.agent.details.bullet5 = UK government securities (gilts)
 ukInterest.agent.details.bullet6 = bonds, loan notes or securities issued by UK companies
 ukInterest.legend = Did you get income from UK interest?
 ukInterest.agent.legend = Did your client get income from UK interest?
-
 ukInterest.fromUkBanks = Interest from UK banks and building societies
 ukInterest.fromUkTrustFunds = Interest from UK trust funds or bonds
 ukInterest.fromGiltEdged = Interest from gilt-edged or accrued income securities
 ukInterest.noInterest = No, I did not get any income from UK interest
-
 ukInterest.agent.fromUkBanks = Interest from UK banks and building societies
 ukInterest.agent.fromUkTrustFunds = Interest from UK trust funds or bonds
 ukInterest.agent.fromGiltEdged= Interest from gilt-edged or accrued income securities
 ukInterest.agent.noInterest = No, my client did not get any income from UK interest
-
 ukInterest.error.required = Select if you got income from UK interest, or 'No, I did not get any income from UK interest'
 ukInterest.agent.error.required = Select if your client got income from UK interest, or 'No, my client did not get any income from UK interest'
+
+ukInsuranceGains.title = UK insurance gains
+ukInsuranceGains.agent.title = UK insurance gains
+ukInsuranceGains.legend = Did you make gains from UK insurance policies or voided ISAs?
+ukInsuranceGains.agent.legend = Did your client make gains from UK insurance policies or voided ISAs?
+ukInsuranceGains.summary = Understanding insurance gains
+ukInsuranceGains.p1 = The most common occasions you’ll make a gain are when:
+ukInsuranceGains.p2 = If the calculations which take place after these events show that a gain has been made, your insurer should send you a chargeable event certificate showing the gain.
+ukInsuranceGains.p3 = Life annuity contracts do not include pension annuities.
+ukInsuranceGains.agent.p1 = The most common occasions your client will make a gain are when:
+ukInsuranceGains.agent.p2 = If the calculations which take place after these events show that a gain has been made, your client’s insurer should send them a chargeable event certificate showing the gain.
+ukInsuranceGains.agent.p3 = Life annuity contracts do not include pension annuities.
+ukInsuranceGains.details.bullet1 = cash or other benefits were received on a full or part surrender of a policy
+ukInsuranceGains.details.bullet2 = a policy matured or was ended by the death of the life insured
+ukInsuranceGains.details.bullet3 = there was a sale or assignment of a UK policy, or part of a policy, for value
+ukInsuranceGains.details.bullet4 = the policy was a Personal Portfolio Bond, even if the insurer had not paid cash or other benefits during the year
+ukInsuranceGains.lifeInsurance = Life Insurance
+ukInsuranceGains.lifeAnnuity = Life Annuity
+ukInsuranceGains.capitalRedemption = Capital Redemption
+ukInsuranceGains.voidedISA = Voided ISA (a policy cancelled by your ISA manager)
+ukInsuranceGains.agent.lifeInsurance = Life Insurance
+ukInsuranceGains.agent.lifeAnnuity = Life Annuity
+ukInsuranceGains.agent.capitalRedemption = Capital Redemption
+ukInsuranceGains.agent.voidedISA = Voided ISA (a policy cancelled by your client’s ISA manager)
+ukInsuranceGains.none = No, I did not make any UK insurance gains
+ukInsuranceGains.agent.none = No, my client did not make any UK insurance gains
+ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
+ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or ‘No, I did not make any UK insurance gains’
+ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or ‘No, my client did not make any UK insurance gains’

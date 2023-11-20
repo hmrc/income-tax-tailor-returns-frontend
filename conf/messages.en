@@ -380,21 +380,33 @@ taxableStateBenefits.agent.error.required = Select yes if taxableStateBenefits
 taxableStateBenefits.change.hidden = TaxableStateBenefits
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
-
-nonUkInterestDividendsInsurance.title = nonUkInterestDividendsInsurance
-nonUkInterestDividendsInsurance.agent.title = nonUkInterestDividendsInsurance
-nonUkInterestDividendsInsurance.heading = nonUkInterestDividendsInsurance
-nonUkInterestDividendsInsurance.agent.heading = nonUkInterestDividendsInsurance
-nonUkInterestDividendsInsurance.option1 = Option 1
-nonUkInterestDividendsInsurance.option2 = Option 2
-nonUkInterestDividendsInsurance.agent.option1 = Option 1
-nonUkInterestDividendsInsurance.agent.option2 = Option 2
-nonUkInterestDividendsInsurance.exclusive = Exclusive
-nonUkInterestDividendsInsurance.agent.exclusive = Exclusive
-nonUkInterestDividendsInsurance.checkYourAnswersLabel = nonUkInterestDividendsInsurance
-nonUkInterestDividendsInsurance.error.required = Select nonUkInterestDividendsInsurance
-nonUkInterestDividendsInsurance.agent.error.required = Select nonUkInterestDividendsInsurance
-nonUkInterestDividendsInsurance.change.hidden = NonUkInterestDividendsInsurance
+rentalIncome.title = Rental income from property
+rentalIncome.agent.title = Rental income from property
+rentalIncome.heading = Rental income from property
+rentalIncome.agent.heading = Rental income from property
+rentalIncome.details.understandingIncomeFromProperty = Understanding income from property
+rentalIncome.details.p = Income from property includes:
+rentalIncome.details.bullet1 = any UK rent you received, including for land
+rentalIncome.agent.details.bullet1 = any UK rent your client received, including for land
+rentalIncome.details.bullet2 = any non-UK rent you received, including for land
+rentalIncome.agent.details.bullet2 = any non-UK rent your client received, including for land
+rentalIncome.details.bullet3 = furnished holiday lettings in the UK or European Economic Area (EEA)
+rentalIncome.details.bullet4 = letting furnished rooms in your own home if you did not provide meals or other services
+rentalIncome.agent.details.bullet4 = letting furnished rooms in your client’s own home if they did not provide meals or other services
+rentalIncome.details.link = Check your UK residence status
+rentalIncome.agent.details.link = Check your client’s UK residence status
+rentalIncome.legend = Did you get rental income from property?
+rentalIncome.agent.legend = Did your client get rental income from property?
+rentalIncome.uk = UK property
+rentalIncome.nonUk = Non-UK property
+rentalIncome.none = No, I did not get rental income from property
+rentalIncome.agent.uk = UK property
+rentalIncome.agent.nonUk = Non-UK property
+rentalIncome.agent.none = No, my client did not get rental income from property
+rentalIncome.checkYourAnswersLabel = rentalIncome
+rentalIncome.error.required = Select if you got rental income from UK property, Non-UK property or ‘No, I did not get rental income from property’
+rentalIncome.agent.error.required = Select if your client got rental income from UK property, Non-UK property or ‘No, my client did not get rental income from property’
+rentalIncome.change.hidden = RentalIncome
 
 pensions.title = Income from pensions
 pensions.agent.title = Income from pensions
@@ -444,49 +456,6 @@ pensions.agent.error.required = Select if your client got any income from pensio
 pensions.checkYourAnswersLabel = pensions
 pensions.change.hidden = Pensions
 
-rentalIncome.title = Rental income from property
-rentalIncome.agent.title = Rental income from property
-rentalIncome.heading = Rental income from property
-rentalIncome.agent.heading = Rental income from property
-rentalIncome.details.understandingIncomeFromProperty = Understanding income from property
-rentalIncome.details.p = Income from property includes:
-rentalIncome.details.bullet1 = any UK rent you received, including for land
-rentalIncome.agent.details.bullet1 = any UK rent your client received, including for land
-rentalIncome.details.bullet2 = any non-UK rent you received, including for land
-rentalIncome.agent.details.bullet2 = any non-UK rent your client received, including for land
-rentalIncome.details.bullet3 = furnished holiday lettings in the UK or European Economic Area (EEA)
-rentalIncome.details.bullet4 = letting furnished rooms in your own home if you did not provide meals or other services
-rentalIncome.agent.details.bullet4 = letting furnished rooms in your client’s own home if they did not provide meals or other services
-rentalIncome.details.link = Check your UK residence status
-rentalIncome.agent.details.link = Check your client’s UK residence status
-rentalIncome.legend = Did you get rental income from property?
-rentalIncome.agent.legend = Did your client get rental income from property?
-rentalIncome.uk = UK property
-rentalIncome.nonUk = Non-UK property
-rentalIncome.none = No, I did not get rental income from property
-rentalIncome.agent.uk = UK property
-rentalIncome.agent.nonUk = Non-UK property
-rentalIncome.agent.none = No, my client did not get rental income from property
-rentalIncome.checkYourAnswersLabel = rentalIncome
-rentalIncome.error.required = Select if you got rental income from UK property, Non-UK property or ‘No, I did not get rental income from property’
-rentalIncome.agent.error.required = Select if your client got rental income from UK property, Non-UK property or ‘No, my client did not get rental income from property’
-rentalIncome.change.hidden = RentalIncome
-
-ukDividendsSharesLoans.title = ukDividendsSharesLoans
-ukDividendsSharesLoans.agent.title = ukDividendsSharesLoans
-ukDividendsSharesLoans.heading = ukDividendsSharesLoans
-ukDividendsSharesLoans.agent.heading = ukDividendsSharesLoans
-ukDividendsSharesLoans.option1 = Option 1
-ukDividendsSharesLoans.option2 = Option 2
-ukDividendsSharesLoans.agent.option1 = Option 1
-ukDividendsSharesLoans.agent.option2 = Option 2
-ukDividendsSharesLoans.exclusive = Exclusive
-ukDividendsSharesLoans.agent.exclusive = Exclusive
-ukDividendsSharesLoans.checkYourAnswersLabel = ukDividendsSharesLoans
-ukDividendsSharesLoans.error.required = Select ukDividendsSharesLoans
-ukDividendsSharesLoans.agent.error.required = Select ukDividendsSharesLoans
-ukDividendsSharesLoans.change.hidden = UkDividendsSharesLoans
-
 ukInsuranceGains.title = UK insurance gains
 ukInsuranceGains.agent.title = UK insurance gains
 ukInsuranceGains.legend = Did you make gains from UK insurance policies or voided ISAs?
@@ -516,24 +485,6 @@ ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
 ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or ‘No, I did not make any UK insurance gains’
 ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or ‘No, my client did not make any UK insurance gains’
 
-
-paymentsIntoPensions.title = paymentsIntoPensions
-paymentsIntoPensions.agent.title = paymentsIntoPensions
-paymentsIntoPensions.heading = paymentsIntoPensions
-paymentsIntoPensions.agent.heading = paymentsIntoPensions
-paymentsIntoPensions.option1 = Option 1
-paymentsIntoPensions.option2 = Option 2
-paymentsIntoPensions.agent.option1 = Option 1
-paymentsIntoPensions.agent.option2 = Option 2
-paymentsIntoPensions.exclusive = Exclusive
-paymentsIntoPensions.agent.exclusive = Exclusive
-paymentsIntoPensions.checkYourAnswersLabel = paymentsIntoPensions
-paymentsIntoPensions.error.required = Select paymentsIntoPensions
-paymentsIntoPensions.agent.error.required = Select paymentsIntoPensions
-paymentsIntoPensions.change.hidden = PaymentsIntoPensions
-
-###################################  UK interest ###########################################################################################
-
 ukInterest.title = UK interest
 ukInterest.agent.title = UK interest
 ukInterest.heading = UK interest
@@ -556,16 +507,60 @@ ukInterest.agent.details.bullet5 = UK government securities (gilts)
 ukInterest.agent.details.bullet6 = bonds, loan notes or securities issued by UK companies
 ukInterest.legend = Did you get income from UK interest?
 ukInterest.agent.legend = Did your client get income from UK interest?
-
 ukInterest.fromUkBanks = Interest from UK banks and building societies
 ukInterest.fromUkTrustFunds = Interest from UK trust funds or bonds
 ukInterest.fromGiltEdged = Interest from gilt-edged or accrued income securities
 ukInterest.noInterest = No, I did not get any income from UK interest
-
 ukInterest.agent.fromUkBanks = Interest from UK banks and building societies
 ukInterest.agent.fromUkTrustFunds = Interest from UK trust funds or bonds
 ukInterest.agent.fromGiltEdged= Interest from gilt-edged or accrued income securities
 ukInterest.agent.noInterest = No, my client did not get any income from UK interest
-
 ukInterest.error.required = Select if you got income from UK interest, or ‘No, I did not get any income from UK interest’
 ukInterest.agent.error.required = Select if your client got income from UK interest, or ‘No, my client did not get any income from UK interest’
+
+ukDividendsSharesLoans.title = ukDividendsSharesLoans
+ukDividendsSharesLoans.agent.title = ukDividendsSharesLoans
+ukDividendsSharesLoans.heading = ukDividendsSharesLoans
+ukDividendsSharesLoans.agent.heading = ukDividendsSharesLoans
+ukDividendsSharesLoans.option1 = Option 1
+ukDividendsSharesLoans.option2 = Option 2
+ukDividendsSharesLoans.agent.option1 = Option 1
+ukDividendsSharesLoans.agent.option2 = Option 2
+ukDividendsSharesLoans.exclusive = Exclusive
+ukDividendsSharesLoans.agent.exclusive = Exclusive
+ukDividendsSharesLoans.checkYourAnswersLabel = ukDividendsSharesLoans
+ukDividendsSharesLoans.error.required = Select ukDividendsSharesLoans
+ukDividendsSharesLoans.agent.error.required = Select ukDividendsSharesLoans
+ukDividendsSharesLoans.change.hidden = UkDividendsSharesLoans
+
+nonUkInterestDividendsInsurance.title = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.agent.title = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.heading = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.agent.heading = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.option1 = Option 1
+nonUkInterestDividendsInsurance.option2 = Option 2
+nonUkInterestDividendsInsurance.agent.option1 = Option 1
+nonUkInterestDividendsInsurance.agent.option2 = Option 2
+nonUkInterestDividendsInsurance.exclusive = Exclusive
+nonUkInterestDividendsInsurance.agent.exclusive = Exclusive
+nonUkInterestDividendsInsurance.checkYourAnswersLabel = nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.error.required = Select nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.agent.error.required = Select nonUkInterestDividendsInsurance
+nonUkInterestDividendsInsurance.change.hidden = NonUkInterestDividendsInsurance
+
+###################################  Payments into pensions ###########################################################################################
+
+paymentsIntoPensions.title = paymentsIntoPensions
+paymentsIntoPensions.agent.title = paymentsIntoPensions
+paymentsIntoPensions.heading = paymentsIntoPensions
+paymentsIntoPensions.agent.heading = paymentsIntoPensions
+paymentsIntoPensions.option1 = Option 1
+paymentsIntoPensions.option2 = Option 2
+paymentsIntoPensions.agent.option1 = Option 1
+paymentsIntoPensions.agent.option2 = Option 2
+paymentsIntoPensions.exclusive = Exclusive
+paymentsIntoPensions.agent.exclusive = Exclusive
+paymentsIntoPensions.checkYourAnswersLabel = paymentsIntoPensions
+paymentsIntoPensions.error.required = Select paymentsIntoPensions
+paymentsIntoPensions.agent.error.required = Select paymentsIntoPensions
+paymentsIntoPensions.change.hidden = PaymentsIntoPensions
