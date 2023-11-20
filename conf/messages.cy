@@ -343,8 +343,6 @@ pensions.agent.error.required = Select if your client got any income from pensio
 pensions.checkYourAnswersLabel = pensions
 pensions.change.hidden = Pensions
 
-###################################  Income From Property Pensions Investments ###########################################################################################
-
 rentalIncome.title = Rental income from property
 rentalIncome.agent.title = Rental income from property
 rentalIncome.heading = Rental income from property
@@ -372,7 +370,6 @@ rentalIncome.checkYourAnswersLabel = rentalIncome
 rentalIncome.error.required = Select if you got rental income from UK property, Non-UK property or ‘No, I did not get rental income from property’
 rentalIncome.agent.error.required = Select if your client got rental income from UK property, Non-UK property or ‘No, my client did not get rental income from property’
 rentalIncome.change.hidden = RentalIncome
-
 
 jobseekersAllowance.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
 jobseekersAllowance.agent.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
