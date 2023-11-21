@@ -79,6 +79,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val understandingTaxAvoidanceUrl: String = configuration.get[String]("external-urls.understandingTaxAvoidance")
   val understandingRemunerationUrl: String = configuration.get[String]("external-urls.understandingRemuneration")
   val unauthorisedPaymentsUrl: String = configuration.get[String]("external-urls.unauthorisedPayments")
-
+  val taxOnDividendsUrl: String = configuration.get[String]("external-urls.taxOnDividends")
+  val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
 
 }

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package models
+package models.propertypensionsinvestments
 
+import models.{Enumerable, WithName}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, ExclusiveCheckbox}

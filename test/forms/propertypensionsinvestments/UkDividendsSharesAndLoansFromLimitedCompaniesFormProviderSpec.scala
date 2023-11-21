@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package models
+package forms.propertypensionsinvestments
 
 import generators.ModelGenerators
+import models.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompanies
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import org.scalatest.OptionValues
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.libs.json.{JsError, JsString, Json}
 
-class UkDividendsSharesAndLoansFromLimitedCompaniesSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyChecks with OptionValues with ModelGenerators {
+class UkDividendsSharesAndLoansFromLimitedCompaniesFormProviderSpec
+  extends AnyFreeSpec
+    with Matchers
+    with ScalaCheckPropertyChecks
+    with OptionValues
+    with ModelGenerators {
 
   "UkDividendsSharesAndLoansFromLimitedCompanies" - {
 
@@ -35,7 +41,8 @@ class UkDividendsSharesAndLoansFromLimitedCompaniesSpec extends AnyFreeSpec with
       forAll(gen) {
         ukDividendsSharesAndLoansFromLimitedCompanies =>
 
-          JsString(ukDividendsSharesAndLoansFromLimitedCompanies.toString).validate[UkDividendsSharesAndLoansFromLimitedCompanies].asOpt.value mustEqual ukDividendsSharesAndLoansFromLimitedCompanies
+          JsString(ukDividendsSharesAndLoansFromLimitedCompanies.toString)
+            .validate[UkDividendsSharesAndLoansFromLimitedCompanies].asOpt.value mustEqual ukDividendsSharesAndLoansFromLimitedCompanies
       }
     }
 

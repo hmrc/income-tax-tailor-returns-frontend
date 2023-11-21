@@ -548,7 +548,7 @@ nonUkInterestDividendsInsurance.error.required = Select nonUkInterestDividendsIn
 nonUkInterestDividendsInsurance.agent.error.required = Select nonUkInterestDividendsInsurance
 nonUkInterestDividendsInsurance.change.hidden = NonUkInterestDividendsInsurance
 
-#################################### uk Dividends Shares and Loans From Limited Companies ####################################
+#################################### Uk Dividends Shares and Loans From Limited Companies ####################################
 
 ukDividendsSharesAndLoansFromLimitedCompanies.title = UK dividends, shares and loans from limited companies
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.title = UK dividends, shares and loans from limited companies
@@ -556,12 +556,12 @@ ukDividendsSharesAndLoansFromLimitedCompanies.heading = UK dividends, shares and
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.heading = UK dividends, shares and loans from limited companies
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.summary = Understanding dividends
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.p1 = You may get a dividend payment if you own shares in a company. Dividends can be cash or ‘stock’ (shares). You can earn a total of £1,000 from UK and non-UK dividends each year without paying tax. You must tell us about all of your dividend income, even if it’s less than £1,000.
-ukDividendsSharesAndLoansFromLimitedCompanies.detail.taxOnDividends.link = Learn more about tax on dividends (opens in a new tab)
+ukDividendsSharesAndLoansFromLimitedCompanies.detail.taxOnDividends.linkText = Learn more about tax on dividends (opens in a new tab)
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.summary = Understanding dividends from unit trusts or investment companies
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p1 = Investment trusts make money through buying and selling shares or assets in other companies.
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p2 = Unit trusts make money by buying and selling bonds or shares on the stock market. The fund is split into units which investors buy. A fund manager creates and cancels units when investors join and leave the trust.
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p3 = Open-ended investment companies are like unit trusts, but create and cancel shares, rather than units, when investors join or leave.
-ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4.link = Find out more about authorised investment funds (opens in a new tab)
+ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4.linkText = Find out more about authorised investment funds (opens in a new tab)
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.summary = Understanding free or redeemable shares
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p1 = You can hold both free and redeemable shares.
 ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p2 = Redeemable shares are ones a company can buy back at an agreed price on a future date.

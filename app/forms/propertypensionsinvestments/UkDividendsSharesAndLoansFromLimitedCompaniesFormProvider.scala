@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package forms
-
-import javax.inject.Inject
+package forms.propertypensionsinvestments
 
 import forms.mappings.Mappings
+import models.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompanies
 import play.api.data.Form
 import play.api.data.Forms.set
-import models.UkDividendsSharesAndLoansFromLimitedCompanies
+
+import javax.inject.Inject
 
 class UkDividendsSharesAndLoansFromLimitedCompaniesFormProvider @Inject() extends Mappings {
 

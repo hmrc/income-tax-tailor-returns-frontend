@@ -16,7 +16,7 @@
 
 @import viewmodels.LegendSize
 @import components._
-@import models.UkDividendsSharesAndLoansFromLimitedCompanies
+@import models.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompanies
 
 @this(
     layout: templates.Layout,
@@ -33,14 +33,23 @@
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
+@taxOnDividends = @{ Call("GET", config.taxOnDividendsUrl) }
+
+@authorisedInvestmentFunds = @{ Call("GET", config.authorisedInvestmentFundsUrl) }
+
 @insetContent1 = {
-    @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.p1"))
+    <p class="govuk-body">@messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.p1")
+        @link("taxOnDividends", messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.taxOnDividends.linkText"), taxOnDividends, true)
+    </p>
 }
 
 @insetContent2 = {
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p1"))
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p2"))
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p3"))
+    <p class="govuk-body">
+        @link("authorisedInvestmentFunds", messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4.linkText"), authorisedInvestmentFunds, true)
+    </p>
 }
 
 @insetContent3 = {
@@ -56,7 +65,7 @@
 
 @layout(pageTitle = title(form, messages("ukDividendsSharesAndLoansFromLimitedCompanies.title")), taxYear = taxYear) {
 
-    @formHelper(action = routes.UkDividendsSharesAndLoansFromLimitedCompaniesController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.propertypensionsinvestments.routes.UkDividendsSharesAndLoansFromLimitedCompaniesController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "UkDividendsSharesAndLoansFromLimitedCompanies")))

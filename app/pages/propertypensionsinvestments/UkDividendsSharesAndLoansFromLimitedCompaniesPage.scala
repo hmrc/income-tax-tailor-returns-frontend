@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package pages
+package pages.propertypensionsinvestments
 
-import models.UkDividendsSharesAndLoansFromLimitedCompanies
+import models.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompanies
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 case object UkDividendsSharesAndLoansFromLimitedCompaniesPage extends QuestionPage[Set[UkDividendsSharesAndLoansFromLimitedCompanies]] {

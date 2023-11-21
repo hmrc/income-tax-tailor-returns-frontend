@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.propertypensionsinvestments
 
 import base.SpecBase
-import forms.UkDividendsSharesAndLoansFromLimitedCompaniesFormProvider
-import models.{NormalMode, UkDividendsSharesAndLoansFromLimitedCompanies, UserAnswers, Done}
+import forms.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompaniesFormProvider
+import models.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompanies
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.UkDividendsSharesAndLoansFromLimitedCompaniesPage
+import pages.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompaniesPage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.UkDividendsSharesAndLoansFromLimitedCompaniesView
-import views.html.UkDividendsSharesAndLoansFromLimitedCompaniesAgentView
+import views.html.propertypensionsinvestments.{UkDividendsSharesAndLoansFromLimitedCompaniesAgentView, UkDividendsSharesAndLoansFromLimitedCompaniesView}
 
 import scala.concurrent.Future
 
@@ -38,7 +38,8 @@ class UkDividendsSharesAndLoansFromLimitedCompaniesControllerSpec extends SpecBa
 
   def onwardRoute = Call("GET", "/foo")
 
-  lazy val ukDividendsSharesAndLoansFromLimitedCompaniesRoute = routes.UkDividendsSharesAndLoansFromLimitedCompaniesController.onPageLoad(NormalMode, taxYear).url
+  lazy val ukDividendsSharesAndLoansFromLimitedCompaniesRoute =
+    routes.UkDividendsSharesAndLoansFromLimitedCompaniesController.onPageLoad(NormalMode, taxYear).url
 
   val formProvider = new UkDividendsSharesAndLoansFromLimitedCompaniesFormProvider()
   val form = formProvider(isAgent = false)
@@ -192,7 +193,7 @@ class UkDividendsSharesAndLoansFromLimitedCompaniesControllerSpec extends SpecBa
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
       }
     }
 
@@ -208,7 +209,7 @@ class UkDividendsSharesAndLoansFromLimitedCompaniesControllerSpec extends SpecBa
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
       }
     }
   }

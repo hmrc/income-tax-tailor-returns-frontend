@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.propertypensionsinvestments
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.UkDividendsSharesAndLoansFromLimitedCompaniesFormProvider
-import javax.inject.Inject
+import forms.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompaniesFormProvider
 import models.Mode
 import navigation.Navigator
-import pages.UkDividendsSharesAndLoansFromLimitedCompaniesPage
+import pages.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompaniesPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.UkDividendsSharesAndLoansFromLimitedCompaniesView
-import views.html.UkDividendsSharesAndLoansFromLimitedCompaniesAgentView
+import views.html.propertypensionsinvestments.{UkDividendsSharesAndLoansFromLimitedCompaniesAgentView, UkDividendsSharesAndLoansFromLimitedCompaniesView}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UkDividendsSharesAndLoansFromLimitedCompaniesController @Inject()(

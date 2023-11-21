@@ -18,8 +18,8 @@ package generators
 
 import models.pensions._
 import models.aboutyou._
-import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
 import models.propertypensionsinvestments._
+import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
 import org.scalacheck.{Arbitrary, Gen}
 
 trait ModelGenerators {

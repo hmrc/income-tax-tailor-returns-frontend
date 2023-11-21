@@ -16,7 +16,7 @@
 
 @import viewmodels.LegendSize
 @import components._
-@import models.UkDividendsSharesAndLoansFromLimitedCompanies
+@import models.propertypensionsinvestments.UkDividendsSharesAndLoansFromLimitedCompanies
 
 @this(
     layout: templates.Layout,
@@ -54,7 +54,7 @@
 
 @layout(pageTitle = title(form, messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.title")), taxYear = taxYear) {
 
-    @formHelper(action = routes.UkDividendsSharesAndLoansFromLimitedCompaniesController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.propertypensionsinvestments.routes.UkDividendsSharesAndLoansFromLimitedCompaniesController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "UkDividendsSharesAndLoansFromLimitedCompanies")))
