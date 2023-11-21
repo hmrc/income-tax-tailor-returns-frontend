@@ -23,23 +23,34 @@
     govukErrorSummary: GovukErrorSummary,
     govukRadios: GovukRadios,
     govukButton: GovukButton,
-    heading: Heading1
+    heading: Heading1,
+    list: BulletList,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("aboutYourWorkRadioPage.agent.title")), taxYear = taxYear) {
 
-    @formHelper(action = controllers.workandbenefits.routes.AboutYourWorkRadioPageController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.workandbenefits.routes.AboutYourWorkController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        @heading(messages("aboutYourWorkRadioPage.agent.title"))
+
+        <div class="govuk-inset-text">
+            @paragraph(messages("aboutYourWorkRadioPage.agent.p1"))
+            @list(Seq(
+                Html(messages("aboutYourWorkRadioPage.bullet1"))
+            ))
+        </div>
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("aboutYourWorkRadioPage.agent.heading")).asPageHeading()
+                legend = LegendViewModel(messages("aboutYourWorkRadioPage.agent.heading")).withSize(LegendSize.Medium)
             )
         )
 

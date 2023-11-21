@@ -18,6 +18,9 @@ package services
 
 import base.SpecBase
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
+import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
+import models.workandbenefits.AboutYourWork.Employed
+import models.workandbenefits.JobseekersAllowance.Jsa
 import models.{SectionState, UserAnswers}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
@@ -25,6 +28,7 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.aboutyou.FosterCarerPage
+import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 import play.api.test.Helpers.running
 
 class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
@@ -38,6 +42,10 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
   private val privateBetaEnabled = Map("features.privateBeta" -> "true")
 
   private val aboutYouCompleteInBeta = Some(UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value)
+
+  private val incomeFromWorkAndBenefitsComplete = Some(aboutYouCompleteInBeta.value.copy().set(AboutYourWorkPage, Set[AboutYourWork](Employed))
+    .flatMap(_.set(JobseekersAllowancePage, Set[JobseekersAllowance](Jsa)))
+    .success.value)
 
   ".getState must" - {
 
@@ -118,6 +126,38 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
 
           val model = service.getState(aboutYouCompleteInBeta)
           val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, CannotStartYet)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return incomeFromWork section as NotStarted when aboutYou section is complete and AboutYourWork value is not defined" in {
+        val application = applicationBuilder()
+          .configure(privateBetaEnabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
+
+          val model = service.getState(incomeFromWorkAndBenefitsComplete.get.remove(AboutYourWorkPage).toOption)
+          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, CannotStartYet)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return incomeFromWork section as Completed when values in incomeFromWork are defined and aboutYou section is complete" in {
+        val application = applicationBuilder()
+          .configure(privateBetaEnabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
+
+          val model = service.getState(incomeFromWorkAndBenefitsComplete)
+          val expectedResult = SectionState(Completed, Completed, CannotStartYet, CannotStartYet)
 
           model mustBe expectedResult
         }

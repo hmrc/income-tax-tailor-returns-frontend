@@ -24,31 +24,35 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.workandbenefits.AboutYourWorkRadioPagePage
+import pages.aboutyou.FosterCarerPage
+import pages.workandbenefits.AboutYourWorkRadioPage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.workandbenefits.{AboutYourWorkRadioPageView, AboutYourWorkRadioPageAgentView}
+import views.html.workandbenefits.{AboutYourWorkRadioPageAgentView, AboutYourWorkRadioPageView}
 
 import scala.concurrent.Future
 
 class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new AboutYourWorkRadioPageFormProvider()
-  val form = formProvider(isAgent = false)
-  val agentForm = formProvider(isAgent = true)
+  val form: Form[Boolean] = formProvider(isAgent = false)
+  val agentForm: Form[Boolean] = formProvider(isAgent = true)
 
-  lazy val aboutYourWorkRadioPageRoute = controllers.workandbenefits.routes.AboutYourWorkRadioPageController.onPageLoad(NormalMode, taxYear).url
+  val userAnswersWithFosterCarer: UserAnswers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
+
+  lazy val aboutYourWorkRadioPageRoute: String = controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url
 
   "AboutYourWorkRadioPage Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRadioPageRoute)
@@ -64,11 +68,10 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET for an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute
-        )
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute)
 
         val result = route(application, request).value
 
@@ -81,7 +84,9 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkRadioPagePage, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear)
+        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
+        .success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -99,13 +104,14 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkRadioPagePage, true).success.value
+      val userAnswers = UserAnswers(mtdItId, taxYear)
+        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
+        .success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute
-        )
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute)
 
         val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
 
@@ -116,14 +122,39 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to the next page when valid data is submitted" in {
+    "must redirect to the next page when true is submitted" in {
 
       val mockUserDataService = mock[UserDataService]
 
       when(mockUserDataService.set(any())(any())) thenReturn Future.successful(Done)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[UserDataService].toInstance(mockUserDataService)
+          )
+          .build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRadioPageRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to the next page when false is submitted" in {
+
+      val mockUserDataService = mock[UserDataService]
+
+      when(mockUserDataService.set(any())(any())) thenReturn Future.successful(Done)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[UserDataService].toInstance(mockUserDataService)
@@ -133,7 +164,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, aboutYourWorkRadioPageRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody(("value", "false"))
 
         val result = route(application, request).value
 
@@ -144,12 +175,11 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
 
       running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRadioPageRoute)
-            .withFormUrlEncodedBody(("value", ""))
+        val request = FakeRequest(POST, aboutYourWorkRadioPageRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
@@ -164,13 +194,11 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted for an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
 
       running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRadioPageRoute
-        )
-        .withFormUrlEncodedBody(("value", ""))
+        val request = FakeRequest(POST, aboutYourWorkRadioPageRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = agentForm.bind(Map("value" -> ""))
 
@@ -202,9 +230,8 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRadioPageRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+        val request = FakeRequest(POST, aboutYourWorkRadioPageRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 

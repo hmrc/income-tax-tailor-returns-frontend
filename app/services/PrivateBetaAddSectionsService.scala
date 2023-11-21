@@ -19,6 +19,7 @@ package services
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
 import models.{SectionState, TagStatus, UserAnswers}
 import pages.aboutyou.FosterCarerPage
+import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 
 class PrivateBetaAddSectionsService extends AddSectionsService {
   def getState(userAnswers: Option[UserAnswers]): SectionState = {
@@ -32,13 +33,23 @@ class PrivateBetaAddSectionsService extends AddSectionsService {
           NotStarted
         }
 
-        val incomeFromWork: TagStatus = if (aboutYou.isCompleted) {
-          NotStarted
-        } else {
-          CannotStartYet
+        val incomeFromWorkDependentStates: IncomeFromWorkDependentStates = IncomeFromWorkDependentStates(
+          aboutYou.isCompleted,
+          ua.get(AboutYourWorkPage).isDefined,
+          ua.get(JobseekersAllowancePage).isDefined
+        )
+
+        val incomeFromWork: TagStatus = {
+          incomeFromWorkDependentStates match {
+            case IncomeFromWorkDependentStates(true, true, true) => Completed
+            case IncomeFromWorkDependentStates(true, _, _) => NotStarted
+            case _ => CannotStartYet
+          }
         }
 
         SectionState(aboutYou, incomeFromWork, CannotStartYet, CannotStartYet)
     }
   }
+
+  private case class IncomeFromWorkDependentStates(aboutYouSection: Boolean, aboutYourWorkValue: Boolean, jsaEsaValue: Boolean)
 }

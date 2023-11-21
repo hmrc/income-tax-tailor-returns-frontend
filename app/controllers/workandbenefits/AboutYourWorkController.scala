@@ -18,67 +18,134 @@ package controllers.workandbenefits
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.workandbenefits.AboutYourWorkFormProvider
+import forms.workandbenefits.{AboutYourWorkFormProvider, AboutYourWorkRadioPageFormProvider}
 import models.Mode
+import models.requests.DataRequest
+import models.workandbenefits.AboutYourWork
+import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
 import navigation.Navigator
-import pages.workandbenefits.AboutYourWorkPage
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import pages.aboutyou.FosterCarerPage
+import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
+import play.api.data.Form
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.libs.json.Format.GenericFormat
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkView}
+import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkRadioPageAgentView, AboutYourWorkRadioPageView, AboutYourWorkView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AboutYourWorkController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        userDataService: UserDataService,
-                                        navigator: Navigator,
-                                        identify: IdentifierActionProvider,
-                                        getData: DataRetrievalActionProvider,
-                                        requireData: DataRequiredActionProvider,
-                                        formProvider: AboutYourWorkFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: AboutYourWorkView,
-                                        agentView: AboutYourWorkAgentView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                         override val messagesApi: MessagesApi,
+                                         userDataService: UserDataService,
+                                         navigator: Navigator,
+                                         identify: IdentifierActionProvider,
+                                         getData: DataRetrievalActionProvider,
+                                         requireData: DataRequiredActionProvider,
+                                         formProvider: AboutYourWorkFormProvider,
+                                         radioFormProvider: AboutYourWorkRadioPageFormProvider,
+                                         val controllerComponents: MessagesControllerComponents,
+                                         view: AboutYourWorkView,
+                                         agentView: AboutYourWorkAgentView,
+                                         radioView: AboutYourWorkRadioPageView,
+                                         agentRadioView: AboutYourWorkRadioPageAgentView
+                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def form(isAgent: Boolean) = formProvider(isAgent)
+  def form(isAgent: Boolean): Form[Set[AboutYourWork]] = formProvider(isAgent)
+
+  def radioForm(isAgent: Boolean): Form[Boolean] = radioFormProvider(isAgent)
 
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
-    implicit request =>
 
-      val preparedForm = request.userAnswers.get(AboutYourWorkPage) match {
-        case None => form(request.isAgent)
-        case Some(value) => form(request.isAgent).fill(value)
-      }
+      implicit request =>
 
-      if (request.isAgent) {
-        Ok(agentView(preparedForm, mode, taxYear))
-      } else {
-        Ok(view(preparedForm, mode, taxYear))
-      }
-  }
+        val isFosterCarer: Boolean = getFosterCarerStatus(request)
+
+        if (isFosterCarer) {
+
+          val preparedRadioForm = request.userAnswers.get(AboutYourWorkRadioPage) match {
+            case None => radioForm(request.isAgent)
+            case Some(value) => radioForm(request.isAgent).fill(value)
+          }
+
+          getView(preparedRadioForm, isFosterCarer, mode, taxYear, Ok)
+
+        } else {
+
+          val preparedCheckboxForm = request.userAnswers.get(AboutYourWorkPage) match {
+            case None => form(request.isAgent)
+            case Some(value) => form(request.isAgent).fill(value)
+          }
+
+          getView(preparedCheckboxForm, isFosterCarer, mode, taxYear, Ok)
+        }
+    }
+
 
   def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
-    implicit request =>
+      implicit request =>
 
-      form(request.isAgent).bindFromRequest().fold(
-        formWithErrors =>
-          if (request.isAgent) {
-            Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear)))
-          } else {
-            Future.successful(BadRequest(view(formWithErrors, mode, taxYear)))
-          },
+        val isFosterCarer: Boolean = getFosterCarerStatus(request)
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AboutYourWorkPage, value))
-            _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AboutYourWorkPage, mode, updatedAnswers))
-      )
+        if (isFosterCarer) {
+
+          radioForm(request.isAgent).bindFromRequest().fold(
+            formWithErrors =>
+              Future.successful(getView(formWithErrors, isFosterCarer, mode, taxYear, BadRequest)),
+
+            value => {
+              val aboutYourWork = if (value) {
+                Set[AboutYourWork](Employed, SelfEmployed)
+              } else {
+                Set[AboutYourWork](SelfEmployed)
+              }
+
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(AboutYourWorkRadioPage, value)
+                  .flatMap(_.set(AboutYourWorkPage, aboutYourWork)))
+                _ <- userDataService.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(AboutYourWorkRadioPage, mode, updatedAnswers))
+            }
+          )
+
+        } else {
+
+          form(request.isAgent).bindFromRequest().fold(
+            formWithErrors =>
+              Future.successful(getView(formWithErrors, isFosterCarer, mode, taxYear, BadRequest)),
+
+            value =>
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(AboutYourWorkPage, value))
+                _ <- userDataService.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(AboutYourWorkPage, mode, updatedAnswers))
+          )
+
+        }
+    }
+
+  private def getFosterCarerStatus(request: DataRequest[AnyContent]): Boolean = {
+    val isFosterCarer: Boolean = request.userAnswers.get(FosterCarerPage) match {
+      case Some(value) => value
+      case _ => false
+    }
+    isFosterCarer
+  }
+
+  private def getView[A](form: Form[A], isFosterCarer: Boolean, mode: Mode, taxYear: Int, status: Status)
+                        (implicit request: DataRequest[_], messages: Messages): Result = {
+
+    val refinedView = if (isFosterCarer) radioView(form, mode, taxYear)(request, messages) else view(form, mode, taxYear)(request, messages)
+    val refinedAgentView = if (isFosterCarer) agentRadioView(form, mode, taxYear)(request, messages) else agentView(form, mode, taxYear)(request, messages)
+
+    if (request.isAgent) {
+      status(refinedAgentView)
+    } else {
+      status(refinedView)
+    }
   }
 }

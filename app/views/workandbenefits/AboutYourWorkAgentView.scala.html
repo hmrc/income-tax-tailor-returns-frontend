@@ -25,8 +25,7 @@
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
     govukButton: GovukButton,
-    govukDetails: GovukDetails,
-    heading: Heading1
+    govukDetails: GovukDetails
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
@@ -39,14 +38,12 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "AboutYourWork")))
         }
 
-        @heading(messages("aboutYourWork.agent.title"))
-
         @govukCheckboxes(
             CheckboxesViewModel(
                 form     = form,
                 idPrefix = "AboutYourWork",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("aboutYourWork.agent.heading")).visuallyHidden(),
+                legend   = LegendViewModel(messages("aboutYourWork.agent.heading")).asPageHeading(LegendSize.Large),
                 items    = AboutYourWork.agentCheckboxItems
             ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )

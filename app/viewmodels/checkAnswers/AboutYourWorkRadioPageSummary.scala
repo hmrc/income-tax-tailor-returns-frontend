@@ -17,7 +17,7 @@
 package viewmodels.checkAnswers
 
 import models.{CheckMode, UserAnswers}
-import pages.workandbenefits.AboutYourWorkRadioPagePage
+import pages.workandbenefits.AboutYourWorkRadioPage
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
@@ -26,7 +26,7 @@ import viewmodels.implicits._
 object AboutYourWorkRadioPageSummary  {
 
   def row(answers: UserAnswers)(implicit messages: Messages): Option[SummaryListRow] =
-    answers.get(AboutYourWorkRadioPagePage).map {
+    answers.get(AboutYourWorkRadioPage).map {
       answer =>
 
         val value = if (answer) "site.yes" else "site.no"
@@ -35,7 +35,7 @@ object AboutYourWorkRadioPageSummary  {
           key     = "aboutYourWorkRadioPage.checkYourAnswersLabel",
           value   = ValueViewModel(value),
           actions = Seq(
-            ActionItemViewModel("site.change", controllers.workandbenefits.routes.AboutYourWorkRadioPageController.onPageLoad(CheckMode, answers.taxYear).url)
+            ActionItemViewModel("site.change", controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(CheckMode, answers.taxYear).url)
               .withVisuallyHiddenText(messages("aboutYourWorkRadioPage.change.hidden"))
           )
         )

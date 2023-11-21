@@ -278,6 +278,34 @@ taxAvoidanceSchemes.error.required = Dewiswch pa gynlluniau arbed treth yr oedde
 taxAvoidanceSchemes.agent.error.required = Dewiswch pa gynlluniau arbed treth yr oedd eich cleient yn rhan ohonynt, neu dewiswch ‘Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth’
 
 ###################################  Work And Benefits ###########################################################################################
+
+aboutYourWork.title = Pa fath o waith roeddech yn ei wneud?
+aboutYourWork.agent.title = Pa fath o waith roedd eich cleient yn ei wneud?
+aboutYourWork.heading = Pa fath o waith roeddech yn ei wneud?
+aboutYourWork.agent.heading = Pa fath o waith roedd eich cleient yn ei wneud?
+aboutYourWork.employed = Cyflogedig (gan gynnwys gweithio oddi ar y gyflogres)
+aboutYourWork.selfEmployed = Hunangyflogedig
+aboutYourWork.employed.hint = Roeddech yn gweithio i rywun arall o dan gontract cyflogaeth ac roedd gennych hawliau megis tâl salwch a gwyliau blynyddol.
+aboutYourWork.selfEmployed.hint = Roeddech yn gweithio i chi eich hun ac roeddech yn anfonebu cleientiaid am y nwyddau neu’r gwasanaethau a ddarparoch.
+aboutYourWork.none = Dim un o’r uchod
+aboutYourWork.agent.employed = Cyflogedig (gan gynnwys gweithio oddi ar y gyflogres)
+aboutYourWork.agent.selfEmployed = Hunangyflogedig
+aboutYourWork.agent.none = Dim un o’r uchod
+aboutYourWork.employed.agent.hint = Roedd eich cleient yn gweithio i rywun arall o dan gontract cyflogaeth ac roedd ganddo hawliau megis tâl salwch a gwyliau blynyddol.
+aboutYourWork.selfEmployed.agent.hint = Roedd eich cleient yn gweithio i’w hun ac roedd yn anfonebu cleientiaid am y nwyddau neu’r gwasanaethau a ddarparodd.
+aboutYourWork.error.required = Select what you did for work
+aboutYourWork.agent.error.required = Select what your client did for work
+
+aboutYourWorkRadioPage.title = Ynglŷn â’ch gwaith
+aboutYourWorkRadioPage.agent.title = Ynglŷn â gwaith eich cleient
+aboutYourWorkRadioPage.heading = Were you employed?
+aboutYourWorkRadioPage.agent.heading = Was your client employed?
+aboutYourWorkRadioPage.p1 = Oherwydd roeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau, rydym wedi cynnwys yr adran ganlynol:
+aboutYourWorkRadioPage.agent.p1 = Oherwydd roedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau, rydym wedi cynnwys yr adran ganlynol:
+aboutYourWorkRadioPage.bullet1 = Hunangyflogedig
+aboutYourWorkRadioPage.error.required = Select yes if you were employed
+aboutYourWorkRadioPage.agent.error.required = Select yes if your client was employed
+
 constructionIndustryScheme.title = Cynllun y Diwydiant Adeiladu (CIS)
 constructionIndustryScheme.agent.title = Cynllun y Diwydiant Adeiladu (CIS)
 constructionIndustryScheme.heading = A gawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog?

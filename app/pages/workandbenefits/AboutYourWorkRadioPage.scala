@@ -19,9 +19,9 @@ package pages.workandbenefits
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object AboutYourWorkRadioPagePage extends QuestionPage[Boolean] {
+case object AboutYourWorkRadioPage extends QuestionPage[Boolean] {
 
-  override def path: JsPath = JsPath \ toString
+  override def path: JsPath = JsPath \"workAndBenefits"\ toString
 
-  override def toString: String = "aboutYourWorkRadioPage"
+  override def toString: String = "aboutYourWorkEmployed"
 }

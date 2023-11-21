@@ -32,7 +32,7 @@
 
 @layout(pageTitle = title(form, messages("aboutYourWorkRadioPage.title")), taxYear = taxYear) {
 
-    @formHelper(action = controllers.workandbenefits.routes.AboutYourWorkRadioPageController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.workandbenefits.routes.AboutYourWorkController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -41,10 +41,10 @@
         @heading(messages("aboutYourWorkRadioPage.title"))
 
         <div class="govuk-inset-text">
-        @paragraph(messages("aboutYourWorkRadioPage.p1"))
-        @list(elements = Seq(
-            Html(messages("aboutYourWorkRadioPage.bullet1"))
-        ))
+            @paragraph(messages("aboutYourWorkRadioPage.p1"))
+            @list(Seq(
+                Html(messages("aboutYourWorkRadioPage.bullet1"))
+            ))
         </div>
 
         @govukRadios(
