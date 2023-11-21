@@ -83,7 +83,9 @@ class UkDividendsSharesAndLoansFromLimitedCompaniesControllerSpec extends SpecBa
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(UkDividendsSharesAndLoansFromLimitedCompaniesPage, UkDividendsSharesAndLoansFromLimitedCompanies.values.toSet).success.value
+      val userAnswers =
+        UserAnswers(mtdItId, taxYear)
+          .set(UkDividendsSharesAndLoansFromLimitedCompaniesPage, UkDividendsSharesAndLoansFromLimitedCompanies.values.toSet).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -95,13 +97,16 @@ class UkDividendsSharesAndLoansFromLimitedCompaniesControllerSpec extends SpecBa
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(UkDividendsSharesAndLoansFromLimitedCompanies.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(form.fill(UkDividendsSharesAndLoansFromLimitedCompanies.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
 
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(UkDividendsSharesAndLoansFromLimitedCompaniesPage, UkDividendsSharesAndLoansFromLimitedCompanies.values.toSet).success.value
+      val userAnswers =
+        UserAnswers(mtdItId, taxYear)
+          .set(UkDividendsSharesAndLoansFromLimitedCompaniesPage, UkDividendsSharesAndLoansFromLimitedCompanies.values.toSet).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
@@ -113,7 +118,8 @@ class UkDividendsSharesAndLoansFromLimitedCompaniesControllerSpec extends SpecBa
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(UkDividendsSharesAndLoansFromLimitedCompanies.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(agentForm.fill(UkDividendsSharesAndLoansFromLimitedCompanies.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 

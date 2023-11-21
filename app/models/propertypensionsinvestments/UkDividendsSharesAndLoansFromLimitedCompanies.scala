@@ -101,13 +101,13 @@ object UkDividendsSharesAndLoansFromLimitedCompanies extends Enumerable.Implicit
             divider = messages("site.or")
           )
           case CashDividendsFromUkStocksAndShares => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.agent.${value.toString}")),
+            content = Text(messages(s"ukDividendsSharesAndLoansFromLimitedCompanies.agent.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
           ).withHint(Hint(content = Text(messages(s"ukDividendsSharesAndLoansFromLimitedCompanies.agent.dividends.hint"))))
           case StockDividendsFromUkCompanies => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.${value.toString}")),
+            content = Text(messages(s"ukDividendsSharesAndLoansFromLimitedCompanies.agent.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString

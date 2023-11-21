@@ -26,20 +26,30 @@
     govukButton: GovukButton,
     govukDetails: GovukDetails,
     heading: Heading1,
-    paragraph: ParagraphBody
+    paragraph: ParagraphBody,
+    config: FrontendAppConfig,
+    link: Link
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
+@taxOnDividends = @{ Call("GET", config.taxOnDividendsUrl) }
+
+@authorisedInvestmentFunds = @{ Call("GET", config.authorisedInvestmentFundsUrl) }
+
 @insetContent1 = {
-    @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.p1"))
+    <p class="govuk-body">@messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.p1")
+        @link("taxOnDividends", messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.taxOnDividends.linkText"), taxOnDividends, true)
+    </p>
 }
 
 @insetContent2 = {
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p1"))
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p2"))
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p3"))
-    @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4"))
+    <p class="govuk-body">
+        @link("authorisedInvestmentFunds", messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4.linkText"), authorisedInvestmentFunds, true)
+    </p>
 }
 
 @insetContent3 = {
@@ -95,7 +105,7 @@
                 form     = form,
                 idPrefix  = "UkDividendsSharesAndLoansFromLimitedCompanies",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.legend")).asPageHeading(),
+                legend   = LegendViewModel(messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.legend")).withSize(LegendSize.Medium),
                 items    = UkDividendsSharesAndLoansFromLimitedCompanies.agentCheckboxItems
             ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )
