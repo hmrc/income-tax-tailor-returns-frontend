@@ -34,7 +34,10 @@ class UkDividendsSharesAndLoansFromLimitedCompaniesFormProvider @Inject() extend
       }
     Form(
       "value" -> set(enumerable[UkDividendsSharesAndLoansFromLimitedCompanies](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, UkDividendsSharesAndLoansFromLimitedCompanies.NoUkDividendsSharesOrLoans.toString))
+        firstError(
+          nonEmptySet(error),
+          exclusiveItemInSet(error, UkDividendsSharesAndLoansFromLimitedCompanies.NoUkDividendsSharesOrLoans.toString)
+        )
       )
     )
   }

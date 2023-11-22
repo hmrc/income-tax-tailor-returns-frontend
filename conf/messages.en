@@ -548,8 +548,6 @@ nonUkInterestDividendsInsurance.error.required = Select nonUkInterestDividendsIn
 nonUkInterestDividendsInsurance.agent.error.required = Select nonUkInterestDividendsInsurance
 nonUkInterestDividendsInsurance.change.hidden = NonUkInterestDividendsInsurance
 
-#################################### Uk Dividends Shares and Loans From Limited Companies ####################################
-
 ukDividendsSharesAndLoansFromLimitedCompanies.title = UK dividends, shares and loans from limited companies
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.title = UK dividends, shares and loans from limited companies
 ukDividendsSharesAndLoansFromLimitedCompanies.heading = UK dividends, shares and loans from limited companies
@@ -574,8 +572,8 @@ ukDividendsSharesAndLoansFromLimitedCompanies.cashDividendsUkStocksAndShares = C
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.cashDividendsUkStocksAndShares = Cash dividends from UK stocks and shares
 ukDividendsSharesAndLoansFromLimitedCompanies.stockDividendsUkCompanies = Stock dividends from UK companies
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.stockDividendsUkCompanies = Stock dividends from UK companies
-ukDividendsSharesAndLoansFromLimitedCompanies.dividends.hint = you must include all dividends except for dividends from ISAs
-ukDividendsSharesAndLoansFromLimitedCompanies.agent.dividends.hint = you must include all dividends except for dividends from ISAs
+ukDividendsSharesAndLoansFromLimitedCompanies.dividends.hint = You must include all dividends except for dividends from ISAs.
+ukDividendsSharesAndLoansFromLimitedCompanies.agent.dividends.hint = You must include all dividends except for dividends from ISAs.
 ukDividendsSharesAndLoansFromLimitedCompanies.dividendsUnitTrustsInvestmentCompanies = Dividends from unit trusts or investment companies
 ukDividendsSharesAndLoansFromLimitedCompanies.agent.dividendsUnitTrustsInvestmentCompanies = Dividends from unit trusts or investment companies
 ukDividendsSharesAndLoansFromLimitedCompanies.freeOrRedeemableShares = Free or redeemable shares
