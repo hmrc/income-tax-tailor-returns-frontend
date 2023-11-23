@@ -293,8 +293,8 @@ aboutYourWork.agent.selfEmployed = Hunangyflogedig
 aboutYourWork.agent.none = Dim un o’r uchod
 aboutYourWork.employed.agent.hint = Roedd eich cleient yn gweithio i rywun arall o dan gontract cyflogaeth ac roedd ganddo hawliau megis tâl salwch a gwyliau blynyddol.
 aboutYourWork.selfEmployed.agent.hint = Roedd eich cleient yn gweithio i’w hun ac roedd yn anfonebu cleientiaid am y nwyddau neu’r gwasanaethau a ddarparodd.
-aboutYourWork.error.required = Select what you did for work
-aboutYourWork.agent.error.required = Select what your client did for work
+aboutYourWork.error.required = Select what you did for work or select ‘None of the above’
+aboutYourWork.agent.error.required = Select what your client did for work or select ‘None of the above’
 
 aboutYourWorkRadioPage.title = Ynglŷn â’ch gwaith
 aboutYourWorkRadioPage.agent.title = Ynglŷn â gwaith eich cleient

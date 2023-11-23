@@ -299,8 +299,8 @@ aboutYourWork.agent.selfEmployed = Self-employed
 aboutYourWork.agent.none = None of the above
 aboutYourWork.employed.agent.hint = Your client worked for somebody else under a contract of employment and had rights such as sick pay and annual leave.
 aboutYourWork.selfEmployed.agent.hint = Your client worked for themselves and invoiced clients for the goods or services they provided.
-aboutYourWork.error.required = Select what you did for work
-aboutYourWork.agent.error.required = Select what your client did for work
+aboutYourWork.error.required = Select what you did for work or select ‘None of the above’
+aboutYourWork.agent.error.required = Select what your client did for work or select ‘None of the above’
 
 aboutYourWorkRadioPage.title = About your work
 aboutYourWorkRadioPage.agent.title = About your client’s work
