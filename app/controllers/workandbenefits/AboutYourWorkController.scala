@@ -62,7 +62,9 @@ class AboutYourWorkController @Inject()(
 
       implicit request =>
 
-        val isFosterCarer: Boolean = getFosterCarerStatus(request)
+        val isFosterCarer: Boolean = request.userAnswers.get(FosterCarerPage).getOrElse(false)
+
+        def deriveView[A](form: Form[A], status: Status): Result = getView(isFosterCarer, mode, taxYear)(form, status)
 
         if (isFosterCarer) {
 
@@ -71,7 +73,7 @@ class AboutYourWorkController @Inject()(
             case Some(value) => radioForm(request.isAgent).fill(value)
           }
 
-          getView(preparedRadioForm, isFosterCarer, mode, taxYear, Ok)
+          deriveView(preparedRadioForm, Ok)
 
         } else {
 
@@ -80,7 +82,7 @@ class AboutYourWorkController @Inject()(
             case Some(value) => form(request.isAgent).fill(value)
           }
 
-          getView(preparedCheckboxForm, isFosterCarer, mode, taxYear, Ok)
+          deriveView(preparedCheckboxForm, Ok)
         }
     }
 
@@ -89,13 +91,15 @@ class AboutYourWorkController @Inject()(
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
       implicit request =>
 
-        val isFosterCarer: Boolean = getFosterCarerStatus(request)
+        val isFosterCarer: Boolean = request.userAnswers.get(FosterCarerPage).getOrElse(false)
+
+        def deriveView[A](form: Form[A], status: Status): Result = getView(isFosterCarer, mode, taxYear)(form, status)
 
         if (isFosterCarer) {
 
           radioForm(request.isAgent).bindFromRequest().fold(
             formWithErrors =>
-              Future.successful(getView(formWithErrors, isFosterCarer, mode, taxYear, BadRequest)),
+              Future.successful(deriveView(formWithErrors, BadRequest)),
 
             value => {
               val aboutYourWork = if (value) {
@@ -116,7 +120,7 @@ class AboutYourWorkController @Inject()(
 
           form(request.isAgent).bindFromRequest().fold(
             formWithErrors =>
-              Future.successful(getView(formWithErrors, isFosterCarer, mode, taxYear, BadRequest)),
+              Future.successful(deriveView(formWithErrors, BadRequest)),
 
             value =>
               for {
@@ -128,24 +132,14 @@ class AboutYourWorkController @Inject()(
         }
     }
 
-  private def getFosterCarerStatus(request: DataRequest[AnyContent]): Boolean = {
-    val isFosterCarer: Boolean = request.userAnswers.get(FosterCarerPage) match {
-      case Some(value) => value
-      case _ => false
-    }
-    isFosterCarer
-  }
-
-  private def getView[A](form: Form[A], isFosterCarer: Boolean, mode: Mode, taxYear: Int, status: Status)
+  private def getView[A](isFosterCarer: Boolean, mode: Mode, taxYear: Int)(form: Form[A], status: Status)
                         (implicit request: DataRequest[_], messages: Messages): Result = {
 
-    val refinedView = if (isFosterCarer) radioView(form, mode, taxYear)(request, messages) else view(form, mode, taxYear)(request, messages)
-    val refinedAgentView = if (isFosterCarer) agentRadioView(form, mode, taxYear)(request, messages) else agentView(form, mode, taxYear)(request, messages)
-
-    if (request.isAgent) {
-      status(refinedAgentView)
-    } else {
-      status(refinedView)
+    (request.isAgent, isFosterCarer) match {
+      case (true, true) => status(agentRadioView(form, mode, taxYear)(request, messages))
+      case (true, false) => status(agentView(form, mode, taxYear)(request, messages))
+      case (false, true) => status(radioView(form, mode, taxYear)(request, messages))
+      case (false, false) => status(view(form, mode, taxYear)(request, messages))
     }
   }
 }

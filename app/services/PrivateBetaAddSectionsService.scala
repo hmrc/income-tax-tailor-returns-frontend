@@ -33,14 +33,14 @@ class PrivateBetaAddSectionsService extends AddSectionsService {
           NotStarted
         }
 
-        val incomeFromWorkDependentStates: IncomeFromWorkDependentStates = IncomeFromWorkDependentStates(
+        val incomeFromWorkStates: IncomeFromWorkDependentStates = IncomeFromWorkDependentStates(
           aboutYou.isCompleted,
           ua.get(AboutYourWorkPage).isDefined,
           ua.get(JobseekersAllowancePage).isDefined
         )
 
         val incomeFromWork: TagStatus = {
-          incomeFromWorkDependentStates match {
+          incomeFromWorkStates match {
             case IncomeFromWorkDependentStates(true, true, true) => Completed
             case IncomeFromWorkDependentStates(true, _, _) => NotStarted
             case _ => CannotStartYet
@@ -51,5 +51,5 @@ class PrivateBetaAddSectionsService extends AddSectionsService {
     }
   }
 
-  private case class IncomeFromWorkDependentStates(aboutYouSection: Boolean, aboutYourWorkValue: Boolean, jsaEsaValue: Boolean)
+  private case class IncomeFromWorkDependentStates(aboutYouSection: Boolean, aboutYourWorkPage: Boolean, jsaEsaPage: Boolean)
 }
