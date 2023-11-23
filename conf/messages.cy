@@ -451,3 +451,26 @@ ukInsuranceGains.agent.none = No, my client did not make any UK insurance gains
 ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
 ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or ‘No, I did not make any UK insurance gains’
 ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or ‘No, my client did not make any UK insurance gains’
+
+###################################  Payments into pensions ###########################################################################################
+
+paymentsIntoPensions.title = Payments into pensions
+paymentsIntoPensions.agent.title = Payments into pensions
+paymentsIntoPensions.heading = Did you pay into any UK or non-UK pensions?
+paymentsIntoPensions.agent.heading = Did your client pay into any UK or non-UK pensions?
+paymentsIntoPensions.summary = Understanding overseas transfer charges
+paymentsIntoPensions.p1 = The overseas transfer charge is a tax paid when UK pension funds are transferred into a non-UK pension scheme.
+paymentsIntoPensions.link = Learn more about the overseas transfer charge
+paymentsIntoPensions.agent.p1 = The overseas transfer charge is a tax paid when UK pension funds are transferred into a non-UK pension scheme.
+paymentsIntoPensions.uk = Payments into UK pensions
+paymentsIntoPensions.uk.hint = do not include the State Pension
+paymentsIntoPensions.nonUk = Payments into non-UK pensions
+paymentsIntoPensions.overseas = Overseas transfer charges
+paymentsIntoPensions.agent.uk = Payments into UK pensions
+paymentsIntoPensions.agent.uk.hint = do not include the State Pension
+paymentsIntoPensions.agent.nonUk = Payments into non-UK pensions
+paymentsIntoPensions.agent.overseas = Overseas transfer charges
+paymentsIntoPensions.none = No, I did not pay into any UK or non-UK pensions
+paymentsIntoPensions.agent.none = No, my client did not pay into any UK or non-UK pensions
+paymentsIntoPensions.error.required = Select if you made Payments into UK pensions, Payments into non-UK pensions, Overseas transfer charges or, ‘No, I did not pay into any UK or non-UK pensions
+paymentsIntoPensions.agent.error.required = Select if your client made Payments into UK pensions, Payments into non-UK pensions, Overseas transfer charges or, ‘No, my client did not pay into any UK or non-UK pensions’
