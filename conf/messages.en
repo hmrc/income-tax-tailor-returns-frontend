@@ -568,5 +568,5 @@ paymentsIntoPensions.agent.nonUk = Payments into non-UK pensions
 paymentsIntoPensions.agent.overseas = Overseas transfer charges
 paymentsIntoPensions.none = No, I did not pay into any UK or non-UK pensions
 paymentsIntoPensions.agent.none = No, my client did not pay into any UK or non-UK pensions
-paymentsIntoPensions.error.required = Select if you made Payments into UK pensions, Payments into non-UK pensions, Overseas transfer charges or, ‘No, I did not pay into any UK or non-UK pensions
+paymentsIntoPensions.error.required = Select if you made Payments into UK pensions, Payments into non-UK pensions, Overseas transfer charges or, ‘No, I did not pay into any UK or non-UK pensions’
 paymentsIntoPensions.agent.error.required = Select if your client made Payments into UK pensions, Payments into non-UK pensions, Overseas transfer charges or, ‘No, my client did not pay into any UK or non-UK pensions’
