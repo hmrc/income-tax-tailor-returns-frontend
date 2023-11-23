@@ -27,8 +27,8 @@ sealed trait PaymentsIntoPensions
 
 object PaymentsIntoPensions extends Enumerable.Implicits {
 
-  case object Uk extends WithName("uk") with PaymentsIntoPensions
-  case object NonUk extends WithName("nonUk") with PaymentsIntoPensions
+  case object UkPensions extends WithName("ukPensions") with PaymentsIntoPensions
+  case object NonUkPensions extends WithName("nonUkPensions") with PaymentsIntoPensions
 
   case object Overseas extends WithName("overseas") with PaymentsIntoPensions
 
@@ -36,8 +36,8 @@ object PaymentsIntoPensions extends Enumerable.Implicits {
   case object No extends WithName("none") with PaymentsIntoPensions
 
   val values: Seq[PaymentsIntoPensions] = Seq(
-    Uk,
-    NonUk,
+    UkPensions,
+    NonUkPensions,
     Overseas,
     Divider,
     No
@@ -47,7 +47,7 @@ object PaymentsIntoPensions extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case Uk => CheckboxItemViewModel(
+          case UkPensions => CheckboxItemViewModel(
             content = Text (messages(s"paymentsIntoPensions.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -79,7 +79,7 @@ object PaymentsIntoPensions extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case Uk => CheckboxItemViewModel(
+          case UkPensions => CheckboxItemViewModel(
             content = Text(messages(s"paymentsIntoPensions.${value.toString}")),
             fieldId = "value",
             index = index,
