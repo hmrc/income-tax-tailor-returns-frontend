@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-package pages.aboutyou
+package models
 
-import models.UserAnswers
-import pages.QuestionPage
-import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
-import play.api.libs.json.JsPath
+import models.TagStatus.{CannotStartYet, Completed, NotStarted}
 
-import scala.util.Try
-
-case object FosterCarerPage extends QuestionPage[Boolean] {
-
-  override def path: JsPath = JsPath \"aboutYou"\ toString
-
-  override def toString: String = "fosterCarer"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case _ =>
-        userAnswers.remove(AboutYourWorkPage).flatMap(_.remove(AboutYourWorkRadioPage))
-    }
+case class IncomeFromWorkDependentStates(aboutYouSection: Boolean, aboutYourWorkPage: Boolean, jsaEsaPage: Boolean) {
+  def getStatus: TagStatus = {
+      this match {
+        case IncomeFromWorkDependentStates(true, true, true) => Completed
+        case IncomeFromWorkDependentStates(true, _, _) => NotStarted
+        case _ => CannotStartYet
+      }
+  }
 }
+

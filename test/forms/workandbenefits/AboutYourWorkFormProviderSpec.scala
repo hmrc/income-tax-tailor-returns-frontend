@@ -45,9 +45,9 @@ class AboutYourWorkFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       form,
-      AboutYourWork.ExclusiveOption.toString,
+      AboutYourWork.No.toString,
       fieldName,
-      AboutYourWork.Option1.toString,
+      AboutYourWork.Employed.toString,
       requiredKey
     )
   }
@@ -65,9 +65,9 @@ class AboutYourWorkFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       agentForm,
-      AboutYourWork.ExclusiveOption.toString,
+      AboutYourWork.No.toString,
       fieldName,
-      AboutYourWork.Option1.toString,
+      AboutYourWork.Employed.toString,
       requiredKey
     )
   }

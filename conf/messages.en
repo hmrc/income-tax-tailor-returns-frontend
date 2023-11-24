@@ -285,20 +285,34 @@ taxAvoidanceSchemes.agent.error.required = Select which tax avoidance schemes yo
 
 ###################################  Work And Benefits ###########################################################################################
 
-aboutYourWork.title = About Your Work
-aboutYourWork.agent.title = About Your Work
-aboutYourWork.heading = About Your Work
-aboutYourWork.agent.heading = About Your Work
-aboutYourWork.option1 = Option 1
-aboutYourWork.option2 = Option 2
-aboutYourWork.agent.option1 = Option 1
-aboutYourWork.agent.option2 = Option 2
-aboutYourWork.exclusive = Exclusive
-aboutYourWork.agent.exclusive = Exclusive
-aboutYourWork.checkYourAnswersLabel = About Your Work
-aboutYourWork.error.required = Select aboutYourWork
-aboutYourWork.agent.error.required = Select aboutYourWork
-aboutYourWork.change.hidden = AboutYourWork
+aboutYourWork.title = What did you do for work?
+aboutYourWork.agent.title = What did your client do for work?
+aboutYourWork.heading = What did you do for work?
+aboutYourWork.agent.heading = What did your client do for work?
+aboutYourWork.employed = Employed (including off-payroll working)
+aboutYourWork.selfEmployed = Self-employed
+aboutYourWork.employed.hint = You worked for somebody else under a contract of employment and had rights such as sick pay and annual leave.
+aboutYourWork.selfEmployed.hint = You worked for yourself and invoiced clients for the goods or services you provided.
+aboutYourWork.none = None of the above
+aboutYourWork.agent.employed = Employed (including off-payroll working)
+aboutYourWork.agent.selfEmployed = Self-employed
+aboutYourWork.agent.none = None of the above
+aboutYourWork.employed.agent.hint = Your client worked for somebody else under a contract of employment and had rights such as sick pay and annual leave.
+aboutYourWork.selfEmployed.agent.hint = Your client worked for themselves and invoiced clients for the goods or services they provided.
+aboutYourWork.error.required = Select what you did for work or select ‘None of the above’
+aboutYourWork.agent.error.required = Select what your client did for work or select ‘None of the above’
+
+aboutYourWorkRadioPage.title = About your work
+aboutYourWorkRadioPage.agent.title = About your client’s work
+aboutYourWorkRadioPage.heading = Were you employed?
+aboutYourWorkRadioPage.agent.heading = Was your client employed?
+aboutYourWorkRadioPage.p1 = Because you were a foster carer or shared lives carer, we’ve included the following section:
+aboutYourWorkRadioPage.agent.p1 = Because your client was a foster carer or shared lives carer, we’ve included the following section:
+aboutYourWorkRadioPage.bullet1 = Self-employed
+aboutYourWorkRadioPage.error.required = Select yes if you were employed
+aboutYourWorkRadioPage.agent.error.required = Select yes if your client was employed
+
+
 
 constructionIndustryScheme.title = Construction Industry Scheme (CIS)
 constructionIndustryScheme.agent.title = Construction Industry Scheme (CIS)

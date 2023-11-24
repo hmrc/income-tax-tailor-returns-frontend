@@ -18,32 +18,41 @@ package controllers.workandbenefits
 
 import base.SpecBase
 import controllers.routes
-import forms.workandbenefits.AboutYourWorkFormProvider
+import forms.workandbenefits.{AboutYourWorkFormProvider, AboutYourWorkRadioPageFormProvider}
 import models.workandbenefits.AboutYourWork
 import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import pages.workandbenefits.AboutYourWorkPage
+import pages.aboutyou.FosterCarerPage
+import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkView}
+import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkRadioPageAgentView, AboutYourWorkRadioPageView, AboutYourWorkView}
 
 import scala.concurrent.Future
 
 class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("GET", "/foo")
+  def onwardRoute: Call = Call("GET", "/foo")
 
-  lazy val aboutYourWorkRoute = controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url
+  lazy val aboutYourWorkRoute: String = controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url
 
   val formProvider = new AboutYourWorkFormProvider()
-  val form = formProvider(isAgent = false)
-  val agentForm = formProvider(isAgent = true)
+  val form: Form[Set[AboutYourWork]] = formProvider(isAgent = false)
+  val agentForm: Form[Set[AboutYourWork]] = formProvider(isAgent = true)
+
+  val radioFormProvider = new AboutYourWorkRadioPageFormProvider()
+  val radioForm: Form[Boolean] = radioFormProvider(isAgent = false)
+  val radioAgentForm: Form[Boolean] = radioFormProvider(isAgent = true)
+
+  val userAnswersWithFosterCarer: UserAnswers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
+
 
   "AboutYourWork Controller" - {
 
@@ -205,6 +214,199 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value[0]", AboutYourWork.values.head.toString))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+      }
+    }
+  }
+
+  "AboutYourWork Controller when Foster Carer is true" - {
+
+    "must return OK and the correct view for a GET" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRoute)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear)
+        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
+        .success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRoute)
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(radioForm.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear)
+        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
+        .success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRoute)
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(radioAgentForm.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to the next page when true is submitted" in {
+
+      val mockUserDataService = mock[UserDataService]
+
+      when(mockUserDataService.set(any())(any())) thenReturn Future.successful(Done)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[UserDataService].toInstance(mockUserDataService)
+          )
+          .build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRoute)
+          .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to the next page when false is submitted" in {
+
+      val mockUserDataService = mock[UserDataService]
+
+      when(mockUserDataService.set(any())(any())) thenReturn Future.successful(Done)
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[UserDataService].toInstance(mockUserDataService)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, aboutYourWorkRoute)
+            .withFormUrlEncodedBody(("value", "false"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRoute)
+          .withFormUrlEncodedBody(("value", ""))
+
+        val boundForm = radioForm.bind(Map("value" -> ""))
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRoute)
+          .withFormUrlEncodedBody(("value", ""))
+
+        val boundForm = radioAgentForm.bind(Map("value" -> ""))
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRoute)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+      }
+    }
+
+    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
