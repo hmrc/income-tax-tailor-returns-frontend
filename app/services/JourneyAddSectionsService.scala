@@ -17,7 +17,7 @@
 package services
 
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
-import models.{SectionState, TagStatus, UserAnswers}
+import models.{SectionState, TagStatus, UserAnswers, IncomeFromWorkDependentStates}
 import pages.aboutyou.TaxAvoidanceSchemesPage
 import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 
@@ -33,23 +33,13 @@ class JourneyAddSectionsService extends AddSectionsService {
           NotStarted
         }
 
-        val incomeFromWorkDependentStates: IncomeFromWorkDependentStates = IncomeFromWorkDependentStates(
+        val incomeFromWorkStates: IncomeFromWorkDependentStates = IncomeFromWorkDependentStates(
           aboutYou.isCompleted,
           ua.get(AboutYourWorkPage).isDefined,
           ua.get(JobseekersAllowancePage).isDefined
         )
 
-        val incomeFromWork: TagStatus = {
-          incomeFromWorkDependentStates match {
-            case IncomeFromWorkDependentStates(true, true, true) => Completed
-            case IncomeFromWorkDependentStates(true, _, _) => NotStarted
-            case _ => CannotStartYet
-          }
-        }
-
-        SectionState(aboutYou, incomeFromWork, CannotStartYet, CannotStartYet)
+        SectionState(aboutYou, incomeFromWorkStates.getStatus, CannotStartYet, CannotStartYet)
     }
   }
-
-  private case class IncomeFromWorkDependentStates(aboutYouSection: Boolean, aboutYourWorkValue: Boolean, jsaEsaValue: Boolean)
 }
