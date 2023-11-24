@@ -21,6 +21,7 @@ import models._
 import models.aboutyou.UkResidenceStatus
 import pages._
 import pages.aboutyou._
+import pages.propertypensionsinvestments._
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -33,6 +34,11 @@ class PrivateBetaNavigator @Inject()() extends Navigator {
     case YourResidenceStatusPage              => ua => controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
     case CharitableDonationsPage              => ua => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, ua.taxYear)
     case FosterCarerPage                      => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
+    case RentalIncomePage                     => ua => controllers.propertypensionsinvestments.routes.PensionsController.onPageLoad(NormalMode, ua.taxYear)
+    case PensionsPage                         => ua => controllers.propertypensionsinvestments.routes.UkInsuranceGainsController.onPageLoad(NormalMode, ua.taxYear)
+    case UkInsuranceGainsPage                 => ua => controllers.propertypensionsinvestments.routes.UkInterestController.onPageLoad(NormalMode, ua.taxYear)
+    case UkInterestPage                       => ua => controllers.propertypensionsinvestments.routes.UkDividendsSharesLoansController.onPageLoad(NormalMode, ua.taxYear)
+    case UkDividendsSharesLoansPage           => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
     case _                                    => ua => routes.IndexController.onPageLoad(ua.taxYear)
   }
 
