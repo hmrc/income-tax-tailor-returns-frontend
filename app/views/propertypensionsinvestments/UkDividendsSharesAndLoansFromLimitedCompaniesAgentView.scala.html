@@ -38,7 +38,7 @@
 @authorisedInvestmentFunds = @{ Call("GET", config.authorisedInvestmentFundsUrl) }
 
 @insetContent1 = {
-    <p class="govuk-body">@messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingDividends.p1")
+    <p class="govuk-body">@messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.detail.understandingDividends.p1")
         @link(
             "taxOnDividends",
             messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.taxOnDividends.linkText"),
@@ -63,13 +63,13 @@
 }
 
 @insetContent3 = {
-    @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p1"))
+    @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.detail.understandingFreeRedeemableShares.p1"))
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p2"))
     @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingFreeRedeemableShares.p3"))
 }
 
 @insetContent4 = {
-    @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.detail.understandingCloseCompanyLoans.p1"))
+    @paragraph(messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.detail.understandingCloseCompanyLoans.p1"))
 }
 
 @layout(pageTitle = title(form, messages("ukDividendsSharesAndLoansFromLimitedCompanies.agent.title")), taxYear = taxYear) {
