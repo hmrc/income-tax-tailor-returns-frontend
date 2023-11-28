@@ -14,17 +14,36 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+@import components._
+
+
 @import models.pensions.PaymentsIntoPensions
 
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
+    config: FrontendAppConfig,
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    list: BulletList,
+    link: Link,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@overseasTransferCharge = @{ Call("GET", config.overseasTransferChargeUrl)}
+
+@insetContent1 = {
+    <p class="govuk-body">
+        @messages("paymentsIntoPensions.agent.p1")
+        @link("overseas-pensions-pension-transfers", messages("paymentsIntoPensions.link"), overseasTransferCharge, true)
+    </p>
+}
 
 @layout(pageTitle = title(form, messages("paymentsIntoPensions.agent.title")), taxYear = taxYear) {
 
@@ -34,14 +53,22 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "PaymentsIntoPensions")))
         }
 
+        @heading(messages("paymentsIntoPensions.agent.title"))
+
+        @govukDetails(Details(
+            summary = Text(messages("paymentsIntoPensions.summary")),
+            content = HtmlContent(insetContent1)
+            )
+        )
+
         @govukCheckboxes(
             CheckboxesViewModel(
                 form     = form,
                 idPrefix = "PaymentsIntoPensions",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("paymentsIntoPensions.agent.heading")).asPageHeading(),
+                legend   = LegendViewModel(messages("paymentsIntoPensions.agent.heading")).withSize(LegendSize.Medium),
                 items    = PaymentsIntoPensions.agentCheckboxItems
-            )
+            ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )
 
         @govukButton(
