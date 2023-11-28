@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import viewmodels.LegendSize
+@import components._
 @import models.propertypensionsinvestments.UkDividendsSharesLoans
 
 @this(
@@ -21,10 +23,54 @@
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails,
+    heading: Heading1,
+    paragraph: ParagraphBody,
+    config: FrontendAppConfig,
+    link: Link
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+
+@taxOnDividends = @{ Call("GET", config.taxOnDividendsUrl) }
+
+@authorisedInvestmentFunds = @{ Call("GET", config.authorisedInvestmentFundsUrl) }
+
+@insetContent1 = {
+    <p class="govuk-body">@messages("ukDividendsSharesLoans.agent.detail.understandingDividends.p1")
+        @link(
+            "taxOnDividends",
+            messages("ukDividendsSharesLoans.detail.taxOnDividends.linkText"),
+            taxOnDividends,
+            true
+        )
+    </p>
+}
+
+@insetContent2 = {
+    @paragraph(messages("ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.p1"))
+    @paragraph(messages("ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.p2"))
+    @paragraph(messages("ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.p3"))
+    <p class="govuk-body">
+        @link(
+            "authorisedInvestmentFunds",
+            messages("ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4.linkText"),
+            authorisedInvestmentFunds,
+            true
+        )
+    </p>
+}
+
+@insetContent3 = {
+    @paragraph(messages("ukDividendsSharesLoans.agent.detail.understandingFreeRedeemableShares.p1"))
+    @paragraph(messages("ukDividendsSharesLoans.detail.understandingFreeRedeemableShares.p2"))
+    @paragraph(messages("ukDividendsSharesLoans.detail.understandingFreeRedeemableShares.p3"))
+}
+
+@insetContent4 = {
+    @paragraph(messages("ukDividendsSharesLoans.agent.detail.understandingCloseCompanyLoans.p1"))
+}
 
 @layout(pageTitle = title(form, messages("ukDividendsSharesLoans.agent.title")), taxYear = taxYear) {
 
@@ -34,14 +80,44 @@
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "UkDividendsSharesLoans")))
         }
 
+        @heading(messages("ukDividendsSharesLoans.agent.heading"))
+
+        @govukDetails(
+            Details(
+                summary = Text(messages("ukDividendsSharesLoans.detail.understandingDividends.summary")),
+                content = HtmlContent(insetContent1)
+            )
+        )
+
+        @govukDetails(
+            Details(
+                summary = Text(messages("ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.summary")),
+                content = HtmlContent(insetContent2)
+            )
+        )
+
+        @govukDetails(
+            Details(
+                summary = Text(messages("ukDividendsSharesLoans.detail.understandingFreeRedeemableShares.summary")),
+                content = HtmlContent(insetContent3)
+            )
+        )
+
+        @govukDetails(
+            Details(
+                summary = Text(messages("ukDividendsSharesLoans.detail.understandingCloseCompanyLoans.summary")),
+                content = HtmlContent(insetContent4)
+            )
+        )
+
         @govukCheckboxes(
             CheckboxesViewModel(
                 form     = form,
-                idPrefix = "UkDividendsSharesLoans",
+                idPrefix  = "UkDividendsSharesLoans",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("ukDividendsSharesLoans.agent.heading")).asPageHeading(),
+                legend   = LegendViewModel(messages("ukDividendsSharesLoans.agent.legend")).withSize(LegendSize.Medium),
                 items    = UkDividendsSharesLoans.agentCheckboxItems
-            )
+            ).withHint(Hint(content = Text(messages("site.hint.selectAll"))))
         )
 
         @govukButton(

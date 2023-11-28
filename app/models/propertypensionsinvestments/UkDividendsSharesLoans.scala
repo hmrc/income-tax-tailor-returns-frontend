@@ -18,6 +18,7 @@ package models.propertypensionsinvestments
 
 import models.{Enumerable, WithName}
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.Aliases.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, ExclusiveCheckbox}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import viewmodels.govuk.checkbox._
@@ -26,21 +27,47 @@ sealed trait UkDividendsSharesLoans
 
 object UkDividendsSharesLoans extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with UkDividendsSharesLoans
-  case object Option2 extends WithName("option2") with UkDividendsSharesLoans
-  case object ExclusiveOption extends WithName("exclusive") with UkDividendsSharesLoans
+  case object CashDividendsFromUkStocksAndShares extends WithName("cashDividendsUkStocksAndShares") with UkDividendsSharesLoans
+  case object StockDividendsFromUkCompanies extends WithName("stockDividendsUkCompanies") with UkDividendsSharesLoans
+  case object DividendsUnitTrustsInvestmentCompanies extends WithName("dividendsUnitTrustsInvestmentCompanies") with UkDividendsSharesLoans
+  case object FreeOrRedeemableShares extends WithName("freeOrRedeemableShares") with UkDividendsSharesLoans
+  case object CloseCompanyLoansWrittenOffReleased extends WithName("closeCompanyLoansWrittenOffReleased") with UkDividendsSharesLoans
+  case object Divider extends UkDividendsSharesLoans
+  case object NoUkDividendsSharesOrLoans extends WithName("noUkDividendsSharesOrLoans") with UkDividendsSharesLoans
 
   val values: Seq[UkDividendsSharesLoans] = Seq(
-    Option1,
-    Option2,
-    ExclusiveOption
+    CashDividendsFromUkStocksAndShares,
+    StockDividendsFromUkCompanies,
+    DividendsUnitTrustsInvestmentCompanies,
+    FreeOrRedeemableShares,
+    CloseCompanyLoansWrittenOffReleased,
+    Divider,
+    NoUkDividendsSharesOrLoans
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages("site.or")
+          )
+          case CashDividendsFromUkStocksAndShares => CheckboxItemViewModel(
+            content = Text(messages(s"ukDividendsSharesLoans.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"ukDividendsSharesLoans.dividends.hint"))))
+          case StockDividendsFromUkCompanies => CheckboxItemViewModel(
+            content = Text(messages(s"ukDividendsSharesLoans.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"ukDividendsSharesLoans.dividends.hint"))))
+          case NoUkDividendsSharesOrLoans => CheckboxItemViewModel(
             content = Text(messages(s"ukDividendsSharesLoans.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -48,7 +75,7 @@ object UkDividendsSharesLoans extends Enumerable.Implicits {
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text (messages(s"ukDividendsSharesLoans.${value.toString}")),
+            content = Text(messages(s"ukDividendsSharesLoans.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
@@ -60,15 +87,33 @@ object UkDividendsSharesLoans extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages("site.or")
+          )
+          case CashDividendsFromUkStocksAndShares => CheckboxItemViewModel(
+            content = Text(messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"ukDividendsSharesLoans.agent.dividends.hint"))))
+          case StockDividendsFromUkCompanies => CheckboxItemViewModel(
+            content = Text(messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"ukDividendsSharesLoans.agent.dividends.hint"))))
+          case NoUkDividendsSharesOrLoans => CheckboxItemViewModel(
             content = Text(messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
           )
-          case _ => CheckboxItemViewModel (
-            content = Text (messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
+          case _ => CheckboxItemViewModel(
+            content = Text(messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
