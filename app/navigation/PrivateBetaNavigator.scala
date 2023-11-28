@@ -30,15 +30,19 @@ import javax.inject.{Inject, Singleton}
 class PrivateBetaNavigator @Inject()() extends Navigator {
 
   override val normalRoutes: Page => UserAnswers => Call = {
+    // About you
     case UkResidenceStatusPage                => ukResidenceStatusRoute
     case YourResidenceStatusPage              => ua => controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
     case CharitableDonationsPage              => ua => controllers.aboutyou.routes.FosterCarerController.onPageLoad(NormalMode, ua.taxYear)
     case FosterCarerPage                      => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
+
+    // Income from property, pensions and investments
     case RentalIncomePage                     => ua => controllers.propertypensionsinvestments.routes.PensionsController.onPageLoad(NormalMode, ua.taxYear)
     case PensionsPage                         => ua => controllers.propertypensionsinvestments.routes.UkInsuranceGainsController.onPageLoad(NormalMode, ua.taxYear)
     case UkInsuranceGainsPage                 => ua => controllers.propertypensionsinvestments.routes.UkInterestController.onPageLoad(NormalMode, ua.taxYear)
     case UkInterestPage                       => ua => controllers.propertypensionsinvestments.routes.UkDividendsSharesLoansController.onPageLoad(NormalMode, ua.taxYear)
     case UkDividendsSharesLoansPage           => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
+
     case _                                    => ua => routes.IndexController.onPageLoad(ua.taxYear)
   }
 

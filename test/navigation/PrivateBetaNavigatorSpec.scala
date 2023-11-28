@@ -35,6 +35,8 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
     "in Normal mode" - {
 
+      // About you
+
       "must go from UkResidentStatus page to YourResidenceStatus page when no is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(UkResidenceStatusPage, UkResidenceStatus.NonUK).success.value
 
@@ -98,6 +100,8 @@ class PrivateBetaNavigatorSpec extends SpecBase {
 
         navigator.nextPage(FosterCarerPage, NormalMode, answers) mustBe expectedRoute
       }
+
+      // Income from property, pensions and investments
 
       "must go from RentalIncome page to Pensions page when any value is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, Set(RentalIncome.values.head)).success.value
