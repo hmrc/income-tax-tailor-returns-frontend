@@ -278,6 +278,34 @@ taxAvoidanceSchemes.error.required = Dewiswch pa gynlluniau arbed treth yr oedde
 taxAvoidanceSchemes.agent.error.required = Dewiswch pa gynlluniau arbed treth yr oedd eich cleient yn rhan ohonynt, neu dewiswch ‘Na, nid oedd fy nghleient yn rhan o unrhyw gynlluniau arbed treth’
 
 ###################################  Work And Benefits ###########################################################################################
+
+aboutYourWork.title = Pa fath o waith roeddech yn ei wneud?
+aboutYourWork.agent.title = Pa fath o waith roedd eich cleient yn ei wneud?
+aboutYourWork.heading = Pa fath o waith roeddech yn ei wneud?
+aboutYourWork.agent.heading = Pa fath o waith roedd eich cleient yn ei wneud?
+aboutYourWork.employed = Cyflogedig (gan gynnwys gweithio oddi ar y gyflogres)
+aboutYourWork.selfEmployed = Hunangyflogedig
+aboutYourWork.employed.hint = Roeddech yn gweithio i rywun arall o dan gontract cyflogaeth ac roedd gennych hawliau megis tâl salwch a gwyliau blynyddol.
+aboutYourWork.selfEmployed.hint = Roeddech yn gweithio i chi eich hun ac roeddech yn anfonebu cleientiaid am y nwyddau neu’r gwasanaethau a ddarparoch.
+aboutYourWork.none = Dim un o’r uchod
+aboutYourWork.agent.employed = Cyflogedig (gan gynnwys gweithio oddi ar y gyflogres)
+aboutYourWork.agent.selfEmployed = Hunangyflogedig
+aboutYourWork.agent.none = Dim un o’r uchod
+aboutYourWork.employed.agent.hint = Roedd eich cleient yn gweithio i rywun arall o dan gontract cyflogaeth ac roedd ganddo hawliau megis tâl salwch a gwyliau blynyddol.
+aboutYourWork.selfEmployed.agent.hint = Roedd eich cleient yn gweithio i’w hun ac roedd yn anfonebu cleientiaid am y nwyddau neu’r gwasanaethau a ddarparodd.
+aboutYourWork.error.required = Select what you did for work or select ‘None of the above’
+aboutYourWork.agent.error.required = Select what your client did for work or select ‘None of the above’
+
+aboutYourWorkRadioPage.title = Ynglŷn â’ch gwaith
+aboutYourWorkRadioPage.agent.title = Ynglŷn â gwaith eich cleient
+aboutYourWorkRadioPage.heading = Were you employed?
+aboutYourWorkRadioPage.agent.heading = Was your client employed?
+aboutYourWorkRadioPage.p1 = Oherwydd roeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau, rydym wedi cynnwys yr adran ganlynol:
+aboutYourWorkRadioPage.agent.p1 = Oherwydd roedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau, rydym wedi cynnwys yr adran ganlynol:
+aboutYourWorkRadioPage.bullet1 = Hunangyflogedig
+aboutYourWorkRadioPage.error.required = Select yes if you were employed
+aboutYourWorkRadioPage.agent.error.required = Select yes if your client was employed
+
 constructionIndustryScheme.title = Cynllun y Diwydiant Adeiladu (CIS)
 constructionIndustryScheme.agent.title = Cynllun y Diwydiant Adeiladu (CIS)
 constructionIndustryScheme.heading = A gawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog?
@@ -451,3 +479,26 @@ ukInsuranceGains.agent.none = No, my client did not make any UK insurance gains
 ukInsuranceGains.checkYourAnswersLabel = ukInsuranceGains
 ukInsuranceGains.error.required = Select if you made gains from UK insurance policies or voided ISAs, or ‘No, I did not make any UK insurance gains’
 ukInsuranceGains.agent.error.required = Select if your client made gains from UK insurance policies or voided ISAs, or ‘No, my client did not make any UK insurance gains’
+
+###################################  Payments into pensions ###########################################################################################
+
+paymentsIntoPensions.title = Taliadau i bensiynau
+paymentsIntoPensions.agent.title = Taliadau i bensiynau
+paymentsIntoPensions.heading =A wnaethoch dalu i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU?
+paymentsIntoPensions.agent.heading = A wnaeth eich cleient dalu i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU?
+paymentsIntoPensions.summary = Deall taliadau ar drosglwyddiadau tramor
+paymentsIntoPensions.p1 = Treth a dalir pan drosglwyddir cronfeydd pensiwn yn y DU i gynllun pensiwn sydd ddim yn y DU yw’r tâl ar drosglwyddiadau tramor.
+paymentsIntoPensions.link = Dysgwch ragor am daliadau ar drosglwyddiadau tramor
+paymentsIntoPensions.agent.p1 = Treth a dalir pan drosglwyddir cronfeydd pensiwn yn y DU i gynllun pensiwn sydd ddim yn y DU yw’r tâl ar drosglwyddiadau tramor.
+paymentsIntoPensions.ukPensions = Taliadau i bensiynau’r DU
+paymentsIntoPensions.uk.hint = peidiwch â chynnwys Pensiwn y Wladwriaeth
+paymentsIntoPensions.nonUkPensions = Taliadau i mewn i bensiynau sydd ddim yn y DU
+paymentsIntoPensions.overseas = Taliadau ar drosglwyddiadau tramor
+paymentsIntoPensions.agent.ukPensions = Taliadau i bensiynau’r DU
+paymentsIntoPensions.agent.uk.hint = peidiwch â chynnwys Pensiwn y Wladwriaeth
+paymentsIntoPensions.agent.nonUkPensions = Taliadau i mewn i bensiynau sydd ddim yn y DU
+paymentsIntoPensions.agent.overseas = Taliadau ar drosglwyddiadau tramor
+paymentsIntoPensions.none = Na, ni dalais i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU
+paymentsIntoPensions.agent.none = Na, ni dalodd fy nghleient i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU
+paymentsIntoPensions.error.required = Dewiswch a wnaethoch Daliadau i mewn i bensiynau’r DU, Taliadau i mewn i bensiynau sydd ddim yn y DU, Taliadau ar drosglwyddiadau tramor neu, ‘Na, ni dalais i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU’ 
+paymentsIntoPensions.agent.error.required = Dewiswch a wnaeth eich cleient Taliadau i mewn i bensiynau’r DU, Taliadau i mewn i i bensiynau sydd ddim yn y DU, Taliadau ar drosglwyddiadau tramor neu, ‘Na, ni dalodd fy nghleient i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU’

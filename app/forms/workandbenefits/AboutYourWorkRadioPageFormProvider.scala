@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package pages.aboutyou
+package forms.workandbenefits
 
-import models.UserAnswers
-import pages.QuestionPage
-import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
 
-import scala.util.Try
+import javax.inject.Inject
 
-case object FosterCarerPage extends QuestionPage[Boolean] {
+class AboutYourWorkRadioPageFormProvider @Inject() extends Mappings {
 
-  override def path: JsPath = JsPath \"aboutYou"\ toString
-
-  override def toString: String = "fosterCarer"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case _ =>
-        userAnswers.remove(AboutYourWorkPage).flatMap(_.remove(AboutYourWorkRadioPage))
-    }
+  def apply(isAgent: Boolean): Form[Boolean] = {
+    val error: String =
+      if (isAgent) {
+        "aboutYourWorkRadioPage.agent.error.required"
+      } else {
+        "aboutYourWorkRadioPage.error.required"
+      }
+    Form(
+      "value" -> boolean(error)
+    )
+  }
 }

@@ -14,6 +14,10 @@
  * limitations under the License.
  *@
 
+@import components._
+@import viewmodels.LegendSize
+
+
 @import models.workandbenefits.AboutYourWork
 
 @this(
@@ -21,7 +25,8 @@
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
     govukCheckboxes: GovukCheckboxes,
-    govukButton: GovukButton
+    govukButton: GovukButton,
+    govukDetails: GovukDetails
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
@@ -39,9 +44,9 @@
                 form     = form,
                 idPrefix = "AboutYourWork",
                 name     = "value[]",
-                legend   = LegendViewModel(messages("aboutYourWork.heading")).asPageHeading(),
+                legend   = LegendViewModel(messages("aboutYourWork.heading")).asPageHeading(LegendSize.Large),
                 items    = AboutYourWork.checkboxItems
-            )
+            ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
         )
 
         @govukButton(

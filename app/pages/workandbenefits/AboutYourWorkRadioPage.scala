@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package pages.aboutyou
+package pages.workandbenefits
 
-import models.UserAnswers
 import pages.QuestionPage
-import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
 import play.api.libs.json.JsPath
 
-import scala.util.Try
+case object AboutYourWorkRadioPage extends QuestionPage[Boolean] {
 
-case object FosterCarerPage extends QuestionPage[Boolean] {
+  override def path: JsPath = JsPath \"workAndBenefits"\ toString
 
-  override def path: JsPath = JsPath \"aboutYou"\ toString
-
-  override def toString: String = "fosterCarer"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case _ =>
-        userAnswers.remove(AboutYourWorkPage).flatMap(_.remove(AboutYourWorkRadioPage))
-    }
+  override def toString: String = "aboutYourWorkEmployed"
 }

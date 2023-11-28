@@ -17,8 +17,9 @@
 package services
 
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
-import models.{SectionState, TagStatus, UserAnswers}
+import models.{SectionState, TagStatus, UserAnswers, IncomeFromWorkDependentStates}
 import pages.aboutyou.FosterCarerPage
+import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 
 class PrivateBetaAddSectionsService extends AddSectionsService {
   def getState(userAnswers: Option[UserAnswers]): SectionState = {
@@ -32,13 +33,13 @@ class PrivateBetaAddSectionsService extends AddSectionsService {
           NotStarted
         }
 
-        val incomeFromWork: TagStatus = if (aboutYou.isCompleted) {
-          NotStarted
-        } else {
-          CannotStartYet
-        }
+        val incomeFromWorkStates: IncomeFromWorkDependentStates = IncomeFromWorkDependentStates(
+          aboutYou.isCompleted,
+          ua.get(AboutYourWorkPage).isDefined,
+          ua.get(JobseekersAllowancePage).isDefined
+        )
 
-        SectionState(aboutYou, incomeFromWork, CannotStartYet, CannotStartYet)
+        SectionState(aboutYou, incomeFromWorkStates.getStatus, CannotStartYet, CannotStartYet)
     }
   }
 }

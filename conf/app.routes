@@ -78,10 +78,10 @@ POST       /:taxYear/about-you/change-tax-avoidance-schemes                     
 
 #################       Work And Benefits pages      ##############################
 
-GET        /aboutYourWork/:taxYear                                                                                      controllers.workandbenefits.AboutYourWorkController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /aboutYourWork/:taxYear                                                                                      controllers.workandbenefits.AboutYourWorkController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changeAboutYourWork/:taxYear                                                                                controllers.workandbenefits.AboutYourWorkController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changeAboutYourWork/:taxYear                                                                                controllers.workandbenefits.AboutYourWorkController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/about-your-work                              controllers.workandbenefits.AboutYourWorkController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/about-your-work                              controllers.workandbenefits.AboutYourWorkController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/change-about-your-work                       controllers.workandbenefits.AboutYourWorkController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/change-about-your-work                       controllers.workandbenefits.AboutYourWorkController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /:taxYear/work-and-benefits/construction-industry-scheme                                                     controllers.workandbenefits.ConstructionIndustrySchemeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /:taxYear/work-and-benefits/construction-industry-scheme                                                     controllers.workandbenefits.ConstructionIndustrySchemeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
@@ -145,10 +145,10 @@ POST       /:taxYear/property-pensions-investments/uk-insurance-gains           
 GET        /:taxYear/property-pensions-investments/change-uk-insurance-gains                                            controllers.propertypensionsinvestments.UkInsuranceGainsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/property-pensions-investments/change-uk-insurance-gains                                            controllers.propertypensionsinvestments.UkInsuranceGainsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /paymentsIntoPensions/:taxYear                                                                               controllers.pensions.PaymentsIntoPensionsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /paymentsIntoPensions/:taxYear                                                                               controllers.pensions.PaymentsIntoPensionsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /changePaymentsIntoPensions/:taxYear                                                                         controllers.pensions.PaymentsIntoPensionsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /changePaymentsIntoPensions/:taxYear                                                                         controllers.pensions.PaymentsIntoPensionsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/payments-pensions                                                                                  controllers.pensions.PaymentsIntoPensionsController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/payments-pensions                                                                                  controllers.pensions.PaymentsIntoPensionsController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/change-payments-pensions                                                                           controllers.pensions.PaymentsIntoPensionsController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/change-payments-pensions                                                                           controllers.pensions.PaymentsIntoPensionsController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /:taxYear/property-pensions-investments/uk-interest                                                          controllers.propertypensionsinvestments.UkInterestController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /:taxYear/property-pensions-investments/uk-interest                                                          controllers.propertypensionsinvestments.UkInterestController.onSubmit(mode: Mode = NormalMode, taxYear: Int)

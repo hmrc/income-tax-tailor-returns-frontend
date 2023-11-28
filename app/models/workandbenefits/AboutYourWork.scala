@@ -20,38 +20,54 @@ import models.{Enumerable, WithName}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, ExclusiveCheckbox}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 import viewmodels.govuk.checkbox._
 
 sealed trait AboutYourWork
 
 object AboutYourWork extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with AboutYourWork
-  case object Option2 extends WithName("option2") with AboutYourWork
-  case object ExclusiveOption extends WithName("exclusive") with AboutYourWork
+  case object Employed extends WithName("employed") with AboutYourWork
+  case object SelfEmployed extends WithName("selfEmployed") with AboutYourWork
+
+  case object Divider extends AboutYourWork
+  case object No extends WithName("none") with AboutYourWork
 
   val values: Seq[AboutYourWork] = Seq(
-    Option1,
-    Option2,
-    ExclusiveOption
+    Employed,
+    SelfEmployed,
+    Divider,
+    No
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case Employed => CheckboxItemViewModel(
+            content = Text(messages(s"aboutYourWork.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"aboutYourWork.employed.hint"))))
+          case SelfEmployed => CheckboxItemViewModel(
+            content = Text(messages(s"aboutYourWork.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"aboutYourWork.selfEmployed.hint"))))
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"aboutYourWork.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel(
-            content = Text (messages(s"aboutYourWork.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
           )
         }
     }
@@ -60,18 +76,30 @@ object AboutYourWork extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
-            content = Text(messages(s"aboutYourWork.agent.${value.toString}")),
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case Employed => CheckboxItemViewModel(
+            content = Text(messages(s"aboutYourWork.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"aboutYourWork.employed.agent.hint"))))
+          case SelfEmployed => CheckboxItemViewModel(
+            content = Text(messages(s"aboutYourWork.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"aboutYourWork.selfEmployed.agent.hint"))))
+          case No => CheckboxItemViewModel(
+            content = Text(messages(s"aboutYourWork.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel (
-            content = Text (messages(s"aboutYourWork.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
           )
         }
     }

@@ -17,35 +17,41 @@
 @import components._
 @import viewmodels.LegendSize
 
-@import models.workandbenefits.AboutYourWork
-
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
     govukErrorSummary: GovukErrorSummary,
-    govukCheckboxes: GovukCheckboxes,
+    govukRadios: GovukRadios,
     govukButton: GovukButton,
-    govukDetails: GovukDetails
+    heading: Heading1,
+    list: BulletList,
+    paragraph: ParagraphBody
 )
 
 @(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("aboutYourWork.agent.title")), taxYear = taxYear) {
+@layout(pageTitle = title(form, messages("aboutYourWorkRadioPage.agent.title")), taxYear = taxYear) {
 
     @formHelper(action = controllers.workandbenefits.routes.AboutYourWorkController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
-            @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "AboutYourWork")))
+            @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @govukCheckboxes(
-            CheckboxesViewModel(
-                form     = form,
-                idPrefix = "AboutYourWork",
-                name     = "value[]",
-                legend   = LegendViewModel(messages("aboutYourWork.agent.heading")).asPageHeading(LegendSize.Large),
-                items    = AboutYourWork.agentCheckboxItems
-            ).withHint(Hint(content = Text(messages(s"site.hint.selectAll"))))
+        @heading(messages("aboutYourWorkRadioPage.agent.title"))
+
+        <div class="govuk-inset-text">
+            @paragraph(messages("aboutYourWorkRadioPage.agent.p1"))
+            @list(Seq(
+                Html(messages("aboutYourWorkRadioPage.bullet1"))
+            ))
+        </div>
+
+        @govukRadios(
+            RadiosViewModel.yesNo(
+                field = form("value"),
+                legend = LegendViewModel(messages("aboutYourWorkRadioPage.agent.heading")).withSize(LegendSize.Medium)
+            )
         )
 
         @govukButton(
