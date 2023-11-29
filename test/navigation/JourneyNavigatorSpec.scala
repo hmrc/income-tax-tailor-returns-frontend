@@ -20,10 +20,12 @@ import base.SpecBase
 import controllers.routes
 import models._
 import models.aboutyou._
+import models.pensions.PaymentsIntoPensions
 import pages._
 import pages.aboutyou._
 import pages.propertypensionsinvestments._
 import models.propertypensionsinvestments._
+import pages.pensions.PaymentsIntoPensionsPage
 
 import scala.concurrent.ExecutionContext
 
@@ -253,6 +255,15 @@ class JourneyNavigatorSpec extends SpecBase {
         val expectedRoute = routes.AddSectionsController.onPageLoad(taxYear)
 
         navigator.nextPage(UkDividendsSharesLoansPage, NormalMode, answers) mustBe expectedRoute
+      }
+
+      // Payments into pensions
+      "must go from PaymentsIntoPensions page to AddSections page when any value is selected" in {
+        val answers = UserAnswers(mtdItId, taxYear).set(PaymentsIntoPensionsPage, Set(PaymentsIntoPensions.values.head)).success.value
+
+        val expectedRoute = routes.AddSectionsController.onPageLoad(taxYear)
+
+        navigator.nextPage(PaymentsIntoPensionsPage, NormalMode, answers) mustBe expectedRoute
       }
 
       "must go from a page that doesn't exist in the route map to Index" in {

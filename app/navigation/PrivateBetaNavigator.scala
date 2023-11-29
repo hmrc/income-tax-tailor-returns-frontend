@@ -22,6 +22,7 @@ import models.aboutyou.UkResidenceStatus
 import pages._
 import pages.aboutyou._
 import pages.propertypensionsinvestments._
+import pages.pensions.PaymentsIntoPensionsPage
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}
@@ -43,11 +44,15 @@ class PrivateBetaNavigator @Inject()() extends Navigator {
     case UkInterestPage                       => ua => controllers.propertypensionsinvestments.routes.UkDividendsSharesLoansController.onPageLoad(NormalMode, ua.taxYear)
     case UkDividendsSharesLoansPage           => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
 
+
+    // Payments into pensions
+    case PaymentsIntoPensionsPage             => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
+
     case _                                    => ua => routes.IndexController.onPageLoad(ua.taxYear)
   }
 
   override val checkRouteMap: Page => UserAnswers => Call = {
-    case _ => _ => routes.IndexController.onPageLoad(2024)
+    case _ => ua => routes.IndexController.onPageLoad(ua.taxYear)
   }
 
   def ukResidenceStatusRoute(userAnswers: UserAnswers): Call = {
