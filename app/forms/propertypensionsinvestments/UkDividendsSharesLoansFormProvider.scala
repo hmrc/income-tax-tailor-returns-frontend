@@ -34,7 +34,7 @@ class UkDividendsSharesLoansFormProvider @Inject() extends Mappings {
       }
     Form(
       "value" -> set(enumerable[UkDividendsSharesLoans](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, UkDividendsSharesLoans.ExclusiveOption.toString))
+        firstError(nonEmptySet(error), exclusiveItemInSet(error, UkDividendsSharesLoans.NoUkDividendsSharesOrLoans.toString))
       )
     )
   }
