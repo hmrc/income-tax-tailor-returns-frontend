@@ -475,6 +475,46 @@ ukInsuranceGains.agent.none = Na, ni chafodd fy nghleient unrhyw enillion o yswi
 ukInsuranceGains.error.required = Dewiswch a gawsoch enillion o bolisïau yswiriant yn y DU neu gyfrifon ISA sydd wedi’u dirymu, neu dewiswch ‘Na, ni chefais unrhyw enillion o yswiriant yn y DU’
 ukInsuranceGains.agent.error.required = Dewiswch a gafodd eich cleient enillion o bolisïau yswiriant yn y DU neu gyfrifon ISA sydd wedi’u dirymu, neu dewiswch ‘Na, ni gafodd fy nghleient unrhyw enillion o yswiriant yn y DU’
 
+ukDividendsSharesLoans.title = Difidendau, cyfranddaliadau a benthyciadau yn y DU o gwmnïau cyfyngedig
+ukDividendsSharesLoans.agent.title = Difidendau, cyfranddaliadau a benthyciadau yn y DU o gwmnïau cyfyngedig
+ukDividendsSharesLoans.heading = Difidendau, cyfranddaliadau a benthyciadau yn y DU o gwmnïau cyfyngedig
+ukDividendsSharesLoans.agent.heading = Difidendau, cyfranddaliadau a benthyciadau yn y DU o gwmnïau cyfyngedig
+ukDividendsSharesLoans.detail.understandingDividends.summary = Deall difidendau
+ukDividendsSharesLoans.detail.understandingDividends.p1 = Efallai y cewch daliad difidend os ydych yn berchen ar gyfranddaliadau mewn cwmni. Gall difidendau fod yn arian parod neu ‘stoc’ (cyfranddaliadau). Gallwch ennill cyfanswm o £1,000 o ddifidendau yn y DU a difidendau sydd ddim yn y DU heb orfod talu treth. Mae’n rhaid i chi roi gwybod i ni am eich holl incwm o ddifidendau, hyd yn oed os yw’n llai na £1,000.
+ukDividendsSharesLoans.agent.detail.understandingDividends.p1 = Efallai bydd eich cleient yn cael daliad difidend os yw’n berchen ar gyfranddaliadau mewn cwmni. Gall difidendau fod yn arian parod neu ‘stoc’ (cyfranddaliadau). Gall eich cleient ennill cyfanswm o £1,000 o ddifidendau yn y DU a difidendau sydd ddim yn y DU heb orfod talu treth. Mae’n rhaid i’ch cleient roi gwybod i ni am ei holl incwm o ddifidendau, hyd yn oed os yw’n llai na £1,000.
+ukDividendsSharesLoans.detail.taxOnDividends.linkText = Dysgwch ragor am dreth ar ddifidendau
+ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.summary = Deall difidendau o ymddiriedolaethau unedol neu gwmnïau buddsoddi
+ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.p1 = Mae ymddiriedolaethau buddsoddi yn gwneud arian drwy brynu a gwerthu cyfranddaliadau neu asedion mewn cwmnïau eraill.
+ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.p2 = Mae ymddiriedolaeth unedol yn gwneud arian drwy brynu a gwerthu bondiau a chyfranddaliadau ar y farchnad stoc. Rhennir y gronfa yn unedau, ac mae’r buddsoddwyr yn prynu’r unedau hynny. Mae rheolwr cronfa yn creu ac yn canslo unedau pan fo buddsoddwyr yn ymuno neu’n gadael ymddiriedolaeth.
+ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.p3 = Mae cwmnïau buddsoddi penagored yn debyg i ymddiriedolaethau unedol, ond maent yn creu ac yn canslo cyfranddaliadau, yn hytrach nag unedau, pan fo buddsoddwyr yn ymuno neu’n gadael.
+ukDividendsSharesLoans.detail.understandingDividendsUnitTrustsInvestmentCompanies.p4.linkText = Dysgwch ragor am gronfeydd buddsoddi awdurdodedig
+ukDividendsSharesLoans.detail.understandingFreeRedeemableShares.summary = Deall cyfranddaliadau sy’n rhad ac am ddim neu gyfranddaliadau adbryn
+ukDividendsSharesLoans.detail.understandingFreeRedeemableShares.p1 = Gallwch ddal cyfranddaliadau sy’n rhad ac am ddim a chyfranddaliadau adbryn.
+ukDividendsSharesLoans.agent.detail.understandingFreeRedeemableShares.p1 = Gall eich cleient ddal cyfranddaliadau adbryn a chyfranddaliadau a gafodd yn rhad ac am ddim.
+ukDividendsSharesLoans.detail.understandingFreeRedeemableShares.p2 = Cyfranddaliadau y mae cwmnïau’n gallu prynu’n ôl yn y dyfodol am bris y cytunwyd arno yw ‘cyfranddaliadau adbryn’.
+ukDividendsSharesLoans.detail.understandingFreeRedeemableShares.p3 = Enw arall ar gyfranddaliadau ychwanegol a gawsoch yn rhad ac am ddim yw ‘dyroddiadau bonws o warantau’.
+ukDividendsSharesLoans.detail.understandingCloseCompanyLoans.summary = Deall benthyciadau gan gwmni caeedig
+ukDividendsSharesLoans.detail.understandingCloseCompanyLoans.p1 = Cwmni cyfyngedig sydd â 5 o gyfranddalwyr neu lai yw ‘cwmni caeedig’, neu gwmni cyfyngedig lle bo’r cyfranddalwyr i gyd hefyd yn gyfarwyddwyr.  Os cewch chi, fel cyfranogwr, fenthyciad neu flaenswm gan gwmni caeedig, a bod y cwmni’n rhyddhau neu’n diddymu’r benthyciad neu’r blaenswm, rydym yn ei gyfrif fel eich incwm.
+ukDividendsSharesLoans.agent.detail.understandingCloseCompanyLoans.p1 = Cwmni cyfyngedig sydd â 5 o gyfranddalwyr neu lai yw ‘cwmni caeedig’, neu gwmni cyfyngedig lle bo’r cyfranddalwyr i gyd hefyd yn gyfarwyddwyr. Os bydd eich cleient, fel cyfranogwr, yn cael benthyciad neu flaenswm gan gwmni caeedig, a bod y cwmni’n rhyddhau neu’n diddymu’r benthyciad neu’r blaenswm, rydym yn ei gyfrif fel incwm eich cleient.
+ukDividendsSharesLoans.legend = A gawsoch unrhyw ddifidendau, gyfranddaliadau neu fenthyciadau yn y DU?
+ukDividendsSharesLoans.agent.legend = A gafodd eich cleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU?
+ukDividendsSharesLoans.cashDividendsUkStocksAndShares = Difidendau arian parod o stociau a chyfranddaliadau yn y DU
+ukDividendsSharesLoans.agent.cashDividendsUkStocksAndShares = Difidendau arian parod o stociau a chyfranddaliadau yn y DU
+ukDividendsSharesLoans.stockDividendsUkCompanies = Difidendau stoc o gwmnïau yn y DU
+ukDividendsSharesLoans.agent.stockDividendsUkCompanies = Difidendau stoc o gwmnïau yn y DU
+ukDividendsSharesLoans.dividends.hint = mae’n rhaid i chi gynnwys pob difidend ar wahân i ddifidendau o gyfrifon ISA
+ukDividendsSharesLoans.agent.dividends.hint = mae’n rhaid i chi gynnwys pob difidend ar wahân i ddifidendau o gyfrifon ISA
+ukDividendsSharesLoans.dividendsUnitTrustsInvestmentCompanies = Difidendau o ymddiriedolaethau unedol neu gwmnïau buddsoddi
+ukDividendsSharesLoans.agent.dividendsUnitTrustsInvestmentCompanies = Difidendau o ymddiriedolaethau unedol neu gwmnïau buddsoddi
+ukDividendsSharesLoans.freeOrRedeemableShares = Cyfranddaliadau sy’n rhad ac am ddim neu gyfranddaliadau adbryn
+ukDividendsSharesLoans.agent.freeOrRedeemableShares = Cyfranddaliadau sy’n rhad ac am ddim neu gyfranddaliadau adbryn
+ukDividendsSharesLoans.closeCompanyLoansWrittenOffReleased = Benthyciadau gan gwmnïau caeedig a ddilëwyd neu a ryddhawyd
+ukDividendsSharesLoans.agent.closeCompanyLoansWrittenOffReleased = Benthyciadau gan gwmnïau caeedig a ddilëwyd neu a ryddhawyd
+ukDividendsSharesLoans.noUkDividendsSharesOrLoans = Na, ni chefais unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU
+ukDividendsSharesLoans.agent.noUkDividendsSharesOrLoans = Na, ni chafodd fy nghleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU
+ukDividendsSharesLoans.error.required = Dewiswch a gawsoch unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU, neu ‘Na, ni chefais unrhyw ddifidendau, cyfranddaliadau na benthyciadau yn y DU’
+ukDividendsSharesLoans.agent.error.required = Dewiswch a gafodd eich cleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU, neu ‘Na, ni chafodd fy nghleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU’
+
 ###################################  Payments into pensions ###########################################################################################
 
 paymentsIntoPensions.title = Taliadau i bensiynau
