@@ -23,11 +23,13 @@ import pages._
 import models._
 import models.aboutyou._
 import pages.aboutyou._
+import pages.propertypensionsinvestments._
 
 @Singleton
 class JourneyNavigator @Inject()() extends Navigator {
 
   override val normalRoutes: Page => UserAnswers => Call = {
+    // About you
     case UkResidenceStatusPage                => ukResidenceStatusRoute
     case YourResidenceStatusPage              => ua => controllers.aboutyou.routes.CharitableDonationsController.onPageLoad(NormalMode, ua.taxYear)
     case CharitableDonationsPage              => ua => controllers.aboutyou.routes.MarriageAllowanceController.onPageLoad(NormalMode, ua.taxYear)
@@ -38,6 +40,14 @@ class JourneyNavigator @Inject()() extends Navigator {
     case FosterCarerPage                      => ua => controllers.aboutyou.routes.PatentRoyaltyPaymentsController.onPageLoad(NormalMode, ua.taxYear)
     case PatentRoyaltyPaymentsPage            => ua => controllers.aboutyou.routes.TaxAvoidanceSchemesController.onPageLoad(NormalMode, ua.taxYear)
     case TaxAvoidanceSchemesPage              => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
+
+    // Income from property, pensions and investments
+    case RentalIncomePage                    => ua => controllers.propertypensionsinvestments.routes.PensionsController.onPageLoad(NormalMode, ua.taxYear)
+    case PensionsPage                        => ua => controllers.propertypensionsinvestments.routes.UkInsuranceGainsController.onPageLoad(NormalMode, ua.taxYear)
+    case UkInsuranceGainsPage                => ua => controllers.propertypensionsinvestments.routes.UkInterestController.onPageLoad(NormalMode, ua.taxYear)
+    case UkInterestPage                      => ua => controllers.propertypensionsinvestments.routes.UkDividendsSharesLoansController.onPageLoad(NormalMode, ua.taxYear)
+    case UkDividendsSharesLoansPage          => ua => routes.AddSectionsController.onPageLoad(ua.taxYear)
+
     case _                                    => ua => routes.IndexController.onPageLoad(ua.taxYear)
 
   }
