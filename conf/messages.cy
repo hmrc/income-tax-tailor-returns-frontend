@@ -474,3 +474,26 @@ ukInsuranceGains.none = Na, ni chefais unrhyw enillion yswiriant yn y DU
 ukInsuranceGains.agent.none = Na, ni chafodd fy nghleient unrhyw enillion o yswiriant yn y DU
 ukInsuranceGains.error.required = Dewiswch a gawsoch enillion o bolisïau yswiriant yn y DU neu gyfrifon ISA sydd wedi’u dirymu, neu dewiswch ‘Na, ni chefais unrhyw enillion o yswiriant yn y DU’
 ukInsuranceGains.agent.error.required = Dewiswch a gafodd eich cleient enillion o bolisïau yswiriant yn y DU neu gyfrifon ISA sydd wedi’u dirymu, neu dewiswch ‘Na, ni gafodd fy nghleient unrhyw enillion o yswiriant yn y DU’
+
+###################################  Payments into pensions ###########################################################################################
+
+paymentsIntoPensions.title = Taliadau i bensiynau
+paymentsIntoPensions.agent.title = Taliadau i bensiynau
+paymentsIntoPensions.heading =A wnaethoch dalu i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU?
+paymentsIntoPensions.agent.heading = A wnaeth eich cleient dalu i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU?
+paymentsIntoPensions.summary = Deall taliadau ar drosglwyddiadau tramor
+paymentsIntoPensions.p1 = Treth a dalir pan drosglwyddir cronfeydd pensiwn yn y DU i gynllun pensiwn sydd ddim yn y DU yw’r tâl ar drosglwyddiadau tramor.
+paymentsIntoPensions.link = Dysgwch ragor am daliadau ar drosglwyddiadau tramor
+paymentsIntoPensions.agent.p1 = Treth a dalir pan drosglwyddir cronfeydd pensiwn yn y DU i gynllun pensiwn sydd ddim yn y DU yw’r tâl ar drosglwyddiadau tramor.
+paymentsIntoPensions.ukPensions = Taliadau i bensiynau’r DU
+paymentsIntoPensions.uk.hint = peidiwch â chynnwys Pensiwn y Wladwriaeth
+paymentsIntoPensions.nonUkPensions = Taliadau i mewn i bensiynau sydd ddim yn y DU
+paymentsIntoPensions.overseas = Taliadau ar drosglwyddiadau tramor
+paymentsIntoPensions.agent.ukPensions = Taliadau i bensiynau’r DU
+paymentsIntoPensions.agent.uk.hint = peidiwch â chynnwys Pensiwn y Wladwriaeth
+paymentsIntoPensions.agent.nonUkPensions = Taliadau i mewn i bensiynau sydd ddim yn y DU
+paymentsIntoPensions.agent.overseas = Taliadau ar drosglwyddiadau tramor
+paymentsIntoPensions.none = Na, ni dalais i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU
+paymentsIntoPensions.agent.none = Na, ni dalodd fy nghleient i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU
+paymentsIntoPensions.error.required = Dewiswch a wnaethoch Daliadau i mewn i bensiynau’r DU, Taliadau i mewn i bensiynau sydd ddim yn y DU, Taliadau ar drosglwyddiadau tramor neu, ‘Na, ni dalais i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU’ 
+paymentsIntoPensions.agent.error.required = Dewiswch a wnaeth eich cleient Taliadau i mewn i bensiynau’r DU, Taliadau i mewn i i bensiynau sydd ddim yn y DU, Taliadau ar drosglwyddiadau tramor neu, ‘Na, ni dalodd fy nghleient i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU’

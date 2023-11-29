@@ -20,6 +20,7 @@ import forms.behaviours.CheckboxFieldBehaviours
 import models.propertypensionsinvestments.UkDividendsSharesLoans
 import play.api.data.FormError
 
+
 class UkDividendsSharesLoansFormProviderSpec extends CheckboxFieldBehaviours {
 
   val form = new UkDividendsSharesLoansFormProvider()(false)
@@ -45,9 +46,9 @@ class UkDividendsSharesLoansFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       form,
-      UkDividendsSharesLoans.ExclusiveOption.toString,
+      UkDividendsSharesLoans.NoUkDividendsSharesOrLoans.toString,
       fieldName,
-      UkDividendsSharesLoans.Option1.toString,
+      UkDividendsSharesLoans.CashDividendsFromUkStocksAndShares.toString,
       requiredKey
     )
   }
@@ -65,9 +66,9 @@ class UkDividendsSharesLoansFormProviderSpec extends CheckboxFieldBehaviours {
 
     behave like exclusiveCheckboxField(
       agentForm,
-      UkDividendsSharesLoans.ExclusiveOption.toString,
+      UkDividendsSharesLoans.NoUkDividendsSharesOrLoans.toString,
       fieldName,
-      UkDividendsSharesLoans.Option1.toString,
+      UkDividendsSharesLoans.CashDividendsFromUkStocksAndShares.toString,
       requiredKey
     )
   }

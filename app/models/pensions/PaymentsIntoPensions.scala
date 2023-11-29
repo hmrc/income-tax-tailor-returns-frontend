@@ -18,6 +18,7 @@ package models.pensions
 
 import models.{Enumerable, WithName}
 import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.Aliases.Hint
 import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.{CheckboxItem, ExclusiveCheckbox}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import viewmodels.govuk.checkbox._
@@ -26,21 +27,39 @@ sealed trait PaymentsIntoPensions
 
 object PaymentsIntoPensions extends Enumerable.Implicits {
 
-  case object Option1 extends WithName("option1") with PaymentsIntoPensions
-  case object Option2 extends WithName("option2") with PaymentsIntoPensions
-  case object ExclusiveOption extends WithName("exclusive") with PaymentsIntoPensions
+  case object UkPensions extends WithName("ukPensions") with PaymentsIntoPensions
+  case object NonUkPensions extends WithName("nonUkPensions") with PaymentsIntoPensions
+
+  case object Overseas extends WithName("overseas") with PaymentsIntoPensions
+
+  case object Divider extends PaymentsIntoPensions
+  case object No extends WithName("none") with PaymentsIntoPensions
 
   val values: Seq[PaymentsIntoPensions] = Seq(
-    Option1,
-    Option2,
-    ExclusiveOption
+    UkPensions,
+    NonUkPensions,
+    Overseas,
+    Divider,
+    No
   )
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case UkPensions => CheckboxItemViewModel(
+            content = Text (messages(s"paymentsIntoPensions.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"paymentsIntoPensions.uk.hint"))))
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"paymentsIntoPensions.${value.toString}")),
             fieldId = "value",
             index = index,
@@ -60,7 +79,19 @@ object PaymentsIntoPensions extends Enumerable.Implicits {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
+          case UkPensions => CheckboxItemViewModel(
+            content = Text(messages(s"paymentsIntoPensions.${value.toString}")),
+            fieldId = "value",
+            index = index,
+            value = value.toString
+          ).withHint(Hint(content = Text(messages(s"paymentsIntoPensions.agent.uk.hint"))))
+          case Divider => CheckboxItemViewModel(
+            fieldId = "value",
+            index = index,
+            value = value.toString,
+            divider = messages(s"site.or")
+          )
+          case No => CheckboxItemViewModel(
             content = Text(messages(s"paymentsIntoPensions.agent.${value.toString}")),
             fieldId = "value",
             index = index,
