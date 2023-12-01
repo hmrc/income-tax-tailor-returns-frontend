@@ -293,18 +293,18 @@ aboutYourWork.agent.selfEmployed = Hunangyflogedig
 aboutYourWork.agent.none = Dim un o’r uchod
 aboutYourWork.employed.agent.hint = Roedd eich cleient yn gweithio i rywun arall o dan gontract cyflogaeth ac roedd ganddo hawliau megis tâl salwch a gwyliau blynyddol.
 aboutYourWork.selfEmployed.agent.hint = Roedd eich cleient yn gweithio i’w hun ac roedd yn anfonebu cleientiaid am y nwyddau neu’r gwasanaethau a ddarparodd.
-aboutYourWork.error.required = Select what you did for work or select ‘None of the above’
-aboutYourWork.agent.error.required = Select what your client did for work or select ‘None of the above’
+aboutYourWork.error.required = Dewiswch yr hyn a wnaethoch o ran gwaith, neu dewiswch ‘Dim un o’r uchod’
+aboutYourWork.agent.error.required = Dewiswch yr hyn a wnaeth eich cleient o ran gwaith, neu dewiswch ‘Dim un o’r uchod’
 
 aboutYourWorkRadioPage.title = Ynglŷn â’ch gwaith
 aboutYourWorkRadioPage.agent.title = Ynglŷn â gwaith eich cleient
-aboutYourWorkRadioPage.heading = Were you employed?
-aboutYourWorkRadioPage.agent.heading = Was your client employed?
+aboutYourWorkRadioPage.heading = A oeddech wedi eich cyflogi?
+aboutYourWorkRadioPage.agent.heading = A oedd eich cleient wedi ei gyflogi?
 aboutYourWorkRadioPage.p1 = Oherwydd roeddech yn ofalwr maeth neu’n ofalwr cysylltu bywydau, rydym wedi cynnwys yr adran ganlynol:
 aboutYourWorkRadioPage.agent.p1 = Oherwydd roedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau, rydym wedi cynnwys yr adran ganlynol:
 aboutYourWorkRadioPage.bullet1 = Hunangyflogedig
-aboutYourWorkRadioPage.error.required = Select yes if you were employed
-aboutYourWorkRadioPage.agent.error.required = Select yes if your client was employed
+aboutYourWorkRadioPage.error.required = Dewiswch ‘Iawn’ os oeddech yn gyflogedig
+aboutYourWorkRadioPage.agent.error.required = Dewiswch ‘Iawn’ os oedd eich cleient yn gyflogedig
 
 constructionIndustryScheme.title = Cynllun y Diwydiant Adeiladu (CIS)
 constructionIndustryScheme.agent.title = Cynllun y Diwydiant Adeiladu (CIS)
@@ -335,10 +335,8 @@ jobseekersAllowance.agent.jsa = Lwfans Ceisio Gwaith
 jobseekersAllowance.agent.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
 jobseekersAllowance.none = Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn
 jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r wladwriaeth hyn
-jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employment and Support Allowance
-jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, I did not get either of these state benefits’
-jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, my client did not get either of these state benefits’
-jobseekersAllowance.change.hidden = JobseekersAllowance
+jobseekersAllowance.error.required = Dewiswch a gawsoch Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn’
+jobseekersAllowance.agent.error.required = Dewiswch a gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chafodd fy nghleient yr un o’r budd-daliadau hyn’
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
 
