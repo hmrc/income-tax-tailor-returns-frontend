@@ -26,7 +26,9 @@ import pages._
 import pages.aboutyou._
 import pages.propertypensionsinvestments._
 import pages.pensions.PaymentsIntoPensionsPage
-
+import pages.workandbenefits._
+import models.workandbenefits.AboutYourWork.{Employed, No, SelfEmployed}
+import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
 import scala.concurrent.ExecutionContext
 
 class PrivateBetaNavigatorSpec extends SpecBase {
@@ -103,6 +105,88 @@ class PrivateBetaNavigatorSpec extends SpecBase {
         navigator.nextPage(FosterCarerPage, NormalMode, answers) mustBe expectedRoute
       }
 
+      //Income from work and taxable state benefits section
+
+      "must go from About Your Work Radio page to Construction Industry Scheme page when yes is selected" in {
+        val answers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkRadioPage, true).success.value
+
+        val expectedRoute = controllers.workandbenefits.routes.ConstructionIndustrySchemeController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(AboutYourWorkRadioPage, NormalMode, answers) mustBe expectedRoute
+      }
+
+      "must go from About Your Work Radio page to Construction Industry Scheme page when no is selected" in {
+        val answers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkRadioPage, false).success.value
+
+        val expectedRoute = controllers.workandbenefits.routes.ConstructionIndustrySchemeController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(AboutYourWorkRadioPage, NormalMode, answers) mustBe expectedRoute
+      }
+
+      "must go from About your work page to Job seeker's Allowance Page when Employed is selected" in {
+
+        val answers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, Set[AboutYourWork](Employed)).success.value
+
+        val expectedRoute = controllers.workandbenefits.routes.JobseekersAllowanceController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(AboutYourWorkPage, NormalMode, answers) mustBe expectedRoute
+      }
+
+      "must go from About your work page to Construction Industry Scheme Page when Self-employed is selected" in {
+
+        val answers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, Set[AboutYourWork](SelfEmployed)).success.value
+
+        val expectedRoute = controllers.workandbenefits.routes.ConstructionIndustrySchemeController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(AboutYourWorkPage, NormalMode, answers) mustBe expectedRoute
+      }
+
+      "must go from About your work page to Job seeker's Allowance Page when None is selected" in {
+
+        val answers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, Set[AboutYourWork](No)).success.value
+
+        val expectedRoute = controllers.workandbenefits.routes.JobseekersAllowanceController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(AboutYourWorkPage, NormalMode, answers) mustBe expectedRoute
+      }
+
+      "must go from About your work page to Construction Industry Scheme Page when both Employed and Self Employed are selected" in {
+
+        val answers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, Set[AboutYourWork](Employed, SelfEmployed)).success.value
+
+        val expectedRoute = controllers.workandbenefits.routes.ConstructionIndustrySchemeController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(AboutYourWorkPage, NormalMode, answers) mustBe expectedRoute
+      }
+
+      "must go from Job seeker's Allowance Page to AddSections page when any value is selected" in {
+
+        val answers = UserAnswers(mtdItId, taxYear).set(JobseekersAllowancePage, Set(JobseekersAllowance.values.head)).success.value
+
+        val expectedRoute = routes.AddSectionsController.onPageLoad(taxYear)
+
+        navigator.nextPage(JobseekersAllowancePage, NormalMode, answers) mustBe expectedRoute
+
+      }
+
+      "must go from Construction Industry Scheme Page to Job seeker's Allowance Page when yes is selected" in {
+        val answers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
+
+        val expectedRoute = controllers.workandbenefits.routes.JobseekersAllowanceController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(ConstructionIndustrySchemePage, NormalMode, answers) mustBe expectedRoute
+
+      }
+
+      "must go from Construction Industry Scheme Page to Job seeker's Allowance Page when no is selected" in {
+
+        val answers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, false).success.value
+
+        val expectedRoute = controllers.workandbenefits.routes.JobseekersAllowanceController.onPageLoad(NormalMode, taxYear)
+
+        navigator.nextPage(ConstructionIndustrySchemePage, NormalMode, answers) mustBe expectedRoute
+      }
+      
       // Income from property, pensions and investments
 
       "must go from RentalIncome page to Pensions page when any value is selected" in {
@@ -146,6 +230,7 @@ class PrivateBetaNavigatorSpec extends SpecBase {
       }
 
       // Payments into pensions
+
       "must go from PaymentsIntoPensions page to AddSections page when any value is selected" in {
         val answers = UserAnswers(mtdItId, taxYear).set(PaymentsIntoPensionsPage, Set(PaymentsIntoPensions.values.head)).success.value
 
