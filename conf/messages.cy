@@ -264,6 +264,8 @@ taxAvoidanceSchemes.agent.title = Cynlluniau arbed treth
 taxAvoidanceSchemes.heading = Cynlluniau arbed treth
 taxAvoidanceSchemes.agent.heading = Cynlluniau arbed treth
 taxAvoidanceSchemes.taxAvoidance = Arbed treth
+taxAvoidanceSchemes.legend = A oeddech yn rhan o unrhyw gynlluniau arbed treth?
+taxAvoidanceSchemes.agent.legend = A oedd eich cleient yn rhan o unrhyw gynlluniau arbed treth?
 taxAvoidanceSchemes.understandingAvoidance.summary = Deall cynlluniau arbed treth
 taxAvoidanceSchemes.understandingAvoidance.summary.p = Mae arbed treth yn ymwneud â phlygu rheolau’r system dreth i dalu llai o dreth. Mae’n aml yn cynnwys trafodion dyfeisgar sydd â’r bwriad o gynhyrchu’r fantais hon. Mae’n golygu glynu wrth lythyren, ond nid ysbryd, y gyfraith.
 taxAvoidanceSchemes.understandingAvoidance.summary.findOutMore = Dysgwch ragor am arbed treth
@@ -542,6 +544,42 @@ ukDividendsSharesLoans.checkYourAnswersLabel = Did you get any UK dividends, sha
 ukDividendsSharesLoans.error.required = Select if you had any UK dividends, shares or loans, or ‘No, I did not get any UK dividends, shares, or loans’
 ukDividendsSharesLoans.agent.error.required = Select if your client had any UK dividends, shares or loans, or ‘No, my client did not have any UK dividends, shares or loans’
 ukDividendsSharesLoans.change.hidden = ukDividendsSharesLoans
+
+employmentLumpSums.title = Cyfandaliadau cyflogaeth
+employmentLumpSums.agent.title = Cyfandaliadau cyflogaeth
+employmentLumpSums.heading = Cyfandaliadau cyflogaeth
+employmentLumpSums.agent.heading = Cyfandaliadau cyflogaeth
+employmentLumpSums.details.understandingRedundancyCompensation.summary = Deall taliadau o iawndal diswyddo
+employmentLumpSums.details.understandingRedundancyCompensation.p = Taliadau gan eich cyn-gyflogwr yw’r rhain, gan gynnwys:
+employmentLumpSums.agent.details.understandingRedundancyCompensation.p = Taliadau gan gyn-gyflogwr eich cleient yw’r rhain, gan gynnwys:
+employmentLumpSums.details.understandingRedundancyCompensation.bullet1 = tâl diswyddo
+employmentLumpSums.details.understandingRedundancyCompensation.bullet2 = cyflog rhybudd ôl-gyflogaeth
+employmentLumpSums.details.understandingRedundancyCompensation.bullet3 = iawndal am golli swydd
+employmentLumpSums.details.understandingTaxableLumpSums.summary = Deall cyfandaliadau trethadwy ac incwm penodol
+employmentLumpSums.details.understandingTaxableLumpSums.p = Taliadau mawr (fel arfer mewn arian parod ac eithrio pensiynau) neu fuddiannau oddi wrth eich cyflogwr neu’ch cyn-gyflogwr yw’r rhain. Maent yn cynnwys:
+employmentLumpSums.agent.details.understandingTaxableLumpSums.p = Taliadau mawr (fel arfer mewn arian parod ac eithrio pensiynau) neu fuddiannau oddi wrth gyflogwr neu gyn-gyflogwr eich cleient yw’r rhain. Maent yn cynnwys:
+employmentLumpSums.details.understandingTaxableLumpSums.bullet1 = cyflog
+employmentLumpSums.details.understandingTaxableLumpSums.bullet2 = tâl gwyliau
+employmentLumpSums.details.understandingTaxableLumpSums.bullet3 = bonysau
+employmentLumpSums.details.understandingTaxableLumpSums.bullet4 = taliadau yn lle rhybudd diswyddo (PILON)
+employmentLumpSums.details.understandingTaxableLumpSums.bullet5 = iawndal pan fydd telerau’ch cyflogaeth yn newid
+employmentLumpSums.agent.details.understandingTaxableLumpSums.bullet5 = compensation for changes in your client's employment terms
+employmentLumpSums.details.understandingTaxableLumpSums.bullet6 = taliadau a wnaed er mwyn gwarantu’ch ymddygiad yn y dyfodol (‘cyfamod cyfyngu’), er enghraifft, cytuno i beidio â chystadlu â’ch cyflogwr blaenorol
+employmentLumpSums.agent.details.understandingTaxableLumpSums.bullet6 = taliadau a wnaed er mwyn gwarantu ymddygiad eich cleient yn y dyfodol (‘cyfamod cyfyngu’), er enghraifft, cytuno i beidio â chystadlu â’i gyflogwr blaenorol
+employmentLumpSums.details.understandingEmployerFinancedRetirement.summary = Deall Cynlluniau Budd-daliadau Ymddeol a Ariannwyd gan y Cyflogwr (CBYAC)
+employmentLumpSums.details.understandingEmployerFinancedRetirement.p = Cynlluniau sy’n darparu buddiannau ymddeol neu fuddiannau marwolaeth yw’r rhain. Fel arfer, maent wedi’u trefnu gan gyflogwyr ond ni chofrestrwyd gyda CThEF. Os nad yw cynllun pensiwn wedi’i gofrestru, efallai ei fod yn CBYAC.
+employmentLumpSums.bullet1 = Taliadau o iawndal diswyddo
+employmentLumpSums.bullet1.hint = er enghraifft, cyflog rhybudd ôl-gyflogaeth neu iawndal am golli swydd
+employmentLumpSums.bullet2 = Cyfandaliadau trethadwy ac incwm penodol
+employmentLumpSums.bullet2.hint = er enghraifft, tâl gwyliau neu daliadau yn lle rhybudd diswyddo (PILON)
+employmentLumpSums.bullet3 = Cynlluniau Budd-daliadau Ymddeol a Ariannwyd gan y Cyflogwr
+employmentLumpSums.legend = Did you get any lump sums from employers?
+employmentLumpSums.agent.legend = Did your client get any lump sums from employers?
+employmentLumpSums.error.required = Select yes if you got any lump sums from employers
+employmentLumpSums.agent.error.required = Select yes if your client got any lump sums from employers
+employmentLumpSums.checkYourAnswersLabel = Cyfandaliadau cyflogaeth
+employmentLumpSums.change.hidden = Cyfandaliadau cyflogaeth
+
 
 
 ###################################  Payments into pensions ###########################################################################################

@@ -46,13 +46,12 @@
 
     @formHelper(action = controllers.aboutyou.routes.HighIncomeChildBenefitChargeController.onSubmit(mode, taxYear), 'autoComplete -> "off") {
 
-
-
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))
         }
 
         @heading(messages("highIncomeChildBenefitCharge.title"))
+
         @paragraph(messages("highIncomeChildBenefitCharge.p1"))
 
         @govukDetails(Details(
@@ -60,7 +59,6 @@
             content = HtmlContent(insetContent1)
             )
         )
-
 
         @govukRadios(
             RadiosViewModel(

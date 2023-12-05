@@ -19,7 +19,7 @@ package controllers.workandbenefits
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.EmploymentLumpSumsFormProvider
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.workandbenefits.EmploymentLumpSumsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
