@@ -382,7 +382,6 @@ jobseekersAllowance.agent.none = No, my client did not get either of these state
 jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employment and Support Allowance
 jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, I did not get either of these state benefits’
 jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, my client did not get either of these state benefits’
-jobseekersAllowance.change.hidden = JobseekersAllowance
 
 shareSchemes.title = Share schemes at your work
 shareSchemes.agent.title = Share schemes at your client’s work

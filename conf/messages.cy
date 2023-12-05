@@ -343,7 +343,6 @@ jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-da
 jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employment and Support Allowance
 jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, I did not get either of these state benefits’
 jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, my client did not get either of these state benefits’
-jobseekersAllowance.change.hidden = JobseekersAllowance
 
 shareSchemes.title = Cynlluniau cyfranddaliadau yn eich gwaith
 shareSchemes.agent.title = Cynlluniau cyfranddaliadau yng ngweithle eich cleient
