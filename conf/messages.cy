@@ -39,6 +39,10 @@ error.number = Nodwch rif dilys
 error.required = Nodwch werth
 error.summary.title = Mae problem wedi codi
 
+index.title = income-tax-tailor-returns-frontend
+index.heading = income-tax-tailor-returns-frontend
+index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
+
 checkYourAnswers.title = Gwirio’ch Atebion
 checkYourAnswers.heading = Gwirio’ch Atebion
 
@@ -132,7 +136,6 @@ ukResidenceStatus.uk = Iawn
 ukResidenceStatus.agent.uk = Iawn
 ukResidenceStatus.nonUK = Na
 ukResidenceStatus.agent.nonUK = Na
-
 ukResidenceStatus.domiciled = Iawn, ond roedd fy nghartref parhaol (‘domisil’) dramor ac rwy’n hawlio’r sail trosglwyddo
 ukResidenceStatus.agent.domiciled = Iawn, ond roedd ei gartref parhaol (‘domisil’) dramor ac mae’n hawlio’r sail trosglwyddo
 ukResidenceStatus.error.required = Dewiswch a oeddech yn breswylydd yn y DU, yn breswylydd yn y DU a oedd yn byw dramor ac sydd am hawlio’r sail trosglwyddo, neu os nad oeddech yn breswylydd yn y DU
@@ -339,6 +342,22 @@ jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employme
 jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, I did not get either of these state benefits’
 jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, my client did not get either of these state benefits’
 jobseekersAllowance.change.hidden = JobseekersAllowance
+
+shareSchemes.title = Cynlluniau cyfranddaliadau yn eich gwaith
+shareSchemes.agent.title = Cynlluniau cyfranddaliadau yng ngweithle eich cleient
+shareSchemes.heading = Cynlluniau cyfranddaliadau yn eich gwaith
+shareSchemes.agent.heading = Cynlluniau cyfranddaliadau yng ngweithle eich cleient
+shareSchemes.p1 = Nid oes angen i ni wybod am gyfranddaliadau oni bai bod eich cyflogwr:
+shareSchemes.agent.p1 = Nid oes angen i ni wybod am gyfranddaliadau oni bai bod cyflogwr eich cleient:
+shareSchemes.bullet1 = heb eu trethu’n llawn
+shareSchemes.bullet2 = wedi defnyddio prisiad is nag y dylai i gyfrifo’r swm trethadwy
+shareSchemes.p2 = Nid oes angen i chi roi gwybod i ni am unrhyw symiau sydd ar eich P60 neu P45 o gynllun cyfranddaliad gan fod y rhain eisoes wedi’u trethu. Os nad ydych yn siŵr o hyd, dylai’ch cyflogwr allu cadarnhau hyn.
+shareSchemes.agent.p2 = Nid oes angen i chi roi gwybod i ni am unrhyw symiau sydd ar P60 neu P45 eich cleient o gynllun cyfranddaliad gan fod y rhain eisoes wedi’u trethu. Os nad ydych yn siŵr o hyd, dylai cyflogwr eich cleient allu cadarnhau hyn.
+shareSchemes.legend = A gawsoch unrhyw incwm heb ei drethu o gynlluniau cyfranddaliadau?
+shareSchemes.agent.legend = A gafodd eich cleient unrhyw incwm heb ei drethu o gynlluniau cyfranddaliadau?
+shareSchemes.checkYourAnswersLabel = shareSchemes
+shareSchemes.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw incwm heb ei drethu o gynlluniau cyfranddaliadau
+shareSchemes.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw incwm heb ei drethu o gynlluniau cyfranddaliadau
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
 
