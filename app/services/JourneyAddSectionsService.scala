@@ -17,15 +17,17 @@
 package services
 
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
-import models.{SectionState, TagStatus, UserAnswers, IncomeFromWorkDependentStates}
+import models.{IncomeFromWorkDependentStates, SectionState, TagStatus, UserAnswers}
 import pages.aboutyou.TaxAvoidanceSchemesPage
+import pages.pensions.PaymentsIntoPensionsPage
+import pages.propertypensionsinvestments.UkDividendsSharesLoansPage
 import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 
 class JourneyAddSectionsService extends AddSectionsService {
   def getState(userAnswers: Option[UserAnswers]): SectionState = {
 
     userAnswers match {
-      case None => SectionState(NotStarted, CannotStartYet, CannotStartYet, CannotStartYet)
+      case None => SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted)
       case Some(ua) =>
         val aboutYou: TagStatus = if (ua.get(TaxAvoidanceSchemesPage).isDefined) {
           Completed
@@ -39,7 +41,23 @@ class JourneyAddSectionsService extends AddSectionsService {
           ua.get(JobseekersAllowancePage).isDefined
         )
 
-        SectionState(aboutYou, incomeFromWorkStates.getStatus, CannotStartYet, CannotStartYet)
+        val incomeFromProperty: TagStatus =
+          ua.get(UkDividendsSharesLoansPage) match {
+            case Some(_) => Completed
+            case None => if (incomeFromWorkStates.getStatus.isCompleted) {
+              NotStarted
+            } else {
+              CannotStartYet
+            }
+          }
+
+        val pensions: TagStatus = if (ua.get(PaymentsIntoPensionsPage).isDefined) {
+          Completed
+        } else {
+          NotStarted
+        }
+
+        SectionState(aboutYou, incomeFromWorkStates.getStatus, incomeFromProperty, pensions)
     }
   }
 }
