@@ -89,20 +89,34 @@ trait RadiosFluency {
     }
 
     def yesNoConditional(
+<<<<<<< HEAD
                           field: Field,
                           legend: Legend,
                           conditional: Html
                         )(implicit messages: Messages): Radios =
+=======
+               field: Field,
+               legend: Legend,
+               conditional: Html
+             )(implicit messages: Messages): Radios =
+>>>>>>> origin/SASS-6128
       yesNoConditional(
         field = field,
         fieldset = FieldsetViewModel(legend),
         conditional = conditional
       )
     def yesNoConditional(
+<<<<<<< HEAD
                           field: Field,
                           fieldset: Fieldset,
                           conditional: Html
                         )(implicit messages: Messages): Radios = {
+=======
+               field: Field,
+               fieldset: Fieldset,
+               conditional: Html
+             )(implicit messages: Messages): Radios = {
+>>>>>>> origin/SASS-6128
 
       val items = Seq(
         RadioItem(

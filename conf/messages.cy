@@ -384,6 +384,23 @@ taxableStateBenefits.agent.p.addStateBenefitsSectionToReturn = Byddwn yn ychwane
 taxableStateBenefits.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw rai o fudd-daliadau trethadwy’r wladwriaeth a restrir ar y dudalen hon
 taxableStateBenefits.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw rai o fudd-daliadau trethadwy’r wladwriaeth a restrir ar y dudalen hon
 
+statutoryBenefits.title = Budd-daliadau statudol a dalwyd gan CThEF
+statutoryBenefits.agent.title = Budd-daliadau statudol a dalwyd gan CThEF
+statutoryBenefits.heading = Budd-daliadau statudol a dalwyd gan CThEF
+statutoryBenefits.agent.heading = Budd-daliadau statudol a dalwyd gan CThEF
+statutoryBenefits.alert = Dim ond pan fo’r cyflogwr yn methu talu budd-daliadau statudol y mae CThEF yn talu’r rhain. Peidiwch â chynnwys unrhyw fudd-daliadau statudol a gawsoch gan eich cyflogwr.
+statutoryBenefits.agent.alert = Dim ond pan fo’r cyflogwr yn methu talu budd-daliadau statudol y mae CThEF yn talu’r rhain. Peidiwch â chynnwys unrhyw fudd-daliadau statudol a gafodd eich cleient gan ei gyflogwr.
+statutoryBenefits.bullet1 = Tâl Salwch Statudol
+statutoryBenefits.bullet2 = Tâl Mamolaeth Statudol
+statutoryBenefits.bullet3 = Tâl Tadolaeth Statudol
+statutoryBenefits.bullet4 = Tâl Mabwysiadu Statudol
+statutoryBenefits.bullet5 = Tâl Statudol ar y Cyd i Rieni
+statutoryBenefits.legend = A gawsoch unrhyw fudd-daliadau statudol gan CThEF yn lle eich cyflogwr?
+statutoryBenefits.agent.legend = A gafodd eich cleient unrhyw fudd-daliadau statudol gan CThEF yn lle ei gyflogwr?
+statutoryBenefits.conditionalText = Byddwn yn ychwanegu’r adran, ‘Budd-daliadau eraill y wladwriaeth’, at eich Ffurflen Dreth
+statutoryBenefits.agent.conditionalText = Byddwn yn ychwanegu’r adran, ‘Budd-daliadau eraill y wladwriaeth’, at Ffurflen Dreth eich cleient
+statutoryBenefits.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw fudd-daliadau statudol a restrir ar y dudalen hon gan CThEF yn lle eich cyflogwr
+statutoryBenefits.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw fudd-daliadau statudol a restrir ar y dudalen hon gan CThEF yn lle ei gyflogwr
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
 
