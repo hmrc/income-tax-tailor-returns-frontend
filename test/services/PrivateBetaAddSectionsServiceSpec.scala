@@ -18,6 +18,10 @@ package services
 
 import base.SpecBase
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
+import models.pensions.PaymentsIntoPensions
+import models.pensions.PaymentsIntoPensions.UkPensions
+import models.propertypensionsinvestments.UkDividendsSharesLoans._
+import models.propertypensionsinvestments._
 import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
 import models.workandbenefits.AboutYourWork.Employed
 import models.workandbenefits.JobseekersAllowance.Jsa
@@ -28,6 +32,8 @@ import org.scalatest.matchers.must.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.aboutyou.FosterCarerPage
+import pages.pensions.PaymentsIntoPensionsPage
+import pages.propertypensionsinvestments.UkDividendsSharesLoansPage
 import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 import play.api.test.Helpers.running
 
@@ -47,6 +53,12 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
     .flatMap(_.set(JobseekersAllowancePage, Set[JobseekersAllowance](Jsa)))
     .success.value)
 
+  private val incomeFromPropertyComplete = Some(incomeFromWorkAndBenefitsComplete.value.copy()
+    .set(UkDividendsSharesLoansPage, Set[UkDividendsSharesLoans](CashDividendsFromUkStocksAndShares)).success.value)
+
+  private val incomeFromPensionsComplete = Some(incomeFromPropertyComplete.value.copy()
+    .set(PaymentsIntoPensionsPage, Set[PaymentsIntoPensions](UkPensions)).success.value)
+
   ".getState must" - {
 
     "when privateBeta is enabled" - {
@@ -61,7 +73,7 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
           val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
 
           val model = service.getState(None)
-          val expectedResult = SectionState(NotStarted, CannotStartYet, CannotStartYet, CannotStartYet)
+          val expectedResult = SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted)
 
           model mustBe expectedResult
         }
@@ -77,7 +89,7 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
           val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
 
           val model = service.getState(aboutYouCompleteInBeta)
-          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, CannotStartYet)
+          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, NotStarted)
 
           model mustBe expectedResult
         }
@@ -93,7 +105,7 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
           val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
 
           val model = service.getState(aboutYouCompleteInBeta)
-          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, CannotStartYet)
+          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, NotStarted)
 
           model mustBe expectedResult
         }
@@ -109,7 +121,7 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
           val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
 
           val model = service.getState(Some(emptyUserAnswers))
-          val expectedResult = SectionState(NotStarted, CannotStartYet, CannotStartYet, CannotStartYet)
+          val expectedResult = SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted)
 
           model mustBe expectedResult
         }
@@ -125,7 +137,7 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
           val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
 
           val model = service.getState(aboutYouCompleteInBeta)
-          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, CannotStartYet)
+          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, NotStarted)
 
           model mustBe expectedResult
         }
@@ -141,7 +153,7 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
           val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
 
           val model = service.getState(incomeFromWorkAndBenefitsComplete.get.remove(AboutYourWorkPage).toOption)
-          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, CannotStartYet)
+          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, NotStarted)
 
           model mustBe expectedResult
         }
@@ -157,7 +169,87 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
           val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
 
           val model = service.getState(incomeFromWorkAndBenefitsComplete)
-          val expectedResult = SectionState(Completed, Completed, CannotStartYet, CannotStartYet)
+          val expectedResult = SectionState(Completed, Completed, NotStarted, NotStarted)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return incomeFromProperty section as NotStarted when incomeFromWork section is complete" in {
+        val application = applicationBuilder()
+          .configure(privateBetaEnabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
+
+          val model = service.getState(incomeFromWorkAndBenefitsComplete)
+          val expectedResult = SectionState(Completed, Completed, NotStarted, NotStarted)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return incomeFromProperty section as Completed when UkDividendsSharesLoans is defined" in {
+        val application = applicationBuilder()
+          .configure(privateBetaEnabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
+
+          val model = service.getState(incomeFromPropertyComplete)
+          val expectedResult = SectionState(Completed, Completed, Completed, NotStarted)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return incomeFromProperty section as CannotStartYet when incomeFromWork is not completed" in {
+        val application = applicationBuilder()
+          .configure(privateBetaEnabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
+
+          val model = service.getState(incomeFromWorkAndBenefitsComplete.copy().value.remove(JobseekersAllowancePage).toOption)
+          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, NotStarted)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return pensions section as NotStarted with no user data" in {
+        val application = applicationBuilder()
+          .configure(privateBetaEnabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
+
+          val model = service.getState(Some(emptyUserAnswers))
+          val expectedResult = SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return pensions section as Completed when PaymentsIntoPensions is defined" in {
+        val application = applicationBuilder()
+          .configure(privateBetaEnabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
+
+          val model = service.getState(incomeFromPensionsComplete)
+          val expectedResult = SectionState(Completed, Completed, Completed, Completed)
 
           model mustBe expectedResult
         }

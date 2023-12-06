@@ -16,30 +16,9 @@
 
 package services
 
-import models.TagStatus.{CannotStartYet, Completed, NotStarted}
-import models.{SectionState, TagStatus, UserAnswers, IncomeFromWorkDependentStates}
-import pages.aboutyou.FosterCarerPage
-import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
+import models.{SectionState, UserAnswers}
 
 class PrivateBetaAddSectionsService extends AddSectionsService {
-  def getState(userAnswers: Option[UserAnswers]): SectionState = {
+  def getState(userAnswers: Option[UserAnswers]): SectionState = deriveState(userAnswers, isPrivateBeta = true)
 
-    userAnswers match {
-      case None => SectionState(NotStarted, CannotStartYet, CannotStartYet, CannotStartYet)
-      case Some(ua) =>
-        val aboutYou: TagStatus = if (ua.get(FosterCarerPage).isDefined) {
-          Completed
-        } else {
-          NotStarted
-        }
-
-        val incomeFromWorkStates: IncomeFromWorkDependentStates = IncomeFromWorkDependentStates(
-          aboutYou.isCompleted,
-          ua.get(AboutYourWorkPage).isDefined,
-          ua.get(JobseekersAllowancePage).isDefined
-        )
-
-        SectionState(aboutYou, incomeFromWorkStates.getStatus, CannotStartYet, CannotStartYet)
-    }
-  }
 }
