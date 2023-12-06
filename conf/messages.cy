@@ -13,7 +13,7 @@ site.govuk = GOV.UK
 site.taxYearCaption = 6 Ebrill {0} i 5 Ebrill {1}
 site.or = Neu
 site.hint.selectAll = Dewiswch bob un sy’n berthnasol.
-site.opensInNewTab = (yn agor tab newydd)
+site.opensInNewTab = (yn agor mewn tab newydd)
 
 date.day = Diwrnod
 date.month = Mis
