@@ -16,13 +16,23 @@
 
 package pages.workandbenefits
 
+import models.UserAnswers
 import models.workandbenefits.AboutYourWork
+import models.workandbenefits.AboutYourWork.Employed
 import pages.QuestionPage
 import play.api.libs.json.JsPath
+
+import scala.util.Try
 
 case object AboutYourWorkPage extends QuestionPage[Set[AboutYourWork]] {
 
   override def path: JsPath = JsPath \"workAndBenefits"\ toString
 
   override def toString: String = "aboutYourWork"
+
+  override def cleanup(value: Option[Set[AboutYourWork]], userAnswers: UserAnswers): Try[UserAnswers] =
+    value.map(_.toSeq) match {
+      case Some(Seq(Employed)) => userAnswers.remove(ConstructionIndustrySchemePage)
+      case _ => super.cleanup(value, userAnswers)
+    }
 }

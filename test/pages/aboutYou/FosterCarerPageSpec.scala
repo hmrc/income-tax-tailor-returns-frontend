@@ -22,7 +22,7 @@ import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.aboutyou.FosterCarerPage
 import pages.behaviours.PageBehaviours
-import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
+import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage, ConstructionIndustrySchemePage}
 
 class FosterCarerPageSpec extends PageBehaviours {
 
@@ -34,7 +34,7 @@ class FosterCarerPageSpec extends PageBehaviours {
 
   }
 
-  "remove data relating to both versions of AboutYourWorkPage in the income from work and pensions section" in {
+  "remove data relating to both versions of AboutYourWorkPage and the ConstructionIndustrySchemePage in the income from work and pensions section" in {
 
     forAll(arbitrary[UserAnswers]) {
       initial =>
@@ -46,6 +46,7 @@ class FosterCarerPageSpec extends PageBehaviours {
 
         result.get(AboutYourWorkPage) mustNot be (defined)
         result.get(AboutYourWorkRadioPage) mustNot be (defined)
+        result.get(ConstructionIndustrySchemePage) mustNot be (defined)
     }
 
   }

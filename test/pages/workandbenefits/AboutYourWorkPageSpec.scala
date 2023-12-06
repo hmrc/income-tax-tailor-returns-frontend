@@ -14,38 +14,33 @@
  * limitations under the License.
  */
 
-package pages.aboutYou
+package pages.workandbenefits
 
 import models.UserAnswers
 import models.workandbenefits.AboutYourWork
-import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
+import models.workandbenefits.AboutYourWork.Employed
 import org.scalacheck.Arbitrary.arbitrary
-import pages.aboutyou.FosterCarerPage
 import pages.behaviours.PageBehaviours
-import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage, ConstructionIndustrySchemePage}
 
-class FosterCarerPageSpec extends PageBehaviours {
+class AboutYourWorkPageSpec extends PageBehaviours {
 
-  "FosterCarerPage" must {
+  "AboutYourWorkPage" must {
 
-    beRetrievable[Boolean](FosterCarerPage)
+    beRetrievable[Set[AboutYourWork]](AboutYourWorkPage)
 
-    beSettable[Boolean](FosterCarerPage)
+    beSettable[Set[AboutYourWork]](AboutYourWorkPage)
 
   }
 
-  "remove data relating to both versions of AboutYourWorkPage and the ConstructionIndustrySchemePage in the income from work and pensions section" in {
+  "remove data relating ConstructionIndustrySchemePage in the income from work and pensions section" in {
 
     forAll(arbitrary[UserAnswers]) {
       initial =>
 
-        val answers = initial.set(AboutYourWorkPage, Set[AboutYourWork](Employed, SelfEmployed))
-          .flatMap(_.set(AboutYourWorkRadioPage, true)).success.value
+        val answers = initial.set(ConstructionIndustrySchemePage, true).success.value
 
-        val result = answers.set(FosterCarerPage, false).success.value
+        val result = answers.set(AboutYourWorkPage, Set[AboutYourWork](Employed)).success.value
 
-        result.get(AboutYourWorkPage) mustNot be (defined)
-        result.get(AboutYourWorkRadioPage) mustNot be (defined)
         result.get(ConstructionIndustrySchemePage) mustNot be (defined)
     }
 
