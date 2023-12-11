@@ -63,7 +63,8 @@ class UkResidenceStatusController @Inject()(
       }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)).async {
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)).async {
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(
