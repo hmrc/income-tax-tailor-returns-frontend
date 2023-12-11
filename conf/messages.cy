@@ -336,7 +336,7 @@ jobseekersAllowance.agent.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
 jobseekersAllowance.none = Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn
 jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r wladwriaeth hyn
 jobseekersAllowance.error.required = Dewiswch a gawsoch Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn’
-jobseekersAllowance.agent.error.required = Dewiswch a gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chafodd fy nghleient yr un o’r budd-daliadau hyn’
+jobseekersAllowance.agent.error.required = Dewiswch a gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r budd-daliadau’r wladwriaeth hyn’
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
 
@@ -402,7 +402,7 @@ rentalIncome.agent.details.bullet4 = gosod ystafelloedd wedi’u dodrefnu yng ng
 rentalIncome.details.link = Gwirio’ch statws preswyl yn y DU
 rentalIncome.agent.details.link = Gwirio statws preswyl yn y DU eich cleient
 rentalIncome.legend = A gawsoch incwm rhent o eiddo?
-rentalIncome.agent.legend = A gafodd eich cleient incwm rhent o eiddo?
+rentalIncome.agent.legend = A gafodd eich cleient inc wm rhent o eiddo?
 rentalIncome.uk = Eiddo yn y DU
 rentalIncome.nonUk = Eiddo sydd ddim yn y DU
 rentalIncome.none = Na, ni chefais incwm rhent o eiddo
