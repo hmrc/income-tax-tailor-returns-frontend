@@ -618,3 +618,12 @@ paymentsIntoPensions.none = No, I did not pay into any UK or non-UK pensions
 paymentsIntoPensions.agent.none = No, my client did not pay into any UK or non-UK pensions
 paymentsIntoPensions.error.required = Select if you made Payments into UK pensions, Payments into non-UK pensions, Overseas transfer charges or, ‘No, I did not pay into any UK or non-UK pensions’
 paymentsIntoPensions.agent.error.required = Select if your client made Payments into UK pensions, Payments into non-UK pensions, Overseas transfer charges or, ‘No, my client did not pay into any UK or non-UK pensions’
+
+taskList.title = Your Income Tax Return
+taskList.heading = Your Income Tax Return
+taskList.agent.title = Your client’s Income Tax Return
+taskList.agent.heading = Your client’s Income Tax Return
+taskList.incomplete = Incomplete
+taskList.completedSections = You have completed {0} of {1} sections
+taskList.addSections = Add sections
+taskList.employers = Employers

@@ -43,6 +43,12 @@ class AddSectionsController @Inject()(
   def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)) {
     implicit request =>
 
+      val prefix: String = if (request.isAgent) {
+        "addSections.agent"
+      } else {
+        "addSections"
+      }
+
       val state = addSectionsService.getState(request.userAnswers)
 
       val prefix: String = if (request.isAgent) {

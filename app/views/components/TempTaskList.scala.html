@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,28 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package viewmodels
+@import views.html.components.{Link, TaskItem}
+@import viewmodels.Task
 
-import models.TagStatus
-import play.api.i18n.Messages
+@this(
+    taskItem: TaskItem,
+    link: Link
+)
 
-case class Task(link: Link, tag: TagStatus, prefix: String) {
-  def linkText()(implicit messages: Messages): String = {
-    messages(s"$prefix.${link.text}")
-  }
+
+@(sections: List[(String, List[Task])])(implicit messages: Messages)
+
+@for(taskList <- sections) {
+
+    <h2 id="task-list--heading" class="app-task-list__section">@messages({taskList._1})</h2>
+
+    <ul class="app-task-list__items govuk-!-padding-left-0">
+
+        @for(task <- taskList._2){
+            @taskItem(task)
+        }
+
+    </ul>
 }

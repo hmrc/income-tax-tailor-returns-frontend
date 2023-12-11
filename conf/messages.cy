@@ -540,3 +540,11 @@ paymentsIntoPensions.none = Na, ni dalais i mewn i unrhyw bensiynau’r DU neu b
 paymentsIntoPensions.agent.none = Na, ni dalodd fy nghleient i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU
 paymentsIntoPensions.error.required = Dewiswch a wnaethoch Daliadau i mewn i bensiynau’r DU, Taliadau i mewn i bensiynau sydd ddim yn y DU, Taliadau ar drosglwyddiadau tramor neu, ‘Na, ni dalais i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU’ 
 paymentsIntoPensions.agent.error.required = Dewiswch a wnaeth eich cleient Taliadau i mewn i bensiynau’r DU, Taliadau i mewn i i bensiynau sydd ddim yn y DU, Taliadau ar drosglwyddiadau tramor neu, ‘Na, ni dalodd fy nghleient i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU’
+
+taskList.title = Eich Ffurflen Dreth Incwm
+taskList.heading = Eich Ffurflen Dreth Incwm
+taskList.agent.title = Ffurflen Dreth Incwm eich cleient
+taskList.agent.heading = Ffurflen Dreth Incwm eich cleient
+taskList.incomplete = Incomplete
+taskList.completedSections = You have completed {0} of 32 sections
+

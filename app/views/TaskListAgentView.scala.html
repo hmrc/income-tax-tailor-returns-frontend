@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package viewmodels
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton
+)
 
-import models.TagStatus
-import play.api.i18n.Messages
+@(taxYear: Int)(implicit request: Request[_], messages: Messages)
 
-case class Task(link: Link, tag: TagStatus, prefix: String) {
-  def linkText()(implicit messages: Messages): String = {
-    messages(s"$prefix.${link.text}")
-  }
+@layout(pageTitle = titleNoForm(messages("askList.agent.title")), taxYear = taxYear) {
+
+    <h1 class="govuk-heading-xl">@messages("askList.agent.heading")</h1>
 }
