@@ -15,7 +15,7 @@
  *@
 
 @import models.Mode
-@import viewmodels.Task
+@import viewmodels.{Task, AddSectionsViewModel}
 @import models.TagStatus._
 @import views.html.components._
 
@@ -30,7 +30,7 @@
         p: ParagraphBody
 )
 
-@(taxYear: Int, sections: List[Task], completedSections: Int)(implicit request: Request[_], messages: Messages)
+@(taxYear: Int, vm: AddSectionsViewModel)(implicit request: Request[_], messages: Messages)
 
     @layout(pageTitle = titleNoForm(messages("addSections.title")), taxYear = taxYear) {
 
@@ -38,15 +38,15 @@
 
         @heading(messages("addSections.heading"))
 
-        @heading2(messages("addSections.incomplete"))
+        @heading2(messages("vm.statusText"))
 
         @p(messages("addSections.completedSections", completedSections), extraClasses = Seq("govuk-!-margin-bottom-7"))
 
-        @taskList(sections)
+        @taskList(List(("", vm.sections)))
 
         @govukButton(
             ButtonViewModel(messages("site.continue"))
-                .asLink(routes.TaxReturnNotReadyController.onPageLoad(taxYear).url)
-                .withCssClass("govuk-button--secondary")
+                .asLink(vm.continueLink)
+                .withCssClass(vm.buttonStyle)
         )
     }

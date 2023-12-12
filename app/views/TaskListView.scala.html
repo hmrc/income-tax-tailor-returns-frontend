@@ -23,10 +23,10 @@
         h1: Heading1,
         h2: Heading2,
         p: ParagraphBody,
-        tasks: TempTaskList
+        tasks: TaskList
 )
 
-@(taxYear: Int, vm: TaskListPageViewModel, taskCount: Int)(implicit request: Request[_], messages: Messages)
+@(taxYear: Int, vm: TaskListPageViewModel)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("taskList.title")), taxYear = taxYear) {
 
@@ -36,7 +36,7 @@
 
     @h2(messages("taskList.incomplete"), size = "s")
 
-    @p(messages("taskList.completedSections", "0", taskCount))
+    @p(messages("taskList.completedSections", "0", vm.getNumOfTasks))
 
     @tasks(vm.getSections)
 

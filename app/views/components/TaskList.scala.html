@@ -18,15 +18,24 @@
 @import viewmodels.Task
 
 @this(
-    taskItem: TaskItem,
-    link: Link
+taskItem: TaskItem,
+link: Link
 )
 
 
-@(sections: List[Task])(implicit messages: Messages)
+@(sections: List[(String, List[Task])])(implicit messages: Messages)
+
+@for(taskList <- sections) {
+
+@if(!sections.head._1.isEmpty) {
+<h2 id="task-list--heading" class="app-task-list__section">@messages({taskList._1})</h2>
+}
 
 <ul class="app-task-list__items govuk-!-padding-left-0">
-    @for(task <- sections){
-        @taskItem(task)
+
+    @for(task <- taskList._2){
+    @taskItem(task)
     }
+
 </ul>
+}

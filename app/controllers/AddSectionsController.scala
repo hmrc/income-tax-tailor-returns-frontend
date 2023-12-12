@@ -18,13 +18,11 @@ package controllers
 
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import models.SectionNames._
-import models.NormalMode
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.AddSectionsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.{Link, Task}
+import viewmodels.AddSectionsViewModel
 import views.html.{AddSectionsAgentView, AddSectionsView}
 
 import javax.inject.Inject
@@ -51,27 +49,12 @@ class AddSectionsController @Inject()(
 
       val state = addSectionsService.getState(request.userAnswers)
 
-      val prefix: String = if (request.isAgent) {
-        "addSections.agent"
-      } else {
-        "addSections"
-      }
-
-      val sections = List(
-        Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), state.aboutYou, prefix),
-        Task(Link(
-          IncomeFromWork.toString, controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url), state.incomeFromWork, prefix),
-        Task(Link(
-          IncomeFromProperty.toString, controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url), state.incomeFromProperty, prefix),
-        Task(Link(Pensions.toString, controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url), state.pensions, prefix)
-      )
-
-      val completedCount: Int = sections.map(_.tag).count(_.isCompleted)
+      val vm = AddSectionsViewModel(state, taxYear, prefix)
 
       if (request.isAgent) {
-        Ok(agentView(taxYear, sections, completedCount))
+        Ok(agentView(taxYear, vm))
       } else {
-        Ok(view(taxYear, sections, completedCount))
+        Ok(view(taxYear, vm))
       }
   }
 }

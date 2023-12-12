@@ -17,36 +17,24 @@
 package controllers
 
 import base.SpecBase
-import models.NormalMode
-import models.SectionNames._
-import models.TagStatus.{CannotStartYet, NotStarted}
+import models.SectionState
+import models.TagStatus.{CannotStartYet, Completed, NotStarted}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewmodels.{Link, Task}
+import viewmodels.AddSectionsViewModel
 import views.html.{AddSectionsAgentView, AddSectionsView}
 
 
 class AddSectionsControllerSpec extends SpecBase {
 
-  private val addSectionsKey = "addSections"
-  private val addSectionsAgentKey = "addSections.agent"
-
-  private def sectionList(key: String): List[Task] =
-    List(
-      Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), NotStarted, key),
-      Task(Link(
-        IncomeFromWork.toString, controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url), CannotStartYet, key),
-      Task(Link(
-        IncomeFromProperty.toString, controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url), CannotStartYet, key),
-      Task(Link(
-        Pensions.toString, controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url), NotStarted, key)
-    )
-
-  private val completedCount: Int = sectionList(addSectionsKey).map(_.tag).count(_.isCompleted)
+  private val addSectionsKey: String = "addSections"
+  private val addSectionsAgentKey: String = "addSections.agent"
+  private def vmIncomplete(key: String) = AddSectionsViewModel(SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted), taxYear, key)
+  private def vmComplete(key: String) = AddSectionsViewModel(SectionState(Completed, Completed, Completed, Completed), taxYear, key)
 
   "AddSections Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET with incomplete sections" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -58,11 +46,29 @@ class AddSectionsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AddSectionsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear, sectionList(addSectionsKey), completedCount)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(taxYear, vmIncomplete(addSectionsKey))(request, messages(application)).toString
       }
     }
 
-    "must return OK and the correct view for a GET for an agent" in {
+    "must return OK and the correct view for a GET when all sections are complete" in {
+
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AddSectionsView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(taxYear, vmComplete(addSectionsKey))(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET with incomplete sections for an agent" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
@@ -74,7 +80,25 @@ class AddSectionsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AddSectionsAgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear, sectionList(addSectionsAgentKey), completedCount)(request, messages(application)).toString
+        contentAsString(result) mustEqual
+          view(taxYear, vmIncomplete(addSectionsAgentKey))(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET when all sections are complete for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AddSectionsAgentView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(taxYear, vmComplete(addSectionsAgentKey))(request, messages(application)).toString
       }
     }
   }

@@ -49,12 +49,10 @@ class TaskListController @Inject()(
 
       val vm = TaskListPageViewModel(request.userAnswers, prefix)
 
-      val taskCount = vm.getSections.map(_._2.size).sum
-
       if (request.isAgent) {
-        Ok(agentView(taxYear))
+        Ok(agentView(taxYear, vm))
       } else {
-        Ok(view(taxYear, vm, taskCount))
+        Ok(view(taxYear, vm))
       }
   }
 

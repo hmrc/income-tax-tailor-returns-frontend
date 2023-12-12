@@ -18,22 +18,19 @@ package viewmodels
 
 import base.SpecBase
 import models.TagStatus.NotStarted
-import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities, NoDonations}
+import models.aboutyou.CharitableDonations.NoDonations
+import models.aboutyou.UkResidenceStatus.Domiciled
 import models.aboutyou.{CharitableDonations, UkResidenceStatus}
 import models.pensions.PaymentsIntoPensions
-import models.pensions.PaymentsIntoPensions.{Overseas, UkPensions}
-import models.propertypensionsinvestments.Pensions.{NoPensions, OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
+import models.propertypensionsinvestments.Pensions.NoPensions
 import models.propertypensionsinvestments.UkDividendsSharesLoans._
-import models.propertypensionsinvestments.UkInsuranceGains.{CapitalRedemption, LifeAnnuity, LifeInsurance, VoidedISA}
-import models.propertypensionsinvestments.UkInterest.{FromGiltEdged, FromUkBanks, FromUkTrustFunds, NoInterest}
+import models.propertypensionsinvestments.UkInterest.NoInterest
 import models.propertypensionsinvestments._
-import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
-import models.workandbenefits.JobseekersAllowance.{Esa, Jsa}
 import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
 import pages.aboutyou.{CharitableDonationsPage, FosterCarerPage, UkResidenceStatusPage}
 import pages.pensions.PaymentsIntoPensionsPage
 import pages.propertypensionsinvestments._
-import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage, ConstructionIndustrySchemePage, JobseekersAllowancePage}
+import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 import play.api.i18n.Messages
 import play.api.test.Helpers.stubMessages
 
@@ -41,26 +38,7 @@ class TaskListPageViewModelSpec extends SpecBase {
 
   private implicit val messages: Messages = stubMessages()
 
-  private val allSections = emptyUserAnswers.copy().set(UkResidenceStatusPage, UkResidenceStatus.Uk)
-    .flatMap(_.set(CharitableDonationsPage, Set[CharitableDonations](DonationsUsingGiftAid, GiftsOfSharesOrSecurities, GiftsOfLandOrProperty )))
-    .flatMap(_.set(FosterCarerPage, true))
-    .flatMap(_.set(AboutYourWorkRadioPage, true))
-    .flatMap(_.set(AboutYourWorkPage, Set[AboutYourWork](Employed, SelfEmployed)))
-    .flatMap(_.set(ConstructionIndustrySchemePage, true))
-    .flatMap(_.set(JobseekersAllowancePage, Set[JobseekersAllowance](Jsa, Esa)))
-    .flatMap(_.set(RentalIncomePage, Set[RentalIncome](RentalIncome.Uk, RentalIncome.NonUk)))
-    .flatMap(_.set(PensionsPage, Set[Pensions](StatePension, OtherUkPensions, UnauthorisedPayments, ShortServiceRefunds, Pensions.NonUkPensions)))
-    .flatMap(_.set(UkInsuranceGainsPage, Set[UkInsuranceGains](LifeInsurance, LifeAnnuity, CapitalRedemption, VoidedISA)))
-    .flatMap(_.set(UkInterestPage, Set[UkInterest](FromUkBanks, FromUkTrustFunds, FromGiltEdged)))
-    .flatMap(_.set(UkDividendsSharesLoansPage, Set[UkDividendsSharesLoans](
-      CashDividendsFromUkStocksAndShares,
-      StockDividendsFromUkCompanies,
-      DividendsUnitTrustsInvestmentCompanies,
-      FreeOrRedeemableShares,
-      CloseCompanyLoansWrittenOffReleased
-    )))
-    .flatMap(_.set(PaymentsIntoPensionsPage, Set[PaymentsIntoPensions](UkPensions, PaymentsIntoPensions.NonUkPensions, Overseas)))
-    .success.value
+  private val prefix: String = "taskList"
 
   private val allSectionsNegative = emptyUserAnswers.copy().set(UkResidenceStatusPage, UkResidenceStatus.NonUK)
     .flatMap(_.set(CharitableDonationsPage, Set[CharitableDonations](NoDonations)))
@@ -79,14 +57,24 @@ class TaskListPageViewModelSpec extends SpecBase {
 
     "must return an empty list with an empty userAnswers object" in {
       val expected = List.empty
-      val result = TaskListPageViewModel(emptyUserAnswers).getSections
+      val result = TaskListPageViewModel(emptyUserAnswers, prefix).getSections
 
       result mustBe expected
     }
 
     "must return an empty list when all answers are 'no/none'" in {
       val expected = List.empty
-      val result = TaskListPageViewModel(allSectionsNegative).getSections
+      val result = TaskListPageViewModel(allSectionsNegative, prefix).getSections
+
+      result mustBe expected
+    }
+
+    "must return the ukResidenceStatus task when 'Domiciled'" in {
+      val expected = List(
+        (s"${prefix}.aboutYou", List(
+          Task(Link("heading", "#"), NotStarted, "ukResidenceStatus")))
+      )
+      val result = TaskListPageViewModel(emptyUserAnswers.copy().set(UkResidenceStatusPage, Domiciled).success.value, prefix).getSections
 
       result mustBe expected
     }
@@ -94,46 +82,58 @@ class TaskListPageViewModelSpec extends SpecBase {
     "must return a list containing all possible sections for the task list" in {
       val expected =
         List(
-          ("addSections.aboutYou", List(
-            Task(Link("ukResidenceStatus.heading", "#"), NotStarted),
-            Task(Link("charitableDonations.donationsUsingGiftAid", "#"), NotStarted),
-            Task(Link("charitableDonations.giftsOfLandOrProperty", "#"), NotStarted),
-            Task(Link("charitableDonations.giftsOfSharesOrSecurities", "#"), NotStarted),
-            Task(Link("Foster Carer", "#"), NotStarted))),
-          ("All Employment", List(Task(Link("Employers", "#"), NotStarted))),
-          ("aboutYourWork.selfEmployed", List(Task(Link("Check your self-employment details", "#"), NotStarted), Task(Link("Review CIS", "#"), NotStarted))),
-          ("Employment and Support Allowance", List(Task(Link("Review Jobseeker’s Allowance claims", "#"), NotStarted))),
-          ("jobseekersAllowance.jsa", List(Task(Link("Review Jobseeker’s Allowance claims", "#"), NotStarted))),
-          ("rentalIncome.uk", List(Task(Link("About UK property", "#"), NotStarted))),
-          ("rentalIncome.nonUk", List(Task(Link("About Foreign property", "#"), NotStarted))),
+          (s"${prefix}.aboutYou", List(
+            Task(Link("heading", "#"), NotStarted, "ukResidenceStatus"),
+            Task(Link("donationsUsingGiftAid", "#"), NotStarted, "charitableDonations"),
+            Task(Link("giftsOfLandOrProperty", "#"), NotStarted, "charitableDonations"),
+            Task(Link("giftsOfSharesOrSecurities", "#"), NotStarted, "charitableDonations"),
+            Task(Link("fosterCarer", "#"), NotStarted, prefix))),
+          ("taskList.allEmployment", List(Task(Link("employers", "#"), NotStarted, prefix))),
+          ("aboutYourWork.selfEmployed", List(
+            Task(Link("selfEmployment", "#"), NotStarted, prefix),
+            Task(Link("reviewCis", "#"), NotStarted, prefix))),
+          ("taskList.esa", List(Task(Link("reviewEsa", "#"), NotStarted, prefix))),
+          ("jobseekersAllowance.jsa", List(Task(Link("reviewJsa", "#"), NotStarted, prefix))),
+          ("rentalIncome.uk", List(Task(Link("ukProperty", "#"), NotStarted, prefix))),
+          ("taskList.foreignProperty", List(Task(Link("aboutForeignProperty", "#"), NotStarted, prefix))),
           ("pensions.title", List(
-            Task(Link("pensions.unauthorisedPayments", "#"), NotStarted),
-            Task(Link("pensions.nonUkPensions", "#"), NotStarted),
-            Task(Link("pensions.shortServiceRefunds", "#"), NotStarted),
-            Task(Link("pensions.otherUkPensions", "#"), NotStarted),
-            Task(Link("pensions.statePension", "#"), NotStarted))),
+            Task(Link("statePension", "#"), NotStarted, "pensions"),
+            Task(Link("otherUkPensions", "#"), NotStarted, "pensions"),
+            Task(Link("unauthorisedPayments", "#"), NotStarted, "pensions"),
+            Task(Link("shortServiceRefunds", "#"), NotStarted, "pensions"),
+            Task(Link("nonUkPensions", "#"), NotStarted, "pensions"))),
           ("ukInsuranceGains.title", List(
-            Task(Link("ukInsuranceGains.lifeInsurance", "#"), NotStarted),
-            Task(Link("ukInsuranceGains.lifeAnnuity", "#"), NotStarted),
-            Task(Link("ukInsuranceGains.capitalRedemption", "#"), NotStarted),
-            Task(Link("ukInsuranceGains.voidedISA", "#"), NotStarted))),
+            Task(Link("lifeInsurance", "#"), NotStarted, "ukInsuranceGains"),
+            Task(Link("lifeAnnuity", "#"), NotStarted, "ukInsuranceGains"),
+            Task(Link("capitalRedemption", "#"), NotStarted, "ukInsuranceGains"),
+            Task(Link("voidedISA", "#"), NotStarted, "ukInsuranceGains"))),
           ("ukInterest.title", List(
-            Task(Link("ukInterest.fromUkBanks", "#"), NotStarted),
-            Task(Link("ukInterest.fromUkTrustFunds", "#"), NotStarted),
-            Task(Link("ukInterest.fromGiltEdged", "#"), NotStarted))),
+            Task(Link("fromUkBanks", "#"), NotStarted, "ukInterest"),
+            Task(Link("fromUkTrustFunds", "#"), NotStarted, "ukInterest"),
+            Task(Link("fromGiltEdged", "#"), NotStarted, "ukInterest"))),
           ("ukDividendsSharesLoans.title", List(
-            Task(Link("ukDividendsSharesLoans.cashDividendsUkStocksAndShares", "#"), NotStarted),
-            Task(Link("ukDividendsSharesLoans.closeCompanyLoansWrittenOffReleased", "#"), NotStarted),
-            Task(Link("ukDividendsSharesLoans.dividendsUnitTrustsInvestmentCompanies", "#"), NotStarted),
-            Task(Link("ukDividendsSharesLoans.freeOrRedeemableShares", "#"), NotStarted),
-            Task(Link("ukDividendsSharesLoans.stockDividendsUkCompanies", "#"), NotStarted))),
+            Task(Link("cashDividendsUkStocksAndShares", "#"), NotStarted, "ukDividendsSharesLoans"),
+            Task(Link("stockDividendsUkCompanies", "#"), NotStarted, "ukDividendsSharesLoans"),
+            Task(Link("dividendsUnitTrustsInvestmentCompanies", "#"), NotStarted, "ukDividendsSharesLoans"),
+            Task(Link("freeOrRedeemableShares", "#"), NotStarted, "ukDividendsSharesLoans"),
+            Task(Link("closeCompanyLoansWrittenOffReleased", "#"), NotStarted, "ukDividendsSharesLoans"))),
           ("paymentsIntoPensions.title", List(
-            Task(Link("paymentsIntoPensions.ukPensions", "#"), NotStarted),
-            Task(Link("paymentsIntoPensions.nonUkPensions", "#"), NotStarted),
-            Task(Link("paymentsIntoPensions.overseas", "#"), NotStarted)))
+            Task(Link("ukPensions", "#"), NotStarted, "paymentsIntoPensions"),
+            Task(Link("nonUkPensions", "#"), NotStarted, "paymentsIntoPensions"),
+            Task(Link("overseas", "#"), NotStarted, "paymentsIntoPensions")))
         )
 
-      val result = TaskListPageViewModel(allSections).getSections
+      val result = TaskListPageViewModel(fullUserAnswers, prefix).getSections
+
+      result mustBe expected
+    }
+  }
+
+  ".getNumOfTasks" - {
+
+    "must return 32 when all options have been selected" in {
+      val expected = 32
+      val result = TaskListPageViewModel(fullUserAnswers, prefix).getNumOfTasks
 
       result mustBe expected
     }

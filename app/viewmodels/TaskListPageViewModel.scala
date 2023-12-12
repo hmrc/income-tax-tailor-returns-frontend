@@ -39,28 +39,24 @@ case class TaskListPageViewModel(ua: UserAnswers, prefix: String)(implicit messa
 
     def ukResidence: List[Task] =
       ua.get(UkResidenceStatusPage) match {
-        case Some(UkResidenceStatus.Uk) => List(Task(Link(messages("ukResidenceStatus.heading"), "#"), NotStarted, ""))
-        case Some(UkResidenceStatus.Domiciled) => List(Task(Link(messages("ukResidenceStatus.heading"), "#"), NotStarted, ""))
+        case Some(UkResidenceStatus.Uk) => List(Task(Link(messages("heading"), "#"), NotStarted, "ukResidenceStatus"))
+        case Some(UkResidenceStatus.Domiciled) => List(Task(Link(messages("heading"), "#"), NotStarted, "ukResidenceStatus"))
         case _ => Nil
       }
 
     def charitableDonations: List[Task] = {
 
-      val links = List(
-        DonationsUsingGiftAid,
-        GiftsOfLandOrProperty,
-        GiftsOfSharesOrSecurities
-      )
+      val links = List(DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities)
 
       ua.get(CharitableDonationsPage).map(_.toSeq) match {
-        case Some(value) => links.intersect(value).map(k => Task(Link(messages(k.toString), "#"), NotStarted, "charitableDonations"))
+        case Some(value) => links.intersect(value).map(k => Task(Link(k.toString, "#"), NotStarted, "charitableDonations"))
         case _ => Nil
       }
     }
 
     def fosterCarer: List[Task] = {
       ua.get(FosterCarerPage) match {
-        case Some(value) if value => List[Task](Task(Link("Foster Carer", "#"), NotStarted, ""))
+        case Some(value) if value => List[Task](Task(Link("fosterCarer", "#"), NotStarted, prefix))
         case _ => Nil
       }
     }
@@ -81,13 +77,13 @@ case class TaskListPageViewModel(ua: UserAnswers, prefix: String)(implicit messa
 
     def selfEmployment: List[Task] =
       ua.get(AboutYourWorkPage).map(_.toSeq) match {
-        case Some(value) if value.contains(SelfEmployed) => List(Task(Link("Check your self-employment details", "#"), NotStarted, ""))
+        case Some(value) if value.contains(SelfEmployed) => List(Task(Link("selfEmployment", "#"), NotStarted, prefix))
         case _ => Nil
       }
 
     def cis: List[Task] =
       ua.get(ConstructionIndustrySchemePage) match {
-        case Some(value) if value => List[Task](Task(Link("Review CIS", "#"), NotStarted, ""))
+        case Some(value) if value => List[Task](Task(Link("reviewCis", "#"), NotStarted, prefix))
         case _ => Nil
       }
 
@@ -96,98 +92,84 @@ case class TaskListPageViewModel(ua: UserAnswers, prefix: String)(implicit messa
 
   private def esaSection: List[Task] = {
     ua.get(JobseekersAllowancePage).map(_.toSeq) match {
-      case Some(value) if value.contains(Esa) => List(Task(Link("Review Jobseeker’s Allowance claims", "#"), NotStarted, ""))
+      case Some(value) if value.contains(Esa) => List(Task(Link("reviewEsa", "#"), NotStarted, prefix))
       case _ => Nil
     }
   }
 
   private def jsaSection: List[Task] = {
     ua.get(JobseekersAllowancePage).map(_.toSeq) match {
-      case Some(value) if value.contains(Jsa) => List(Task(Link("Review Jobseeker’s Allowance claims", "#"), NotStarted, ""))
+      case Some(value) if value.contains(Jsa) => List(Task(Link("reviewJsa", "#"), NotStarted, prefix))
       case _ => Nil
     }
   }
 
   private def ukPropertySection: List[Task] = {
     ua.get(RentalIncomePage).map(_.toSeq) match {
-      case Some(value) if value.contains(Uk) => List(Task(Link("About UK property", "#"), NotStarted, ""))
+      case Some(value) if value.contains(Uk) => List(Task(Link("ukProperty", "#"), NotStarted, prefix))
       case _ => Nil
     }
   }
 
   private def nonUkPropertySection: List[Task] = {
     ua.get(RentalIncomePage).map(_.toSeq) match {
-      case Some(value) if value.contains(NonUk) => List(Task(Link("About Foreign property", "#"), NotStarted, ""))
+      case Some(value) if value.contains(NonUk) => List(Task(Link("aboutForeignProperty", "#"), NotStarted, prefix))
       case _ => Nil
     }
   }
 
   private def incomeFromPensionsSection: List[Task] = {
 
-    val linkMappings = Map(StatePension -> "pensions.statePension",
-      OtherUkPensions -> "pensions.otherUkPensions",
-      UnauthorisedPayments -> "pensions.unauthorisedPayments",
-      ShortServiceRefunds -> "pensions.shortServiceRefunds",
-      NonUkPensions -> "pensions.nonUkPensions"
-    )
+    val links = List(StatePension, OtherUkPensions, UnauthorisedPayments, ShortServiceRefunds, NonUkPensions)
 
     ua.get(PensionsPage).map(_.toSeq) match {
-      case Some(value) => linkMappings.keySet.toList.intersect(value).map(k => Task(Link(messages(linkMappings(k)), "#"), NotStarted, ""))
+      case Some(value) => links.intersect(value).map(k => Task(Link(k.toString, "#"), NotStarted, "pensions"))
       case _ => Nil
     }
   }
 
   private def ukInsuranceGainsSection: List[Task] = {
 
-    val linkMappings = Map(LifeInsurance -> "ukInsuranceGains.lifeInsurance",
-      LifeAnnuity -> "ukInsuranceGains.lifeAnnuity",
-      CapitalRedemption -> "ukInsuranceGains.capitalRedemption",
-      VoidedISA -> "ukInsuranceGains.voidedISA"
-    )
+    val links = List(LifeInsurance, LifeAnnuity, CapitalRedemption, VoidedISA)
 
     ua.get(UkInsuranceGainsPage).map(_.toSeq) match {
-      case Some(value) => linkMappings.keySet.toList.intersect(value).map(k => Task(Link(messages(linkMappings(k)), "#"), NotStarted, ""))
+      case Some(value) => links.intersect(value).map(k => Task(Link(k.toString, "#"), NotStarted, "ukInsuranceGains"))
       case _ => Nil
     }
   }
 
   private def ukInterestSection: List[Task] = {
 
-    val linkMappings = Map(FromUkBanks -> "ukInterest.fromUkBanks",
-      FromUkTrustFunds -> "ukInterest.fromUkTrustFunds",
-      FromGiltEdged -> "ukInterest.fromGiltEdged"
-    )
+    val links = List(FromUkBanks, FromUkTrustFunds, FromGiltEdged)
 
     ua.get(UkInterestPage).map(_.toSeq) match {
-      case Some(value) => linkMappings.keySet.toList.intersect(value).map(k => Task(Link(messages(linkMappings(k)), "#"), NotStarted, ""))
+      case Some(value) => links.intersect(value).map(k => Task(Link(k.toString, "#"), NotStarted, "ukInterest"))
       case _ => Nil
     }
   }
 
   private def ukDividendsSection: List[Task] = {
 
-    val linkMappings = Map(CashDividendsFromUkStocksAndShares -> "ukDividendsSharesLoans.cashDividendsUkStocksAndShares",
-      StockDividendsFromUkCompanies -> "ukDividendsSharesLoans.stockDividendsUkCompanies",
-      DividendsUnitTrustsInvestmentCompanies -> "ukDividendsSharesLoans.dividendsUnitTrustsInvestmentCompanies",
-      FreeOrRedeemableShares -> "ukDividendsSharesLoans.freeOrRedeemableShares",
-      CloseCompanyLoansWrittenOffReleased -> "ukDividendsSharesLoans.closeCompanyLoansWrittenOffReleased"
+    val links = List(
+      CashDividendsFromUkStocksAndShares,
+      StockDividendsFromUkCompanies,
+      DividendsUnitTrustsInvestmentCompanies,
+      FreeOrRedeemableShares,
+      CloseCompanyLoansWrittenOffReleased
     )
 
     ua.get(UkDividendsSharesLoansPage).map(_.toSeq) match {
-      case Some(value) => linkMappings.keySet.toList.intersect(value).map(k => Task(Link(messages(linkMappings(k)), "#"), NotStarted, ""))
+      case Some(value) => links.intersect(value).map(k => Task(Link(k.toString, "#"), NotStarted, "ukDividendsSharesLoans"))
       case _ => Nil
     }
   }
 
   private def paymentsIntoPensionsSection: List[Task] = {
 
-    val linkMappings = Map(UkPensions -> "paymentsIntoPensions.ukPensions",
-      models.pensions.PaymentsIntoPensions.NonUkPensions -> "paymentsIntoPensions.nonUkPensions",
-      Overseas -> "paymentsIntoPensions.overseas"
-    )
+    val links = List(UkPensions, models.pensions.PaymentsIntoPensions.NonUkPensions, Overseas)
 
     ua.get(PaymentsIntoPensionsPage).map(_.toSeq) match {
-      case Some(value) => linkMappings.keySet.toList.intersect(value).map(k => Task(Link(messages(linkMappings(k)), "#"), NotStarted, ""))
+      case Some(value) => links.intersect(value).map(k => Task(Link(k.toString, "#"), NotStarted, "paymentsIntoPensions"))
       case _ => Nil
     }
   }
@@ -195,13 +177,13 @@ case class TaskListPageViewModel(ua: UserAnswers, prefix: String)(implicit messa
   def getSections: List[(String, List[Task])] = {
 
     List(
-      (messages("addSections.aboutYou"), aboutYouSections),
-      ("All Employment", employmentSection),
+      (messages(s"${prefix}.aboutYou"), aboutYouSections),
+      (messages("taskList.allEmployment"), employmentSection),
       (messages("aboutYourWork.selfEmployed"), selfEmploymentSection),
-      ("Employment and Support Allowance", esaSection),
+      (messages("taskList.esa"), esaSection),
       (messages("jobseekersAllowance.jsa"), jsaSection),
       (messages("rentalIncome.uk"), ukPropertySection),
-      (messages("rentalIncome.nonUk"), nonUkPropertySection),
+      (messages("taskList.foreignProperty"), nonUkPropertySection),
       (messages("pensions.title"), incomeFromPensionsSection),
       (messages("ukInsuranceGains.title"), ukInsuranceGainsSection),
       (messages("ukInterest.title"), ukInterestSection),
@@ -210,5 +192,7 @@ case class TaskListPageViewModel(ua: UserAnswers, prefix: String)(implicit messa
     ).filterNot(_._2 == List[Task]())
 
   }
+
+  def getNumOfTasks: Int = getSections.map(_._2.size).sum
 
 }

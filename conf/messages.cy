@@ -67,6 +67,7 @@ addSections.title = Ychwanegu adrannau at eich Ffurflen Dreth
 addSections.agent.title = Ychwanegu adrannau at Ffurflen Dreth eich cleient
 addSections.heading = Ychwanegu adrannau at eich Ffurflen Dreth
 addSections.agent.heading = Ychwanegu adrannau at Ffurflen Dreth eich cleient
+addSections.completed = Wedi’i gwblhau
 addSections.incomplete = Heb lenwi
 addSections.completedSections = Rydych wedi llenwi {0} allan o 4 adran.
 addSections.aboutYou = Amdanoch chi
@@ -541,10 +542,37 @@ paymentsIntoPensions.agent.none = Na, ni dalodd fy nghleient i mewn i unrhyw ben
 paymentsIntoPensions.error.required = Dewiswch a wnaethoch Daliadau i mewn i bensiynau’r DU, Taliadau i mewn i bensiynau sydd ddim yn y DU, Taliadau ar drosglwyddiadau tramor neu, ‘Na, ni dalais i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU’ 
 paymentsIntoPensions.agent.error.required = Dewiswch a wnaeth eich cleient Taliadau i mewn i bensiynau’r DU, Taliadau i mewn i i bensiynau sydd ddim yn y DU, Taliadau ar drosglwyddiadau tramor neu, ‘Na, ni dalodd fy nghleient i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU’
 
+###################################  Task List ###########################################################################################
+
 taskList.title = Eich Ffurflen Dreth Incwm
 taskList.heading = Eich Ffurflen Dreth Incwm
 taskList.agent.title = Ffurflen Dreth Incwm eich cleient
 taskList.agent.heading = Ffurflen Dreth Incwm eich cleient
-taskList.incomplete = Incomplete
-taskList.completedSections = You have completed {0} of 32 sections
+taskList.incomplete = Heb lenwi
+taskList.completedSections = Rydych wedi llenwi {0} allan o {1} adran
+taskList.addSections = Ychwanegu adrannau
+taskList.aboutYou = Amdanoch chi
+taskList.employers = Employers
+taskList.allEmployment = All Employment
+taskList.esa = Employment and Support Allowance
+taskList.fosterCarer = Foster Carer
+taskList.selfEmployment = Check your self-employment details
+taskList.reviewCis = Review CIS
+taskList.reviewEsa = Review Employment and Support Allowance claims
+taskList.reviewJsa = Review Jobseeker’s Allowance claims
+taskList.ukProperty = About UK property
+taskList.aboutForeignProperty = About Foreign property
+taskList.foreignProperty = Foreign property
+taskList.agent.aboutYou = Ynglŷn â’ch cleient
+taskList.agent.employers = Employers
+taskList.agent.allEmployment = All Employment
+taskList.agent.esa = Employment and Support Allowance
+taskList.agent.fosterCarer = Foster Carer
+taskList.agent.selfEmployment = Check your client’s self-employment details
+taskList.agent.reviewCis = Review CIS
+taskList.agent.reviewEsa = Review Employment and Support Allowance claims
+taskList.agent.reviewJsa = Review Jobseeker’s Allowance claims
+taskList.agent.ukProperty = About UK property
+taskList.agent.aboutForeignProperty = About Foreign property
+taskList.agent.foreignProperty = Foreign property
 

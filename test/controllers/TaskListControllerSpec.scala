@@ -29,15 +29,15 @@ class TaskListControllerSpec extends SpecBase {
 
   private implicit val messages: Messages = stubMessages()
 
-  private val vm = TaskListPageViewModel(emptyUserAnswers)
+  private val vm = TaskListPageViewModel(fullUserAnswers, "taskList")
 
-  private val taskCount: Int = vm.getSections.map(_._2.size).sum
+  private val agentVm = TaskListPageViewModel(fullUserAnswers, "taskList.agent")
 
   "TaskList Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.TaskListController.onPageLoad(taxYear).url)
@@ -47,13 +47,13 @@ class TaskListControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[TaskListView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear, vm, taskCount)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear, vm)(request, messages(application)).toString
       }
     }
 
     "must return OK and the correct view for a GET for an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.TaskListController.onPageLoad(taxYear).url)
@@ -63,7 +63,7 @@ class TaskListControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[TaskListAgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear, agentVm)(request, messages(application)).toString
       }
     }
   }

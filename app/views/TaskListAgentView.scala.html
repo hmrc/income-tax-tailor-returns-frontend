@@ -14,14 +14,42 @@
  * limitations under the License.
  *@
 
+@import components._
+@import viewmodels.TaskListPageViewModel
+
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        govukButton: GovukButton,
+        h1: Heading1,
+        h2: Heading2,
+        p: ParagraphBody,
+        tasks: TaskList
 )
 
-@(taxYear: Int)(implicit request: Request[_], messages: Messages)
+@(taxYear: Int, vm: TaskListPageViewModel)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("askList.agent.title")), taxYear = taxYear) {
+@layout(pageTitle = titleNoForm(messages("taskList.agent.title")), taxYear = taxYear) {
 
-    <h1 class="govuk-heading-xl">@messages("askList.agent.heading")</h1>
+    <span class="govuk-caption-l">@messages("site.taxYearCaption", (taxYear -1).toString, taxYear.toString)</span>
+
+    @h1(messages("taskList.agent.heading"))
+
+    @h2(messages("taskList.incomplete"), size = "s")
+
+    @p(messages("taskList.completedSections", "0", vm.getNumOfTasks))
+
+    @tasks(vm.getSections)
+
+    @govukButton(
+        ButtonViewModel(messages("taskList.addSections")).asSecondaryButton()
+            .asLink(controllers.routes.AddSectionsController.onPageLoad(taxYear).url)
+    )
+
+    <br/>
+
+    @govukButton(
+        ButtonViewModel(messages("site.continue")).asSecondaryButton()
+            .asLink("#")
+    )
+
 }
