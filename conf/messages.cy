@@ -13,7 +13,7 @@ site.govuk = GOV.UK
 site.taxYearCaption = 6 Ebrill {0} i 5 Ebrill {1}
 site.or = Neu
 site.hint.selectAll = Dewiswch bob un sy’n berthnasol.
-site.opensInNewTab = (yn agor tab newydd)
+site.opensInNewTab = (yn agor mewn tab newydd)
 
 date.day = Diwrnod
 date.month = Mis
@@ -336,7 +336,7 @@ jobseekersAllowance.agent.esa = Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau
 jobseekersAllowance.none = Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn
 jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r wladwriaeth hyn
 jobseekersAllowance.error.required = Dewiswch a gawsoch Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn’
-jobseekersAllowance.agent.error.required = Dewiswch a gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chafodd fy nghleient yr un o’r budd-daliadau hyn’
+jobseekersAllowance.agent.error.required = Dewiswch a gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r budd-daliadau’r wladwriaeth hyn’
 
 ###################################  Income From Property Pensions Investments ###########################################################################################
 
@@ -383,8 +383,8 @@ pensions.nonUkPensions = Pensiynau sydd ddim yn y DU
 pensions.agent.nonUkPensions = Pensiynau sydd ddim yn y DU
 pensions.noPensions = Na, ni chefais unrhyw incwm o bensiynau
 pensions.agent.noPensions = Na, ni chafodd fy nghleient unrhyw incwm o bensiynau
-pensions.error.required = Dewiswch a gawsoch unrhyw incwm o bensiynau, neu dewiswch ‘Na, ni chefais unrhyw incwm o bensiynau’
-pensions.agent.error.required = Dewiswch a gafodd eich cleient unrhyw incwm o bensiynau, neu dewiswch ‘Na, ni chafodd fy nghleient unrhyw incwm o bensiynau’
+pensions.error.required = Dewiswch a gawsoch unrhyw incwm o bensiynau, neu ‘Na, ni chefais unrhyw incwm o bensiynau’
+pensions.agent.error.required = Dewiswch a gafodd eich cleient unrhyw incwm o bensiynau, neu ‘Na, ni chafodd fy nghleient unrhyw incwm o bensiynau’
 
 rentalIncome.title = Incwm rhent o eiddo
 rentalIncome.agent.title = Incwm rhent o eiddo
@@ -398,7 +398,7 @@ rentalIncome.details.bullet2 = unrhyw rent sydd ddim yn y DU a gawsoch, gan gynn
 rentalIncome.agent.details.bullet2 = unrhyw rent sydd ddim yn y DU a gafodd eich cleient, gan gynnwys rhent am dir
 rentalIncome.details.bullet3 = llety gwyliau wedi’i ddodrefnu yn y DU neu’r Ardal Economaidd Ewropeaidd (AEE)
 rentalIncome.details.bullet4 = gosod ystafelloedd wedi’u dodrefnu yn eich cartref eich hun, os na wnaethoch ddarparu prydau bwyd neu wasanaethau eraill
-rentalIncome.agent.details.bullet4 = lgosod ystafelloedd wedi’u dodrefnu yng nghartref eich cleient, os na wnaeth ddarparu prydau bwyd neu wasanaethau eraill
+rentalIncome.agent.details.bullet4 = gosod ystafelloedd wedi’u dodrefnu yng nghartref eich cleient, os na wnaeth ddarparu prydau bwyd neu wasanaethau eraill
 rentalIncome.details.link = Gwirio’ch statws preswyl yn y DU
 rentalIncome.agent.details.link = Gwirio statws preswyl yn y DU eich cleient
 rentalIncome.legend = A gawsoch incwm rhent o eiddo?
@@ -409,8 +409,8 @@ rentalIncome.none = Na, ni chefais incwm rhent o eiddo
 rentalIncome.agent.uk = Eiddo yn y DU
 rentalIncome.agent.nonUk = Eiddo sydd ddim yn y DU
 rentalIncome.agent.none = Na, ni chafod fy nghleient incwm rhent o eiddo
-rentalIncome.error.required = Dewiswch a gawsoch incwm rhent o eiddo yn y DU, o eiddo sydd ddim yn y DU neu dewiswch ‘Na, ni chefais incwm rhent o eiddo’
-rentalIncome.agent.error.required = Dewiswch a gafodd eich cleient incwm rhent o eiddo yn y DU, o eiddo sydd ddim yn y DU neu dewiswch ‘Na, ni chafodd fy nghleient incwm rhent o eiddo’
+rentalIncome.error.required = Dewiswch a gawsoch incwm rhent o eiddo yn y DU, o eiddo sydd ddim yn y DU, neu ‘Na, ni chefais incwm rhent o eiddo’
+rentalIncome.agent.error.required = Dewiswch a gafodd eich cleient incwm rhent o eiddo yn y DU, o eiddo sydd ddim yn y DU, neu ‘Na, ni chafodd fy nghleient incwm rhent o eiddo’
 
 ukInterest.title = Llog yn y DU
 ukInterest.agent.title = Llog yn y DU
@@ -442,8 +442,8 @@ ukInterest.agent.fromUkBanks = Llog o fanciau a chymdeithasau adeiladu yn y DU
 ukInterest.agent.fromUkTrustFunds = Llog o gronfeydd ymddiriedolaeth neu fondiau yn y DU
 ukInterest.agent.fromGiltEdged= Llog o warantau gilt neu warantau incwm cronedig
 ukInterest.agent.noInterest = Na, ni chafodd fy nghleient unrhyw incwm o log yn y DU
-ukInterest.error.required = Dewiswch a gawsoch incwm o log yn y DU, neu dewiswch ‘Na, ni chefais unrhyw incwm o log yn y DU’
-ukInterest.agent.error.required = Dewiswch a gafodd eich cleient incwm o log yn y DU, neu dewiswch ‘Na, ni chafodd fy nghleient unrhyw incwm o log yn y DU’
+ukInterest.error.required = Dewiswch a gawsoch incwm o log yn y DU, neu ‘Na, ni chefais unrhyw incwm o log yn y DU’
+ukInterest.agent.error.required = Dewiswch a gafodd eich cleient incwm o log yn y DU, neu ‘Na, ni chafodd fy nghleient unrhyw incwm o log yn y DU’
 
 ukInsuranceGains.title = Enillion yswiriant yn y DU
 ukInsuranceGains.agent.title = Enillion yswiriant yn y DU
@@ -470,8 +470,8 @@ ukInsuranceGains.agent.capitalRedemption = Adbrynu Cyfalaf
 ukInsuranceGains.agent.voidedISA = ISA sydd wedi’i ddirymu (polisi wedi’i ganslo gan reolwr ISA eich cleient)
 ukInsuranceGains.none = Na, ni chefais unrhyw enillion yswiriant yn y DU
 ukInsuranceGains.agent.none = Na, ni chafodd fy nghleient unrhyw enillion o yswiriant yn y DU
-ukInsuranceGains.error.required = Dewiswch a gawsoch enillion o bolisïau yswiriant yn y DU neu gyfrifon ISA sydd wedi’u dirymu, neu dewiswch ‘Na, ni chefais unrhyw enillion o yswiriant yn y DU’
-ukInsuranceGains.agent.error.required = Dewiswch a gafodd eich cleient enillion o bolisïau yswiriant yn y DU neu gyfrifon ISA sydd wedi’u dirymu, neu dewiswch ‘Na, ni gafodd fy nghleient unrhyw enillion o yswiriant yn y DU’
+ukInsuranceGains.error.required = Dewiswch a gawsoch enillion o bolisïau yswiriant yn y DU neu gyfrifon ISA sydd wedi’u dirymu, neu ‘Na, ni chefais unrhyw enillion o yswiriant yn y DU’
+ukInsuranceGains.agent.error.required = Dewiswch a gafodd eich cleient enillion o bolisïau yswiriant yn y DU neu gyfrifon ISA sydd wedi’u dirymu, neu ‘Na, ni chafodd fy nghleient unrhyw enillion o yswiriant yn y DU’
 
 ukDividendsSharesLoans.title = Difidendau, cyfranddaliadau a benthyciadau yn y DU o gwmnïau cyfyngedig
 ukDividendsSharesLoans.agent.title = Difidendau, cyfranddaliadau a benthyciadau yn y DU o gwmnïau cyfyngedig
@@ -511,7 +511,7 @@ ukDividendsSharesLoans.agent.closeCompanyLoansWrittenOffReleased = Benthyciadau 
 ukDividendsSharesLoans.noUkDividendsSharesOrLoans = Na, ni chefais unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU
 ukDividendsSharesLoans.agent.noUkDividendsSharesOrLoans = Na, ni chafodd fy nghleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU
 ukDividendsSharesLoans.error.required = Dewiswch a gawsoch unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU, neu ‘Na, ni chefais unrhyw ddifidendau, cyfranddaliadau na benthyciadau yn y DU’
-ukDividendsSharesLoans.agent.error.required = Dewiswch a gafodd eich cleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU, neu ‘Na, ni chafodd fy nghleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU’
+ukDividendsSharesLoans.agent.error.required = Dewiswch a gafodd eich cleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU, neu ‘Na, nid oedd gan fy nghleient unrhyw ddifidendau, cyfranddaliadau neu fenthyciadau yn y DU’
 
 ###################################  Payments into pensions ###########################################################################################
 
