@@ -18,7 +18,7 @@ package pages.aboutyou
 
 import models.UserAnswers
 import pages.QuestionPage
-import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
+import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage, ConstructionIndustrySchemePage}
 import play.api.libs.json.JsPath
 
 import scala.util.Try
@@ -32,6 +32,9 @@ case object FosterCarerPage extends QuestionPage[Boolean] {
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case _ =>
-        userAnswers.remove(AboutYourWorkPage).flatMap(_.remove(AboutYourWorkRadioPage))
+        userAnswers.remove(AboutYourWorkPage)
+          .flatMap(_.remove(AboutYourWorkRadioPage))
+          .flatMap(_.remove(ConstructionIndustrySchemePage))
     }
+
 }

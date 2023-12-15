@@ -74,7 +74,7 @@
         @govukRadios(
             RadiosViewModel(
                 field  = form("value"),
-                legend = LegendViewModel(messages("ukResidenceStatus.agent.legend")).withSize(LegendSize.Medium),
+                legend = LegendViewModel(messages("ukResidenceStatus.agent.legend", (taxYear -1).toString, taxYear.toString)).withSize(LegendSize.Medium),
                 items  = UkResidenceStatus.agentOptions
             )
         )
