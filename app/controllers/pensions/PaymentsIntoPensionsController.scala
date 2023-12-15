@@ -19,7 +19,7 @@ package controllers.pensions
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.pensions.PaymentsIntoPensionsFormProvider
-import models.Mode
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.pensions.PaymentsIntoPensionsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,10 +47,10 @@ class PaymentsIntoPensionsController @Inject()(
   def form(isAgent: Boolean) = formProvider(isAgent)
 
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(PaymentsIntoPensionsPage) match {
+      val preparedForm = request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).get(PaymentsIntoPensionsPage) match {
         case None => form(request.isAgent)
         case Some(value) => form(request.isAgent).fill(value)
       }
@@ -63,7 +63,7 @@ class PaymentsIntoPensionsController @Inject()(
   }
 
   def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)).async {
     implicit request =>
 
       form(request.isAgent).bindFromRequest().fold(
@@ -76,7 +76,7 @@ class PaymentsIntoPensionsController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(PaymentsIntoPensionsPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)).set(PaymentsIntoPensionsPage, value))
             _              <- userDataService.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(PaymentsIntoPensionsPage, mode, updatedAnswers))
       )

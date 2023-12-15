@@ -28,16 +28,21 @@ import views.html.{AddSectionsAgentView, AddSectionsView}
 
 class AddSectionsControllerSpec extends SpecBase {
 
-  private val sections: List[Task] = List(
-    Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), NotStarted),
-    Task(Link(IncomeFromWork.toString, controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url), CannotStartYet),
-    Task(Link(
-      IncomeFromProperty.toString, controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url
-    ), CannotStartYet),
-    Task(Link(Pensions.toString, controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url), NotStarted)
-  )
+  private val addSectionsKey = "addSections"
+  private val addSectionsAgentKey = "addSections.agent"
 
-  private val completedCount: Int = sections.map(_.tag).count(_.isCompleted)
+  private def sectionList(key: String): List[Task] =
+    List(
+      Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), NotStarted, key),
+      Task(Link(
+        IncomeFromWork.toString, controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url), CannotStartYet, key),
+      Task(Link(
+        IncomeFromProperty.toString, controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url), CannotStartYet, key),
+      Task(Link(
+        Pensions.toString, controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url), NotStarted, key)
+    )
+
+  private val completedCount: Int = sectionList(addSectionsKey).map(_.tag).count(_.isCompleted)
 
   "AddSections Controller" - {
 
@@ -53,7 +58,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AddSectionsView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear, sections, completedCount)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear, sectionList(addSectionsKey), completedCount)(request, messages(application)).toString
       }
     }
 
@@ -69,7 +74,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[AddSectionsAgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear, sections, completedCount)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(taxYear, sectionList(addSectionsAgentKey), completedCount)(request, messages(application)).toString
       }
     }
   }

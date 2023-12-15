@@ -16,14 +16,17 @@
 
 @import models.Mode
 @import viewmodels.Task
-@import views.html.components.{Link, AgentTaskList}
+@import views.html.components._
 
 @this(
         layout: templates.Layout,
         govukButton: GovukButton,
         govukTag: GovukTag,
         link: Link,
-        taskList: AgentTaskList
+        taskList: TaskList,
+        heading: Heading1,
+        heading2: Heading2,
+        p: ParagraphBody
 )
 
 @(taxYear: Int, sections: List[Task], completedSections: Int)(implicit request: Request[_], messages: Messages)
@@ -32,11 +35,11 @@
 
         <span class="govuk-caption-l">@messages("site.taxYearCaption", (taxYear -1).toString, taxYear.toString)</span>
 
-        <h1 class="govuk-heading-l">@messages("addSections.agent.heading")</h1>
+        @heading(messages("addSections.agent.heading"))
 
-        <h2 class="govuk-heading-s">@messages("addSections.incomplete")</h2>
+        @heading2(messages("addSections.incomplete"))
 
-        <p class="govuk-body govuk-!-margin-bottom-7">@messages("addSections.completedSections", completedSections)</p>
+        @p(messages("addSections.completedSections", completedSections), extraClasses = Seq("govuk-!-margin-bottom-7"))
 
         @taskList(sections)
 
