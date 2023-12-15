@@ -45,11 +45,9 @@ class TaxReturnNotReadyController @Inject()(
       val state = addSectionsService.getState(request.userAnswers)
 
       if (request.isAgent) {
-        val vm = TaxReturnNotReadyViewModel(state, "taxReturnNotReady.agent")
-        Ok(agentView(taxYear, vm))
+        Ok(agentView(taxYear, TaxReturnNotReadyViewModel(state, "taxReturnNotReady.agent")))
       } else {
-        val vm = TaxReturnNotReadyViewModel(state, "taxReturnNotReady")
-        Ok(view(taxYear, vm))
+        Ok(view(taxYear, TaxReturnNotReadyViewModel(state, "taxReturnNotReady")))
       }
   }
 }
