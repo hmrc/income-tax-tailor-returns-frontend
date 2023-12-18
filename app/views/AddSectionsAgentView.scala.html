@@ -37,9 +37,9 @@
 
         @heading(messages("addSections.agent.heading"))
 
-        @heading2(messages("addSections.incomplete"))
+        @heading2(messages(vm.statusText))
 
-        @p(messages("addSections.completedSections", completedSections), extraClasses = Seq("govuk-!-margin-bottom-7"))
+        @p(messages("addSections.completedSections", vm.completedCount), extraClasses = Seq("govuk-!-margin-bottom-7"))
 
         @taskList(List(("", vm.sections)))
 

@@ -88,14 +88,14 @@ class TaskListPageViewModelSpec extends SpecBase {
             Task(Link("giftsOfLandOrProperty", "#"), NotStarted, "charitableDonations"),
             Task(Link("giftsOfSharesOrSecurities", "#"), NotStarted, "charitableDonations"),
             Task(Link("fosterCarer", "#"), NotStarted, prefix))),
-          ("taskList.allEmployment", List(Task(Link("employers", "#"), NotStarted, prefix))),
+          (s"${prefix}.allEmployment", List(Task(Link("employers", "#"), NotStarted, prefix))),
           ("aboutYourWork.selfEmployed", List(
             Task(Link("selfEmployment", "#"), NotStarted, prefix),
             Task(Link("reviewCis", "#"), NotStarted, prefix))),
-          ("taskList.esa", List(Task(Link("reviewEsa", "#"), NotStarted, prefix))),
+          (s"${prefix}.esa", List(Task(Link("reviewEsa", "#"), NotStarted, prefix))),
           ("jobseekersAllowance.jsa", List(Task(Link("reviewJsa", "#"), NotStarted, prefix))),
           ("rentalIncome.uk", List(Task(Link("ukProperty", "#"), NotStarted, prefix))),
-          ("taskList.foreignProperty", List(Task(Link("aboutForeignProperty", "#"), NotStarted, prefix))),
+          (s"${prefix}.foreignProperty", List(Task(Link("aboutForeignProperty", "#"), NotStarted, prefix))),
           ("pensions.title", List(
             Task(Link("statePension", "#"), NotStarted, "pensions"),
             Task(Link("otherUkPensions", "#"), NotStarted, "pensions"),
@@ -111,7 +111,7 @@ class TaskListPageViewModelSpec extends SpecBase {
             Task(Link("fromUkBanks", "#"), NotStarted, "ukInterest"),
             Task(Link("fromUkTrustFunds", "#"), NotStarted, "ukInterest"),
             Task(Link("fromGiltEdged", "#"), NotStarted, "ukInterest"))),
-          ("ukDividendsSharesLoans.title", List(
+          (s"${prefix}.ukDividends", List(
             Task(Link("cashDividendsUkStocksAndShares", "#"), NotStarted, "ukDividendsSharesLoans"),
             Task(Link("stockDividendsUkCompanies", "#"), NotStarted, "ukDividendsSharesLoans"),
             Task(Link("dividendsUnitTrustsInvestmentCompanies", "#"), NotStarted, "ukDividendsSharesLoans"),

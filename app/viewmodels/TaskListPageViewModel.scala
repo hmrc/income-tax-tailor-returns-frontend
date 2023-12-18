@@ -178,16 +178,16 @@ case class TaskListPageViewModel(ua: UserAnswers, prefix: String)(implicit messa
 
     List(
       (messages(s"${prefix}.aboutYou"), aboutYouSections),
-      (messages("taskList.allEmployment"), employmentSection),
+      (messages(s"${prefix}.allEmployment"), employmentSection),
       (messages("aboutYourWork.selfEmployed"), selfEmploymentSection),
-      (messages("taskList.esa"), esaSection),
+      (messages(s"${prefix}.esa"), esaSection),
       (messages("jobseekersAllowance.jsa"), jsaSection),
       (messages("rentalIncome.uk"), ukPropertySection),
-      (messages("taskList.foreignProperty"), nonUkPropertySection),
+      (messages(s"${prefix}.foreignProperty"), nonUkPropertySection),
       (messages("pensions.title"), incomeFromPensionsSection),
       (messages("ukInsuranceGains.title"), ukInsuranceGainsSection),
       (messages("ukInterest.title"), ukInterestSection),
-      (messages("ukDividendsSharesLoans.title"), ukDividendsSection),
+      (messages(s"${prefix}.ukDividends"), ukDividendsSection),
       (messages("paymentsIntoPensions.title"), paymentsIntoPensionsSection)
     ).filterNot(_._2 == List[Task]())
 
