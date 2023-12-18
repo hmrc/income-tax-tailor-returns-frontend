@@ -154,3 +154,5 @@ GET        /:taxYear/property-pensions-investments/uk-interest                  
 POST       /:taxYear/property-pensions-investments/uk-interest                                                          controllers.propertypensionsinvestments.UkInterestController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
 GET        /:taxYear/property-pensions-investments/change-uk-interest                                                   controllers.propertypensionsinvestments.UkInterestController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/property-pensions-investments/change-uk-interest                                                   controllers.propertypensionsinvestments.UkInterestController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /:taxYear/overview                                                                                           controllers.TaskListController.onPageLoad(taxYear: Int)

@@ -20,36 +20,34 @@ import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.AddSectionsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.AddSectionsViewModel
-import views.html.{AddSectionsAgentView, AddSectionsView}
+import viewmodels.TaskListPageViewModel
+import views.html.{TaskListAgentView, TaskListView}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class AddSectionsController @Inject()(
+class TaskListController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        identify: IdentifierActionProvider,
                                        getData: DataRetrievalActionProvider,
-                                       addSectionsService: AddSectionsService,
+                                       requireData: DataRequiredActionProvider,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: AddSectionsView,
-                                       agentView: AddSectionsAgentView
+                                       view: TaskListView,
+                                       agentView: TaskListAgentView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)) {
+  def onPageLoad(taxYear: Int): Action[AnyContent] =
+    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
     implicit request =>
 
       val prefix: String = if (request.isAgent) {
-        "addSections.agent"
+        "taskList.agent"
       } else {
-        "addSections"
+        "taskList"
       }
 
-      val state = addSectionsService.getState(request.userAnswers)
-
-      val vm = AddSectionsViewModel(state, taxYear, prefix)
+      val vm = TaskListPageViewModel(request.userAnswers, prefix)
 
       if (request.isAgent) {
         Ok(agentView(taxYear, vm))
@@ -57,4 +55,5 @@ class AddSectionsController @Inject()(
         Ok(view(taxYear, vm))
       }
   }
+
 }
