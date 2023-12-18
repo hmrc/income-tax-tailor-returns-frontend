@@ -39,8 +39,8 @@ case class TaskListPageViewModel(ua: UserAnswers, prefix: String)(implicit messa
 
     def ukResidence: List[Task] =
       ua.get(UkResidenceStatusPage) match {
-        case Some(UkResidenceStatus.Uk) => List(Task(Link(messages("heading"), "#"), NotStarted, "ukResidenceStatus"))
-        case Some(UkResidenceStatus.Domiciled) => List(Task(Link(messages("heading"), "#"), NotStarted, "ukResidenceStatus"))
+        case Some(UkResidenceStatus.Uk) => List(Task(Link("heading", "#"), NotStarted, "ukResidenceStatus"))
+        case Some(UkResidenceStatus.Domiciled) => List(Task(Link("heading", "#"), NotStarted, "ukResidenceStatus"))
         case _ => Nil
       }
 

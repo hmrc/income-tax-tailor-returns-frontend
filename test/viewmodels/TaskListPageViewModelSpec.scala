@@ -56,17 +56,15 @@ class TaskListPageViewModelSpec extends SpecBase {
   ".getSections" - {
 
     "must return an empty list with an empty userAnswers object" in {
-      val expected = List.empty
       val result = TaskListPageViewModel(emptyUserAnswers, prefix).getSections
 
-      result mustBe expected
+      result mustBe List.empty
     }
 
     "must return an empty list when all answers are 'no/none'" in {
-      val expected = List.empty
       val result = TaskListPageViewModel(allSectionsNegative, prefix).getSections
 
-      result mustBe expected
+      result mustBe List.empty
     }
 
     "must return the ukResidenceStatus task when 'Domiciled'" in {
