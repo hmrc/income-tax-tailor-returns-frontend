@@ -18,6 +18,7 @@ package connectors
 
 import config.Service
 import models.{Done, UserAnswers}
+import connectors.httpParser.UserAnswersParser.{UserAnswersHttpReads, UserAnswersResponse}
 import play.api.Configuration
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
 import uk.gov.hmrc.http.client.HttpClientV2
@@ -37,7 +38,7 @@ class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClie
     httpClient
       .get(url"$userAnswersUrl/$taxYear")
       .setHeader(("MTDITID", mtdItId))
-      .execute[Option[UserAnswers]]
+      .execute[Option[UserAnswers]] //do we return the UserAnswersResponse??
       .logFailureReason(connectorName = "UserAnswersConnector on get")
   }
 
