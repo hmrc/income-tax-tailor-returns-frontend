@@ -34,11 +34,11 @@ class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClie
   private val userAnswersUrl = url"$baseUrl/income-tax-tailor-return/data"
   private val keepAliveUrl = url"$baseUrl/income-tax-tailor-return/keep-alive"
 
-  def get(mtdItId: String, taxYear: Int)(implicit hc: HeaderCarrier): Future[UserAnswersResponse] = {
+  def get(mtdItId: String, taxYear: Int)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     httpClient
       .get(url"$userAnswersUrl/$taxYear")
       .setHeader(("MTDITID", mtdItId))
-      .execute[UserAnswersResponse]
+      .execute[Option[UserAnswers]] //do we return the UserAnswersResponse??
       .logFailureReason(connectorName = "UserAnswersConnector on get")
   }
 
