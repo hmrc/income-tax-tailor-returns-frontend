@@ -39,6 +39,10 @@ error.number = Nodwch rif dilys
 error.required = Nodwch werth
 error.summary.title = Mae problem wedi codi
 
+error.incorrect.tax.year.heading = Enter the correct tax year
+error.incorrect.tax.year.not.supported = The tax year that you''ve entered is not supported.
+error.incorrect.tax.year.select.back.to.rectify = Select ‘back’ to return to the previous page and enter the correct tax year.
+
 checkYourAnswers.title = Gwirio’ch Atebion
 checkYourAnswers.heading = Gwirio’ch Atebion
 

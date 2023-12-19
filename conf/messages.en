@@ -39,6 +39,15 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
+error.incorrect.tax.year.heading = Enter the correct tax year
+error.incorrect.tax.year.heading.agent = Enter the correct tax year
+error.incorrect.tax.year.title = Enter the correct tax year
+error.incorrect.tax.year.title.agent = Enter the correct tax year
+error.incorrect.tax.year.not.supported = The tax year that you’ve entered is not supported.
+error.incorrect.tax.year.not.supported.agent = The tax year that you’ve entered is not supported.
+error.incorrect.tax.year.select.back.to.rectify = Select ‘back’ to return to the previous page and enter the correct tax year.
+error.incorrect.tax.year.select.back.to.rectify.agent = Select ‘back’ to return to the previous page and enter the correct tax year.
+
 index.title = income-tax-tailor-returns-frontend
 index.heading = income-tax-tailor-returns-frontend
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.

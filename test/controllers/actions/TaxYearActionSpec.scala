@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import models.requests.IdentifierRequest
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.Results.InternalServerError
+import play.api.mvc.Results.{InternalServerError, Redirect}
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.time.TaxYear
@@ -65,7 +65,7 @@ class TaxYearActionSpec extends SpecBase with MockitoSugar {
     }
     "when provided a taxYear outside of current or end of year" - {
 
-      "should return a Left containing internalServerError" in {
+      "should redirect to Error Page when invalid tax year is used" in {
 
         val invalidTaxYear = 2020
 
@@ -74,7 +74,8 @@ class TaxYearActionSpec extends SpecBase with MockitoSugar {
         val result: Either[Result, IdentifierRequest[AnyContentAsEmpty.type]] =
           action.callTransform(IdentifierRequest(FakeRequest(), "mtdItId", isAgent = false)).futureValue
 
-        result mustBe Left(InternalServerError)
+        result mustBe Left(Redirect(controllers.routes.IncorrectTaxYearErrorPageController.onPageLoad(invalidTaxYear)))
+
       }
     }
   }

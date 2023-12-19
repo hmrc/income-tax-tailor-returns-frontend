@@ -24,6 +24,8 @@ GET        /:taxYear/add-sections                                               
 
 GET        /:taxYear/tax-return-not-ready                                                                               controllers.TaxReturnNotReadyController.onPageLoad(taxYear: Int)
 
+GET        /:taxYear/tax-year-not-supported                                                                             controllers.IncorrectTaxYearErrorPageController.onPageLoad(taxYear: Int)
+
 #################       About you pages      ##############################
 
 GET        /:taxYear/about-you/uk-residence-status                                                                      controllers.aboutyou.UkResidenceStatusController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
