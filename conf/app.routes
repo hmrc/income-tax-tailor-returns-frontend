@@ -24,6 +24,8 @@ GET        /:taxYear/add-sections                                               
 
 GET        /:taxYear/tax-return-not-ready                                                                               controllers.TaxReturnNotReadyController.onPageLoad(taxYear: Int)
 
+GET        /:taxYear/tax-year-not-supported                                                                             controllers.IncorrectTaxYearErrorPageController.onPageLoad(taxYear: Int)
+
 #################       About you pages      ##############################
 
 GET        /:taxYear/about-you/uk-residence-status                                                                      controllers.aboutyou.UkResidenceStatusController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
@@ -78,10 +80,10 @@ POST       /:taxYear/about-you/change-tax-avoidance-schemes                     
 
 #################       Work And Benefits pages      ##############################
 
-GET        /:taxYear/work-and-benefits/about-your-work                              controllers.workandbenefits.AboutYourWorkController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-POST       /:taxYear/work-and-benefits/about-your-work                              controllers.workandbenefits.AboutYourWorkController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
-GET        /:taxYear/work-and-benefits/change-about-your-work                       controllers.workandbenefits.AboutYourWorkController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
-POST       /:taxYear/work-and-benefits/change-about-your-work                       controllers.workandbenefits.AboutYourWorkController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/about-your-work                                                                  controllers.workandbenefits.AboutYourWorkController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/about-your-work                                                                  controllers.workandbenefits.AboutYourWorkController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/change-about-your-work                                                           controllers.workandbenefits.AboutYourWorkController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/change-about-your-work                                                           controllers.workandbenefits.AboutYourWorkController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /:taxYear/work-and-benefits/construction-industry-scheme                                                     controllers.workandbenefits.ConstructionIndustrySchemeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /:taxYear/work-and-benefits/construction-industry-scheme                                                     controllers.workandbenefits.ConstructionIndustrySchemeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
