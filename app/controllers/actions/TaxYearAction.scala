@@ -18,10 +18,9 @@ package controllers.actions
 
 import models.requests.IdentifierRequest
 import play.api.Logger
-import play.api.mvc.Results.InternalServerError
+import play.api.mvc.Results.Redirect
 import play.api.mvc._
 import uk.gov.hmrc.time.TaxYear
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,7 +38,7 @@ class TaxYearAction @Inject()(taxYear: Int)
     } else {
       logger.info(s"[TaxYearAction][refine] Invalid tax year, redirecting to error page")
       // todo should redirect to where user selects taxYear
-      Future.successful(Left(InternalServerError))
+      Future.successful(Left(Redirect(controllers.routes.IncorrectTaxYearErrorPageController.onPageLoad(taxYear))))
     }
   }
 }
