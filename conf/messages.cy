@@ -39,9 +39,14 @@ error.number = Nodwch rif dilys
 error.required = Nodwch werth
 error.summary.title = Mae problem wedi codi
 
-error.incorrect.tax.year.heading = Enter the correct tax year
-error.incorrect.tax.year.not.supported = The tax year that you''ve entered is not supported.
-error.incorrect.tax.year.select.back.to.rectify = Select ‘back’ to return to the previous page and enter the correct tax year.
+error.incorrect.tax.year.heading = Nodi'r flwyddyn dreth gywir
+error.incorrect.tax.year.heading.agent = Nodi'r flwyddyn dreth gywir
+error.incorrect.tax.year.title = Nodi'r flwyddyn dreth gywir
+error.incorrect.tax.year.title.agent = Nodi'r flwyddyn dreth gywir
+error.incorrect.tax.year.not.supported = Nid yw'r flwyddyn dreth rydych wedi'i chynnwys wedi’i chefnogi.
+error.incorrect.tax.year.not.supported.agent = Nid yw'r flwyddyn dreth rydych wedi'i chynnwys wedi’i chefnogi.
+error.incorrect.tax.year.select.back.to.rectify = Dewiswch ‘yn ôl' i ddychwelyd i'r dudalen flaenorol a nodi'r flwyddyn dreth gywir.
+error.incorrect.tax.year.select.back.to.rectify.agent = Dewiswch ‘yn ôl' i ddychwelyd i'r dudalen flaenorol a nodi'r flwyddyn dreth gywir.
 
 checkYourAnswers.title = Gwirio’ch Atebion
 checkYourAnswers.heading = Gwirio’ch Atebion
