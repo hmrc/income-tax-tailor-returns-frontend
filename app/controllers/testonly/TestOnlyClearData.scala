@@ -19,17 +19,13 @@ package controllers.testonly
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import handlers.ErrorHandler
-import models.SectionNames._
-import models.{Done, NormalMode}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{AddSectionsService, UserDataService}
+import services.UserDataService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.{Link, Task}
-import views.html.{AddSectionsAgentView, AddSectionsView}
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class TestOnlyClearData @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -37,7 +33,7 @@ class TestOnlyClearData @Inject()(
                                        userDataService: UserDataService,
                                        getData: DataRetrievalActionProvider,
                                        error: ErrorHandler,
-                                       val controllerComponents: MessagesControllerComponents,
+                                       val controllerComponents: MessagesControllerComponents
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def testOnlyClear(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)).async {
