@@ -74,7 +74,7 @@
     pageTitle   = Some(pageTitle),
     headBlock   = Some(head),
     headerBlock = Some(hmrcStandardHeader(
-        serviceUrl  = Some(routes.IndexController.onPageLoad(getTaxYear).url),
+        serviceUrl  = Some(routes.StartController.onPageLoad(getTaxYear).url),
         signOutUrl  = None,
         phaseBanner = Some(alphaBanner(appConfig.feedbackUrl.toString()))
     )),
