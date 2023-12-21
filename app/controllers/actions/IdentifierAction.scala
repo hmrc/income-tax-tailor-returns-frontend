@@ -29,6 +29,7 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import views.html.defaultpages.unauthorized
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -96,7 +97,6 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
         Redirect(config.loginUrl(taxYear))
       case e =>
         logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
-        logger.debug(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
         Unauthorized
     }
   }
@@ -161,8 +161,18 @@ class EarlyPrivateLaunchIdentifierAction @Inject()(taxYear: Int)
 
     implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    authorised() {
-      block(IdentifierRequest(request, "1234567890", isAgent = false))
+    authorised().retrieve(internalId) {
+      case Some(_) => block(IdentifierRequest(request, "1234567890", isAgent = false))
+      case _ =>
+        logger.info(s"[AuthorisedAction][async] - User failed to authenticate no affinityGroup")
+        Future.successful(Unauthorized)
+    }.recover {
+      case _: NoActiveSession =>
+        logger.info(s"[AuthorisedAction][async] - No active session. Redirecting to sign in")
+        Redirect(config.loginUrl(taxYear))
+      case e =>
+        logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
+        Unauthorized
     }
   }
 }
