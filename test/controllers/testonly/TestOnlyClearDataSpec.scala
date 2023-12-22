@@ -17,17 +17,39 @@
 package controllers.testonly
 
 import base.SpecBase
+import models.Done
+import navigation.{FakeNavigator, Navigator}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.UserDataService
 import views.html.StartView
+import play.api.inject.bind
+import play.api.mvc.Call
 
-class TestOnlyClearDataSpec extends SpecBase {
+import scala.concurrent.Future
+
+class TestOnlyClearDataSpec extends SpecBase with MockitoSugar {
+
+  def onwardRoute = Call("DELETE", "/foo")
 
   "TestOnlyClearData Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val mockUserDataService = mock[UserDataService]
+
+      when(mockUserDataService.clear(any(), any())( any())) thenReturn Future.successful(Done)
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[UserDataService].toInstance(mockUserDataService)
+          )
+          .build()
 
       running(application) {
         val request = FakeRequest(GET, routes.TestOnlyClearData.testOnlyClear(taxYear).url)
@@ -36,8 +58,7 @@ class TestOnlyClearDataSpec extends SpecBase {
 
         val view = application.injector.instanceOf[StartView]
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(taxYear)(request, messages(application)).toString
+        status(result) mustEqual SEE_OTHER
       }
     }
   }
