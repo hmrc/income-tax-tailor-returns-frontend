@@ -346,11 +346,86 @@ class AuthActionSpec extends SpecBase {
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
         val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(), appConfig, bodyParsers)(ec).apply(taxYear)
+        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(Some("internalId")),
+          appConfig, bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest())
 
         status(result) mustBe OK
+      }
+    }
+
+    "must return UNAUTHORIZED when authConnector returns incorrect enrolments " in {
+
+      val application = new GuiceApplicationBuilder()
+        .configure(Map("features.earlyPrivateLaunch" -> "true"))
+        .build()
+
+      val enrolments: Enrolments = Enrolments(Set(
+        Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
+        Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "8888888888")), "Activated"),
+      ))
+
+      val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
+        new ~(new ~(
+          None,
+          enrolments),
+          ConfidenceLevel.L50)
+
+      running(application) {
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse),
+          appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+    "must redirect to sign in when the user does not have an active session " in {
+
+      val application = new GuiceApplicationBuilder()
+        .configure(Map("features.earlyPrivateLaunch" -> "true"))
+        .build()
+
+      running(application) {
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeFailingAuthConnector(InvalidBearerToken()),
+          appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result).value mustBe "http://localhost:9949/auth-login-stub/gg-sign-in" +
+          "?continue=http://localhost:10007/update-and-submit-income-tax-return/tailored-return/2024/start" +
+          "&origin=income-tax-tailor-returns-frontend"
+      }
+    }
+
+    "must return UNAUTHORIZED when authConnector returns an exception " in {
+
+      val application = new GuiceApplicationBuilder()
+        .configure(Map("features.earlyPrivateLaunch" -> "true"))
+        .build()
+
+      running(application) {
+
+        val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeFailingAuthConnector(InternalError()),
+          appConfig, bodyParsers)(ec).apply(taxYear)
+        val controller = new Harness(authAction)
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+
+        status(result) mustBe UNAUTHORIZED
       }
     }
 
