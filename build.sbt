@@ -5,6 +5,17 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "income-tax-tailor-returns-frontend"
 
+val excludedPackages: Seq[String] = Seq(
+  "<empty>",
+  "Reverse.*",
+  "uk.gov.hmrc.BuildInfo",
+  "app.*",
+  "prod.*",
+  ".*Routes.*",
+  "testOnly.*",
+  "testOnlyDoNotUseInAppConf.*"
+)
+
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
@@ -38,9 +49,10 @@ lazy val root = (project in file("."))
       "viewmodels.govuk.all._"
     ),
     PlayKeys.playDefaultPort := 10007,
+    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;.*controllers.testonly.*" +
       ".*Routes.*;.*viewmodels.govuk.*;",
-    ScoverageKeys.coverageMinimumStmtTotal := 75,
+    ScoverageKeys.coverageMinimumStmtTotal := 80,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq(
