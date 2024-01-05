@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import models.requests.IdentifierRequest
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.mvc.Results.{InternalServerError, Redirect}
+import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.time.TaxYear

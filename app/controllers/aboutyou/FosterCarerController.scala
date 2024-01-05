@@ -74,16 +74,20 @@ class FosterCarerController @Inject()(
               Future.successful(BadRequest(view(formWithErrors, mode, taxYear)))
             },
 
-          value =>
-            if (request.userAnswers.get(FosterCarerPage).contains(value)) {
-              Future.successful(Redirect(navigator.nextPage(FosterCarerPage, mode, request.userAnswers)))
-            } else {
+          value => {
+
+            val isExistingResponseModified = request.userAnswers.get(FosterCarerPage).contains(value)
+            if (isExistingResponseModified) {
+
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(FosterCarerPage, value))
                 _ <- userDataService.set(updatedAnswers)
               } yield Redirect(navigator.nextPage(FosterCarerPage, mode, updatedAnswers))
-            }
 
+            } else {
+              Future.successful(Redirect(navigator.nextPage(FosterCarerPage, mode, request.userAnswers)))
+            }
+          }
         )
     }
 }

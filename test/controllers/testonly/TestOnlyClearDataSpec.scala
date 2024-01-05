@@ -25,7 +25,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.StartView
 import play.api.inject.bind
 import play.api.mvc.Call
 
@@ -55,8 +54,6 @@ class TestOnlyClearDataSpec extends SpecBase with MockitoSugar {
         val request = FakeRequest(GET, routes.TestOnlyClearData.testOnlyClear(taxYear).url)
 
         val result = route(application, request).value
-
-        val view = application.injector.instanceOf[StartView]
 
         status(result) mustEqual SEE_OTHER
       }
