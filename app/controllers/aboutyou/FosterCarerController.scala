@@ -42,43 +42,52 @@ class FosterCarerController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        view: FosterCarerView,
                                        agentView: FosterCarerAgentView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def form(isAgent: Boolean) = formProvider(isAgent)
 
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
-    implicit request =>
+      implicit request =>
 
-      val preparedForm = request.userAnswers.get(FosterCarerPage) match {
-        case None => form(request.isAgent)
-        case Some(value) => form(request.isAgent).fill(value)
-      }
+        val preparedForm = request.userAnswers.get(FosterCarerPage) match {
+          case None => form(request.isAgent)
+          case Some(value) => form(request.isAgent).fill(value)
+        }
 
-      if (request.isAgent) {
-        Ok(agentView(preparedForm, mode, taxYear))
-      } else {
-        Ok(view(preparedForm, mode, taxYear))
-      }
-  }
+        if (request.isAgent) {
+          Ok(agentView(preparedForm, mode, taxYear))
+        } else {
+          Ok(view(preparedForm, mode, taxYear))
+        }
+    }
 
   def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
-    implicit request =>
+      implicit request =>
 
-      form(request.isAgent).bindFromRequest().fold(
-        formWithErrors =>
-          if (request.isAgent) {
-            Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear)))
-          } else {
-            Future.successful(BadRequest(view(formWithErrors, mode, taxYear)))
-          },
+        form(request.isAgent).bindFromRequest().fold(
+          formWithErrors =>
+            if (request.isAgent) {
+              Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear)))
+            } else {
+              Future.successful(BadRequest(view(formWithErrors, mode, taxYear)))
+            },
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(FosterCarerPage, value))
-            _              <- userDataService.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(FosterCarerPage, mode, updatedAnswers))
-      )
-  }
+          value => {
+
+            val isExistingResponseModified = request.userAnswers.get(FosterCarerPage).contains(value)
+            if (isExistingResponseModified) {
+
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.set(FosterCarerPage, value))
+                _ <- userDataService.set(updatedAnswers)
+              } yield Redirect(navigator.nextPage(FosterCarerPage, mode, updatedAnswers))
+
+            } else {
+              Future.successful(Redirect(navigator.nextPage(FosterCarerPage, mode, request.userAnswers)))
+            }
+          }
+        )
+    }
 }
