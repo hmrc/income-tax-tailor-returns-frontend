@@ -142,6 +142,32 @@ class FosterCarerControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
+    "must redirect to the next page and update userAnswers when valid data is submitted on first submission" in {
+
+      val mockUserDataService = mock[UserDataService]
+
+      when(mockUserDataService.set(any())(any())) thenReturn Future.successful(Done)
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+            bind[UserDataService].toInstance(mockUserDataService)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, fosterCarerRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
     "must redirect to the next page and not update userAnswers when the value submitted is the same as the value stored" in {
 
       val mockUserDataService = mock[UserDataService]
