@@ -75,9 +75,10 @@ class FosterCarerController @Inject()(
             },
 
           value => {
-
+            val current = request.userAnswers.get(FosterCarerPage)
             val isExistingResponseModified = request.userAnswers.get(FosterCarerPage).contains(value)
-            if (isExistingResponseModified) {
+
+            if (isExistingResponseModified || current.isEmpty) {
 
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(FosterCarerPage, value))
