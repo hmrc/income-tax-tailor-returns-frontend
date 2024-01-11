@@ -33,7 +33,7 @@ lazy val root = (project in file("."))
       "viewmodels.govuk.all._"
     ),
     PlayKeys.playDefaultPort := 10007,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;" +
+    ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;.*controllers.testonly.*" +
       ".*Routes.*;.*viewmodels.govuk.*;",
     ScoverageKeys.coverageMinimumStmtTotal := 78,
     ScoverageKeys.coverageFailOnMinimum := true,
@@ -59,7 +59,7 @@ lazy val root = (project in file("."))
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   fork := true,
-  javaOptions += "-Dconfig.resource=test.application.conf",
+  javaOptions ++= Seq("-Dconfig.resource=test.application.conf", "-Dapplication.router=testOnlyDoNotUseInAppConf.Routes"),
   unmanagedSourceDirectories.withRank(KeyRanks.Invisible) += baseDirectory.value / "test-utils"
 )
 
