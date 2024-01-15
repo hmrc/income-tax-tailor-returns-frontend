@@ -41,7 +41,8 @@ object CharitableDonations extends Enumerable.Implicits {
     NoDonations
   )
 
-  private def getCheckboxItem(contentPrefix:String,hintMessage:String)(implicit messages: Messages): Seq[CheckboxItem] = {
+  private def getCheckboxItem(contentPrefix:String)(implicit messages: Messages): Seq[CheckboxItem] = {
+
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
@@ -56,7 +57,7 @@ object CharitableDonations extends Enumerable.Implicits {
             fieldId = "value",
             index = index,
             value = value.toString
-          ).withHint(Hint(content = Text(messages(hintMessage))))
+          ).withHint(Hint(content = Text(messages(s"$contentPrefix.donationsUsingGiftAid.hint"))))
           case NoDonations => CheckboxItemViewModel(
             content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
@@ -76,11 +77,11 @@ object CharitableDonations extends Enumerable.Implicits {
   }
 
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    getCheckboxItem(s"charitableDonations",s"charitableDonations.donationsUsingGiftAid.hint")
+    getCheckboxItem(s"charitableDonations")
 
 
   def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    getCheckboxItem(s"charitableDonations.agent",s"charitableDonations.agent.donationsUsingGiftAid.hint")
+    getCheckboxItem(s"charitableDonations.agent")
 
   implicit val enumerable: Enumerable[CharitableDonations] =
     Enumerable(values.map(v => v.toString -> v): _*)

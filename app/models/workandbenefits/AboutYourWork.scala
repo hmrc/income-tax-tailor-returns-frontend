@@ -40,8 +40,7 @@ object AboutYourWork extends Enumerable.Implicits {
     No
   )
 
-  private def getCheckboxItems(contentPrefix: String, employedHintPrefix: String,
-                               selfEmployedHintPrefix: String)(implicit messages: Messages): Seq[CheckboxItem] = {
+  private def getCheckboxItems(contentPrefix: String)(implicit messages: Messages): Seq[CheckboxItem] = {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
@@ -52,19 +51,19 @@ object AboutYourWork extends Enumerable.Implicits {
             divider = messages(s"site.or")
           )
           case Employed => CheckboxItemViewModel(
-            content = Text(messages(s"aboutYourWork.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
-          ).withHint(Hint(content = Text(messages(s"aboutYourWork.employed.hint"))))
+          ).withHint(Hint(content = Text(messages(s"$contentPrefix.employed.hint"))))
           case SelfEmployed => CheckboxItemViewModel(
-            content = Text(messages(s"aboutYourWork.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
-          ).withHint(Hint(content = Text(messages(s"aboutYourWork.selfEmployed.hint"))))
+          ).withHint(Hint(content = Text(messages(s"$contentPrefix.selfEmployed.hint"))))
           case No => CheckboxItemViewModel(
-            content = Text(messages(s"aboutYourWork.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
@@ -74,14 +73,10 @@ object AboutYourWork extends Enumerable.Implicits {
     }
   }
   def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    getCheckboxItems(contentPrefix = "aboutYourWork",
-      employedHintPrefix = "aboutYourWork.employed.hint", selfEmployedHintPrefix= "aboutYourWork.selfEmployed.hint")
-
-
+    getCheckboxItems(contentPrefix = "aboutYourWork")
 
   def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    getCheckboxItems(contentPrefix = "aboutYourWork",
-      employedHintPrefix = "aboutYourWork.employed.agent.hint", selfEmployedHintPrefix = "aboutYourWork.selfEmployed.agent.hint")
+    getCheckboxItems(contentPrefix = "aboutYourWork")
 
   implicit val enumerable: Enumerable[AboutYourWork] =
     Enumerable(values.map(v => v.toString -> v): _*)
