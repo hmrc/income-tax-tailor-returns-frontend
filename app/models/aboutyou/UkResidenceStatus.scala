@@ -33,23 +33,19 @@ object UkResidenceStatus extends Enumerable.Implicits {
     Uk, Domiciled , NonUK
   )
 
-  def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {
-    case (value, index) =>
-      RadioItem(
-        content = Text(messages(s"ukResidenceStatus.${value.toString}")),
-        value   = Some(value.toString),
-        id      = Some(s"value_$index")
-      )
+  private def getRadioItems(contentPrefix:String)(implicit messages: Messages) :Seq[RadioItem]= {
+    values.zipWithIndex.map {
+      case (value, index) =>
+        RadioItem(
+          content = Text(messages(s"$contentPrefix.${value.toString}")),
+          value = Some(value.toString),
+          id = Some(s"value_$index")
+        )
+    }
   }
 
-  def agentOptions(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {
-    case (value, index) =>
-      RadioItem(
-        content = Text(messages(s"ukResidenceStatus.agent.${value.toString}")),
-        value = Some(value.toString),
-        id = Some(s"value_$index")
-    )
-  }
+  def options(implicit messages: Messages): Seq[RadioItem] = getRadioItems("ukResidenceStatus")
+  def agentOptions(implicit messages: Messages): Seq[RadioItem] = getRadioItems("ukResidenceStatus.agent")
 
   implicit val enumerable: Enumerable[UkResidenceStatus] =
     Enumerable(values.map(v => v.toString -> v): _*)

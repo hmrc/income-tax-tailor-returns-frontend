@@ -43,12 +43,12 @@ object PaymentsIntoPensions extends Enumerable.Implicits {
     No
   )
 
-  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+  private def getCheckboxItems(contentPrefix: String, hintMessage: String)(implicit messages: Messages): Seq[CheckboxItem] = {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
           case UkPensions => CheckboxItemViewModel(
-            content = Text (messages(s"paymentsIntoPensions.${value.toString}")),
+            content = Text(messages(s"paymentsIntoPensions.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
@@ -67,45 +67,20 @@ object PaymentsIntoPensions extends Enumerable.Implicits {
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text (messages(s"paymentsIntoPensions.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          )
-        }
-    }
-
-  def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        value match {
-          case UkPensions => CheckboxItemViewModel(
             content = Text(messages(s"paymentsIntoPensions.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
-          ).withHint(Hint(content = Text(messages(s"paymentsIntoPensions.agent.uk.hint"))))
-          case Divider => CheckboxItemViewModel(
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            divider = messages(s"site.or")
-          )
-          case No => CheckboxItemViewModel(
-            content = Text(messages(s"paymentsIntoPensions.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel (
-            content = Text (messages(s"paymentsIntoPensions.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
           )
         }
+
     }
+  }
+  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+    getCheckboxItems(contentPrefix="paymentsIntoPensions",hintMessage="paymentsIntoPensions.uk.hint")
+
+  def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+    getCheckboxItems(contentPrefix="paymentsIntoPensions.agent",hintMessage="paymentsIntoPensions.agent.uk.hint")
 
   implicit val enumerable: Enumerable[PaymentsIntoPensions] =
     Enumerable(values.map(v => v.toString -> v): _*)

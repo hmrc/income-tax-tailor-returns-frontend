@@ -33,23 +33,20 @@ object HighIncomeChildBenefitCharge extends Enumerable.Implicits {
     SelfIncome, PartnerIncome, NoPartner
   )
 
-  def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {
-    case (value, index) =>
-      RadioItem(
-        content = Text(messages(s"highIncomeChildBenefitCharge.${value.toString}")),
-        value   = Some(value.toString),
-        id      = Some(s"value_$index")
-      )
+  private def getRadioItems(contentPrefix: String)(implicit messages: Messages): Seq[RadioItem] = {
+    values.zipWithIndex.map {
+      case (value, index) =>
+        RadioItem(
+          content = Text(messages(s"$contentPrefix.${value.toString}")),
+          value = Some(value.toString),
+          id = Some(s"value_$index")
+        )
+    }
   }
 
-  def agentOptions(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {
-    case (value, index) =>
-      RadioItem(
-        content = Text(messages(s"highIncomeChildBenefitCharge.agent.${value.toString}") ),
-        value = Some(value.toString),
-        id = Some(s"value_$index")
-      )
-  }
+  def options(implicit messages: Messages): Seq[RadioItem] = getRadioItems("highIncomeChildBenefitCharge")
+
+  def agentOptions(implicit messages: Messages): Seq[RadioItem] = getRadioItems("highIncomeChildBenefitCharge.agent")
 
   implicit val enumerable: Enumerable[HighIncomeChildBenefitCharge] =
     Enumerable(values.map(v => v.toString -> v): _*)

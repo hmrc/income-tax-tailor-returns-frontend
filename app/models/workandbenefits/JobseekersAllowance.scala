@@ -38,7 +38,7 @@ object JobseekersAllowance extends Enumerable.Implicits {
     No
   )
 
-  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+  private def getCheckboxItems(contentPrefix: String)(implicit messages: Messages): Seq[CheckboxItem] = {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
@@ -49,46 +49,27 @@ object JobseekersAllowance extends Enumerable.Implicits {
             divider = messages(s"site.or")
           )
           case No => CheckboxItemViewModel(
-            content = Text(messages(s"jobseekersAllowance.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text (messages(s"jobseekersAllowance.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
           )
         }
     }
+  }
+
+  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] = getCheckboxItems("jobseekersAllowance")
+
 
   def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        value match {
-          case Divider => CheckboxItemViewModel(
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            divider = messages(s"site.or")
-          )
-          case No => CheckboxItemViewModel(
-            content = Text(messages(s"jobseekersAllowance.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel (
-            content = Text (messages(s"jobseekersAllowance.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          )
-        }
-    }
+    getCheckboxItems("jobseekersAllowance.agent")
 
   implicit val enumerable: Enumerable[JobseekersAllowance] =
     Enumerable(values.map(v => v.toString -> v): _*)
