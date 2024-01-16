@@ -44,7 +44,7 @@ object Pensions extends Enumerable.Implicits {
     NoPensions
   )
 
-  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+  private def getCheckboxItems(contentPrefix: String)(implicit messages: Messages): Seq[CheckboxItem] = {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
@@ -55,46 +55,25 @@ object Pensions extends Enumerable.Implicits {
             divider = messages(s"site.or")
           )
           case NoPensions => CheckboxItemViewModel(
-            content = Text(messages(s"pensions.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text (messages(s"pensions.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
           )
         }
     }
+  }
 
-  def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        value match {
-          case Divider => CheckboxItemViewModel(
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            divider = messages(s"site.or")
-          )
-          case NoPensions => CheckboxItemViewModel(
-            content = Text(messages(s"pensions.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel (
-            content = Text (messages(s"pensions.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          )
-        }
-    }
+  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] = getCheckboxItems("pensions")
+
+  def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] = getCheckboxItems("pensions.agent")
 
   implicit val enumerable: Enumerable[Pensions] =
     Enumerable(values.map(v => v.toString -> v): _*)

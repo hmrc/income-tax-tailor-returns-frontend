@@ -41,7 +41,8 @@ object CharitableDonations extends Enumerable.Implicits {
     NoDonations
   )
 
-  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+  private def getCheckboxItem(contentPrefix:String)(implicit messages: Messages): Seq[CheckboxItem] = {
+
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
@@ -52,20 +53,20 @@ object CharitableDonations extends Enumerable.Implicits {
             divider = messages(s"site.or")
           )
           case DonationsUsingGiftAid => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
-          ).withHint(Hint(content = Text(messages(s"charitableDonations.donationsUsingGiftAid.hint"))))
+          ).withHint(Hint(content = Text(messages(s"$contentPrefix.donationsUsingGiftAid.hint"))))
           case NoDonations => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
@@ -73,38 +74,14 @@ object CharitableDonations extends Enumerable.Implicits {
         }
 
     }
+  }
+
+  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+    getCheckboxItem(s"charitableDonations")
+
 
   def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        value match {
-          case Divider => CheckboxItemViewModel(
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            divider = messages(s"site.or")
-          )
-          case DonationsUsingGiftAid => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          ).withHint(Hint(content = Text(messages(s"charitableDonations.agent.donationsUsingGiftAid.hint"))))
-          case NoDonations => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel(
-            content = Text(messages(s"charitableDonations.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          )
-        }
-    }
+    getCheckboxItem(s"charitableDonations.agent")
 
   implicit val enumerable: Enumerable[CharitableDonations] =
     Enumerable(values.map(v => v.toString -> v): _*)

@@ -36,45 +36,35 @@ object NonUkInterestDividendsInsurance extends Enumerable.Implicits {
     ExclusiveOption
   )
 
-  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+
+  private def getCheckboxItems(contentPrefix: String)(implicit messages: Messages): Seq[CheckboxItem] = {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
           case ExclusiveOption => CheckboxItemViewModel(
-            content = Text(messages(s"nonUkInterestDividendsInsurance.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text (messages(s"nonUkInterestDividendsInsurance.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
           )
         }
     }
+  }
+
+  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+    getCheckboxItems("nonUkInterestDividendsInsurance")
+
 
   def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        value match {
-          case ExclusiveOption => CheckboxItemViewModel(
-            content = Text(messages(s"nonUkInterestDividendsInsurance.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel (
-            content = Text (messages(s"nonUkInterestDividendsInsurance.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          )
-        }
-    }
+    getCheckboxItems("nonUkInterestDividendsInsurance.agent")
+
 
   implicit val enumerable: Enumerable[NonUkInterestDividendsInsurance] =
     Enumerable(values.map(v => v.toString -> v): _*)

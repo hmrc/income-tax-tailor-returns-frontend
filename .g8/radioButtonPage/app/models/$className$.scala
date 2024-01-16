@@ -15,23 +15,20 @@ object $className$ extends Enumerable.Implicits {
     $option1key;format="Camel"$, $option2key;format="Camel"$
   )
 
-  def options(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {
-    case (value, index) =>
-      RadioItem(
-        content = Text(messages(s"$className;format="decap"$.\${value.toString}")),
-        value   = Some(value.toString),
-        id      = Some(s"value_\$index")
+  private def getRadioItems(contentPrefix: String)(implicit messages: Messages): Seq[RadioItem] = {
+    values.zipWithIndex.map {
+      case (value, index) =>
+        RadioItem(
+          content = Text(messages(contentPrefix+s".\${value.toString}") ),
+          value = Some(value.toString),
+          id = Some(s"value_\$index")
       )
+    }
   }
 
-  def agentOptions(implicit messages: Messages): Seq[RadioItem] = values.zipWithIndex.map {
-    case (value, index) =>
-      RadioItem(
-        content = Text(messages(s"$className;format="decap"$.agent.\${value.toString}") ),
-        value = Some(value.toString),
-        id = Some(s"value_\$index")
-    )
-  }
+  def options(implicit messages: Messages): Seq[RadioItem] = getRadioItems("$className;format=" decap"$")
+
+  def agentOptions(implicit messages: Messages): Seq[RadioItem] = getRadioItems("$className;format=" decap"$.agent")
 
   implicit val enumerable: Enumerable[$className$] =
     Enumerable(values.map(v => v.toString -> v): _*)

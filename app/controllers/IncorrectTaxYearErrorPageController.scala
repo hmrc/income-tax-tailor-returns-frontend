@@ -39,7 +39,6 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.IncorrectTaxYearErrorPageView
 import views.html.IncorrectTaxYearErrorPageAgentView
-import scala.concurrent.ExecutionContext
 
 class IncorrectTaxYearErrorPageController @Inject()(
                                                      override val messagesApi: MessagesApi,
@@ -49,7 +48,7 @@ class IncorrectTaxYearErrorPageController @Inject()(
                                                      val controllerComponents: MessagesControllerComponents,
                                                      view: IncorrectTaxYearErrorPageView,
                                                      agentView: IncorrectTaxYearErrorPageAgentView
-                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(taxYear: Int): Action[AnyContent] =
     identify(taxYear) {

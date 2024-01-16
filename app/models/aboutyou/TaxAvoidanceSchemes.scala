@@ -41,7 +41,7 @@ object TaxAvoidanceSchemes extends Enumerable.Implicits {
     NoAvoidance
   )
 
-  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+  private def getCheckboxItem(contentPrefix: String)(implicit messages: Messages): Seq[CheckboxItem] = {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
@@ -54,7 +54,7 @@ object TaxAvoidanceSchemes extends Enumerable.Implicits {
             )
           case NoAvoidance =>
             CheckboxItemViewModel(
-              content = Text(messages(s"taxAvoidanceSchemes.${value.toString}")),
+              content = Text(messages(s"$contentPrefix.${value.toString}")),
               fieldId = "value",
               index = index,
               value = value.toString,
@@ -62,42 +62,19 @@ object TaxAvoidanceSchemes extends Enumerable.Implicits {
             )
           case _ =>
             CheckboxItemViewModel(
-              content = Text(messages(s"taxAvoidanceSchemes.${value.toString}")),
+              content = Text(messages(s"$contentPrefix.${value.toString}")),
               fieldId = "value",
               index = index,
               value = value.toString
             )
         }
     }
+  }
 
-  def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        value match {
-          case Divider =>
-            CheckboxItemViewModel(
-              fieldId = "value",
-              index = index,
-              value = value.toString,
-              divider = messages("site.or")
-            )
-          case NoAvoidance =>
-            CheckboxItemViewModel(
-              content = Text(messages(s"taxAvoidanceSchemes.agent.${value.toString}")),
-              fieldId = "value",
-              index = index,
-              value = value.toString,
-              behaviour = Some(ExclusiveCheckbox)
-            )
-          case _ =>
-            CheckboxItemViewModel(
-              content = Text(messages(s"taxAvoidanceSchemes.agent.${value.toString}")),
-              fieldId = "value",
-              index = index,
-              value = value.toString
-            )
-        }
-    }
+  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] = getCheckboxItem("taxAvoidanceSchemes")
+
+  def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] = getCheckboxItem("taxAvoidanceSchemes.agent")
+
 
   implicit val enumerable: Enumerable[TaxAvoidanceSchemes] =
     Enumerable(values.map(v => v.toString -> v): _*)

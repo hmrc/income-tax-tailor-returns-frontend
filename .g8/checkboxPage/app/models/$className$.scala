@@ -19,45 +19,33 @@ object $className$ extends Enumerable.Implicits {
     ExclusiveOption
   )
 
-  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+  private def getCheckboxItem(contentPrefix: String)(implicit messages: Messages): Seq[CheckboxItem] = {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
-          case ExclusiveOption => CheckboxItemViewModel(
-            content = Text(messages(s"$className;format=" decap"$.\${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel(
-            content = Text (messages(s"$className;format=" decap"$.\${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          )
+          case ExclusiveOption => CheckboxItemViewModel(content = Text(messages(contentPrefix+s".\${value.toString}")),
+                fieldId = "value",
+                index = index,
+                value = value.toString,
+                behaviour = Some (ExclusiveCheckbox)
+        )
+          case _ => CheckboxItemViewModel(content = Text(messages(contentPrefix+s".\${value.toString}")),
+                fieldId = "value",
+                index = index,
+                value = value.toString
+        )
         }
     }
+  }
+
+
+
+  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+    getCheckboxItem("$className;format=" decap"$")
+
 
   def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        value match {
-          case ExclusiveOption => CheckboxItemViewModel(
-            content = Text(messages(s"$className;format=" decap"$.agent.\${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel (
-            content = Text (messages(s"$className;format=" decap"$.agent.\${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          )
-        }
-    }
+    getCheckboxItem("$className;format=" decap"$.agent")
 
   implicit val enumerable: Enumerable[$className$] =
     Enumerable(values.map(v => v.toString -> v): _*)

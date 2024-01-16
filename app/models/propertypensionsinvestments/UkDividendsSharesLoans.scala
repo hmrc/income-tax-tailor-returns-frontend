@@ -45,7 +45,7 @@ object UkDividendsSharesLoans extends Enumerable.Implicits {
     NoUkDividendsSharesOrLoans
   )
 
-  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+  private def getCheckboxItems(contentPrefix: String)(implicit messages: Messages): Seq[CheckboxItem] = {
     values.zipWithIndex.map {
       case (value, index) =>
         value match {
@@ -56,70 +56,39 @@ object UkDividendsSharesLoans extends Enumerable.Implicits {
             divider = messages("site.or")
           )
           case CashDividendsFromUkStocksAndShares => CheckboxItemViewModel(
-            content = Text(messages(s"ukDividendsSharesLoans.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
-          ).withHint(Hint(content = Text(messages(s"ukDividendsSharesLoans.dividends.hint"))))
+          ).withHint(Hint(content = Text(messages(s"$contentPrefix.dividends.hint"))))
           case StockDividendsFromUkCompanies => CheckboxItemViewModel(
-            content = Text(messages(s"ukDividendsSharesLoans.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
-          ).withHint(Hint(content = Text(messages(s"ukDividendsSharesLoans.dividends.hint"))))
+          ).withHint(Hint(content = Text(messages(s"$contentPrefix.dividends.hint"))))
           case NoUkDividendsSharesOrLoans => CheckboxItemViewModel(
-            content = Text(messages(s"ukDividendsSharesLoans.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString,
             behaviour = Some(ExclusiveCheckbox)
           )
           case _ => CheckboxItemViewModel(
-            content = Text(messages(s"ukDividendsSharesLoans.${value.toString}")),
+            content = Text(messages(s"$contentPrefix.${value.toString}")),
             fieldId = "value",
             index = index,
             value = value.toString
           )
         }
     }
+  }
+  def checkboxItems(implicit messages: Messages): Seq[CheckboxItem] =
+    getCheckboxItems("ukDividendsSharesLoans")
 
   def agentCheckboxItems(implicit messages: Messages): Seq[CheckboxItem] =
-    values.zipWithIndex.map {
-      case (value, index) =>
-        value match {
-          case Divider => CheckboxItemViewModel(
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            divider = messages("site.or")
-          )
-          case CashDividendsFromUkStocksAndShares => CheckboxItemViewModel(
-            content = Text(messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          ).withHint(Hint(content = Text(messages(s"ukDividendsSharesLoans.agent.dividends.hint"))))
-          case StockDividendsFromUkCompanies => CheckboxItemViewModel(
-            content = Text(messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          ).withHint(Hint(content = Text(messages(s"ukDividendsSharesLoans.agent.dividends.hint"))))
-          case NoUkDividendsSharesOrLoans => CheckboxItemViewModel(
-            content = Text(messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString,
-            behaviour = Some(ExclusiveCheckbox)
-          )
-          case _ => CheckboxItemViewModel(
-            content = Text(messages(s"ukDividendsSharesLoans.agent.${value.toString}")),
-            fieldId = "value",
-            index = index,
-            value = value.toString
-          )
-        }
-    }
+    getCheckboxItems("ukDividendsSharesLoans.agent")
+
 
   implicit val enumerable: Enumerable[UkDividendsSharesLoans] =
     Enumerable(values.map(v => v.toString -> v): _*)
