@@ -101,5 +101,75 @@ class AddSectionsControllerSpec extends SpecBase {
           view(taxYear, vmComplete(addSectionsAgentKey))(request, messages(application)).toString
       }
     }
+
+    "must redirect to task list page and submit a completed audit event for an individual" in {
+
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        await(result).header.headers.get("Location").contains("/overview")
+      }
+    }
+
+    "must redirect to task list page and submit a completed audit event for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        await(result).header.headers.get("Location").contains("/overview")
+      }
+    }
+
+    "must redirect to tax return not ready page and submit an incomplete audit event for an individual" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        await(result).header.headers.get("Location").contains("/tax-return-not-ready")
+      }
+    }
+
+    "must redirect to tax return not ready page and submit an incomplete audit event for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        await(result).header.headers.get("Location").contains("/tax-return-not-ready")
+      }
+    }
+
+    "must redirect to tax return not ready page and submit an incomplete audit event for an individual with no userAnswers" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        await(result).header.headers.get("Location").contains("/tax-return-not-ready")
+      }
+    }
   }
 }

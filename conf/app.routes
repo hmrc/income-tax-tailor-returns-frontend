@@ -21,6 +21,7 @@ GET        /account/signed-out                                                  
 GET        /unauthorised/:taxYear                                                                                       controllers.UnauthorisedController.onPageLoad(taxYear: Int)
 
 GET        /:taxYear/add-sections                                                                                       controllers.AddSectionsController.onPageLoad(taxYear: Int)
+POST       /:taxYear/add-sections                                                                                       controllers.AddSectionsController.onSubmit(taxYear: Int)
 
 GET        /:taxYear/tax-return-not-ready                                                                               controllers.TaxReturnNotReadyController.onPageLoad(taxYear: Int)
 
