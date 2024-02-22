@@ -112,7 +112,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").contains("/overview")
+        await(result).header.headers.get("Location").head.contains("/overview") mustBe true
       }
     }
 
@@ -126,7 +126,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").contains("/overview")
+        await(result).header.headers.get("Location").head.contains("/overview") mustBe true
       }
     }
 
@@ -140,7 +140,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").contains("/tax-return-not-ready")
+        await(result).header.headers.get("Location").head.contains("/tax-return-not-ready") mustBe true
       }
     }
 
@@ -154,7 +154,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").contains("/tax-return-not-ready")
+        await(result).header.headers.get("Location").head.contains("/tax-return-not-ready") mustBe true
       }
     }
 
@@ -168,7 +168,7 @@ class AddSectionsControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").contains("/tax-return-not-ready")
+        await(result).header.headers.get("Location").head.contains("/tax-return-not-ready") mustBe true
       }
     }
   }
