@@ -20,6 +20,7 @@
 
 @this(
         layout: templates.Layout,
+        formHelper: FormWithCSRF,
         govukButton: GovukButton,
         govukTag: GovukTag,
         link: Link,
@@ -43,9 +44,10 @@
 
         @taskList(List(("", vm.sections)))
 
-        @govukButton(
-            ButtonViewModel(messages("site.continue"))
-                .asLink(vm.continueLink)
-                .withCssClass(vm.buttonStyle)
-        )
+        @formHelper(action = vm.continueLink, Symbol("autoComplete") -> "off") {
+            @govukButton(
+                ButtonViewModel(messages("site.continue"))
+                    .withCssClass(vm.buttonStyle)
+            )
+        }
     }

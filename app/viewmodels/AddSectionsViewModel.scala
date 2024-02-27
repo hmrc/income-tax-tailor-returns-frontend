@@ -19,6 +19,7 @@ package viewmodels
 import controllers.routes
 import models.SectionNames.{AboutYou, IncomeFromProperty, IncomeFromWork, Pensions}
 import models.{NormalMode, SectionState}
+import play.api.mvc.Call
 
 case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: String) {
 
@@ -33,13 +34,9 @@ case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: Strin
 
   val completedCount: Int = sections.map(_.tag).count(_.isCompleted)
 
-  private val isComplete: Boolean = completedCount >= sections.size
+  val isComplete: Boolean = completedCount >= sections.size
 
-  val continueLink: String = if (isComplete) {
-    routes.TaskListController.onPageLoad(taxYear).url
-  } else {
-    routes.TaxReturnNotReadyController.onPageLoad(taxYear).url
-  }
+  val continueLink: Call = routes.AddSectionsController.onSubmit(taxYear)
 
   val buttonStyle: String = if (isComplete) {
     ""
