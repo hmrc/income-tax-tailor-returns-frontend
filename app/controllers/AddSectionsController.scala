@@ -21,7 +21,6 @@ import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import models.requests.OptionalDataRequest
 import models.{SectionState, UserAnswers}
-import org.joda.time.{DateTime, DateTimeZone}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, JsValue, Json}
@@ -93,7 +92,6 @@ class AddSectionsController @Inject()(
       sendAuditEvent("CompleteTailoring",
         "CompleteTailoring",
         ua,
-        "nino",
         ua.mtdItId,
         affinityGroup,
         taxYear)
@@ -116,7 +114,6 @@ class AddSectionsController @Inject()(
       sendAuditEvent("IncompleteTailoring",
         "incompleteTailoring",
         uaWithStatus,
-        "nino",
         uaWithStatus.mtdItId,
         affinityGroup,
         taxYear)
@@ -128,11 +125,10 @@ class AddSectionsController @Inject()(
   private def sendAuditEvent(auditName: String,
                              transactionName: String,
                              ua: UserAnswers,
-                             nino: String,
                              mtdItId: String,
                              affinityGroup: String,
                              taxYear: Int)(implicit hc: HeaderCarrier): Future[AuditResult] =
     auditService.auditModel(
-      AuditModel(auditName, transactionName, AuditDetail(ua.data, nino, mtdItId, affinityGroup, taxYear))
+      AuditModel(auditName, transactionName, AuditDetail(ua.data, mtdItId, affinityGroup, taxYear))
     )
 }
