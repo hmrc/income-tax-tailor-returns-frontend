@@ -19,6 +19,7 @@ package services
 import connectors.UserAnswersConnector
 import models.{Done, UserAnswers}
 import play.api.Logging
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -30,8 +31,10 @@ class UserDataService @Inject()(connector: UserAnswersConnector) extends Logging
     connector.get(mtdItId, taxYear)
   }
 
-  def set(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] =
-    connector.set(answers)
+  def set(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] = {
+    val withCompletedFlag = answers.data.fields ++ Seq("isUpdate" -> Json.toJson(true))
+    connector.set(answers.copy(data = JsObject(withCompletedFlag)))
+  }
 
   def keepAlive(mtdItId: String, taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] = {
     connector.keepAlive(mtdItId, taxYear)

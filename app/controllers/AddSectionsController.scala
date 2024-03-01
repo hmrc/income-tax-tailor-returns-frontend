@@ -20,12 +20,12 @@ import audit.{AuditDetail, AuditModel, AuditService}
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import models.requests.OptionalDataRequest
-import models.{SectionState, UserAnswers}
+import models.{Done, SectionState, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.AddSectionsService
+import services.{AddSectionsService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -42,6 +42,7 @@ class AddSectionsController @Inject()(
                                        getData: DataRetrievalActionProvider,
                                        addSectionsService: AddSectionsService,
                                        auditService: AuditService,
+                                       userDataService: UserDataService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: AddSectionsView,
                                        agentView: AddSectionsAgentView
@@ -87,14 +88,30 @@ class AddSectionsController @Inject()(
     }
 
     if (vm.isComplete) {
+
       val ua: UserAnswers = request.userAnswers.get
 
+      val updated: Option[JsValue] = ua.data.value.get("isUpdate")
+
+      val isUpdate: Boolean = if (ua.data.value.contains("isCompleted")) {
+        true
+      } else {
+        false
+      }
+
+      val withCompletedFlag: collection.Seq[(String, JsValue)] = ua.data.fields ++ Seq("isCompleted" -> Json.toJson("completed"))
+
+      val updatedUa = ua.copy(data = JsObject(withCompletedFlag))
+
+      userDataService.set(updatedUa)
+
       sendAuditEvent("CompleteTailoring",
-        "CompleteTailoring",
-        ua,
+        "complete-tailoring",
+        updatedUa,
         ua.mtdItId,
         affinityGroup,
-        taxYear)
+        taxYear,
+        isUpdate)
 
       Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(taxYear)))
     } else {
@@ -112,7 +129,7 @@ class AddSectionsController @Inject()(
         .copy(data = JsObject(ua))
 
       sendAuditEvent("IncompleteTailoring",
-        "incompleteTailoring",
+        "incomplete-tailoring",
         uaWithStatus,
         uaWithStatus.mtdItId,
         affinityGroup,
@@ -127,8 +144,10 @@ class AddSectionsController @Inject()(
                              ua: UserAnswers,
                              mtdItId: String,
                              affinityGroup: String,
-                             taxYear: Int)(implicit hc: HeaderCarrier): Future[AuditResult] =
+                             taxYear: Int,
+                             isUpdate: Boolean = false
+                            )(implicit hc: HeaderCarrier): Future[AuditResult] =
     auditService.auditModel(
-      AuditModel(auditName, transactionName, AuditDetail(ua.data, mtdItId, affinityGroup, taxYear))
+      AuditModel(auditName, transactionName, AuditDetail(ua.data, isUpdate, mtdItId, affinityGroup, taxYear))
     )
 }

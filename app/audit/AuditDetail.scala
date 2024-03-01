@@ -19,6 +19,7 @@ package audit
 import play.api.libs.json.{JsObject, Json, OWrites}
 
 case class AuditDetail(body: JsObject,
+                       isUpdate: Boolean,
                        mtditid: String,
                        userType: String,
                        taxYear: Int)
