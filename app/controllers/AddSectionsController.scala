@@ -20,10 +20,10 @@ import audit.{AuditDetail, AuditModel, AuditService}
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import models.requests.OptionalDataRequest
-import models.{Done, SectionState, UserAnswers}
+import models.{SectionState, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.{AddSectionsService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -50,83 +50,44 @@ class AddSectionsController @Inject()(
 
   def onPageLoad(taxYear: Int): Action[AnyContent] = (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)) {
     implicit request =>
-
-      val prefix: String = if (request.isAgent) {
-        "addSections.agent"
-      } else {
-        "addSections"
-      }
-
       val state = addSectionsService.getState(request.userAnswers)
-
-      val vm = AddSectionsViewModel(state, taxYear, prefix)
-
-      if (request.isAgent) {
-        Ok(agentView(taxYear, vm))
-      } else {
-        Ok(view(taxYear, vm))
+      request.isAgent match {
+        case true => Ok(agentView(taxYear, AddSectionsViewModel(state, taxYear, "addSections.agent")))
+        case false => Ok(view(taxYear, AddSectionsViewModel(state, taxYear, "addSections")))
       }
   }
 
   def onSubmit(taxYear: Int): Action[AnyContent] =
     (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear)).async {
       implicit request =>
-
         val state = addSectionsService.getState(request.userAnswers)
-
         val vm: AddSectionsViewModel = AddSectionsViewModel(state, taxYear, "")
-
         handleAudit(taxYear, vm, state)
     }
 
   private def handleAudit(taxYear: Int, vm: AddSectionsViewModel, state: SectionState)(implicit request: OptionalDataRequest[AnyContent]): Future[Result] = {
 
-    val affinityGroup = if (request.isAgent) {
-      "Agent"
-    } else {
-      "Individual"
-    }
+    val affinityGroup = if (request.isAgent) "Agent" else "Individual"
+    val ua: UserAnswers = request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear))
 
     if (vm.isComplete) {
+      def isUpdated: Boolean = ua.data.value.contains("isCompleted")
+      val userAnsWithCompletedStatus = ua.copy(data = JsObject(ua.data.fields ++ Seq("isCompleted" -> Json.toJson("completed"))))
 
-      val ua: UserAnswers = request.userAnswers.get
-
-      val updated: Option[JsValue] = ua.data.value.get("isUpdate")
-
-      val isUpdate: Boolean = if (ua.data.value.contains("isCompleted")) {
-        true
-      } else {
-        false
-      }
-
-      val withCompletedFlag: collection.Seq[(String, JsValue)] = ua.data.fields ++ Seq("isCompleted" -> Json.toJson("completed"))
-
-      val updatedUa = ua.copy(data = JsObject(withCompletedFlag))
-
-      userDataService.set(updatedUa)
+      userDataService.set(userAnsWithCompletedStatus)
 
       sendAuditEvent("CompleteTailoring",
         "complete-tailoring",
-        updatedUa,
+        userAnsWithCompletedStatus,
         ua.mtdItId,
         affinityGroup,
         taxYear,
-        isUpdate)
+        isUpdated)
 
       Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(taxYear)))
     } else {
-      val sectionStatus = Seq(
-        s"About you: ${state.aboutYou}",
-        s"Income from work: ${state.incomeFromWork}",
-        s"Income from property: ${state.incomeFromProperty}",
-        s"Pensions: ${state.pensions}"
-      )
-
-      val ua: scala.collection.Seq[(String, JsValue)] =
-        request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).data.fields ++ Seq("sectionStatus" -> Json.toJson(sectionStatus))
-
-      val uaWithStatus = request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear))
-        .copy(data = JsObject(ua))
+      val userAnswersWithSectionStatus = ua.data.fields ++ Seq("sectionStatus" -> Json.toJson(state.getStatus))
+      val uaWithStatus = ua.copy(data = JsObject(userAnswersWithSectionStatus))
 
       sendAuditEvent("IncompleteTailoring",
         "incomplete-tailoring",
@@ -145,9 +106,9 @@ class AddSectionsController @Inject()(
                              mtdItId: String,
                              affinityGroup: String,
                              taxYear: Int,
-                             isUpdate: Boolean = false
+                             isUpdated: Boolean = false
                             )(implicit hc: HeaderCarrier): Future[AuditResult] =
     auditService.auditModel(
-      AuditModel(auditName, transactionName, AuditDetail(ua.data, isUpdate, mtdItId, affinityGroup, taxYear))
+      AuditModel(auditName, transactionName, AuditDetail(ua.data, isUpdated, mtdItId, affinityGroup, taxYear))
     )
 }

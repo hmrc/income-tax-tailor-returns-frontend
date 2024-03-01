@@ -16,4 +16,11 @@
 
 package models
 
-case class SectionState(aboutYou: TagStatus, incomeFromWork: TagStatus, incomeFromProperty: TagStatus, pensions: TagStatus)
+case class SectionState(aboutYou: TagStatus, incomeFromWork: TagStatus, incomeFromProperty: TagStatus, pensions: TagStatus){
+  def getStatus = Seq(
+    s"About you: ${aboutYou}",
+    s"Income from work: ${incomeFromWork}",
+    s"Income from property: ${incomeFromProperty}",
+    s"Pensions: ${pensions}"
+  )
+}
