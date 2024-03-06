@@ -77,6 +77,17 @@ class UserDataServiceSpec
 
   }
 
+  ".setWithoutUpdate" - {
+
+    "must write the answers to the backend" in {
+
+      when[Future[Done]](mockConnector.set(any())(any())) thenReturn Future.successful(Done)
+
+      service.setWithoutUpdate(answers(taxYear)).futureValue mustEqual Done
+    }
+
+  }
+
   ".keepAlive" - {
 
     "must keep the backend record alive" in {

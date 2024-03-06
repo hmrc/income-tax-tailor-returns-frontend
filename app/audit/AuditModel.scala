@@ -16,6 +16,19 @@
 
 package audit
 
+import models.{Enumerable, WithName}
+
 case class AuditModel[T](auditType: String,
                          transactionName: String,
                          detail: T)
+
+trait AuditDescriptors
+object AuditDescriptors extends Enumerable.Implicits {
+
+  case object UserDataCompleteType extends WithName("UserDataComplete") with AuditDescriptors
+  case object UserDataCompleteTransaction extends WithName("user-data-complete") with AuditDescriptors
+  case object UserDataIncompleteType extends WithName("UserDataIncomplete") with AuditDescriptors
+  case object UserDataIncompleteTransaction extends WithName("user-data-incomplete") with AuditDescriptors
+  case object UserDataUpdatedType extends WithName("UserDataUpdated") with AuditDescriptors
+  case object UserDataUpdatedTransaction extends WithName("user-data-updated") with AuditDescriptors
+}

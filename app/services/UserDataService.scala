@@ -32,8 +32,11 @@ class UserDataService @Inject()(connector: UserAnswersConnector) extends Logging
   }
 
   def set(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] = {
-    val withCompletedFlag = answers.data.fields ++ Seq("isUpdate" -> Json.toJson(true))
-    connector.set(answers.copy(data = JsObject(withCompletedFlag)))
+    connector.set(answers.copy(data = JsObject(answers.data.fields ++ Seq("isUpdate" -> Json.toJson(true)))))
+  }
+
+  def setWithoutUpdate(answers: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] = {
+    connector.set(answers)
   }
 
   def keepAlive(mtdItId: String, taxYear: Int)(implicit hc: HeaderCarrier): Future[Done] = {
