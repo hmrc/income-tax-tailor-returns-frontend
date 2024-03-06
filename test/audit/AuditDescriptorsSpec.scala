@@ -16,6 +16,25 @@
 
 package audit
 
-case class AuditModel[T](auditType: String,
-                         transactionName: String,
-                         detail: T)
+import audit.AuditDescriptors._
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+
+class AuditDescriptorsSpec extends AnyFreeSpec with Matchers {
+
+  "AuditDescriptors" - {
+
+    "must contain the correct values" in {
+      AuditDescriptors.values mustEqual Set(
+        UserDataCompleteType,
+        UserDataCompleteTransaction,
+        UserDataIncompleteType,
+        UserDataIncompleteTransaction,
+        UserDataUpdatedType,
+        UserDataUpdatedTransaction
+      )
+    }
+
+  }
+}
+
