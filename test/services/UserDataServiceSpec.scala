@@ -25,7 +25,6 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
-import pages.aboutyou.ChildBenefitPage
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
