@@ -74,27 +74,11 @@ class PaymentsIntoPensionsController @Inject()(
             Future.successful(BadRequest(view(formWithErrors, mode, taxYear)))
           },
 
-        value => {
-          val current = request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).get(PaymentsIntoPensionsPage)
-          val isExisting = request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).get(PaymentsIntoPensionsPage).contains(value)
-
-          if (!isExisting || current.isEmpty) {
-
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).set(PaymentsIntoPensionsPage, value))
-              _ <- userDataService.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(PaymentsIntoPensionsPage, mode, updatedAnswers))
-
-          } else {
-            Future.successful(Redirect(
-              navigator.nextPage(PaymentsIntoPensionsPage, mode, request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)))
-            ))
-          }
-        }
-//          for {
-//            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)).set(PaymentsIntoPensionsPage, value))
-//            _              <- userDataService.set(updatedAnswers)
-//          } yield Redirect(navigator.nextPage(PaymentsIntoPensionsPage, mode, updatedAnswers))
+        value =>
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)).set(PaymentsIntoPensionsPage, value))
+            _              <- userDataService.set(updatedAnswers, request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)))
+          } yield Redirect(navigator.nextPage(PaymentsIntoPensionsPage, mode, updatedAnswers))
       )
   }
 }

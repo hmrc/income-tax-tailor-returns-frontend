@@ -25,6 +25,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
+import pages.aboutyou.ChildBenefitPage
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -44,7 +45,8 @@ class UserDataServiceSpec
   private val instant   = Instant.now.truncatedTo(ChronoUnit.MILLIS)
   private val stubClock = Clock.fixed(instant, ZoneId.systemDefault)
   private val userId    = "foo"
-  private def answers(taxYear: Int)   = UserAnswers(userId, taxYear, Json.obj("bar" -> "baz"), lastUpdated = Instant.now(stubClock))
+  private def answers(taxYear: Int) = UserAnswers(userId, taxYear, Json.obj("bar" -> "baz"), lastUpdated = Instant.now(stubClock))
+  private def modifiedAnswers(taxYear: Int) = UserAnswers(userId, taxYear, Json.obj("bar" -> "foo"), lastUpdated = Instant.now(stubClock))
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val mockConnector = mock[UserAnswersConnector]
@@ -68,11 +70,18 @@ class UserDataServiceSpec
 
   ".set" - {
 
-    "must write the answers to the backend" in {
+    "must write the answers to the backend when values have been modified" in {
 
       when[Future[Done]](mockConnector.set(any())(any())) thenReturn Future.successful(Done)
 
-      service.set(answers(taxYear)).futureValue mustEqual Done
+      service.set(answers(taxYear), modifiedAnswers(taxYear)).futureValue mustEqual Done
+    }
+
+    "must not write the answers to the backend when values have not been modified" in {
+
+      when[Future[Done]](mockConnector.set(any())(any())) thenReturn Future.successful(Done)
+
+      service.set(answers(taxYear), answers(taxYear)).futureValue mustEqual Done
     }
 
   }

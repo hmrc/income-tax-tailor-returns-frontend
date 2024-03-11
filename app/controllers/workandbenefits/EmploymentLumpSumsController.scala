@@ -77,7 +77,7 @@ class EmploymentLumpSumsController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(EmploymentLumpSumsPage, value))
-            _              <- userDataService.set(updatedAnswers)
+            _              <- userDataService.set(updatedAnswers, request.userAnswers)
           } yield Redirect(navigator.nextPage(EmploymentLumpSumsPage, mode, updatedAnswers))
       )
   }
