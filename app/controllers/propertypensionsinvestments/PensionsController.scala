@@ -77,7 +77,7 @@ class PensionsController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PensionsPage, value))
-            _              <- userDataService.set(updatedAnswers)
+            _              <- userDataService.set(updatedAnswers, request.userAnswers)
           } yield Redirect(navigator.nextPage(PensionsPage, mode, updatedAnswers))
       )
   }

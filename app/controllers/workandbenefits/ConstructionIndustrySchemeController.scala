@@ -77,7 +77,7 @@ class ConstructionIndustrySchemeController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ConstructionIndustrySchemePage, value))
-            _              <- userDataService.set(updatedAnswers)
+            _              <- userDataService.set(updatedAnswers, request.userAnswers)
           } yield Redirect(navigator.nextPage(ConstructionIndustrySchemePage, mode, updatedAnswers))
       )
   }

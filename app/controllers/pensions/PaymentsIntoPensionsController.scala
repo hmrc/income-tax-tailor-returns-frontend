@@ -77,7 +77,7 @@ class PaymentsIntoPensionsController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)).set(PaymentsIntoPensionsPage, value))
-            _              <- userDataService.set(updatedAnswers)
+            _              <- userDataService.set(updatedAnswers, request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)))
           } yield Redirect(navigator.nextPage(PaymentsIntoPensionsPage, mode, updatedAnswers))
       )
   }

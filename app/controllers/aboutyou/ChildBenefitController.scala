@@ -77,7 +77,7 @@ class ChildBenefitController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ChildBenefitPage, value))
-            _              <- userDataService.set(updatedAnswers)
+            _              <- userDataService.set(updatedAnswers, request.userAnswers)
           } yield Redirect(navigator.nextPage(ChildBenefitPage, mode, updatedAnswers))
       )
   }

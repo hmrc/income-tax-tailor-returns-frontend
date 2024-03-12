@@ -77,7 +77,7 @@ class UkInterestController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UkInterestPage, value))
-            _              <- userDataService.set(updatedAnswers)
+            _              <- userDataService.set(updatedAnswers, request.userAnswers)
           } yield Redirect(navigator.nextPage(UkInterestPage, mode, updatedAnswers))
       )
   }

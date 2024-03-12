@@ -19,13 +19,15 @@ package controllers
 import base.SpecBase
 import models.SectionState
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
+import play.api.Logging
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.AddSectionsViewModel
 import views.html.{AddSectionsAgentView, AddSectionsView}
 
 
-class AddSectionsControllerSpec extends SpecBase {
+class AddSectionsControllerSpec extends SpecBase with Logging {
 
   private val addSectionsKey: String = "addSections"
   private val addSectionsAgentKey: String = "addSections.agent"
@@ -119,6 +121,38 @@ class AddSectionsControllerSpec extends SpecBase {
     "must redirect to task list page and submit a completed audit event for an agent" in {
 
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        await(result).header.headers.get("Location").head.contains("/overview") mustBe true
+      }
+    }
+
+    "must redirect to task list page and submit an update audit event for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(
+        fullUserAnswers.copy(data = JsObject(fullUserAnswers.data.fields ++ Seq("isCompleted" -> Json.toJson("completed"), "isUpdate" -> Json.toJson(true))))
+      ), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        await(result).header.headers.get("Location").head.contains("/overview") mustBe true
+      }
+    }
+
+    "must redirect to task list page without submitting an event if no data has changed for an agent" in {
+
+      val application = applicationBuilder(userAnswers = Some(
+        fullUserAnswers.copy(data = JsObject(fullUserAnswers.data.fields ++ Seq("isCompleted" -> Json.toJson("completed"), "isUpdate" -> Json.toJson(false))))
+      ), isAgent = true).build()
 
       running(application) {
         val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)

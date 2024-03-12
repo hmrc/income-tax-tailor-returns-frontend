@@ -77,7 +77,7 @@ class TaxableStateBenefitsController @Inject()(
         value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TaxableStateBenefitsPage, value))
-            _              <- userDataService.set(updatedAnswers)
+            _              <- userDataService.set(updatedAnswers, request.userAnswers)
           } yield Redirect(navigator.nextPage(TaxableStateBenefitsPage, mode, updatedAnswers))
       )
   }

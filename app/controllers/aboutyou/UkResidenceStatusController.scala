@@ -77,8 +77,8 @@ class UkResidenceStatusController @Inject()(
 
         value =>
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId,taxYear)).set(UkResidenceStatusPage, value))
-            _              <- userDataService.set(updatedAnswers)
+            updatedAnswers <- Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)).set(UkResidenceStatusPage, value))
+            _              <- userDataService.set(updatedAnswers, request.userAnswers.getOrElse(UserAnswers(request.mtdItId, taxYear)))
           } yield Redirect(navigator.nextPage(UkResidenceStatusPage, mode, updatedAnswers))
       )
   }

@@ -14,13 +14,27 @@
  * limitations under the License.
  */
 
-package models
+package audit
 
-case class SectionState(aboutYou: TagStatus, incomeFromWork: TagStatus, incomeFromProperty: TagStatus, pensions: TagStatus){
-  def getStatus = Seq(
-    s"About you: ${aboutYou}",
-    s"Income from work: ${incomeFromWork}",
-    s"Income from property: ${incomeFromProperty}",
-    s"Pensions: ${pensions}"
-  )
+import audit.AuditDescriptors._
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+
+class AuditDescriptorsSpec extends AnyFreeSpec with Matchers {
+
+  "AuditDescriptors" - {
+
+    "must contain the correct values" in {
+      AuditDescriptors.values mustEqual Set(
+        UserDataCompleteType,
+        UserDataCompleteTransaction,
+        UserDataIncompleteType,
+        UserDataIncompleteTransaction,
+        UserDataUpdatedType,
+        UserDataUpdatedTransaction
+      )
+    }
+
+  }
 }
+

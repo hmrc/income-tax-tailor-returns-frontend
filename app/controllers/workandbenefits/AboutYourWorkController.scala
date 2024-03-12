@@ -111,7 +111,7 @@ class AboutYourWorkController @Inject()(
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AboutYourWorkRadioPage, value)
                   .flatMap(_.set(AboutYourWorkPage, aboutYourWork)))
-                _ <- userDataService.set(updatedAnswers)
+                _ <- userDataService.set(updatedAnswers, request.userAnswers)
               } yield Redirect(navigator.nextPage(AboutYourWorkRadioPage, mode, updatedAnswers))
             }
           )
@@ -125,7 +125,7 @@ class AboutYourWorkController @Inject()(
             value =>
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(AboutYourWorkPage, value))
-                _ <- userDataService.set(updatedAnswers)
+                _ <- userDataService.set(updatedAnswers, request.userAnswers)
               } yield Redirect(navigator.nextPage(AboutYourWorkPage, mode, updatedAnswers))
           )
 
