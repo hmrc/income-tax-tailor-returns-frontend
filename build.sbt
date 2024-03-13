@@ -55,6 +55,7 @@ lazy val root = (project in file("."))
         ))
     ),
     pipelineStages := Seq(digest),
+    Assets / pipelineStages := Seq(concat)
   )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(
