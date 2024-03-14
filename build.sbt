@@ -64,7 +64,7 @@ lazy val testSettings: Seq[Def.Setting[_]] = Seq(
   unmanagedSourceDirectories.withRank(KeyRanks.Invisible) += baseDirectory.value / "test-utils"
 )
 
-lazy val itSettings = DefaultBuildSettings.itSettings ++ Seq(
+lazy val itSettings = DefaultBuildSettings.itSettings() ++ Seq(
   unmanagedSourceDirectories.withRank(KeyRanks.Invisible) := Seq(
     baseDirectory.value / "it"
   ),
