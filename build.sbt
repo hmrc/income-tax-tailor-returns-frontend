@@ -6,14 +6,26 @@ import uk.gov.hmrc.DefaultBuildSettings
 
 lazy val appName: String = "income-tax-tailor-returns-frontend"
 
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.12"
+
+val excludedPackages: Seq[String] = Seq(
+  "<empty>",
+  "Reverse.*",
+  "uk.gov.hmrc.BuildInfo",
+  "app.*",
+  "prod.*",
+  ".*Routes.*",
+  "testOnly.*",
+  "testOnlyDoNotUseInAppConf.*"
+)
+
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(inConfig(Test)(testSettings): _*)
-  .settings(majorVersion := 0)
   .settings(ThisBuild / useSuperShell := false)
   .settings(
-    scalaVersion := "2.13.12",
     name := appName,
     RoutesKeys.routesImport ++= Seq(
       "models._",
@@ -33,9 +45,10 @@ lazy val root = (project in file("."))
       "viewmodels.govuk.all._"
     ),
     PlayKeys.playDefaultPort := 10007,
+    ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
     ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;.*controllers.testonly.*" +
       ".*Routes.*;.*viewmodels.govuk.*;",
-    ScoverageKeys.coverageMinimumStmtTotal := 78,
+    ScoverageKeys.coverageMinimumStmtTotal := 95,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq(
@@ -44,7 +57,7 @@ lazy val root = (project in file("."))
       baseDirectory.value.getCanonicalPath,
       "-Wconf:cat=deprecation:ws,cat=feature:ws,cat=optimizer:ws,src=target/.*:s"
     ),
-    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
+    libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     resolvers ++= Seq(Resolver.jcenterRepo),
     // concatenate js
@@ -77,6 +90,3 @@ lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(root % "test->test") // the "test->test" allows reusing test code and test dependencies
   .settings(testSettings ++ itSettings)
-  .settings(scalaVersion := "2.13.12")
-  .settings(majorVersion := 0)
-  .settings(libraryDependencies ++= AppDependencies.test)
