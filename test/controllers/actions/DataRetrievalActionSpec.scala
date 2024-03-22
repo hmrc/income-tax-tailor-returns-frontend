@@ -35,10 +35,7 @@ class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
     val provider: ActionTransformer[IdentifierRequest, OptionalDataRequest] = new DataRetrievalActionProviderImpl(userDataService)(ec).apply(taxYear)
 
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
-      provider.refine(request).map(_.toOption match {
-        case Some(value) => value
-        case None => OptionalDataRequest(request, "mtdItId", None, isAgent = false)
-      })
+      provider.refine(request).map(_.value)
     }
   }
 
