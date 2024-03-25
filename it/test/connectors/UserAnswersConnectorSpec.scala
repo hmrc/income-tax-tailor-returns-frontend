@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package connectors
+package test.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
+import connectors.UserAnswersConnector
 import generators.ModelGenerators
 import models.UserAnswers
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
