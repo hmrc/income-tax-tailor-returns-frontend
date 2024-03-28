@@ -17,7 +17,7 @@
 package controllers
 
 import audit.AuditDescriptors._
-import audit.{AuditDescriptors, AuditDetail, AuditModel, AuditService}
+import audit.{AuditDescriptors, AuditModel, AuditService}
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import models.requests.OptionalDataRequest
@@ -95,11 +95,12 @@ class AddSectionsController @Inject()(
 
       (isPreviouslyCompleted, isUpdate) match {
         case (true, true) =>
-          submitAudit(UserDataUpdatedType.toString, UserDataUpdatedTransaction.toString, uaWithCompletedStatus, ua.mtdItId, affinityGroup, taxYear, isUpdate)
+          submitAudit(UserDataUpdatedType.toString, UserDataUpdatedTransaction.toString, uaWithCompletedStatus, ua.mtdItId, affinityGroup, taxYear)
         case (false, _) =>
           submitAudit(UserDataCompleteType.toString,
             UserDataCompleteTransaction.toString,
-            uaWithCompletedStatus,
+            // Remove isUpdate field for completed event as it is not needed here.
+            uaWithCompletedStatus.copy(data = JsObject(uaWithCompletedStatus.data.fields.filterNot(_._1 == IS_UPDATE))),
             ua.mtdItId,
             affinityGroup,
             taxYear)
@@ -125,10 +126,9 @@ class AddSectionsController @Inject()(
                           ua: UserAnswers,
                           mtdItId: String,
                           affinityGroup: String,
-                          taxYear: Int,
-                          isUpdate: Boolean = false
+                          taxYear: Int
                          )(implicit hc: HeaderCarrier): Future[AuditResult] =
     auditService.auditModel(
-      AuditModel(auditName, transactionName, AuditDetail(ua.data, isUpdate, mtdItId, affinityGroup, taxYear))
+      AuditModel(auditName, transactionName, ua.data, mtdItId, affinityGroup, taxYear)
     )
 }
