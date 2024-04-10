@@ -12,9 +12,18 @@ You will need to have the following:
 - Installed [MongoDB](https://docs.mongodb.com/manual/installation/)
 - Installed/configured [service manager](https://github.com/hmrc/service-manager).
 
-The service manager profile for this service is:
+The service manager profile for this service is: (complete journey)
+
+    sm2 --start INCOME_TAX_TAILOR_RETURNS_FRONTEND
+Run the following command to start the remaining services locally:
+
+    sudo mongod (If not already running)
+    sm2 --start INCOME_TAX_SUBMISSION_ALL -r
+
+The tailoring private beta service manager profile for this service is: (reduced journey)
 
     sm2 --start INCOME_TAX_TAILOR_RETURNS_FRONTEND_PRIVATE_BETA
+
 Run the following command to start the remaining services locally:
 
     sudo mongod (If not already running)
