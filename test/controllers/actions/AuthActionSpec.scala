@@ -208,7 +208,8 @@ class AuthActionSpec extends SpecBase {
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
-          status(result) mustBe UNAUTHORIZED
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result) mustBe Some("https://www.gov.uk/guidance/use-software-to-send-income-tax-updates")
         }
       }
       "must fail with a UNAUTHORIZED when ClientMTDID from User Session does not exist in users enrolments" in {
@@ -263,7 +264,8 @@ class AuthActionSpec extends SpecBase {
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
-          status(result) mustBe UNAUTHORIZED
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result) mustBe Some("https://www.gov.uk/guidance/get-an-hmrc-agent-services-account")
         }
       }
     }
