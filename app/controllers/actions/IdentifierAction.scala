@@ -131,12 +131,12 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
           case _ =>
             // TODO redirect to agent services
             logger.warn("User did not have ARN")
-            unauthorized
+            Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
         }
       case None =>
         logger.warn("User did not have MTDID in session")
         // TODO redirect to View & Change to fix user session
-        unauthorized
+        Future.successful(Redirect(config.signUpUrl))
     }
   }
 }
