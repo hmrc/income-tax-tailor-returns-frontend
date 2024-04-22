@@ -61,7 +61,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -78,7 +78,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -97,7 +97,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[AboutYourWorkView]
 
@@ -115,7 +115,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[AboutYourWorkAgentView]
 
@@ -144,6 +144,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value[0]", AboutYourWork.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -160,6 +161,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
@@ -180,6 +182,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> "invalid value"))
 
@@ -197,7 +200,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -214,6 +217,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value[0]", AboutYourWork.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -230,7 +234,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -246,7 +250,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -266,7 +270,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
 
@@ -286,7 +290,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
 
@@ -312,8 +316,10 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
           .build()
 
       running(application) {
-        val request = FakeRequest(POST, aboutYourWorkRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        val request =
+          FakeRequest(POST, aboutYourWorkRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -340,6 +346,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value", "false"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -353,8 +360,10 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
 
       running(application) {
-        val request = FakeRequest(POST, aboutYourWorkRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        val request =
+          FakeRequest(POST, aboutYourWorkRoute)
+            .withFormUrlEncodedBody(("value", ""))
+            .withSession(validTaxYears)
 
         val boundForm = radioForm.bind(Map("value" -> ""))
 
@@ -372,8 +381,10 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(POST, aboutYourWorkRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        val request =
+          FakeRequest(POST, aboutYourWorkRoute)
+            .withFormUrlEncodedBody(("value", ""))
+            .withSession(validTaxYears)
 
         val boundForm = radioAgentForm.bind(Map("value" -> ""))
 
@@ -391,7 +402,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute)
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -405,8 +416,10 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(POST, aboutYourWorkRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        val request =
+          FakeRequest(POST, aboutYourWorkRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

@@ -51,7 +51,7 @@ class PaymentsIntoPensionsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, paymentsIntoPensionsRoute)
+        val request = FakeRequest(GET, paymentsIntoPensionsRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -68,7 +68,7 @@ class PaymentsIntoPensionsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, paymentsIntoPensionsRoute)
+        val request = FakeRequest(GET, paymentsIntoPensionsRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -87,7 +87,7 @@ class PaymentsIntoPensionsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, paymentsIntoPensionsRoute)
+        val request = FakeRequest(GET, paymentsIntoPensionsRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[PaymentsIntoPensionsView]
 
@@ -105,7 +105,7 @@ class PaymentsIntoPensionsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, paymentsIntoPensionsRoute)
+        val request = FakeRequest(GET, paymentsIntoPensionsRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[PaymentsIntoPensionsAgentView]
 
@@ -134,6 +134,7 @@ class PaymentsIntoPensionsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, paymentsIntoPensionsRoute)
             .withFormUrlEncodedBody(("value[0]", PaymentsIntoPensions.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -150,6 +151,7 @@ class PaymentsIntoPensionsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, paymentsIntoPensionsRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
@@ -170,6 +172,7 @@ class PaymentsIntoPensionsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, paymentsIntoPensionsRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> "invalid value"))
 

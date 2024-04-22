@@ -51,7 +51,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, ukInsuranceGainsRoute)
+        val request = FakeRequest(GET, ukInsuranceGainsRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -68,7 +68,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, ukInsuranceGainsRoute)
+        val request = FakeRequest(GET, ukInsuranceGainsRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -87,7 +87,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, ukInsuranceGainsRoute)
+        val request = FakeRequest(GET, ukInsuranceGainsRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[UkInsuranceGainsView]
 
@@ -105,7 +105,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, ukInsuranceGainsRoute)
+        val request = FakeRequest(GET, ukInsuranceGainsRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[UkInsuranceGainsAgentView]
 
@@ -134,6 +134,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, ukInsuranceGainsRoute)
             .withFormUrlEncodedBody(("value[0]", UkInsuranceGains.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -150,6 +151,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, ukInsuranceGainsRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
@@ -170,6 +172,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, ukInsuranceGainsRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> "invalid value"))
 
@@ -187,7 +190,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, ukInsuranceGainsRoute)
+        val request = FakeRequest(GET, ukInsuranceGainsRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -204,6 +207,7 @@ class UkInsuranceGainsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, ukInsuranceGainsRoute)
             .withFormUrlEncodedBody(("value[0]", UkInsuranceGains.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

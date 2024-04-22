@@ -22,7 +22,6 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
-import uk.gov.hmrc.time.TaxYear
 
 import scala.concurrent.Future
 import scala.util.Random
@@ -39,11 +38,6 @@ class TaxYearActionSpec extends SpecBase with MockitoSugar {
 
   "TaxYearAction" - {
 
-    val endOfTaxYearRange = TaxYear.current.finishYear
-    val startOfTaxYearRange = endOfTaxYearRange - 5
-
-    val taxYears = (startOfTaxYearRange to  endOfTaxYearRange).toList
-    val validTaxYears = "validTaxYears" -> taxYears.mkString(",")
     val identifierRequest = IdentifierRequest(FakeRequest().withSession(validTaxYears), "mtdItId", isAgent = false)
 
     "when provided a taxYear INSIDE of a valid range" - {

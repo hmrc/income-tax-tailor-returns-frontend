@@ -52,7 +52,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, jobseekersAllowanceRoute)
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -69,7 +69,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, jobseekersAllowanceRoute)
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -88,7 +88,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, jobseekersAllowanceRoute)
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[JobseekersAllowanceView]
 
@@ -106,7 +106,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, jobseekersAllowanceRoute)
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[JobseekersAllowanceAgentView]
 
@@ -135,6 +135,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, jobseekersAllowanceRoute)
             .withFormUrlEncodedBody(("value[0]", JobseekersAllowance.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -151,6 +152,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, jobseekersAllowanceRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
@@ -171,6 +173,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, jobseekersAllowanceRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> "invalid value"))
 
@@ -188,7 +191,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, jobseekersAllowanceRoute)
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -205,6 +208,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, jobseekersAllowanceRoute)
             .withFormUrlEncodedBody(("value[0]", JobseekersAllowance.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

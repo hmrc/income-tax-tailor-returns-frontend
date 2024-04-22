@@ -51,7 +51,7 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, taxableStateBenefitsRoute)
+        val request = FakeRequest(GET, taxableStateBenefitsRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -67,8 +67,7 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, taxableStateBenefitsRoute
-        )
+        val request = FakeRequest(GET, taxableStateBenefitsRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -86,7 +85,7 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, taxableStateBenefitsRoute)
+        val request = FakeRequest(GET, taxableStateBenefitsRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[TaxableStateBenefitsView]
 
@@ -104,8 +103,7 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, taxableStateBenefitsRoute
-        )
+        val request = FakeRequest(GET, taxableStateBenefitsRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[TaxableStateBenefitsAgentView]
 
@@ -134,6 +132,7 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, taxableStateBenefitsRoute)
             .withFormUrlEncodedBody(("value", "true"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -150,6 +149,7 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, taxableStateBenefitsRoute)
             .withFormUrlEncodedBody(("value", ""))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> ""))
 
@@ -168,9 +168,9 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, taxableStateBenefitsRoute
-        )
-        .withFormUrlEncodedBody(("value", ""))
+          FakeRequest(POST, taxableStateBenefitsRoute)
+            .withFormUrlEncodedBody(("value", ""))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> ""))
 
@@ -188,7 +188,7 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, taxableStateBenefitsRoute)
+        val request = FakeRequest(GET, taxableStateBenefitsRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -205,6 +205,7 @@ class TaxableStateBenefitsControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, taxableStateBenefitsRoute)
             .withFormUrlEncodedBody(("value", "true"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

@@ -55,7 +55,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute)
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -71,7 +71,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute)
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -91,7 +91,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute)
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
 
@@ -111,7 +111,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute)
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
 
@@ -137,8 +137,10 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
           .build()
 
       running(application) {
-        val request = FakeRequest(POST, aboutYourWorkRadioPageRoute)
+        val request =
+          FakeRequest(POST, aboutYourWorkRadioPageRoute)
             .withFormUrlEncodedBody(("value", "true"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -165,6 +167,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, aboutYourWorkRadioPageRoute)
             .withFormUrlEncodedBody(("value", "false"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -178,8 +181,10 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
 
       running(application) {
-        val request = FakeRequest(POST, aboutYourWorkRadioPageRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        val request =
+          FakeRequest(POST, aboutYourWorkRadioPageRoute)
+            .withFormUrlEncodedBody(("value", ""))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> ""))
 
@@ -197,8 +202,10 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(POST, aboutYourWorkRadioPageRoute)
-          .withFormUrlEncodedBody(("value", ""))
+        val request =
+          FakeRequest(POST, aboutYourWorkRadioPageRoute)
+            .withFormUrlEncodedBody(("value", ""))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> ""))
 
@@ -216,7 +223,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute)
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -230,8 +237,10 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(POST, aboutYourWorkRadioPageRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+        val request =
+          FakeRequest(POST, aboutYourWorkRadioPageRoute)
+            .withFormUrlEncodedBody(("value", "true"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

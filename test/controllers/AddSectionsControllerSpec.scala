@@ -41,7 +41,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url)
+        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -58,7 +58,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url)
+        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -75,7 +75,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url)
+        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -92,7 +92,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url)
+        val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -109,7 +109,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -123,7 +123,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -139,7 +139,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       ), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -155,7 +155,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       ), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -169,7 +169,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -183,7 +183,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -197,7 +197,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url)
+        val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 

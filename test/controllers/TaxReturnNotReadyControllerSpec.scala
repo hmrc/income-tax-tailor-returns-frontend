@@ -42,7 +42,7 @@ class TaxReturnNotReadyControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.TaxReturnNotReadyController.onPageLoad(taxYear).url)
+        val request = FakeRequest(GET, routes.TaxReturnNotReadyController.onPageLoad(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -58,7 +58,7 @@ class TaxReturnNotReadyControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.TaxReturnNotReadyController.onPageLoad(taxYear).url)
+        val request = FakeRequest(GET, routes.TaxReturnNotReadyController.onPageLoad(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 

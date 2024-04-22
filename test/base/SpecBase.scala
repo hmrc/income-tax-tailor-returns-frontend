@@ -45,6 +45,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.PlayBodyParsers
 import play.api.test.FakeRequest
 import play.api.test.Helpers.stubControllerComponents
+import uk.gov.hmrc.time.TaxYear
 
 import scala.concurrent.ExecutionContext
 
@@ -56,8 +57,13 @@ trait SpecBase
     with ScalaFutures
     with IntegrationPatience {
 
+  val endOfTaxYearRange: Int = TaxYear.current.finishYear
+  val startOfTaxYearRange: Int = endOfTaxYearRange - 5
+  val taxYear: Int = TaxYear.current.currentYear
+  val taxYears: Seq[Int] = (startOfTaxYearRange to  endOfTaxYearRange).toList
+  val validTaxYears: (String, String) = "validTaxYears" -> taxYears.mkString(",")
+
   val mtdItId: String = "anMtdItId"
-  val taxYear: Int = 2024
   val anAgent: Boolean = true
   val notAnAgent: Boolean = false
   val parsers: PlayBodyParsers = stubControllerComponents().parsers
