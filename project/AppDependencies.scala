@@ -13,17 +13,17 @@ object AppDependencies {
     "uk.gov.hmrc"                   %% "play-conditional-form-mapping-play-30"  % "2.0.0",
     "uk.gov.hmrc"                   %% "bootstrap-frontend-play-30"             % bootstrapVersion,
     "uk.gov.hmrc.mongo"             %% "hmrc-mongo-play-30"                     % hmrcMongoVersion,
-    "uk.gov.hmrc"                   %% "tax-year"                               % "3.3.0",
-    "com.fasterxml.jackson.module"  %% "jackson-module-scala"                   % "2.14.2"
+    "uk.gov.hmrc"                   %% "tax-year"                               % "4.0.0",
+    "com.fasterxml.jackson.module"  %% "jackson-module-scala"                   % "2.17.0"
   )
 
   val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"             %% "bootstrap-test-play-30"  % bootstrapVersion,
     "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-30" % hmrcMongoVersion,
     "org.scalatestplus"       %% "scalacheck-1-15"         % "3.2.11.0",
-    "org.mockito"             %% "mockito-scala"           % "1.17.30",
-    "org.scalacheck"          %% "scalacheck"              % "1.17.0",
-    "org.jsoup"               %  "jsoup"                   % "1.16.2",
+    "org.mockito"             %% "mockito-scala"           % "1.17.31",
+    "org.scalacheck"          %% "scalacheck"              % "1.18.0",
+    "org.jsoup"               %  "jsoup"                   % "1.17.2",
     "org.playframework"       %% "play-test"               % current
   ).map(_ % "test")
 
