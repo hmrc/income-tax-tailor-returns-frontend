@@ -95,9 +95,9 @@ addSections.pensions = Payments into pensions
 addSections.agent.pensions = Payments into pensions
 addSections.allowances = Allowances and tax reliefs
 addSections.agent.allowances = Allowances and tax reliefs
-addSections.status.notStarted = NOT STARTED
-addSections.status.cannotStart = CANNOT START YET
-addSections.status.completed = COMPLETED
+addSections.status.notStarted = Not started
+addSections.status.cannotStart = Cannot start yet
+addSections.status.completed = Completed
 
 taxReturnNotReady.title = Your Tax Return is not ready to fill in yet
 taxReturnNotReady.heading = Your Tax Return is not ready to fill in yet

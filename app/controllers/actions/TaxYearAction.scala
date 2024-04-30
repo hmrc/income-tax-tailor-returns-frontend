@@ -20,7 +20,7 @@ import models.requests.IdentifierRequest
 import play.api.Logger
 import play.api.mvc.Results.Redirect
 import play.api.mvc._
-import uk.gov.hmrc.time.TaxYear
+
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,8 +32,12 @@ class TaxYearAction @Inject()(taxYear: Int)
   lazy val logger: Logger = Logger.apply(this.getClass)
 
   override def refine[A](request: IdentifierRequest[A]): Future[Either[Result, IdentifierRequest[A]]] = {
-    // todo should retrieve and compare with valid taxYears from businessDetails accounting periods
-    if (TaxYear.current.previous.finishYear.equals(taxYear) || TaxYear.current.finishYear.equals(taxYear)) {
+    val isValidYear = request.session.get("validTaxYears").map(_.split(",")) match {
+      case Some(taxYears) => taxYears.map(_.toInt).contains(taxYear)
+      case None => false
+    }
+
+    if (isValidYear) {
       Future.successful(Right(IdentifierRequest(request.request, request.mtdItId, request.isAgent)))
     } else {
       logger.info(s"[TaxYearAction][refine] Invalid tax year, redirecting to error page")

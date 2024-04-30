@@ -52,7 +52,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute)
+        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -68,7 +68,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute)
+        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -86,7 +86,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute)
+        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[HighIncomeChildBenefitChargeView]
 
@@ -104,7 +104,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute)
+        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[HighIncomeChildBenefitChargeAgentView]
 
@@ -133,6 +133,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(POST, highIncomeChildBenefitChargeRoute)
             .withFormUrlEncodedBody(("value", HighIncomeChildBenefitCharge.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -149,6 +150,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(POST, highIncomeChildBenefitChargeRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
@@ -169,6 +171,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(POST, highIncomeChildBenefitChargeRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> "invalid value"))
 
@@ -186,7 +189,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute)
+        val request = FakeRequest(GET, highIncomeChildBenefitChargeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -203,6 +206,7 @@ class HighIncomeChildBenefitChargeControllerSpec extends SpecBase with MockitoSu
         val request =
           FakeRequest(POST, highIncomeChildBenefitChargeRoute)
             .withFormUrlEncodedBody(("value", HighIncomeChildBenefitCharge.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

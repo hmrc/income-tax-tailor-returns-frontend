@@ -51,7 +51,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute)
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -67,8 +67,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute
-        )
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -86,7 +85,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute)
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
 
@@ -104,8 +103,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute
-        )
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
 
@@ -134,6 +132,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val request =
           FakeRequest(POST, constructionIndustrySchemeRoute)
             .withFormUrlEncodedBody(("value", "true"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -150,6 +149,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val request =
           FakeRequest(POST, constructionIndustrySchemeRoute)
             .withFormUrlEncodedBody(("value", ""))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> ""))
 
@@ -168,9 +168,9 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
 
       running(application) {
         val request =
-          FakeRequest(POST, constructionIndustrySchemeRoute
-        )
-        .withFormUrlEncodedBody(("value", ""))
+          FakeRequest(POST, constructionIndustrySchemeRoute)
+            .withFormUrlEncodedBody(("value", ""))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> ""))
 
@@ -188,7 +188,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute)
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -205,6 +205,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val request =
           FakeRequest(POST, constructionIndustrySchemeRoute)
             .withFormUrlEncodedBody(("value", "true"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

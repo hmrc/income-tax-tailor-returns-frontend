@@ -1,9 +1,5 @@
-### License
-
-This code is open source software licensed under the [Apache 2.0 License]("http://www.apache.org/licenses/LICENSE-2.0.html").
-
-
 # income-tax-tailor-returns-fronted
+
 This is where users can review and make changes to their income tax return.
 
 ## Running the service locally
@@ -31,7 +27,16 @@ Run the following command to start the remaining services locally:
 
 This service runs on port: `localhost:10007`
 
+### Running Tests
+
+- Run Unit Tests:  `sbt test`
+- Run Integration Tests: `sbt it/test`
+- Run Unit and Integration Tests: `sbt test it/test`
+- Run Unit and Integration Tests with coverage report: `sbt runAllChecks`<br/>
+  which runs `clean compile scalastyle coverage test it/test coverageReport`
+
 ### .g8 folder contains all the scaffold page types which you can use to create a new pages, to create the pages you need to enter the sbt shell
+
 sbt shell
 then select the page type and provide the class name
 After creating the pages using the script come out of sbt shell and run ./migrate.sh script which will generate the relevant test cases.

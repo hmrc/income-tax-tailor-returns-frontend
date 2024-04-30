@@ -45,7 +45,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;format="decap"$Route)
+        val request = FakeRequest(GET, $className;format="decap"$Route).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[$className$View]
 
@@ -61,7 +61,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;format="decap"$Route)
+        val request = FakeRequest(GET, $className;format="decap"$Route).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[$className$View]
 
@@ -90,6 +90,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, $className;format="decap"$Route)
             .withFormUrlEncodedBody(("$field1Name$", "value 1"), ("$field2Name$", "value 2"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -106,6 +107,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, $className;format="decap"$Route)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
@@ -123,7 +125,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, $className;format="decap"$Route)
+        val request = FakeRequest(GET, $className;format="decap"$Route).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -140,6 +142,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, $className;format="decap"$Route)
             .withFormUrlEncodedBody(("$field1Name$", "value 1"), ("$field2Name$", "value 2"))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

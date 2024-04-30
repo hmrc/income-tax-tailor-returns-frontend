@@ -51,7 +51,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute)
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -68,7 +68,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute)
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -87,7 +87,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute)
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[RentalIncomeView]
 
@@ -105,7 +105,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute)
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
 
         val view = application.injector.instanceOf[RentalIncomeAgentView]
 
@@ -134,6 +134,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, rentalIncomeRoute)
             .withFormUrlEncodedBody(("value[0]", RentalIncome.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -150,6 +151,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, rentalIncomeRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = form.bind(Map("value" -> "invalid value"))
 
@@ -170,6 +172,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, rentalIncomeRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
+            .withSession(validTaxYears)
 
         val boundForm = agentForm.bind(Map("value" -> "invalid value"))
 
@@ -187,7 +190,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute)
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -204,6 +207,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, rentalIncomeRoute)
             .withFormUrlEncodedBody(("value[0]", RentalIncome.values.head.toString))
+            .withSession(validTaxYears)
 
         val result = route(application, request).value
 

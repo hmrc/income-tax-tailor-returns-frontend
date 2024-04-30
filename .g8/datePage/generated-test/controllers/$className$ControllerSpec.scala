@@ -31,10 +31,11 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
   lazy val $className;format="decap"$Route = routes.$className$Controller.onPageLoad(NormalMode, taxYear).url
 
   def getRequest(): FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest(GET, $className;format="decap"$Route)
+    FakeRequest(GET, $className;format="decap"$Route).withSession(validTaxYears)
 
   def postRequest(): FakeRequest[AnyContentAsFormUrlEncoded] =
     FakeRequest(POST, $className;format="decap"$Route)
+      .withSession(validTaxYears)
       .withFormUrlEncodedBody(
         "value.day"   -> validAnswer.getDayOfMonth.toString,
         "value.month" -> validAnswer.getMonthValue.toString,
@@ -102,6 +103,7 @@ class $className$ControllerSpec extends SpecBase with MockitoSugar {
       val request =
         FakeRequest(POST, $className;format="decap"$Route)
           .withFormUrlEncodedBody(("value", "invalid value"))
+          .withSession(validTaxYears)
 
       running(application) {
         val boundForm = form.bind(Map("value" -> "invalid value"))

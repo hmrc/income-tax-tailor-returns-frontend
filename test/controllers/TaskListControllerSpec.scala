@@ -40,7 +40,7 @@ class TaskListControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.TaskListController.onPageLoad(taxYear).url)
+        val request = FakeRequest(GET, routes.TaskListController.onPageLoad(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
@@ -56,7 +56,7 @@ class TaskListControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.TaskListController.onPageLoad(taxYear).url)
+        val request = FakeRequest(GET, routes.TaskListController.onPageLoad(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
