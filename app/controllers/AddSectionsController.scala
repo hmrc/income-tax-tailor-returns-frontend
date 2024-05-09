@@ -18,6 +18,7 @@ package controllers
 
 import audit.AuditDescriptors._
 import audit.{AuditDescriptors, AuditModel, AuditService}
+import config.FrontendAppConfig
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import models.requests.OptionalDataRequest
@@ -34,7 +35,6 @@ import viewmodels.AddSectionsViewModel
 import views.html.{AddSectionsAgentView, AddSectionsView}
 
 import javax.inject.Inject
-import scala.collection.immutable.Seq
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddSectionsController @Inject()(
@@ -43,6 +43,7 @@ class AddSectionsController @Inject()(
                                        getData: DataRetrievalActionProvider,
                                        addSectionsService: AddSectionsService,
                                        auditService: AuditService,
+                                       appConfig:FrontendAppConfig,
                                        userDataService: UserDataService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: AddSectionsView,
@@ -110,7 +111,7 @@ class AddSectionsController @Inject()(
       }
       userDataService.setWithoutUpdate(uaWithCompletedStatus.copy(data = JsObject(uaWithCompletedStatus.data.fields ++ Seq(IS_UPDATE -> Json.toJson(false)))))
 
-      Future.successful(Redirect(controllers.routes.TaskListController.onPageLoad(taxYear)))
+      Future.successful(Redirect(appConfig.submissionFrontendTaskListRedirect(taxYear)))
     } else {
 
       val uaWithStatus = ua.copy(data = JsObject(ua.data.fields ++ Seq("sectionStatus" -> Json.toJson(state.getStatus), IS_UPDATE -> Json.toJson(false))))
