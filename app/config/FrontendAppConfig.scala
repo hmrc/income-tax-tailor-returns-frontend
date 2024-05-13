@@ -59,6 +59,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
+  //Submission Frontend
+  val submissionFrontendTaskListRedirect: Int => String = taxYear => RedirectUrl(
+    configuration.get[String]("microservice.services.income-tax-submission-frontend.url") + s"/update-and-submit-income-tax-return/$taxYear/tasklist")
+      .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
+      .url
+
   val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/$appName"
 
   val languageTranslationEnabled: Boolean =

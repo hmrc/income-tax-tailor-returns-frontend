@@ -31,6 +31,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
 
   private val addSectionsKey: String = "addSections"
   private val addSectionsAgentKey: String = "addSections.agent"
+  private val taskListUrl : String = s"$submissionFrontendBaseUrl/$taxYear/tasklist"
   private def vmIncomplete(key: String) = AddSectionsViewModel(SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted), taxYear, key)
   private def vmComplete(key: String) = AddSectionsViewModel(SectionState(Completed, Completed, Completed, Completed), taxYear, key)
 
@@ -114,7 +115,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").head.contains("/overview") mustBe true
+        await(result).header.headers.get("Location").head.contains(taskListUrl) mustBe true
       }
     }
 
@@ -128,7 +129,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").head.contains("/overview") mustBe true
+        await(result).header.headers.get("Location").head.contains(taskListUrl) mustBe true
       }
     }
 
@@ -144,7 +145,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").head.contains("/overview") mustBe true
+        await(result).header.headers.get("Location").head.contains(taskListUrl) mustBe true
       }
     }
 
@@ -160,7 +161,7 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        await(result).header.headers.get("Location").head.contains("/overview") mustBe true
+        await(result).header.headers.get("Location").head.contains(taskListUrl) mustBe true
       }
     }
 
