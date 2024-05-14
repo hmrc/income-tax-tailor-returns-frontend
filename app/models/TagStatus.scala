@@ -24,9 +24,9 @@ sealed trait TagStatus {
 
 object TagStatus extends Enumerable.Implicits {
 
-  case object Completed extends WithName("completed") with TagStatus
-  case object NotStarted extends WithName("notStarted") with TagStatus
-  case object CannotStartYet extends WithName("cannotStart") with TagStatus
+  case object Completed extends WithName("Completed") with TagStatus
+  case object NotStarted extends WithName("Not started") with TagStatus
+  case object CannotStartYet extends WithName("Cannot start") with TagStatus
 
   val values: Set[TagStatus] = Set(
     Completed, NotStarted, CannotStartYet

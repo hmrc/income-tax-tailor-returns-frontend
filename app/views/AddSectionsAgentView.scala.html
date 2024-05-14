@@ -17,12 +17,14 @@
 @import models.Mode
 @import viewmodels.{Task, AddSectionsViewModel}
 @import views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(
         layout: templates.Layout,
         formHelper: FormWithCSRF,
         govukButton: GovukButton,
         govukTag: GovukTag,
+        govukTaskList : GovukTaskList,
         link: Link,
         taskList: OldTaskList,
         heading: Heading1,
@@ -42,7 +44,7 @@
 
         @p(messages("addSections.completedSections", vm.completedCount), extraClasses = Seq("govuk-!-margin-bottom-7"))
 
-        @taskList(List(("", vm.sections)))
+        @govukTaskList(TaskList((vm.sections)))
 
         @formHelper(action = vm.continueLink, Symbol("autoComplete") -> "off") {
             @govukButton(
