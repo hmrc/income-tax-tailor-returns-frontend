@@ -86,9 +86,9 @@ addSections.pensions = Taliadau i bensiynau
 addSections.agent.pensions = Taliadau i bensiynau
 addSections.allowances = Lwfansau a rhyddhad treth
 addSections.agent.allowances = Lwfansau a rhyddhad treth
-addSections.status.notStarted = HEB DDECHRAU
-addSections.status.cannotStart = METHU DECHRAU ETO
-addSections.status.completed = WEDI’I GWBLHAU
+addSections.status.notStarted = Heb ddechrau
+addSections.status.cannotStart = Methu dechrau eto
+addSections.status.completed = Wedi'i gwblhau
 
 taxReturnNotReady.title = Nid yw’ch Ffurflen Dreth yn barod i’w llenwi ar hyn o bryd
 taxReturnNotReady.heading = Nid yw’ch Ffurflen Dreth yn barod i’w llenwi ar hyn o bryd
