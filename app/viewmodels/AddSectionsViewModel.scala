@@ -30,42 +30,45 @@ case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: Strin
   val sections: Seq[TaskListItem] = List(
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${AboutYou.toString}"))),
-      status = TaskListItemStatus(Some(Tag(
-        HtmlContent(messages(s"addSections.status.${state.aboutYou.toString}")), classes = statusTagColour(state.aboutYou)))),
-      href = notStartedHref(controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url, state.aboutYou)
+      status = itemStatus(state.aboutYou),
+      href = itemHref(controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url, state.aboutYou)
     ),
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${IncomeFromWork.toString}"))),
-      status = TaskListItemStatus(Some(Tag(
-        HtmlContent(messages(s"addSections.status.${state.incomeFromWork.toString}")), classes = statusTagColour(state.incomeFromWork)))),
-      href = notStartedHref(controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url, state.incomeFromWork)
+      status = itemStatus(state.incomeFromWork),
+      href = itemHref(controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url, state.incomeFromWork)
     ),
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${IncomeFromProperty.toString}"))),
-      status = TaskListItemStatus(Some(Tag(
-        HtmlContent(messages(s"addSections.status.${state.incomeFromProperty.toString}")), classes = statusTagColour(state.incomeFromProperty)))),
-      href = notStartedHref(controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url, state.incomeFromProperty)
+      status = itemStatus(state.incomeFromProperty),
+      href = itemHref(controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url, state.incomeFromProperty)
     ),
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${Pensions.toString}"))),
-      status = TaskListItemStatus(Some(Tag(
-        HtmlContent(messages(s"addSections.status.${state.pensions.toString}")), classes = statusTagColour(state.pensions)
-      ))),
-      href = notStartedHref(controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url, state.pensions)
+      status = itemStatus(state.pensions),
+      href = itemHref(controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url, state.pensions)
     )
   )
 
-  private def notStartedHref(hrefString: String, tagStatus: TagStatus) : Option[String] = {
+
+  private def itemHref(hrefString: String, tagStatus: TagStatus) : Option[String] = {
     tagStatus match{
       case TagStatus.CannotStartYet => None
       case _ => Some(hrefString)
     }
   }
-  private def statusTagColour(tagStatus: TagStatus) : String = {
+
+  private def itemStatus(tagStatus: TagStatus) : TaskListItemStatus = {
     tagStatus match {
-      case TagStatus.Completed => ""
-      case TagStatus.NotStarted => "govuk-tag--grey"
-      case TagStatus.CannotStartYet => "govuk-tag--grey"
+      case TagStatus.CannotStartYet =>
+        TaskListItemStatus(content = HtmlContent(messages(s"addSections.status.cannotStart")),
+          classes = "govuk-task-list__status--cannot-start-yet")
+      case TagStatus.NotStarted =>
+        TaskListItemStatus(Some(Tag(content = HtmlContent(messages(s"addSections.status.notStarted")),
+          classes = "govuk-tag--blue")))
+      case TagStatus.Completed =>
+        TaskListItemStatus(content = HtmlContent(messages(s"addSections.status.completed")),
+          classes = "govuk-tag--white")
     }
   }
 
