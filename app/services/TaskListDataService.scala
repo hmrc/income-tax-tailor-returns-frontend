@@ -65,7 +65,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       paymentsIntoPensionsSection,
       interestSection,
       dividendsSection
-    ).filter(section => section.taskItems.nonEmpty))
+    ).filterNot(section => section.taskItems.contains(List.empty)))
   }
 
 
