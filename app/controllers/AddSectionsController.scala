@@ -124,6 +124,7 @@ class AddSectionsController @Inject()(
   }
 
   private def saveTaskListData(ua: UserAnswers)(implicit hc: HeaderCarrier): Future[Result] = {
+    // TODO: Error handling
     taskListDataService.set(ua).map {
       case Done => Redirect(appConfig.submissionFrontendTaskListRedirect(ua.taxYear))
     }
