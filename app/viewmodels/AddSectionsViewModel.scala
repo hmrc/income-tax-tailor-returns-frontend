@@ -57,7 +57,7 @@ case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: Strin
 
   private def notStartedHref(hrefString: String, tagStatus: TagStatus) : Option[String] = {
     tagStatus match{
-      case TagStatus.NotStarted => None
+      case TagStatus.CannotStartYet => None
       case _ => Some(hrefString)
     }
   }
