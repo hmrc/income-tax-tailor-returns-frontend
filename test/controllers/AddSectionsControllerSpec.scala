@@ -17,21 +17,33 @@
 package controllers
 
 import base.SpecBase
-import models.SectionState
+import connectors.TaskListDataConnector
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
+import models.{Done, SectionState}
+import org.mockito.ArgumentMatchers.any
+import org.mockito.MockitoSugar.when
+import org.scalatestplus.mockito.MockitoSugar
 import play.api.Logging
 import play.api.i18n.Messages
+import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.UpstreamErrorResponse
 import viewmodels.AddSectionsViewModel
 import views.html.{AddSectionsAgentView, AddSectionsView}
 
-class AddSectionsControllerSpec extends SpecBase with Logging {
+import scala.concurrent.Future
+
+
+class AddSectionsControllerSpec extends SpecBase with Logging with MockitoSugar {
 
   private val addSectionsKey: String = "addSections"
   private val addSectionsAgentKey: String = "addSections.agent"
   private val taskListUrl : String = s"$submissionFrontendBaseUrl/$taxYear/tasklist"
+
+  private def vmIncomplete(key: String) = AddSectionsViewModel(SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted), taxYear, key)
+  private def vmComplete(key: String) = AddSectionsViewModel(SectionState(Completed, Completed, Completed, Completed), taxYear, key)
 
   "AddSections Controller" - {
 
@@ -113,9 +125,16 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
 
     "must redirect to task list page and submit a completed audit event for an individual" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+      val mockConnector = mock[TaskListDataConnector]
+
+      when(mockConnector.set(any())(any())) thenReturn Future.successful(Done)
+
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers))
+        .overrides(bind[TaskListDataConnector].toInstance(mockConnector))
+        .build()
 
       running(application) {
+
         val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
@@ -127,7 +146,13 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
 
     "must redirect to task list page and submit a completed audit event for an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
+      val mockConnector = mock[TaskListDataConnector]
+
+      when(mockConnector.set(any())(any())) thenReturn Future.successful(Done)
+
+      val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true)
+        .overrides(bind[TaskListDataConnector].toInstance(mockConnector))
+        .build()
 
       running(application) {
         val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
@@ -141,9 +166,15 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
 
     "must redirect to task list page and submit an update audit event for an agent" in {
 
+      val mockConnector = mock[TaskListDataConnector]
+
+      when(mockConnector.set(any())(any())) thenReturn Future.successful(Done)
+
       val application = applicationBuilder(userAnswers = Some(
         fullUserAnswers.copy(data = JsObject(fullUserAnswers.data.fields ++ Seq("isCompleted" -> Json.toJson("completed"), "isUpdate" -> Json.toJson(true))))
-      ), isAgent = true).build()
+      ), isAgent = true)
+        .overrides(bind[TaskListDataConnector].toInstance(mockConnector))
+        .build()
 
       running(application) {
         val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
@@ -157,9 +188,15 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
 
     "must redirect to task list page without submitting an event if no data has changed for an agent" in {
 
+      val mockConnector = mock[TaskListDataConnector]
+
+      when(mockConnector.set(any())(any())) thenReturn Future.successful(Done)
+
       val application = applicationBuilder(userAnswers = Some(
         fullUserAnswers.copy(data = JsObject(fullUserAnswers.data.fields ++ Seq("isCompleted" -> Json.toJson("completed"), "isUpdate" -> Json.toJson(false))))
-      ), isAgent = true).build()
+      ), isAgent = true)
+        .overrides(bind[TaskListDataConnector].toInstance(mockConnector))
+        .build()
 
       running(application) {
         val request = FakeRequest(POST, routes.AddSectionsController.onSubmit(taxYear).url).withSession(validTaxYears)
