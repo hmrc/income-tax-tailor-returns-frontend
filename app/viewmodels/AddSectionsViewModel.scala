@@ -55,10 +55,10 @@ case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: Strin
     )
   )
 
-  private def notStartedHref(href: String, tagStatus: TagStatus) : Option[String] = {
+  private def notStartedHref(hrefString: String, tagStatus: TagStatus) : Option[String] = {
     tagStatus match{
       case TagStatus.NotStarted => None
-      case _ => Some(href)
+      case _ => Some(hrefString)
     }
   }
   private def statusTagColour(tagStatus: TagStatus) : String = {
