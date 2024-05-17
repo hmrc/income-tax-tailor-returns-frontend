@@ -32,36 +32,41 @@ case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: Strin
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${AboutYou.toString}"))),
       status = TaskListItemStatus(Some(Tag(
         HtmlContent(messages(s"addSections.status.${state.aboutYou.toString}")), classes = statusTagColour(state.aboutYou)))),
-      href = Some(controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url)
+      href = notStartedHref(controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url, state.aboutYou)
     ),
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${IncomeFromWork.toString}"))),
       status = TaskListItemStatus(Some(Tag(
         HtmlContent(messages(s"addSections.status.${state.incomeFromWork.toString}")), classes = statusTagColour(state.incomeFromWork)))),
-      href = Some(controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url)
+      href = notStartedHref(controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url, state.incomeFromWork)
     ),
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${IncomeFromProperty.toString}"))),
       status = TaskListItemStatus(Some(Tag(
         HtmlContent(messages(s"addSections.status.${state.incomeFromProperty.toString}")), classes = statusTagColour(state.incomeFromProperty)))),
-      href = Some(controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url)
+      href = notStartedHref(controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url, state.incomeFromProperty)
     ),
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${Pensions.toString}"))),
       status = TaskListItemStatus(Some(Tag(
         HtmlContent(messages(s"addSections.status.${state.pensions.toString}")), classes = statusTagColour(state.pensions)
       ))),
-      href = Some(controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url)
+      href = notStartedHref(controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url, state.pensions)
     )
   )
 
+  private def notStartedHref(href: String, tagStatus: TagStatus) : Option[String] = {
+    tagStatus match{
+      case TagStatus.NotStarted => None
+      case _ => Some(href)
+    }
+  }
   private def statusTagColour(tagStatus: TagStatus) : String = {
     tagStatus match {
       case TagStatus.Completed => ""
       case TagStatus.NotStarted => "govuk-tag--grey"
       case TagStatus.CannotStartYet => "govuk-tag--grey"
     }
-
   }
 
   private val states: List[TagStatus] = List(
