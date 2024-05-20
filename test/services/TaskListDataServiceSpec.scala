@@ -44,6 +44,7 @@ class TaskListDataServiceSpec
   private val mockConnector = mock[TaskListDataConnector]
   private val service = new TaskListDataService(mockConnector)
 
+  override implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
   override def beforeEach(): Unit = {
     reset(mockConnector)
     super.beforeEach()
@@ -73,6 +74,4 @@ class TaskListDataServiceSpec
     }
 
   }
-
-  override implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 }
