@@ -18,8 +18,8 @@ package connectors
 
 import config.Service
 import connectors.ConnectorFailureLogger._
+import models.Done
 import models.tasklist.TaskListData
-import models.{Done, UserAnswers}
 import play.api.Configuration
 import play.api.http.Status.NO_CONTENT
 import play.api.libs.json.Json

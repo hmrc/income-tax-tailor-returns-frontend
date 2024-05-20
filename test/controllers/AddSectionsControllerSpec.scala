@@ -29,7 +29,6 @@ import play.api.inject.bind
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.UpstreamErrorResponse
 import viewmodels.AddSectionsViewModel
 import views.html.{AddSectionsAgentView, AddSectionsView}
 
@@ -41,9 +40,6 @@ class AddSectionsControllerSpec extends SpecBase with Logging with MockitoSugar 
   private val addSectionsKey: String = "addSections"
   private val addSectionsAgentKey: String = "addSections.agent"
   private val taskListUrl : String = s"$submissionFrontendBaseUrl/$taxYear/tasklist"
-
-  private def vmIncomplete(key: String) = AddSectionsViewModel(SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted), taxYear, key)
-  private def vmComplete(key: String) = AddSectionsViewModel(SectionState(Completed, Completed, Completed, Completed), taxYear, key)
 
   "AddSections Controller" - {
 

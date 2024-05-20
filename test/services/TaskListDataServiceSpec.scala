@@ -20,8 +20,6 @@ import base.SpecBase
 import connectors.TaskListDataConnector
 import models.Done
 import models.aboutyou.UkResidenceStatus
-import models.pensions.PaymentsIntoPensions
-import models.propertypensionsinvestments.{Pensions, UkDividendsSharesLoans, UkInterest}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.ScalaFutures
@@ -29,9 +27,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import pages.aboutyou.UkResidenceStatusPage
-import pages.pensions.PaymentsIntoPensionsPage
-import pages.propertypensionsinvestments.{PensionsPage, UkDividendsSharesLoansPage, UkInterestPage}
-import uk.gov.hmrc.http.{HeaderCarrier, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
