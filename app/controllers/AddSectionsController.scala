@@ -22,12 +22,12 @@ import config.FrontendAppConfig
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import models.requests.OptionalDataRequest
-import models.{SectionState, UserAnswers}
+import models.{Done, SectionState, UserAnswers}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.{AddSectionsService, UserDataService}
+import services.{AddSectionsService, TaskListDataService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -42,6 +42,7 @@ class AddSectionsController @Inject()(
                                        identify: IdentifierActionProvider,
                                        getData: DataRetrievalActionProvider,
                                        addSectionsService: AddSectionsService,
+                                       taskListDataService: TaskListDataService,
                                        auditService: AuditService,
                                        appConfig:FrontendAppConfig,
                                        userDataService: UserDataService,
@@ -111,14 +112,21 @@ class AddSectionsController @Inject()(
       }
       userDataService.setWithoutUpdate(uaWithCompletedStatus.copy(data = JsObject(uaWithCompletedStatus.data.fields ++ Seq(IS_UPDATE -> Json.toJson(false)))))
 
-      Future.successful(Redirect(appConfig.submissionFrontendTaskListRedirect(taxYear)))
+      saveTaskListData(ua)
+
     } else {
 
       val uaWithStatus = ua.copy(data = JsObject(ua.data.fields ++ Seq("sectionStatus" -> Json.toJson(state.getStatus), IS_UPDATE -> Json.toJson(false))))
 
       submitAudit(UserDataIncompleteType.toString, UserDataIncompleteTransaction.toString, uaWithStatus, ua.mtdItId, affinityGroup, taxYear)
-
       Future.successful(Redirect(controllers.routes.TaxReturnNotReadyController.onPageLoad(taxYear)))
+    }
+  }
+
+  private def saveTaskListData(ua: UserAnswers)(implicit hc: HeaderCarrier): Future[Result] = {
+    // TODO: Error handling
+    taskListDataService.set(ua).map {
+      case Done => Redirect(appConfig.submissionFrontendTaskListRedirect(ua.taxYear))
     }
   }
 

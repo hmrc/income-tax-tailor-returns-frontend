@@ -70,6 +70,7 @@ trait SpecBase
   implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val submissionFrontendBaseUrl = "http://localhost:9302/update-and-submit-income-tax-return"
+
   def emptyUserAnswers : UserAnswers = UserAnswers(mtdItId, taxYear)
 
   val fullUserAnswers: UserAnswers = emptyUserAnswers.copy().set(UkResidenceStatusPage, UkResidenceStatus.Uk)
