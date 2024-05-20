@@ -19,7 +19,7 @@ package services
 import connectors.TaskListDataConnector
 import models.TagStatus.NotStarted
 import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
-import models.aboutyou.UkResidenceStatus
+import models.aboutyou.{CharitableDonations, UkResidenceStatus}
 import models.pensions.PaymentsIntoPensions
 import models.pensions.PaymentsIntoPensions.{Overseas, UkPensions}
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
@@ -65,7 +65,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       paymentsIntoPensionsSection,
       interestSection,
       dividendsSection
-    ).filterNot(section => section.taskItems.contains(List.empty)))
+    ).filter(_.taskItems.isDefined))
   }
 
 
@@ -110,7 +110,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       val links = Seq(DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities)
 
       ua.get(CharitableDonationsPage).map(_.toList) match {
-        case Some(value) =>
+        case Some(value) if !value.contains(CharitableDonations.NoDonations) =>
           Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(charitableDonationsUrl))))
         case _ => None
       }
@@ -198,13 +198,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       case Pensions.UnauthorisedPayments => ""
       case Pensions.ShortServiceRefunds => ""
       case Pensions.NonUkPensions => ""
-      //case _ => ""
     }
 
     def pensions: Option[Seq[TaskListSectionItem]] = {
 
       ua.get(PensionsPage).map(_.toSeq) match {
-        case Some(value) =>
+        case Some(value) if !value.contains(Pensions.NoPensions) =>
           Some(items.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(pensionsUrl(k)))))
         case _ => None
       }
@@ -220,14 +219,13 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       case PaymentsIntoPensions.UkPensions => ""
       case PaymentsIntoPensions.NonUkPensions => ""
       case PaymentsIntoPensions.Overseas => ""
-      //case _ => ""
     }
 
     def paymentsIntoPensions: Option[Seq[TaskListSectionItem]] = {
       val links = List(UkPensions, models.pensions.PaymentsIntoPensions.NonUkPensions, Overseas)
 
       ua.get(PaymentsIntoPensionsPage).map(_.toSeq) match {
-        case Some(value) =>
+        case Some(value) if !value.contains(PaymentsIntoPensions.No) =>
           Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(paymentsIntoPensionsUrl(k)))))
         case _ => None
       }
@@ -243,7 +241,6 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       case UkInterest.FromUkBanks => ""
       case UkInterest.FromUkTrustFunds => ""
       case UkInterest.FromGiltEdged => ""
-      //case _ => ""
     }
 
     def interest: Option[Seq[TaskListSectionItem]] = {
@@ -251,7 +248,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       val links = List(FromUkBanks, FromUkTrustFunds, FromGiltEdged)
 
       ua.get(UkInterestPage).map(_.toSeq) match {
-        case Some(value) =>
+        case Some(value) if !value.contains(UkInterest.NoInterest) =>
           Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(interestUrl(k)))))
         case _ => None
       }
@@ -269,7 +266,6 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       case UkDividendsSharesLoans.DividendsUnitTrustsInvestmentCompanies => ""
       case UkDividendsSharesLoans.FreeOrRedeemableShares => ""
       case UkDividendsSharesLoans.CloseCompanyLoansWrittenOffReleased => ""
-      //case _ => ""
     }
 
     def dividends: Option[Seq[TaskListSectionItem]] = {
@@ -282,7 +278,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
       )
 
       ua.get(UkDividendsSharesLoansPage).map(_.toSeq) match {
-        case Some(value) =>
+        case Some(value) if !value.contains(UkDividendsSharesLoans.NoUkDividendsSharesOrLoans) =>
           Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(dividendsUrl(k)))))
         case _ => None
       }
