@@ -20,26 +20,26 @@ import base.SpecBase
 import models.SectionState
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
 import play.api.Logging
+import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.AddSectionsViewModel
 import views.html.{AddSectionsAgentView, AddSectionsView}
 
-
 class AddSectionsControllerSpec extends SpecBase with Logging {
 
   private val addSectionsKey: String = "addSections"
   private val addSectionsAgentKey: String = "addSections.agent"
   private val taskListUrl : String = s"$submissionFrontendBaseUrl/$taxYear/tasklist"
-  private def vmIncomplete(key: String) = AddSectionsViewModel(SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted), taxYear, key)
-  private def vmComplete(key: String) = AddSectionsViewModel(SectionState(Completed, Completed, Completed, Completed), taxYear, key)
 
   "AddSections Controller" - {
 
     "must return OK and the correct view for a GET with incomplete sections" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+       implicit val testMessages: Messages = messages(application)
+       def vmIncomplete(key: String) = AddSectionsViewModel(SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted), taxYear, key)
 
       running(application) {
         val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url).withSession(validTaxYears)
@@ -57,6 +57,8 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
     "must return OK and the correct view for a GET when all sections are complete" in {
 
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers)).build()
+      implicit val testMessages: Messages = messages(application)
+      def vmComplete(key: String) = AddSectionsViewModel(SectionState(Completed, Completed, Completed, Completed), taxYear, key)
 
       running(application) {
         val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url).withSession(validTaxYears)
@@ -74,6 +76,8 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
     "must return OK and the correct view for a GET with incomplete sections for an agent" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+      implicit val testMessages: Messages = messages(application)
+      def vmIncomplete(key: String) = AddSectionsViewModel(SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted), taxYear, key)
 
       running(application) {
         val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url).withSession(validTaxYears)
@@ -91,6 +95,8 @@ class AddSectionsControllerSpec extends SpecBase with Logging {
     "must return OK and the correct view for a GET when all sections are complete for an agent" in {
 
       val application = applicationBuilder(userAnswers = Some(fullUserAnswers), isAgent = true).build()
+      implicit val testMessages: Messages = messages(application)
+      def vmComplete(key: String) = AddSectionsViewModel(SectionState(Completed, Completed, Completed, Completed), taxYear, key)
 
       running(application) {
         val request = FakeRequest(GET, routes.AddSectionsController.onPageLoad(taxYear).url).withSession(validTaxYears)

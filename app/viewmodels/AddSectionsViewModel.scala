@@ -18,21 +18,68 @@ package viewmodels
 
 import controllers.routes
 import models.SectionNames.{AboutYou, IncomeFromProperty, IncomeFromWork, Pensions}
-import models.{NormalMode, SectionState}
+import models.{NormalMode, SectionState, TagStatus}
+import play.api.i18n.Messages
 import play.api.mvc.Call
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+import uk.gov.hmrc.govukfrontend.views.viewmodels.tasklist.{TaskListItem, TaskListItemStatus, TaskListItemTitle}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.tag.Tag
 
-case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: String) {
+case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: String) (implicit messages: Messages) {
 
-  val sections: List[Task] = List(
-    Task(Link(AboutYou.toString, controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url), state.aboutYou, prefix),
-    Task(Link(
-      IncomeFromWork.toString, controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url), state.incomeFromWork, prefix),
-    Task(Link(
-      IncomeFromProperty.toString, controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url), state.incomeFromProperty, prefix),
-    Task(Link(Pensions.toString, controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url), state.pensions, prefix)
+  val sections: Seq[TaskListItem] = List(
+    TaskListItem(
+      title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${AboutYou.toString}"))),
+      status = itemStatus(state.aboutYou),
+      href = itemHref(controllers.aboutyou.routes.UkResidenceStatusController.onPageLoad(NormalMode, taxYear).url, state.aboutYou)
+    ),
+    TaskListItem(
+      title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${IncomeFromWork.toString}"))),
+      status = itemStatus(state.incomeFromWork),
+      href = itemHref(controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url, state.incomeFromWork)
+    ),
+    TaskListItem(
+      title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${IncomeFromProperty.toString}"))),
+      status = itemStatus(state.incomeFromProperty),
+      href = itemHref(controllers.propertypensionsinvestments.routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url, state.incomeFromProperty)
+    ),
+    TaskListItem(
+      title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${Pensions.toString}"))),
+      status = itemStatus(state.pensions),
+      href = itemHref(controllers.pensions.routes.PaymentsIntoPensionsController.onPageLoad(NormalMode, taxYear).url, state.pensions)
+    )
   )
 
-  val completedCount: Int = sections.map(_.tag).count(_.isCompleted)
+
+  private def itemHref(hrefString: String, tagStatus: TagStatus) : Option[String] = {
+    tagStatus match{
+      case TagStatus.CannotStartYet => None
+      case _ => Some(hrefString)
+    }
+  }
+
+  private def itemStatus(tagStatus: TagStatus) : TaskListItemStatus = {
+    tagStatus match {
+      case TagStatus.CannotStartYet =>
+        TaskListItemStatus(content = HtmlContent(messages(s"addSections.status.cannotStart")),
+          classes = "govuk-task-list__status--cannot-start-yet")
+      case TagStatus.NotStarted =>
+        TaskListItemStatus(Some(Tag(content = HtmlContent(messages(s"addSections.status.notStarted")),
+          classes = "govuk-tag--blue")))
+      case TagStatus.Completed =>
+        TaskListItemStatus(content = HtmlContent(messages(s"addSections.status.completed")),
+          classes = "govuk-tag--white")
+    }
+  }
+
+  private val states: List[TagStatus] = List(
+    state.aboutYou,
+    state.incomeFromWork,
+    state.incomeFromProperty,
+    state.pensions
+  )
+
+  val completedCount: Int = states.map(_.isCompleted).count(b => b)
 
   val isComplete: Boolean = completedCount >= sections.size
 

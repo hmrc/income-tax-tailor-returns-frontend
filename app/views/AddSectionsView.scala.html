@@ -18,6 +18,7 @@
 @import viewmodels.{Task, AddSectionsViewModel}
 @import models.TagStatus._
 @import views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(
         layout: templates.Layout,
@@ -26,6 +27,7 @@
         govukTag: GovukTag,
         link: Link,
         taskList: OldTaskList,
+        govukTaskList : GovukTaskList,
         heading: Heading1,
         heading2: Heading2,
         p: ParagraphBody
@@ -43,7 +45,7 @@
 
         @p(messages("addSections.completedSections", vm.completedCount), extraClasses = Seq("govuk-!-margin-bottom-7"))
 
-        @taskList(List(("", vm.sections)))
+        @govukTaskList(TaskList(vm.sections))
 
         @formHelper(action = vm.continueLink, Symbol("autoComplete") -> "off") {
             @govukButton(
