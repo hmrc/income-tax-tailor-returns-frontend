@@ -79,27 +79,22 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
     def ukResidence: Option[Seq[TaskListSectionItem]] =
       ua.get(UkResidenceStatusPage) match {
         case Some(UkResidenceStatus.Uk) =>
-          Some(Seq(TaskListSectionItem(TaskTitle(UkResidenceStatusPage), TaskStatus(NotStarted.toString), Some(residenceStatusUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle(UkResidenceStatusPage), TaskStatus.NotStarted(), Some(residenceStatusUrl))))
         case Some(UkResidenceStatus.Domiciled) =>
-          Some(Seq(TaskListSectionItem(TaskTitle(UkResidenceStatusPage), TaskStatus(NotStarted.toString), Some(residenceStatusUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle(UkResidenceStatusPage), TaskStatus.NotStarted(), Some(residenceStatusUrl))))
         case _ => None
       }
 
     def fosterCarer: Option[Seq[TaskListSectionItem]] = {
       ua.get(FosterCarerPage) match {
-        case Some(value) if value => Some(Seq(TaskListSectionItem(TaskTitle(FosterCarerPage), TaskStatus(NotStarted.toString), Some(fosterCarerUrl))))
+        case Some(value) if value => Some(Seq(TaskListSectionItem(TaskTitle(FosterCarerPage), TaskStatus.NotStarted(), Some(fosterCarerUrl))))
         case _ => None
       }
     }
 
-    val aboutYou: Option[Seq[TaskListSectionItem]] = for {
-      residence <- ukResidence
-      foster <- fosterCarer
-    } yield {
-      residence ++ foster
-    }
+    val aboutYou = ukResidence.getOrElse(Seq()) ++ fosterCarer.getOrElse(Seq())
 
-    TaskListSection(AboutYouTitle.toString, aboutYou)
+    TaskListSection(AboutYouTitle(), Some(aboutYou))
   }
 
 
@@ -113,12 +108,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(CharitableDonationsPage).map(_.toList) match {
         case Some(value) if !value.contains(CharitableDonations.NoDonations) =>
-          Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(charitableDonationsUrl))))
+          Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus.NotStarted(), Some(charitableDonationsUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(CharitableDonationsTitle.toString, charitableDonations)
+    TaskListSection(CharitableDonationsTitle(), charitableDonations)
   }
 
 
@@ -130,12 +125,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(AboutYourWorkPage).map(_.toSeq) match {
         case Some(value) if value.contains(Employed) =>
-          Some(Seq(TaskListSectionItem(TaskTitle(AboutYourWork.Employed.toString), TaskStatus(NotStarted.toString), Some(employmentUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle(AboutYourWork.Employed.toString), TaskStatus.NotStarted(), Some(employmentUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(EmploymentTitle.toString, employment)
+    TaskListSection(EmploymentTitle(), employment)
   }
 
 
@@ -147,12 +142,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(AboutYourWorkPage).map(_.toSeq) match {
         case Some(value) if value.contains(SelfEmployed) =>
-          Some(Seq(TaskListSectionItem(TaskTitle(AboutYourWork.SelfEmployed.toString), TaskStatus(NotStarted.toString), Some(cisGatewayUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle(AboutYourWork.SelfEmployed.toString), TaskStatus.NotStarted(), Some(cisGatewayUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(SelfEmploymentTitle.toString, selfEmployment)
+    TaskListSection(SelfEmploymentTitle(), selfEmployment)
   }
 
 
@@ -164,12 +159,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(JobseekersAllowancePage).map(_.toSeq) match {
         case Some(value) if value.contains(Esa) =>
-          Some(Seq(TaskListSectionItem(TaskTitle(JobseekersAllowance.Esa.toString), TaskStatus(NotStarted.toString), Some(esaUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle(JobseekersAllowance.Esa.toString), TaskStatus.NotStarted(), Some(esaUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(EsaTitle.toString, esa)
+    TaskListSection(EsaTitle(), esa)
   }
 
 
@@ -181,12 +176,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(JobseekersAllowancePage).map(_.toSeq) match {
         case Some(value) if value.contains(Esa) =>
-          Some(Seq(TaskListSectionItem(TaskTitle(JobseekersAllowance.Jsa.toString), TaskStatus(NotStarted.toString), Some(jsaUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle(JobseekersAllowance.Jsa.toString), TaskStatus.NotStarted(), Some(jsaUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(JsaTitle.toString, jsa)
+    TaskListSection(JsaTitle(), jsa)
   }
 
 
@@ -207,12 +202,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(PensionsPage).map(_.toSeq) match {
         case Some(value) if !value.contains(Pensions.NoPensions) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(pensionsUrl(k)))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus.NotStarted(), Some(pensionsUrl(k)))))
         case _ => None
       }
     }
 
-    TaskListSection(PensionsTitle.toString, pensions)
+    TaskListSection(PensionsTitle(), pensions)
   }
 
 
@@ -232,12 +227,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(PaymentsIntoPensionsPage).map(_.toSeq) match {
         case Some(value) if !value.contains(PaymentsIntoPensions.No) =>
-          Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(paymentsIntoPensionsUrl(k)))))
+          Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus.NotStarted(), Some(paymentsIntoPensionsUrl(k)))))
         case _ => None
       }
     }
 
-    TaskListSection(PaymentsIntoPensionsTitle.toString, paymentsIntoPensions)
+    TaskListSection(PaymentsIntoPensionsTitle(), paymentsIntoPensions)
   }
 
 
@@ -257,12 +252,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(UkInterestPage).map(_.toSeq) match {
         case Some(value) if !value.contains(UkInterest.NoInterest) =>
-          Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(interestUrl(k)))))
+          Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus.NotStarted(), Some(interestUrl(k)))))
         case _ => None
       }
     }
 
-    TaskListSection(InterestTitle.toString, interest)
+    TaskListSection(InterestTitle(), interest)
   }
 
 
@@ -288,12 +283,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(UkDividendsSharesLoansPage).map(_.toSeq) match {
         case Some(value) if !value.contains(UkDividendsSharesLoans.NoUkDividendsSharesOrLoans) =>
-          Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus(NotStarted.toString), Some(dividendsUrl(k)))))
+          Some(links.intersect(value).map(k => TaskListSectionItem(TaskTitle(k.toString), TaskStatus.NotStarted(), Some(dividendsUrl(k)))))
         case _ => None
       }
     }
 
-    TaskListSection(DividendsTitle.toString, dividends)
+    TaskListSection(DividendsTitle(), dividends)
   }
 
 }

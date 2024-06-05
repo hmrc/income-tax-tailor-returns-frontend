@@ -16,10 +16,42 @@
 
 package models.tasklist
 
-import play.api.libs.json.{Json, OFormat}
+import models.{Enumerable, WithName}
+import play.api.libs.json.{Json, OWrites, Reads}
 
-case class TaskStatus(content: String)
+trait TaskStatus extends Enumerable.Implicits
 
-object TaskStatus {
-  implicit val format: OFormat[TaskStatus] = Json.format[TaskStatus]
+object TaskStatus extends TaskStatus {
+
+  case class Completed() extends WithName("completed") with TaskStatus
+  object Completed {
+    implicit val nonStrictReads: Reads[Completed] = Reads.pure(Completed())
+    implicit val writes: OWrites[Completed] = OWrites[Completed](_ => Json.obj())
+  }
+
+  case class InProgress() extends WithName("inProgress") with TaskStatus
+  object InProgress {
+    implicit val nonStrictReads: Reads[InProgress] = Reads.pure(InProgress())
+    implicit val writes: OWrites[InProgress] = OWrites[InProgress](_ => Json.obj())
+  }
+
+  case class NotStarted() extends WithName("notStarted") with TaskStatus
+  object NotStarted {
+    implicit val nonStrictReads: Reads[NotStarted] = Reads.pure(NotStarted())
+    implicit val writes: OWrites[NotStarted] = OWrites[NotStarted](_ => Json.obj())
+  }
+
+  case class CheckNow() extends WithName("checkNow") with TaskStatus
+  object CheckNow {
+    implicit val nonStrictReads: Reads[CheckNow] = Reads.pure(CheckNow())
+    implicit val writes: OWrites[CheckNow] = OWrites[CheckNow](_ => Json.obj())
+  }
+
+  val values: Seq[TaskStatus] = Seq(
+    Completed(), InProgress(), NotStarted(), CheckNow()
+  )
+
+  implicit val enumerable: Enumerable[TaskStatus] =
+    Enumerable(values.map(v => v.toString -> v): _*)
+
 }
