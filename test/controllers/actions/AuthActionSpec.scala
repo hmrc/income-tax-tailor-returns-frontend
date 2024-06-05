@@ -121,7 +121,7 @@ class AuthActionSpec extends SpecBase {
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
-          status(result) mustBe OK
+          status(result) mustBe SEE_OTHER
           redirectLocation(result) mustBe Some("http://localhost:9589/report-quarterly/income-and-expenses/sign-up/eligibility")
 
         }
