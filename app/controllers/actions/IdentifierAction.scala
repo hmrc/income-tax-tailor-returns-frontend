@@ -108,7 +108,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
           block(IdentifierRequest(request, mtdItId, isAgent = false))
         case None =>
           logger.error("User did not have MTDITID Enrolment")
-          Future.successful(Redirect(config.signUpUrlAgent))
+          Future.successful(Redirect(config.signUpUrlIndividual))
       }
     }
     else {
