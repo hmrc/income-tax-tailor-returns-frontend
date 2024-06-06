@@ -17,8 +17,7 @@
 package models.tasklist
 
 import models.{Enumerable, WithName}
-import play.api.libs.json.Format.GenericFormat
-import play.api.libs.json.{JsObject, Json, OFormat, OWrites, Reads}
+import play.api.libs.json.{Json, OWrites, Reads}
 
 trait SectionTitle extends Enumerable.Implicits
 

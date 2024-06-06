@@ -18,7 +18,6 @@ package services
 
 import config.FrontendAppConfig
 import connectors.TaskListDataConnector
-import models.TagStatus.NotStarted
 import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
 import models.aboutyou.{CharitableDonations, UkResidenceStatus}
 import models.pensions.PaymentsIntoPensions
