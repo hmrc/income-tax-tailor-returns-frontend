@@ -126,7 +126,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
             }
             else {
               logger.warn("User is not authorized for mtdItId")
-              unauthorized
+              Future.successful(Redirect(config.signUpUrlAgent))
             }
           case _ =>
             logger.warn("User did not have ARN")
