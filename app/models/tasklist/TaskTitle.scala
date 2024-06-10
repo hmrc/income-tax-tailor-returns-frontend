@@ -16,10 +16,53 @@
 
 package models.tasklist
 
-import play.api.libs.json.{Json, OFormat}
+import models.Enumerable
+import models.tasklist.taskItemTitles._
 
-case class TaskTitle(content: String)
+trait TaskTitle extends Enumerable.Implicits
 
-object TaskTitle {
-  implicit val format: OFormat[TaskTitle] = Json.format[TaskTitle]
+object TaskTitle extends TaskTitle {
+
+  val aboutYouItemTitles: AboutYouItemTitles.type = AboutYouItemTitles
+  val charitableDonationsTitles: CharitableDonationsTitles.type = CharitableDonationsTitles
+  val employmentTitles: EmploymentTitles.type = EmploymentTitles
+  val selfEmploymentTitles: SelfEmploymentTitles.type = SelfEmploymentTitles
+  val esaTitles: EsaTitles.type = EsaTitles
+  val jsaTitles: JsaTitles.type = JsaTitles
+  val pensionsTitles: PensionsTitles.type = PensionsTitles
+  val paymentsIntoPensionsTitles: PaymentsIntoPensionsTitles.type = PaymentsIntoPensionsTitles
+  val ukInterestTitles: UkInterestTitles.type = UkInterestTitles
+  val ukDividendsTitles: UkDividendsTitles.type = UkDividendsTitles
+
+  val values: Seq[TaskTitle] = Seq(
+    aboutYouItemTitles.UkResidenceStatus(),
+    aboutYouItemTitles.FosterCarer(),
+    charitableDonationsTitles.DonationsUsingGiftAid(),
+    charitableDonationsTitles.GiftsOfLandOrProperty(),
+    charitableDonationsTitles.GiftsOfShares(),
+    employmentTitles.PayeEmployment(),
+    selfEmploymentTitles.CIS(),
+    esaTitles.ESA(),
+    jsaTitles.JSA(),
+    pensionsTitles.StatePension(),
+    pensionsTitles.OtherUkPensions(),
+    pensionsTitles.IncomeFromOverseas(),
+    pensionsTitles.UnauthorisedPayments(),
+    pensionsTitles.ShortServiceRefunds(),
+    paymentsIntoPensionsTitles.PaymentsIntoUk(),
+    paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
+    paymentsIntoPensionsTitles.OverseasTransfer(),
+    ukInterestTitles.BanksAndBuilding(),
+    ukInterestTitles.TrustFundBond(),
+    ukInterestTitles.GiltEdged(),
+    ukDividendsTitles.CashDividends(),
+    ukDividendsTitles.StockDividends(),
+    ukDividendsTitles.DividendsFromUnitTrusts(),
+    ukDividendsTitles.FreeRedeemableShares(),
+    ukDividendsTitles.CloseCompanyLoans()
+  )
+
+  implicit val enumerable: Enumerable[TaskTitle] =
+    Enumerable(values.map(v => v.toString -> v): _*)
+
 }
