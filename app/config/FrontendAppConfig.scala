@@ -90,5 +90,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
   val setUpAgentServicesAccountUrl: String = configuration.get[String]("external-urls.set-up-agent-services-account")
   //Subscription Service
-  val signUpUrl: String = configuration.get[String]("external-urls.mtd-subscription-service")
+  val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
+  val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
 }

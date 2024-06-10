@@ -108,7 +108,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
           block(IdentifierRequest(request, mtdItId, isAgent = false))
         case None =>
           logger.error("User did not have MTDITID Enrolment")
-          unauthorized
+          Future.successful(Redirect(config.signUpUrlIndividual))
       }
     }
     else {
@@ -126,17 +126,15 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
             }
             else {
               logger.warn("User is not authorized for mtdItId")
-              unauthorized
+              Future.successful(Redirect(config.signUpUrlAgent))
             }
           case _ =>
-            // TODO redirect to agent services
             logger.warn("User did not have ARN")
             Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
         }
       case None =>
         logger.warn("User did not have MTDID in session")
-        // TODO redirect to View & Change to fix user session
-        Future.successful(Redirect(config.signUpUrl))
+        Future.successful(Redirect(config.signUpUrlAgent))
     }
   }
 }
