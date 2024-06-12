@@ -16,7 +16,6 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.TaskTitle
 import models.tasklist.taskItemTitles.PensionsTitles.OtherUkPensions
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -27,7 +26,7 @@ class OtherUkPensionsSpec extends AnyFreeSpec with Matchers {
   "OtherUkPensions" - {
 
     "must parse to and from json" in {
-      val underTest = TaskTitle.pensionsTitles.OtherUkPensions()
+      val underTest = OtherUkPensions()
       Json.toJson(underTest).toString() mustBe "{}"
       Json.toJson(underTest).validate[OtherUkPensions] mustBe JsSuccess(OtherUkPensions(), JsPath())
     }

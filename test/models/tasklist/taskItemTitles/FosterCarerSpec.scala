@@ -16,9 +16,7 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.TaskTitle
 import models.tasklist.taskItemTitles.AboutYouItemTitles.FosterCarer
-import models.tasklist.taskItemTitles.PensionsTitles.UnauthorisedPayments
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.{JsPath, JsSuccess, Json}
@@ -28,7 +26,7 @@ class FosterCarerSpec extends AnyFreeSpec with Matchers {
   "FosterCarer" - {
 
     "must parse to and from json" in {
-      val underTest = TaskTitle.aboutYouItemTitles.FosterCarer()
+      val underTest = FosterCarer()
       Json.toJson(underTest).toString() mustBe "{}"
       Json.toJson(underTest).validate[FosterCarer] mustBe JsSuccess(FosterCarer(), JsPath())
     }

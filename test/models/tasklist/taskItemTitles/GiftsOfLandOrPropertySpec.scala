@@ -16,7 +16,6 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.TaskTitle
 import models.tasklist.taskItemTitles.CharitableDonationsTitles.GiftsOfLandOrProperty
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -27,7 +26,7 @@ class GiftsOfLandOrPropertySpec extends AnyFreeSpec with Matchers {
   "GiftsOfLandOrProperty" - {
 
     "must parse to and from json" in {
-      val underTest = TaskTitle.charitableDonationsTitles.GiftsOfLandOrProperty()
+      val underTest = GiftsOfLandOrProperty()
       Json.toJson(underTest).toString() mustBe "{}"
       Json.toJson(underTest).validate[GiftsOfLandOrProperty] mustBe JsSuccess(GiftsOfLandOrProperty(), JsPath())
     }

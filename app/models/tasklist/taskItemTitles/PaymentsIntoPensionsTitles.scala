@@ -34,6 +34,12 @@ object PaymentsIntoPensionsTitles {
     implicit val writes: OWrites[PaymentsIntoOverseas] = OWrites[PaymentsIntoOverseas](_ => Json.obj())
   }
 
+  case class AnnualAllowances() extends WithName("AnnualAllowancesTitle") with TaskTitle
+  object AnnualAllowances {
+    implicit val nonStrictReads: Reads[AnnualAllowances] = Reads.pure(AnnualAllowances())
+    implicit val writes: OWrites[AnnualAllowances] = OWrites[AnnualAllowances](_ => Json.obj())
+  }
+
   case class OverseasTransfer() extends WithName("OverseasTransferTitle") with TaskTitle
   object OverseasTransfer {
     implicit val nonStrictReads: Reads[OverseasTransfer] = Reads.pure(OverseasTransfer())

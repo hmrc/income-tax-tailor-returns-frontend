@@ -16,7 +16,6 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.TaskTitle
 import models.tasklist.taskItemTitles.CharitableDonationsTitles.DonationsUsingGiftAid
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -27,7 +26,7 @@ class DonationsUsingGiftAidSpec extends AnyFreeSpec with Matchers {
   "DonationsUsingGiftAid" - {
 
     "must parse to and from json" in {
-      val underTest = TaskTitle.charitableDonationsTitles.DonationsUsingGiftAid()
+      val underTest = DonationsUsingGiftAid()
       Json.toJson(underTest).toString() mustBe "{}"
       Json.toJson(underTest).validate[DonationsUsingGiftAid] mustBe JsSuccess(DonationsUsingGiftAid(), JsPath())
     }

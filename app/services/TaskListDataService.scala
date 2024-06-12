@@ -203,6 +203,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       case Pensions.UnauthorisedPayments => pensionsGatewayUrl
       case Pensions.ShortServiceRefunds => pensionsGatewayUrl
       case Pensions.NonUkPensions => pensionsGatewayUrl
+      case _ => ""
     }
 
     def pensions: Option[Seq[TaskListSectionItem]] = {
@@ -235,6 +236,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       case PaymentsIntoPensions.NonUkPensions => incomeFromOverseasGatewayUrl
       case PaymentsIntoPensions.AnnualAllowances => ""
       case PaymentsIntoPensions.Overseas => overseasTransferChargesGatewayUrl
+      case _ => ""
     }
 
     def paymentsIntoPensions: Option[Seq[TaskListSectionItem]] = {
@@ -243,6 +245,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       val taskTitles = Map[PaymentsIntoPensions, TaskTitle](
         UkPensions -> TaskTitle.paymentsIntoPensionsTitles.PaymentsIntoUk(),
         models.pensions.PaymentsIntoPensions.NonUkPensions -> TaskTitle.paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
+        AnnualAllowances -> TaskTitle.paymentsIntoPensionsTitles.AnnualAllowances(),
         Overseas -> TaskTitle.paymentsIntoPensionsTitles.OverseasTransfer()
       )
 
@@ -265,6 +268,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       case UkInterest.FromUkBanks => ukInterestGatewayUrl
       case UkInterest.FromUkTrustFunds => ukInterestGatewayUrl
       case UkInterest.FromGiltEdged => giltEdgedGatewayUrl
+      case _ => ""
     }
 
     def interest: Option[Seq[TaskListSectionItem]] = {
@@ -297,6 +301,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       case UkDividendsSharesLoans.DividendsUnitTrustsInvestmentCompanies => dividendsGatewayUrl
       case UkDividendsSharesLoans.FreeOrRedeemableShares => dividendsGatewayUrl
       case UkDividendsSharesLoans.CloseCompanyLoansWrittenOffReleased => dividendsGatewayUrl
+      case _ => ""
     }
 
     def dividends: Option[Seq[TaskListSectionItem]] = {

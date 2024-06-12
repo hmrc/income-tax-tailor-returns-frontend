@@ -16,7 +16,6 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.TaskTitle
 import models.tasklist.taskItemTitles.JsaTitles.JSA
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -27,7 +26,7 @@ class JSASpec extends AnyFreeSpec with Matchers {
   "JSA" - {
 
     "must parse to and from json" in {
-      val underTest = TaskTitle.jsaTitles.JSA()
+      val underTest = JSA()
       Json.toJson(underTest).toString() mustBe "{}"
       Json.toJson(underTest).validate[JSA] mustBe JsSuccess(JSA(), JsPath())
     }

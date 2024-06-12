@@ -16,7 +16,6 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.TaskTitle
 import models.tasklist.taskItemTitles.EsaTitles.ESA
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -27,7 +26,7 @@ class ESASpec extends AnyFreeSpec with Matchers {
   "ESA" - {
 
     "must parse to and from json" in {
-      val underTest = TaskTitle.esaTitles.ESA()
+      val underTest = ESA()
       Json.toJson(underTest).toString() mustBe "{}"
       Json.toJson(underTest).validate[ESA] mustBe JsSuccess(ESA(), JsPath())
     }

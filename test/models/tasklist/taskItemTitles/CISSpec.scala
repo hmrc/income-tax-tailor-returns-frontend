@@ -16,7 +16,6 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.TaskTitle
 import models.tasklist.taskItemTitles.SelfEmploymentTitles.CIS
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -27,7 +26,7 @@ class CISSpec extends AnyFreeSpec with Matchers {
   "CIS" - {
 
     "must parse to and from json" in {
-      val underTest = TaskTitle.selfEmploymentTitles.CIS()
+      val underTest = CIS()
       Json.toJson(underTest).toString() mustBe "{}"
       Json.toJson(underTest).validate[CIS] mustBe JsSuccess(CIS(), JsPath())
     }

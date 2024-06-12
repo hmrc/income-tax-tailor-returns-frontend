@@ -540,6 +540,7 @@ paymentsIntoPensions.paymentsIntoNonUkPensions = Taliadau i mewn i bensiynau syd
 paymentsIntoPensions.overseas = Taliadau ar drosglwyddiadau tramor
 paymentsIntoPensions.agent.ukPensions = Taliadau i bensiynau’r DU
 paymentsIntoPensions.agent.uk.hint = peidiwch â chynnwys Pensiwn y Wladwriaeth
+paymentsIntoPensions.agent.annualAllowances = Annual allowances
 paymentsIntoPensions.agent.paymentsIntoNonUkPensions = Taliadau i mewn i bensiynau sydd ddim yn y DU
 paymentsIntoPensions.agent.overseas = Taliadau ar drosglwyddiadau tramor
 paymentsIntoPensions.none = Na, ni dalais i mewn i unrhyw bensiynau’r DU neu bensiynau sydd ddim yn y DU

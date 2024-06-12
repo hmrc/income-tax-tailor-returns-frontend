@@ -16,7 +16,7 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.TaskTitle.aboutYouItemTitles.UkResidenceStatus
+import models.tasklist.taskItemTitles.AboutYouItemTitles.UkResidenceStatus
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.{JsPath, JsSuccess, Json}
