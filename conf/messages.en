@@ -618,6 +618,7 @@ paymentsIntoPensions.link = Learn more about the overseas transfer charge
 paymentsIntoPensions.agent.p1 = The overseas transfer charge is a tax paid when UK pension funds are transferred into a non-UK pension scheme.
 paymentsIntoPensions.ukPensions = Payments into UK pensions
 paymentsIntoPensions.uk.hint = Do not include the State Pension.
+paymentsIntoPensions.annualAllowances = Annual allowances
 paymentsIntoPensions.nonUkPensions = Payments into non-UK pensions
 paymentsIntoPensions.overseas = Overseas transfer charges
 paymentsIntoPensions.agent.ukPensions = Payments into UK pensions

@@ -29,7 +29,7 @@ object PaymentsIntoPensions extends Enumerable.Implicits {
 
   case object UkPensions extends WithName("ukPensions") with PaymentsIntoPensions
   case object NonUkPensions extends WithName("nonUkPensions") with PaymentsIntoPensions
-
+  case object AnnualAllowances extends WithName("annualAllowances") with PaymentsIntoPensions
   case object Overseas extends WithName("overseas") with PaymentsIntoPensions
 
   case object Divider extends PaymentsIntoPensions
@@ -38,6 +38,7 @@ object PaymentsIntoPensions extends Enumerable.Implicits {
   val values: Seq[PaymentsIntoPensions] = Seq(
     UkPensions,
     NonUkPensions,
+    AnnualAllowances,
     Overseas,
     Divider,
     No

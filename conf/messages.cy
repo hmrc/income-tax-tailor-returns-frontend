@@ -535,6 +535,7 @@ paymentsIntoPensions.link = Dysgwch ragor am daliadau ar drosglwyddiadau tramor
 paymentsIntoPensions.agent.p1 = Treth a dalir pan drosglwyddir cronfeydd pensiwn yn y DU i gynllun pensiwn sydd ddim yn y DU yw’r tâl ar drosglwyddiadau tramor.
 paymentsIntoPensions.ukPensions = Taliadau i bensiynau’r DU
 paymentsIntoPensions.uk.hint = peidiwch â chynnwys Pensiwn y Wladwriaeth
+paymentsIntoPensions.annualAllowances = Annual allowances
 paymentsIntoPensions.nonUkPensions = Taliadau i mewn i bensiynau sydd ddim yn y DU
 paymentsIntoPensions.overseas = Taliadau ar drosglwyddiadau tramor
 paymentsIntoPensions.agent.ukPensions = Taliadau i bensiynau’r DU

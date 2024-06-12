@@ -21,7 +21,7 @@ import models.TagStatus.NotStarted
 import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
 import models.aboutyou.{CharitableDonations, UkResidenceStatus}
 import models.pensions.PaymentsIntoPensions
-import models.pensions.PaymentsIntoPensions.{Overseas, UkPensions}
+import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
 import models.propertypensionsinvestments.UkDividendsSharesLoans._
 import models.propertypensionsinvestments.UkInterest.{FromGiltEdged, FromUkBanks, FromUkTrustFunds}
@@ -218,11 +218,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
     def paymentsIntoPensionsUrl: PaymentsIntoPensions => String = {
       case PaymentsIntoPensions.UkPensions => ""
       case PaymentsIntoPensions.NonUkPensions => ""
+      case PaymentsIntoPensions.AnnualAllowances => ""
       case PaymentsIntoPensions.Overseas => ""
     }
 
     def paymentsIntoPensions: Option[Seq[TaskListSectionItem]] = {
-      val links = List(UkPensions, models.pensions.PaymentsIntoPensions.NonUkPensions, Overseas)
+      val links = List(UkPensions, models.pensions.PaymentsIntoPensions.NonUkPensions, AnnualAllowances, Overseas)
 
       ua.get(PaymentsIntoPensionsPage).map(_.toSeq) match {
         case Some(value) if !value.contains(PaymentsIntoPensions.No) =>
