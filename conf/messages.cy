@@ -60,8 +60,8 @@ signedOut.guidance = Ni wnaethom gadw’ch atebion.
 unauthorised.title = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 unauthorised.heading = Ni allwch ddefnyddio’r gwasanaeth hwn gyda’r cyfrif hwn
 
-start.title = Diweddaru a chyflwyno Ffurflen Dreth Incwm
-start.agent.title = Diweddaru a chyflwyno Ffurflen Dreth Incwm
+start.title = Diweddaru a chyflwyno Furflen Dreth
+start.agent.title = Diweddaru a chyflwyno Furflen Dreth
 start.heading = Diweddaru a chyflwyno Furflen Dreth
 start.agent.heading = Diweddaru a chyflwyno Furflen Dreth
 start.p = Gallwch ychwanegu adrannau drwy ateb ambell gwestiwn cyn diweddaru’ch Ffurflen Dreth, a’i chyflwyno.
