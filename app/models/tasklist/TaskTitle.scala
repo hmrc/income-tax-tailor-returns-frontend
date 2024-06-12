@@ -51,6 +51,7 @@ object TaskTitle extends TaskTitle {
     pensionsTitles.ShortServiceRefunds(),
     paymentsIntoPensionsTitles.PaymentsIntoUk(),
     paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
+    paymentsIntoPensionsTitles.AnnualAllowances(),
     paymentsIntoPensionsTitles.OverseasTransfer(),
     ukInterestTitles.BanksAndBuilding(),
     ukInterestTitles.TrustFundBond(),
