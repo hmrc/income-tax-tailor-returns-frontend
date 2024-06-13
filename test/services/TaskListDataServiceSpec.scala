@@ -17,6 +17,7 @@
 package services
 
 import base.SpecBase
+import config.FrontendAppConfig
 import connectors.TaskListDataConnector
 import models.Done
 import models.aboutyou.UkResidenceStatus
@@ -42,7 +43,8 @@ class TaskListDataServiceSpec
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val mockConnector = mock[TaskListDataConnector]
-  private val service = new TaskListDataService(mockConnector)
+  private val mockAppConfig = mock[FrontendAppConfig]
+  private val service = new TaskListDataService(mockConnector, mockAppConfig)
 
   override implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
   override def beforeEach(): Unit = {

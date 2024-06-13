@@ -65,6 +65,57 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
       .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
       .url
 
+  def dividendsGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
+      s"/update-and-submit-income-tax-return/personal-income/$taxYear/dividends/dividends-from-stocks-and-shares"
+
+  def ukInterestGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
+      s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-UK"
+
+  def giltEdgedGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
+      s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-securities"
+
+  def charityGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
+      s"/update-and-submit-income-tax-return/personal-income/$taxYear/charity/charity-donations-to-charity"
+
+  def cisGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-cis-frontend.url") +
+      s"/update-and-submit-income-tax-return/construction-industry-scheme-deductions/$taxYear/deductions-from-payments"
+  def employmentGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-employment-frontend.url") +
+      s"/update-and-submit-income-tax-return/employment-income/$taxYear/income-from-employment"
+
+  def pensionsGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
+      s"/update-and-submit-income-tax-return/pensions/$taxYear/pensions-summary"
+
+  def paymentsIntoPensionsGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
+      s"/update-and-submit-income-tax-return/pensions/$taxYear/payments-into-pensions/relief-at-source"
+
+  def incomeFromOverseasGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
+      s"/update-and-submit-income-tax-return/pensions/$taxYear/overseas-pensions/income-from-overseas-pensions/pension-overseas-income-status"
+
+  def overseasTransferChargesGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
+      s"/update-and-submit-income-tax-return/pensions/$taxYear/overseas-pensions/overseas-transfer-charges/transfer-pension-savings"
+
+  def stateBenefitsEsaJourneyGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-state-benefits-frontend.url") +
+      s"/update-and-submit-income-tax-return/state-benefits/$taxYear/employment-support-allowance/claims"
+
+  def stateBenefitsJsaJourneyGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-state-benefits-frontend.url") +
+      s"/update-and-submit-income-tax-return/state-benefits/$taxYear/jobseekers-allowance/claims"
+
+  def tailoringUkResidenceUrl(taxYear: Int):String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/uk-residence-status"
+
+  def tailoringFosterCarerUrl(taxYear: Int):String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/foster-carer "
+
   val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/$appName"
 
   val languageTranslationEnabled: Boolean =
