@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package models.tasklist
+package models.tasklist.taskItemTitles
 
-import play.api.libs.json.{Json, OFormat}
+import models.tasklist.taskItemTitles.UkDividendsTitles.CloseCompanyLoans
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.libs.json.{JsPath, JsSuccess, Json}
 
-case class TaskListSection(sectionTitle: SectionTitle, taskItems: Option[Seq[TaskListSectionItem]])
+class CloseCompanyLoadsSpec extends AnyFreeSpec with Matchers {
 
-object TaskListSection {
-  implicit val format: OFormat[TaskListSection] = Json.format[TaskListSection]
+  "CloseCompanyLoans" - {
+
+    "must parse to and from json" in {
+      val underTest = CloseCompanyLoans()
+      Json.toJson(underTest).toString() mustBe "{}"
+      Json.toJson(underTest).validate[CloseCompanyLoans] mustBe JsSuccess(CloseCompanyLoans(), JsPath())
+    }
+  }
 }

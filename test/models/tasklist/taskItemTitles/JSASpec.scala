@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package models.tasklist
+package models.tasklist.taskItemTitles
 
-import play.api.libs.json.{Json, OFormat}
+import models.tasklist.taskItemTitles.JsaTitles.JSA
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.libs.json.{JsPath, JsSuccess, Json}
 
-case class TaskListSection(sectionTitle: SectionTitle, taskItems: Option[Seq[TaskListSectionItem]])
+class JSASpec extends AnyFreeSpec with Matchers {
 
-object TaskListSection {
-  implicit val format: OFormat[TaskListSection] = Json.format[TaskListSection]
+  "JSA" - {
+
+    "must parse to and from json" in {
+      val underTest = JSA()
+      Json.toJson(underTest).toString() mustBe "{}"
+      Json.toJson(underTest).validate[JSA] mustBe JsSuccess(JSA(), JsPath())
+    }
+  }
 }

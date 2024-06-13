@@ -117,7 +117,7 @@ class TaskListPageViewModelSpec extends SpecBase {
             Task(Link("closeCompanyLoansWrittenOffReleased", "#"), NotStarted, "ukDividendsSharesLoans"))),
           ("paymentsIntoPensions.title", List(
             Task(Link("ukPensions", "#"), NotStarted, "paymentsIntoPensions"),
-            Task(Link("nonUkPensions", "#"), NotStarted, "paymentsIntoPensions"),
+            Task(Link("paymentsIntoNonUkPensions", "#"), NotStarted, "paymentsIntoPensions"),
             Task(Link("overseas", "#"), NotStarted, "paymentsIntoPensions")))
         )
 

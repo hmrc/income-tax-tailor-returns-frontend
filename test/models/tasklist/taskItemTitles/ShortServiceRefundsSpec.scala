@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package models.tasklist
+package models.tasklist.taskItemTitles
 
-import play.api.libs.json.{Json, OFormat}
+import models.tasklist.taskItemTitles.PensionsTitles.ShortServiceRefunds
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.libs.json.{JsPath, JsSuccess, Json}
 
-case class TaskListSection(sectionTitle: SectionTitle, taskItems: Option[Seq[TaskListSectionItem]])
+class ShortServiceRefundsSpec extends AnyFreeSpec with Matchers {
 
-object TaskListSection {
-  implicit val format: OFormat[TaskListSection] = Json.format[TaskListSection]
+  "ShortServiceRefunds" - {
+
+    "must parse to and from json" in {
+      val underTest = ShortServiceRefunds()
+      Json.toJson(underTest).toString() mustBe "{}"
+      Json.toJson(underTest).validate[ShortServiceRefunds] mustBe JsSuccess(ShortServiceRefunds(), JsPath())
+    }
+  }
 }

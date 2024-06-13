@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package models.tasklist
+package models.tasklist.taskItemTitles
 
-import play.api.libs.json.{Json, OFormat}
+import models.tasklist.taskItemTitles.UkDividendsTitles.CashDividends
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.must.Matchers
+import play.api.libs.json.{JsPath, JsSuccess, Json}
 
-case class TaskListSection(sectionTitle: SectionTitle, taskItems: Option[Seq[TaskListSectionItem]])
+class CashDividendsSpec extends AnyFreeSpec with Matchers {
 
-object TaskListSection {
-  implicit val format: OFormat[TaskListSection] = Json.format[TaskListSection]
+  "CashDividends" - {
+
+    "must parse to and from json" in {
+      val underTest = CashDividends()
+      Json.toJson(underTest).toString() mustBe "{}"
+      Json.toJson(underTest).validate[CashDividends] mustBe JsSuccess(CashDividends(), JsPath())
+    }
+  }
 }

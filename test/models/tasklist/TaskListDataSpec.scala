@@ -37,13 +37,13 @@ class TaskListDataSpec extends AnyFreeSpec with Matchers with SpecBase {
       underTest.data mustBe JsObject(Seq("foo" -> Json.toJson("bar")))
     }
 
-    "must not read a tax year that does not match the regex" in {
+    "must not read a tax year that is not valid" in {
       val underTest: JsValue = Json.toJson(TaskListData(mtdItId, taxYear + 5000, data))
 
       underTest.validate[TaskListData].toString mustBe "JsError(List((/taxYear,List())))"
     }
 
-    "must read a tax year that does not match the regex" in {
+    "must read a tax year that is valid" in {
       val lastUpdated: Instant =  Instant.parse("2024-05-16T13:38:09.515Z")
       val taskListData: TaskListData = TaskListData(mtdItId, taxYear, data, lastUpdated)
       val underTest: JsValue = Json.toJson(taskListData)

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package models.tasklist
+package models.tasklist.taskItemTitles
 
-import play.api.libs.json.{Json, OFormat}
+import models.WithName
+import models.tasklist.TaskTitle
+import play.api.libs.json.{Json, OWrites, Reads}
 
-case class TaskListSection(sectionTitle: SectionTitle, taskItems: Option[Seq[TaskListSectionItem]])
+object SelfEmploymentTitles {
 
-object TaskListSection {
-  implicit val format: OFormat[TaskListSection] = Json.format[TaskListSection]
+  case class CIS() extends WithName("CISTitle") with TaskTitle
+  object CIS {
+    implicit val nonStrictReads: Reads[CIS] = Reads.pure(CIS())
+    implicit val writes: OWrites[CIS] = OWrites[CIS](_ => Json.obj())
+  }
+
 }

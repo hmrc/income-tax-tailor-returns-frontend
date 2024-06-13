@@ -14,9 +14,18 @@
  * limitations under the License.
  */
 
-package models.tasklist
+package models.tasklist.taskItemTitles
 
-// TODO: Replace String of status with enum of possible status
-trait StatusTag {
+import models.WithName
+import models.tasklist.TaskTitle
+import play.api.libs.json.{Json, OWrites, Reads}
+
+object EmploymentTitles {
+
+  case class PayeEmployment() extends WithName("PayeEmploymentTitle") with TaskTitle
+  object PayeEmployment {
+    implicit val nonStrictReads: Reads[PayeEmployment] = Reads.pure(PayeEmployment())
+    implicit val writes: OWrites[PayeEmployment] = OWrites[PayeEmployment](_ => Json.obj())
+  }
 
 }
