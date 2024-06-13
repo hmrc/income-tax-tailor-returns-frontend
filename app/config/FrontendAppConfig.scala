@@ -84,6 +84,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   def cisGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-cis-frontend.url") +
       s"/update-and-submit-income-tax-return/construction-industry-scheme-deductions/$taxYear/deductions-from-payments"
+
   def employmentGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-employment-frontend.url") +
       s"/update-and-submit-income-tax-return/employment-income/$taxYear/income-from-employment"
@@ -99,6 +100,10 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   def incomeFromOverseasGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
       s"/update-and-submit-income-tax-return/pensions/$taxYear/overseas-pensions/income-from-overseas-pensions/pension-overseas-income-status"
+
+  def annualAllowancesUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
+      s"/update-and-submit-income-tax-return/pensions/$taxYear/annual-allowance/reduced-annual-allowance"
 
   def overseasTransferChargesGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
