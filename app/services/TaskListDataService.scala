@@ -16,6 +16,7 @@
 
 package services
 
+import config.FrontendAppConfig
 import connectors.TaskListDataConnector
 import models.TagStatus.NotStarted
 import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
@@ -42,7 +43,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
 import scala.concurrent.Future
 
-class TaskListDataService @Inject()(connector: TaskListDataConnector) extends TaskListService {
+class TaskListDataService @Inject()(connector: TaskListDataConnector,
+                                    appConfig: FrontendAppConfig) extends TaskListService {
 
   override def set(ua: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] = {
 
@@ -71,8 +73,8 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
   // TODO: URLs to be added as part of dependency mapping
   private def aboutYouSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val residenceStatusUrl: String = ""
-    val fosterCarerUrl: String = ""
+    val residenceStatusUrl: String = appConfig.tailoringUkResidenceUrl(ua.taxYear)
+    val fosterCarerUrl: String = appConfig.tailoringFosterCarerUrl(ua.taxYear)
 
     def ukResidence: Option[Seq[TaskListSectionItem]] =
       ua.get(UkResidenceStatusPage) match {
@@ -103,7 +105,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
   private def charitableDonationsSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val charitableDonationsUrl: String = ""
+    val charitableDonationsUrl: String = appConfig.charityGatewayUrl(taxYear = ua.taxYear)
 
     def charitableDonations: Option[Seq[TaskListSectionItem]] = {
 
@@ -122,7 +124,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
   private def employmentSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val employmentUrl: String = ""
+    val employmentUrl: String = appConfig.employmentGatewayUrl(taxYear = ua.taxYear)
 
     def employment: Option[Seq[TaskListSectionItem]] = {
 
@@ -139,13 +141,13 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
   private def selfEmploymentSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val selfEmploymentUrl: String = ""
+    val cisGatewayUrl: String = appConfig.cisGatewayUrl(taxYear = ua.taxYear)
 
     def selfEmployment: Option[Seq[TaskListSectionItem]] = {
 
       ua.get(AboutYourWorkPage).map(_.toSeq) match {
         case Some(value) if value.contains(SelfEmployed) =>
-          Some(Seq(TaskListSectionItem(TaskTitle(AboutYourWork.SelfEmployed.toString), TaskStatus(NotStarted.toString), Some(selfEmploymentUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle(AboutYourWork.SelfEmployed.toString), TaskStatus(NotStarted.toString), Some(cisGatewayUrl))))
         case _ => None
       }
     }
@@ -156,7 +158,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
   private def esaSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val esaUrl: String = ""
+    val esaUrl: String = appConfig.stateBenefitsEsaJourneyGatewayUrl(taxYear = ua.taxYear)
 
     def esa: Option[Seq[TaskListSectionItem]] = {
 
@@ -173,7 +175,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
   private def jsaSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val jsaUrl: String = ""
+    val jsaUrl: String = appConfig.stateBenefitsJsaJourneyGatewayUrl(taxYear = ua.taxYear)
 
     def jsa: Option[Seq[TaskListSectionItem]] = {
 
@@ -192,12 +194,13 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
     val items = List(StatePension, OtherUkPensions, UnauthorisedPayments, ShortServiceRefunds, models.propertypensionsinvestments.Pensions.NonUkPensions)
 
+    val pensionsGatewayUrl = appConfig.pensionsGatewayUrl(taxYear = ua.taxYear)
     def pensionsUrl: Pensions => String = {
-      case Pensions.StatePension => ""
-      case Pensions.OtherUkPensions => ""
-      case Pensions.UnauthorisedPayments => ""
-      case Pensions.ShortServiceRefunds => ""
-      case Pensions.NonUkPensions => ""
+      case Pensions.StatePension => pensionsGatewayUrl
+      case Pensions.OtherUkPensions => pensionsGatewayUrl
+      case Pensions.UnauthorisedPayments => pensionsGatewayUrl
+      case Pensions.ShortServiceRefunds => pensionsGatewayUrl
+      case Pensions.NonUkPensions => pensionsGatewayUrl
     }
 
     def pensions: Option[Seq[TaskListSectionItem]] = {
@@ -214,12 +217,14 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
 
   private def paymentsIntoPensionsSection()(implicit ua: UserAnswers): TaskListSection = {
-
+    val paymentsIntoPensionsGatewayUrl = appConfig.paymentsIntoPensionsGatewayUrl(taxYear = ua.taxYear)
+    val incomeFromOverseasGatewayUrl = appConfig.incomeFromOverseasGatewayUrl(taxYear = ua.taxYear)
+    val overseasTransferChargesGatewayUrl = appConfig.overseasTransferChargesGatewayUrl(taxYear = ua.taxYear)
     def paymentsIntoPensionsUrl: PaymentsIntoPensions => String = {
-      case PaymentsIntoPensions.UkPensions => ""
-      case PaymentsIntoPensions.NonUkPensions => ""
+      case PaymentsIntoPensions.UkPensions => paymentsIntoPensionsGatewayUrl
+      case PaymentsIntoPensions.NonUkPensions => incomeFromOverseasGatewayUrl
       case PaymentsIntoPensions.AnnualAllowances => ""
-      case PaymentsIntoPensions.Overseas => ""
+      case PaymentsIntoPensions.Overseas => overseasTransferChargesGatewayUrl
     }
 
     def paymentsIntoPensions: Option[Seq[TaskListSectionItem]] = {
@@ -238,10 +243,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
   private def interestSection()(implicit ua: UserAnswers): TaskListSection = {
 
+    val ukInterestGatewayUrl = appConfig.ukInterestGatewayUrl(taxYear = ua.taxYear)
+    val giltEdgedGatewayUrl = appConfig.giltEdgedGatewayUrl(taxYear = ua.taxYear)
     def interestUrl: UkInterest => String = {
-      case UkInterest.FromUkBanks => ""
-      case UkInterest.FromUkTrustFunds => ""
-      case UkInterest.FromGiltEdged => ""
+      case UkInterest.FromUkBanks => ukInterestGatewayUrl
+      case UkInterest.FromUkTrustFunds => ukInterestGatewayUrl
+      case UkInterest.FromGiltEdged => giltEdgedGatewayUrl
     }
 
     def interest: Option[Seq[TaskListSectionItem]] = {
@@ -261,12 +268,13 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector) extends Ta
 
   private def dividendsSection()(implicit ua: UserAnswers): TaskListSection = {
 
+    val dividendsGatewayUrl = appConfig.dividendsGatewayUrl(taxYear = ua.taxYear)
     def dividendsUrl: UkDividendsSharesLoans => String = {
-      case UkDividendsSharesLoans.CashDividendsFromUkStocksAndShares => ""
-      case UkDividendsSharesLoans.StockDividendsFromUkCompanies => ""
-      case UkDividendsSharesLoans.DividendsUnitTrustsInvestmentCompanies => ""
-      case UkDividendsSharesLoans.FreeOrRedeemableShares => ""
-      case UkDividendsSharesLoans.CloseCompanyLoansWrittenOffReleased => ""
+      case UkDividendsSharesLoans.CashDividendsFromUkStocksAndShares => dividendsGatewayUrl
+      case UkDividendsSharesLoans.StockDividendsFromUkCompanies => dividendsGatewayUrl
+      case UkDividendsSharesLoans.DividendsUnitTrustsInvestmentCompanies => dividendsGatewayUrl
+      case UkDividendsSharesLoans.FreeOrRedeemableShares => dividendsGatewayUrl
+      case UkDividendsSharesLoans.CloseCompanyLoansWrittenOffReleased => dividendsGatewayUrl
     }
 
     def dividends: Option[Seq[TaskListSectionItem]] = {
