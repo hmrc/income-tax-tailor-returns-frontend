@@ -232,20 +232,20 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
     def paymentsIntoPensionsUrl: PaymentsIntoPensions => String = {
       case PaymentsIntoPensions.UkPensions => appConfig.paymentsIntoPensionsGatewayUrl(ua.taxYear)
-      case PaymentsIntoPensions.NonUkPensions => appConfig.incomeFromOverseasGatewayUrl(ua.taxYear)
       case PaymentsIntoPensions.AnnualAllowances => appConfig.annualAllowancesUrl(ua.taxYear)
+      case PaymentsIntoPensions.NonUkPensions => appConfig.incomeFromOverseasGatewayUrl(ua.taxYear)
       case PaymentsIntoPensions.Overseas => appConfig.overseasTransferChargesGatewayUrl(ua.taxYear)
       case _ => ""
     }
 
     def paymentsIntoPensions: Option[Seq[TaskListSectionItem]] = {
 
-      val items = Seq(UkPensions, models.pensions.PaymentsIntoPensions.NonUkPensions, AnnualAllowances, Overseas)
+      val items = Seq(UkPensions, AnnualAllowances, models.pensions.PaymentsIntoPensions.NonUkPensions, Overseas)
 
       val taskTitles = Map[PaymentsIntoPensions, TaskTitle](
         UkPensions -> TaskTitle.paymentsIntoPensionsTitles.PaymentsIntoUk(),
-        models.pensions.PaymentsIntoPensions.NonUkPensions -> TaskTitle.paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
         AnnualAllowances -> TaskTitle.paymentsIntoPensionsTitles.AnnualAllowances(),
+        models.pensions.PaymentsIntoPensions.NonUkPensions -> TaskTitle.paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
         Overseas -> TaskTitle.paymentsIntoPensionsTitles.OverseasTransfer()
       )
 
