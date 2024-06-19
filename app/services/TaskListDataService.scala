@@ -24,8 +24,9 @@ import models.pensions.PaymentsIntoPensions
 import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
 import models.propertypensionsinvestments.UkDividendsSharesLoans._
+import models.propertypensionsinvestments.UkInsuranceGains.{CapitalRedemption, LifeAnnuity, LifeInsurance, VoidedISA}
 import models.propertypensionsinvestments.UkInterest.{FromGiltEdged, FromUkBanks, FromUkTrustFunds}
-import models.propertypensionsinvestments.{Pensions, UkDividendsSharesLoans, UkInterest}
+import models.propertypensionsinvestments.{Pensions, UkDividendsSharesLoans, UkInsuranceGains, UkInterest}
 import models.tasklist.SectionTitle._
 import models.tasklist._
 import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
@@ -33,7 +34,7 @@ import models.workandbenefits.JobseekersAllowance.Esa
 import models.{Done, UserAnswers}
 import pages.aboutyou.{CharitableDonationsPage, FosterCarerPage, UkResidenceStatusPage}
 import pages.pensions.PaymentsIntoPensionsPage
-import pages.propertypensionsinvestments.{PensionsPage, UkDividendsSharesLoansPage, UkInterestPage}
+import pages.propertypensionsinvestments.{PensionsPage, UkDividendsSharesLoansPage, UkInsuranceGainsPage, UkInterestPage}
 import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
@@ -64,7 +65,8 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       pensionsSection,
       paymentsIntoPensionsSection,
       interestSection,
-      dividendsSection
+      dividendsSection,
+      ukInsuranceGainsSection
     ).filter(_.taskItems.isDefined))
   }
 
@@ -94,6 +96,28 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
     }
 
     TaskListSection(AboutYouTitle(), aboutYouItems)
+  }
+
+  private def ukInsuranceGainsSection()(implicit ua: UserAnswers) = {
+
+    def ukInsuranceGains: Option[Seq[TaskListSectionItem]] = {
+
+      val items = Seq(LifeInsurance, LifeAnnuity, CapitalRedemption, VoidedISA)
+
+      val taskTitles = Map[UkInsuranceGains, TaskTitle](
+        LifeInsurance -> TaskTitle.ukInsuranceGainsTitles.LifeInsurance(),
+        LifeAnnuity -> TaskTitle.ukInsuranceGainsTitles.LifeAnnuity(),
+        CapitalRedemption -> TaskTitle.ukInsuranceGainsTitles.CapitalRedemption(),
+        VoidedISA -> TaskTitle.ukInsuranceGainsTitles.VoidedISA()
+      )
+
+      ua.get(UkInsuranceGainsPage).map(_.toList) match {
+        case Some(value) if !value.contains(UkInsuranceGains.No) =>
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(""))))
+        case _ => None
+      }
+    }
+    TaskListSection(InsuranceGainsTitle(), ukInsuranceGains)
   }
 
 
