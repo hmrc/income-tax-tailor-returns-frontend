@@ -64,7 +64,7 @@ class AuditServiceSpec extends AnyFreeSpec
 
     "must return a successful audit result" in {
 
-      val event = AuditModel(auditType, transactionName, eventDetails, mtdItId, "individual", taxYear)
+      val event = AuditModel(auditType, transactionName, eventDetails)
 
       when(mockAuditConnector.sendExtendedEvent(any())(any(), any())) thenReturn expected
 

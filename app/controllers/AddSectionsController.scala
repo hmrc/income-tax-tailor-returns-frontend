@@ -97,15 +97,13 @@ class AddSectionsController @Inject()(
 
       (isPreviouslyCompleted, isUpdate) match {
         case (true, true) =>
-          submitAudit(UserDataUpdatedType.toString, UserDataUpdatedTransaction.toString, uaWithCompletedStatus, ua.mtdItId, affinityGroup, taxYear)
+          submitAudit(UserDataUpdatedType.toString, UserDataUpdatedTransaction.toString, uaWithCompletedStatus, affinityGroup)
         case (false, _) =>
           submitAudit(UserDataCompleteType.toString,
             UserDataCompleteTransaction.toString,
             // Remove isUpdate field for completed event as it is not needed here.
             uaWithCompletedStatus.copy(data = JsObject(uaWithCompletedStatus.data.fields.filterNot(_._1 == IS_UPDATE))),
-            ua.mtdItId,
-            affinityGroup,
-            taxYear)
+            affinityGroup)
         case _ =>
           logger.info("[AddSectionsController][handleAudit] No audit was submitted as user data has not been modified.")
           Future.successful(AuditResult.Success)
@@ -118,7 +116,7 @@ class AddSectionsController @Inject()(
 
       val uaWithStatus = ua.copy(data = JsObject(ua.data.fields ++ Seq("sectionStatus" -> Json.toJson(state.getStatus), IS_UPDATE -> Json.toJson(false))))
 
-      submitAudit(UserDataIncompleteType.toString, UserDataIncompleteTransaction.toString, uaWithStatus, ua.mtdItId, affinityGroup, taxYear)
+      submitAudit(UserDataIncompleteType.toString, UserDataIncompleteTransaction.toString, uaWithStatus, affinityGroup)
       Future.successful(Redirect(controllers.routes.TaxReturnNotReadyController.onPageLoad(taxYear)))
     }
   }
@@ -133,11 +131,17 @@ class AddSectionsController @Inject()(
   private def submitAudit(auditName: String,
                           transactionName: String,
                           ua: UserAnswers,
-                          mtdItId: String,
-                          affinityGroup: String,
-                          taxYear: Int
+                          affinityGroup: String
                          )(implicit hc: HeaderCarrier): Future[AuditResult] =
     auditService.auditModel(
-      AuditModel(auditName, transactionName, ua.data, mtdItId, affinityGroup, taxYear)
+      AuditModel(
+        auditName,
+        transactionName,
+        ua.copy(data = JsObject(ua.data.fields ++ Seq(
+          "mtdItId" -> Json.toJson(ua.mtdItId),
+          "userType" -> Json.toJson(affinityGroup),
+          "taxYear" -> Json.toJson(ua.taxYear)
+        ))).data
+      )
     )
 }
