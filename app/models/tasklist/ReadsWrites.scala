@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package models.tasklist.taskItemTitles
+package models.tasklist
 
-import models.WithName
-import models.tasklist.{ReadsWrites, TaskTitle}
+import play.api.libs.json.{Json, OWrites, Reads}
 
-object SelfEmploymentTitles {
-
-  case class CIS() extends WithName("CISTitle") with TaskTitle
-  object CIS extends ReadsWrites[CIS]
-
+trait ReadsWrites[A] {
+  // Allows to read and write an object without parameters.
+  implicit val nonStrictReads: Reads[A] = Reads.pure[A](asInstanceOf[A])
+  implicit val writes: OWrites[A] = OWrites[A](_ => Json.obj())
 }

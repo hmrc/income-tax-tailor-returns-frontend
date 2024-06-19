@@ -33,6 +33,7 @@ object TaskTitle extends TaskTitle {
   val paymentsIntoPensionsTitles: PaymentsIntoPensionsTitles.type = PaymentsIntoPensionsTitles
   val ukInterestTitles: UkInterestTitles.type = UkInterestTitles
   val ukDividendsTitles: UkDividendsTitles.type = UkDividendsTitles
+  val ukInsuranceGainsTitles: UkInsuranceGainsTitles.type = UkInsuranceGainsTitles
 
   val values: Seq[TaskTitle] = Seq(
     aboutYouItemTitles.UkResidenceStatus(),
@@ -60,7 +61,11 @@ object TaskTitle extends TaskTitle {
     ukDividendsTitles.StockDividends(),
     ukDividendsTitles.DividendsFromUnitTrusts(),
     ukDividendsTitles.FreeRedeemableShares(),
-    ukDividendsTitles.CloseCompanyLoans()
+    ukDividendsTitles.CloseCompanyLoans(),
+    ukInsuranceGainsTitles.LifeInsurance(),
+    ukInsuranceGainsTitles.LifeAnnuity(),
+    ukInsuranceGainsTitles.CapitalRedemption(),
+    ukInsuranceGainsTitles.VoidedISA()
   )
 
   implicit val enumerable: Enumerable[TaskTitle] =

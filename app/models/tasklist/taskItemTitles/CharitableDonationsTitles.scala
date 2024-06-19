@@ -17,27 +17,17 @@
 package models.tasklist.taskItemTitles
 
 import models.WithName
-import models.tasklist.TaskTitle
-import play.api.libs.json.{Json, OWrites, Reads}
+import models.tasklist.{ReadsWrites, TaskTitle}
 
 object CharitableDonationsTitles {
 
   case class DonationsUsingGiftAid() extends WithName("DonationsUsingGiftAidTitle") with TaskTitle
-  object DonationsUsingGiftAid {
-    implicit val nonStrictReads: Reads[DonationsUsingGiftAid] = Reads.pure(DonationsUsingGiftAid())
-    implicit val writes: OWrites[DonationsUsingGiftAid] = OWrites[DonationsUsingGiftAid](_ => Json.obj())
-  }
+  object DonationsUsingGiftAid extends ReadsWrites[DonationsUsingGiftAid]
 
   case class GiftsOfLandOrProperty() extends WithName("GiftsOfLandOrPropertyTitle") with TaskTitle
-  object GiftsOfLandOrProperty {
-    implicit val nonStrictReads: Reads[GiftsOfLandOrProperty] = Reads.pure(GiftsOfLandOrProperty())
-    implicit val writes: OWrites[GiftsOfLandOrProperty] = OWrites[GiftsOfLandOrProperty](_ => Json.obj())
-  }
+  object GiftsOfLandOrProperty extends ReadsWrites[GiftsOfLandOrProperty]
 
   case class GiftsOfShares() extends WithName("GiftsOfSharesTitle") with TaskTitle
-  object GiftsOfShares {
-    implicit val nonStrictReads: Reads[GiftsOfShares] = Reads.pure(GiftsOfShares())
-    implicit val writes: OWrites[GiftsOfShares] = OWrites[GiftsOfShares](_ => Json.obj())
-  }
+  object GiftsOfShares extends ReadsWrites[GiftsOfShares]
 
 }
