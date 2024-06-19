@@ -63,10 +63,10 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       esaSection,
       jsaSection,
       pensionsSection,
+      ukInsuranceGainsSection,
       paymentsIntoPensionsSection,
       interestSection,
-      dividendsSection,
-      ukInsuranceGainsSection
+      dividendsSection
     ).filter(_.taskItems.isDefined))
   }
 
@@ -97,29 +97,6 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
     TaskListSection(AboutYouTitle(), aboutYouItems)
   }
-
-  private def ukInsuranceGainsSection()(implicit ua: UserAnswers) = {
-
-    def ukInsuranceGains: Option[Seq[TaskListSectionItem]] = {
-
-      val items = Seq(LifeInsurance, LifeAnnuity, CapitalRedemption, VoidedISA)
-
-      val taskTitles = Map[UkInsuranceGains, TaskTitle](
-        LifeInsurance -> TaskTitle.ukInsuranceGainsTitles.LifeInsurance(),
-        LifeAnnuity -> TaskTitle.ukInsuranceGainsTitles.LifeAnnuity(),
-        CapitalRedemption -> TaskTitle.ukInsuranceGainsTitles.CapitalRedemption(),
-        VoidedISA -> TaskTitle.ukInsuranceGainsTitles.VoidedISA()
-      )
-
-      ua.get(UkInsuranceGainsPage).map(_.toList) match {
-        case Some(value) if !value.contains(UkInsuranceGains.No) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(""))))
-        case _ => None
-      }
-    }
-    TaskListSection(InsuranceGainsTitle(), ukInsuranceGains)
-  }
-
 
   private def charitableDonationsSection()(implicit ua: UserAnswers): TaskListSection = {
 
@@ -249,6 +226,27 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
     TaskListSection(PensionsTitle(), pensions)
   }
 
+  private def ukInsuranceGainsSection()(implicit ua: UserAnswers) = {
+
+    def ukInsuranceGains: Option[Seq[TaskListSectionItem]] = {
+
+      val items = Seq(LifeInsurance, LifeAnnuity, CapitalRedemption, VoidedISA)
+
+      val taskTitles = Map[UkInsuranceGains, TaskTitle](
+        LifeInsurance -> TaskTitle.ukInsuranceGainsTitles.LifeInsurance(),
+        LifeAnnuity -> TaskTitle.ukInsuranceGainsTitles.LifeAnnuity(),
+        CapitalRedemption -> TaskTitle.ukInsuranceGainsTitles.CapitalRedemption(),
+        VoidedISA -> TaskTitle.ukInsuranceGainsTitles.VoidedISA()
+      )
+
+      ua.get(UkInsuranceGainsPage).map(_.toList) match {
+        case Some(value) if !value.contains(UkInsuranceGains.No) =>
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(""))))
+        case _ => None
+      }
+    }
+    TaskListSection(InsuranceGainsTitle(), ukInsuranceGains)
+  }
 
   private def paymentsIntoPensionsSection()(implicit ua: UserAnswers): TaskListSection = {
 
