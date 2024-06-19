@@ -18,10 +18,8 @@ package services
 
 import config.FrontendAppConfig
 import connectors.TaskListDataConnector
-import models.aboutyou.CharitableDonations
-import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
-import models.pensions.PaymentsIntoPensions
-import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
+import models.aboutyou.CharitableDonations._
+import models.pensions.PaymentsIntoPensions._
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
 import models.propertypensionsinvestments.UkDividendsSharesLoans._
 import models.propertypensionsinvestments.UkInsuranceGains.{CapitalRedemption, LifeAnnuity, LifeInsurance, VoidedISA}
@@ -104,12 +102,16 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
     def charitableDonations: Option[Seq[TaskListSectionItem]] = {
 
-      val items = Seq(DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities)
+      val items = Seq(DonationsUsingGiftAid, GiftsOfSharesOrSecurities, GiftsOfLandOrProperty, GiftsToOverseasCharities)
 
       val taskTitles = Map[CharitableDonations, TaskTitle](
         DonationsUsingGiftAid ->  TaskTitle.DonationsUsingGiftAid,
         GiftsOfLandOrProperty ->  TaskTitle.GiftsOfLandOrProperty,
         GiftsOfSharesOrSecurities -> TaskTitle.GiftsOfShares
+        DonationsUsingGiftAid -> TaskTitle.charitableDonationsTitles.DonationsUsingGiftAid(),
+        GiftsOfSharesOrSecurities -> TaskTitle.charitableDonationsTitles.GiftsOfShares(),
+        GiftsOfLandOrProperty -> TaskTitle.charitableDonationsTitles.GiftsOfLandOrProperty(),
+        GiftsToOverseasCharities -> TaskTitle.charitableDonationsTitles.GiftsToOverseasCharities()
       )
 
       ua.get(CharitableDonationsPage).map(_.toList) match {

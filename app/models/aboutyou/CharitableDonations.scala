@@ -30,6 +30,8 @@ object CharitableDonations extends Enumerable.Implicits {
   case object DonationsUsingGiftAid extends WithName("donationsUsingGiftAid") with CharitableDonations
   case object GiftsOfSharesOrSecurities extends WithName("giftsOfSharesOrSecurities") with CharitableDonations
   case object GiftsOfLandOrProperty extends WithName("giftsOfLandOrProperty") with CharitableDonations
+
+  case object GiftsToOverseasCharities extends WithName("giftsToOverseasCharities") with CharitableDonations
   case object Divider extends CharitableDonations
   case object NoDonations extends WithName("noDonations") with CharitableDonations
 
@@ -37,6 +39,7 @@ object CharitableDonations extends Enumerable.Implicits {
     DonationsUsingGiftAid,
     GiftsOfSharesOrSecurities,
     GiftsOfLandOrProperty,
+    GiftsToOverseasCharities,
     Divider,
     NoDonations
   )
