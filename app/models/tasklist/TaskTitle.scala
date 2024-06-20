@@ -16,85 +16,55 @@
 
 package models.tasklist
 
-import enumeratum.{Enum, EnumEntry}
-import models.PlayJsonEnum
+import models.Enumerable
+import models.tasklist.taskItemTitles._
 
-sealed abstract class TaskTitle(override val entryName: String) extends EnumEntry {
-  override def toString: String = entryName
-}
+trait TaskTitle extends Enumerable.Implicits
 
-object TaskTitle extends Enum[TaskTitle] with PlayJsonEnum[TaskTitle] {
+object TaskTitle extends TaskTitle {
 
-  val values: IndexedSeq[TaskTitle] = findValues
+  val aboutYouItemTitles: AboutYouItemTitles.type = AboutYouItemTitles
+  val charitableDonationsTitles: CharitableDonationsTitles.type = CharitableDonationsTitles
+  val employmentTitles: EmploymentTitles.type = EmploymentTitles
+  val selfEmploymentTitles: SelfEmploymentTitles.type = SelfEmploymentTitles
+  val esaTitles: EsaTitles.type = EsaTitles
+  val jsaTitles: JsaTitles.type = JsaTitles
+  val pensionsTitles: PensionsTitles.type = PensionsTitles
+  val paymentsIntoPensionsTitles: PaymentsIntoPensionsTitles.type = PaymentsIntoPensionsTitles
+  val ukInterestTitles: UkInterestTitles.type = UkInterestTitles
+  val ukDividendsTitles: UkDividendsTitles.type = UkDividendsTitles
 
-  // About you
-  case object UkResidenceStatus extends TaskTitle("UkResidenceStatusTitle")
+  val values: Seq[TaskTitle] = Seq(
+    aboutYouItemTitles.UkResidenceStatus(),
+    aboutYouItemTitles.FosterCarer(),
+    charitableDonationsTitles.DonationsUsingGiftAid(),
+    charitableDonationsTitles.GiftsOfShares(),
+    charitableDonationsTitles.GiftsOfLandOrProperty(),
+    charitableDonationsTitles.GiftsToOverseas(),
+    employmentTitles.PayeEmployment(),
+    selfEmploymentTitles.CIS(),
+    esaTitles.ESA(),
+    jsaTitles.JSA(),
+    pensionsTitles.StatePension(),
+    pensionsTitles.OtherUkPensions(),
+    pensionsTitles.IncomeFromOverseas(),
+    pensionsTitles.UnauthorisedPayments(),
+    pensionsTitles.ShortServiceRefunds(),
+    paymentsIntoPensionsTitles.PaymentsIntoUk(),
+    paymentsIntoPensionsTitles.AnnualAllowances(),
+    paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
+    paymentsIntoPensionsTitles.OverseasTransfer(),
+    ukInterestTitles.BanksAndBuilding(),
+    ukInterestTitles.TrustFundBond(),
+    ukInterestTitles.GiltEdged(),
+    ukDividendsTitles.CashDividends(),
+    ukDividendsTitles.StockDividends(),
+    ukDividendsTitles.DividendsFromUnitTrusts(),
+    ukDividendsTitles.FreeRedeemableShares(),
+    ukDividendsTitles.CloseCompanyLoans()
+  )
 
-  case object FosterCarer extends TaskTitle("FosterCarerTitle")
+  implicit val enumerable: Enumerable[TaskTitle] =
+    Enumerable(values.map(v => v.toString -> v): _*)
 
-  // Charitable Donations
-  case object DonationsUsingGiftAid extends TaskTitle("DonationsUsingGiftAidTitle")
-
-  case object GiftsOfLandOrProperty extends TaskTitle("GiftsOfLandOrPropertyTitle")
-
-  case object GiftsOfShares extends TaskTitle("GiftsOfSharesTitle")
-
-  // Employment
-  case object PayeEmployment extends TaskTitle("PayeEmploymentTitle")
-
-  // Self-employment
-  case object CIS extends TaskTitle("CISTitle")
-
-  // Esa
-  case object ESA extends TaskTitle("ESATitle")
-
-  // Jsa
-  case object JSA extends TaskTitle("JSATitle")
-
-  // Pensions
-  case object StatePension extends TaskTitle("StatePensionTitle")
-
-  case object OtherUkPensions extends TaskTitle("OtherUkPensionsTitle")
-
-  case object UnauthorisedPayments extends TaskTitle("UnauthorisedPaymentsTitle")
-
-  case object ShortServiceRefunds extends TaskTitle("ShortServiceRefundsTitle")
-
-  case object IncomeFromOverseas extends TaskTitle("IncomeFromOverseasTitle")
-
-  // UK insurance gains
-  case object LifeInsurance extends TaskTitle("LifeInsuranceTitle")
-
-  case object LifeAnnuity extends TaskTitle("LifeAnnuityTitle")
-
-  case object CapitalRedemption extends TaskTitle("CapitalRedemptionTitle")
-
-  case object VoidedISA extends TaskTitle("VoidedISATitle")
-
-  // Payments into pensions
-  case object PaymentsIntoUk extends TaskTitle("PaymentsIntoUkTitle")
-
-  case object AnnualAllowances extends TaskTitle("AnnualAllowancesTitle")
-
-  case object PaymentsIntoOverseas extends TaskTitle("PaymentsIntoOverseasTitle")
-
-  case object OverseasTransfer extends TaskTitle("OverseasTransferTitle")
-
-  // UK interest
-  case object BanksAndBuilding extends TaskTitle("BanksAndBuildingTitle")
-
-  case object TrustFundBond extends TaskTitle("TrustFundBondTitle")
-
-  case object GiltEdged extends TaskTitle("GiltEdgedTitle")
-
-  // UK dividends
-  case object CashDividends extends TaskTitle("CashDividendsTitle")
-
-  case object StockDividends extends TaskTitle("StockDividendsTitle")
-
-  case object DividendsFromUnitTrusts extends TaskTitle("DividendsFromUnitTrustsTitle")
-
-  case object FreeRedeemableShares extends TaskTitle("FreeRedeemableSharesTitle")
-
-  case object CloseCompanyLoans extends TaskTitle("CloseCompanyLoansTitle")
 }
