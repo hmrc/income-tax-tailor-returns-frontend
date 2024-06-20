@@ -19,7 +19,7 @@ package models.tasklist
 import play.api.libs.json.{Json, OWrites, Reads}
 
 trait ReadsWrites[A] {
-  // Allows to read and write an object without parameters.
-  implicit val nonStrictReads: Reads[A] = Reads.pure[A](asInstanceOf[A])
+  // Allows to read and write a case class without parameters.
+  implicit val nonStrictReads: Reads[A] = Reads.pure(asInstanceOf[A])
   implicit val writes: OWrites[A] = OWrites[A](_ => Json.obj())
 }

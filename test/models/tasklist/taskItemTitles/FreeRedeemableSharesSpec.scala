@@ -28,7 +28,7 @@ class FreeRedeemableSharesSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = FreeRedeemableShares()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[FreeRedeemableShares] mustBe JsSuccess(FreeRedeemableShares(), JsPath())
+      Json.toJson(underTest).validate[FreeRedeemableShares] mustBe JsSuccess(FreeRedeemableShares, JsPath())
     }
   }
 }

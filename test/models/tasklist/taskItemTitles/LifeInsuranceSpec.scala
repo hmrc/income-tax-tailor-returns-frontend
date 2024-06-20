@@ -16,19 +16,19 @@
 
 package models.tasklist.taskItemTitles
 
-import models.tasklist.taskItemTitles.UkDividendsTitles.CashDividends
+import models.tasklist.taskItemTitles.UkInsuranceGainsTitles.LifeInsurance
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.{JsPath, JsSuccess, Json}
 
-class CashDividendsSpec extends AnyFreeSpec with Matchers {
+class LifeInsuranceSpec extends AnyFreeSpec with Matchers {
 
-  "CashDividends" - {
+  "LifeInsurance" - {
 
     "must parse to and from json" in {
-      val underTest = CashDividends()
+      val underTest = LifeInsurance()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[CashDividends] mustBe JsSuccess(CashDividends, JsPath())
+      Json.toJson(underTest).validate[LifeInsurance] mustBe JsSuccess(LifeInsurance, JsPath())
     }
   }
 }

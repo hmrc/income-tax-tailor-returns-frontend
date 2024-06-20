@@ -28,7 +28,7 @@ class PayeEmploymentSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = PayeEmployment()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[PayeEmployment] mustBe JsSuccess(PayeEmployment(), JsPath())
+      Json.toJson(underTest).validate[PayeEmployment] mustBe JsSuccess(PayeEmployment, JsPath())
     }
   }
 }

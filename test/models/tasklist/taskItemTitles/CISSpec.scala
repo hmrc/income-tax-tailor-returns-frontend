@@ -28,7 +28,7 @@ class CISSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = CIS()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[CIS] mustBe JsSuccess(CIS(), JsPath())
+      Json.toJson(underTest).validate[CIS] mustBe JsSuccess(CIS, JsPath())
     }
   }
 }

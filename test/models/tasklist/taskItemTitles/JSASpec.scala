@@ -28,7 +28,7 @@ class JSASpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = JSA()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[JSA] mustBe JsSuccess(JSA(), JsPath())
+      Json.toJson(underTest).validate[JSA] mustBe JsSuccess(JSA, JsPath())
     }
   }
 }

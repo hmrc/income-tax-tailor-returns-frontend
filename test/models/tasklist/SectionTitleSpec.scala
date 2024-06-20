@@ -28,7 +28,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = AboutYouTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[AboutYouTitle] mustBe JsSuccess(AboutYouTitle(), JsPath())
+      Json.toJson(underTest).validate[AboutYouTitle] mustBe JsSuccess(AboutYouTitle, JsPath())
     }
   }
 
@@ -37,7 +37,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = CharitableDonationsTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[CharitableDonationsTitle] mustBe JsSuccess(CharitableDonationsTitle(), JsPath())
+      Json.toJson(underTest).validate[CharitableDonationsTitle] mustBe JsSuccess(CharitableDonationsTitle, JsPath())
     }
   }
 
@@ -46,7 +46,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = EmploymentTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[EmploymentTitle] mustBe JsSuccess(EmploymentTitle(), JsPath())
+      Json.toJson(underTest).validate[EmploymentTitle] mustBe JsSuccess(EmploymentTitle, JsPath())
     }
   }
 
@@ -55,7 +55,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = SelfEmploymentTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[SelfEmploymentTitle] mustBe JsSuccess(SelfEmploymentTitle(), JsPath())
+      Json.toJson(underTest).validate[SelfEmploymentTitle] mustBe JsSuccess(SelfEmploymentTitle, JsPath())
     }
   }
 
@@ -64,7 +64,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = EsaTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[EsaTitle] mustBe JsSuccess(EsaTitle(), JsPath())
+      Json.toJson(underTest).validate[EsaTitle] mustBe JsSuccess(EsaTitle, JsPath())
     }
   }
 
@@ -73,7 +73,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = JsaTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[JsaTitle] mustBe JsSuccess(JsaTitle(), JsPath())
+      Json.toJson(underTest).validate[JsaTitle] mustBe JsSuccess(JsaTitle, JsPath())
     }
   }
 
@@ -82,7 +82,16 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = PensionsTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[PensionsTitle] mustBe JsSuccess(PensionsTitle(), JsPath())
+      Json.toJson(underTest).validate[PensionsTitle] mustBe JsSuccess(PensionsTitle, JsPath())
+    }
+  }
+
+  "InsuranceGainsTitle" - {
+
+    "must parse to and from json" in {
+      val underTest = InsuranceGainsTitle()
+      Json.toJson(underTest).toString() mustBe "{}"
+      Json.toJson(underTest).validate[InsuranceGainsTitle] mustBe JsSuccess(InsuranceGainsTitle, JsPath())
     }
   }
 
@@ -91,7 +100,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = PaymentsIntoPensionsTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[PaymentsIntoPensionsTitle] mustBe JsSuccess(PaymentsIntoPensionsTitle(), JsPath())
+      Json.toJson(underTest).validate[PaymentsIntoPensionsTitle] mustBe JsSuccess(PaymentsIntoPensionsTitle, JsPath())
     }
   }
 
@@ -100,7 +109,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = InterestTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[InterestTitle] mustBe JsSuccess(InterestTitle(), JsPath())
+      Json.toJson(underTest).validate[InterestTitle] mustBe JsSuccess(InterestTitle, JsPath())
     }
   }
 
@@ -109,7 +118,7 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = DividendsTitle()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[DividendsTitle] mustBe JsSuccess(DividendsTitle(), JsPath())
+      Json.toJson(underTest).validate[DividendsTitle] mustBe JsSuccess(DividendsTitle, JsPath())
     }
   }
 }

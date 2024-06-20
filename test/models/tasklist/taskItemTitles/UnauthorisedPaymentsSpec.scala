@@ -28,7 +28,7 @@ class UnauthorisedPaymentsSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = UnauthorisedPayments()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[UnauthorisedPayments] mustBe JsSuccess(UnauthorisedPayments(), JsPath())
+      Json.toJson(underTest).validate[UnauthorisedPayments] mustBe JsSuccess(UnauthorisedPayments, JsPath())
     }
   }
 }

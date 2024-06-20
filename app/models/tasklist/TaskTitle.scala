@@ -50,9 +50,13 @@ object TaskTitle extends TaskTitle {
     pensionsTitles.IncomeFromOverseas(),
     pensionsTitles.UnauthorisedPayments(),
     pensionsTitles.ShortServiceRefunds(),
+    ukInsuranceGainsTitles.LifeInsurance(),
+    ukInsuranceGainsTitles.LifeAnnuity(),
+    ukInsuranceGainsTitles.CapitalRedemption(),
+    ukInsuranceGainsTitles.VoidedISA(),
     paymentsIntoPensionsTitles.PaymentsIntoUk(),
-    paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
     paymentsIntoPensionsTitles.AnnualAllowances(),
+    paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
     paymentsIntoPensionsTitles.OverseasTransfer(),
     ukInterestTitles.BanksAndBuilding(),
     ukInterestTitles.TrustFundBond(),
@@ -61,11 +65,7 @@ object TaskTitle extends TaskTitle {
     ukDividendsTitles.StockDividends(),
     ukDividendsTitles.DividendsFromUnitTrusts(),
     ukDividendsTitles.FreeRedeemableShares(),
-    ukDividendsTitles.CloseCompanyLoans(),
-    ukInsuranceGainsTitles.LifeInsurance(),
-    ukInsuranceGainsTitles.LifeAnnuity(),
-    ukInsuranceGainsTitles.CapitalRedemption(),
-    ukInsuranceGainsTitles.VoidedISA()
+    ukDividendsTitles.CloseCompanyLoans()
   )
 
   implicit val enumerable: Enumerable[TaskTitle] =

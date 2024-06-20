@@ -28,7 +28,7 @@ class TaskStatusSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = Completed()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[Completed] mustBe JsSuccess(Completed(), JsPath())
+      Json.toJson(underTest).validate[Completed] mustBe JsSuccess(Completed, JsPath())
     }
   }
 
@@ -37,7 +37,7 @@ class TaskStatusSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = InProgress()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[InProgress] mustBe JsSuccess(InProgress(), JsPath())
+      Json.toJson(underTest).validate[InProgress] mustBe JsSuccess(InProgress, JsPath())
     }
   }
 
@@ -46,7 +46,7 @@ class TaskStatusSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = CheckNow()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[CheckNow] mustBe JsSuccess(CheckNow(), JsPath())
+      Json.toJson(underTest).validate[CheckNow] mustBe JsSuccess(CheckNow, JsPath())
     }
   }
 
@@ -55,7 +55,7 @@ class TaskStatusSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = NotStarted()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[NotStarted] mustBe JsSuccess(NotStarted(), JsPath())
+      Json.toJson(underTest).validate[NotStarted] mustBe JsSuccess(NotStarted, JsPath())
     }
   }
 

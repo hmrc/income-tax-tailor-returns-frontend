@@ -28,7 +28,7 @@ class AnnualAllowancesSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = AnnualAllowances()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[AnnualAllowances] mustBe JsSuccess(AnnualAllowances(), JsPath())
+      Json.toJson(underTest).validate[AnnualAllowances] mustBe JsSuccess(AnnualAllowances, JsPath())
     }
   }
 }

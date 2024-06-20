@@ -28,7 +28,7 @@ class BanksAndBuildingSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = BanksAndBuilding()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[BanksAndBuilding] mustBe JsSuccess(BanksAndBuilding(), JsPath())
+      Json.toJson(underTest).validate[BanksAndBuilding] mustBe JsSuccess(BanksAndBuilding, JsPath())
     }
   }
 }

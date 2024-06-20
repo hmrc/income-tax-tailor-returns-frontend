@@ -28,7 +28,7 @@ class UkResidenceStatusSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = UkResidenceStatus()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[UkResidenceStatus] mustBe JsSuccess(UkResidenceStatus(), JsPath())
+      Json.toJson(underTest).validate[UkResidenceStatus] mustBe JsSuccess(UkResidenceStatus, JsPath())
     }
   }
 }

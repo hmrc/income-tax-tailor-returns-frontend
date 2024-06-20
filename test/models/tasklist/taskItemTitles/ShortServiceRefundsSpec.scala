@@ -28,7 +28,7 @@ class ShortServiceRefundsSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = ShortServiceRefunds()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[ShortServiceRefunds] mustBe JsSuccess(ShortServiceRefunds(), JsPath())
+      Json.toJson(underTest).validate[ShortServiceRefunds] mustBe JsSuccess(ShortServiceRefunds, JsPath())
     }
   }
 }
