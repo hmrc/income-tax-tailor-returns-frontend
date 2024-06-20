@@ -228,6 +228,16 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   private def ukInsuranceGainsSection()(implicit ua: UserAnswers) = {
 
+    val gainsUrl: String = appConfig.additionalInfoUrl(ua.taxYear)
+
+    val ukInsuranceGainsUrl: UkInsuranceGains => String = {
+      case UkInsuranceGains.LifeInsurance => gainsUrl
+      case UkInsuranceGains.LifeAnnuity => gainsUrl
+      case UkInsuranceGains.CapitalRedemption => gainsUrl
+      case UkInsuranceGains.VoidedISA => gainsUrl
+      case _ => ""
+    }
+
     def ukInsuranceGains: Option[Seq[TaskListSectionItem]] = {
 
       val items = Seq(LifeInsurance, LifeAnnuity, CapitalRedemption, VoidedISA)
@@ -239,9 +249,9 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
         VoidedISA -> TaskTitle.ukInsuranceGainsTitles.VoidedISA()
       )
 
-      ua.get(UkInsuranceGainsPage).map(_.toList) match {
+      ua.get(UkInsuranceGainsPage).map(_.toSeq) match {
         case Some(value) if !value.contains(UkInsuranceGains.No) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(""))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(ukInsuranceGainsUrl(k)))))
         case _ => None
       }
     }
