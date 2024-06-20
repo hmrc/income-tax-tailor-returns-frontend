@@ -12,3 +12,4 @@
 # Add all the application routes to the prod.routes file
 ->         /                          prod.Routes
 GET        /update-and-submit-income-tax-return/tailored-return/test-only/:taxYear/clear-data                       controllers.testonly.TestOnlyClearData.testOnlyClear(taxYear: Int)
+GET        /update-and-submit-income-tax-return/tailored-return/test-only/:taxYear/add-data                         controllers.testonly.TestOnlyAddData.testOnlyAdd(taxYear: Int)
