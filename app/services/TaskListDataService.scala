@@ -18,8 +18,8 @@ package services
 
 import config.FrontendAppConfig
 import connectors.TaskListDataConnector
+import models.aboutyou.CharitableDonations
 import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
-import models.aboutyou.{CharitableDonations, UkResidenceStatus}
 import models.pensions.PaymentsIntoPensions
 import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
@@ -76,16 +76,14 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
     def ukResidence: Option[Seq[TaskListSectionItem]] =
       ua.get(UkResidenceStatusPage) match {
-        case Some(UkResidenceStatus.Uk) =>
-          Some(Seq(TaskListSectionItem(TaskTitle.aboutYouItemTitles.UkResidenceStatus(), TaskStatus.NotStarted(), Some(residenceStatusUrl))))
-        case Some(UkResidenceStatus.Domiciled) =>
-          Some(Seq(TaskListSectionItem(TaskTitle.aboutYouItemTitles.UkResidenceStatus(), TaskStatus.NotStarted(), Some(residenceStatusUrl))))
+        case Some(_) =>
+          Some(Seq(TaskListSectionItem(TaskTitle.aboutYouItemTitles.UkResidenceStatus(), TaskStatus.Completed(), Some(residenceStatusUrl))))
         case _ => None
       }
 
     def fosterCarer: Option[Seq[TaskListSectionItem]] = {
       ua.get(FosterCarerPage) match {
-        case Some(value) if value => Some(Seq(TaskListSectionItem(TaskTitle.aboutYouItemTitles.FosterCarer(), TaskStatus.NotStarted(), Some(fosterCarerUrl))))
+        case Some(value) if value => Some(Seq(TaskListSectionItem(TaskTitle.aboutYouItemTitles.FosterCarer(), TaskStatus.Completed(), Some(fosterCarerUrl))))
         case _ => None
       }
     }
