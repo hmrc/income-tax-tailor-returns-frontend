@@ -18,8 +18,10 @@ package services
 
 import config.FrontendAppConfig
 import connectors.TaskListDataConnector
-import models.aboutyou.CharitableDonations._
-import models.pensions.PaymentsIntoPensions._
+import models.aboutyou.CharitableDonations
+import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
+import models.pensions.PaymentsIntoPensions
+import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
 import models.propertypensionsinvestments.UkDividendsSharesLoans._
 import models.propertypensionsinvestments.UkInsuranceGains.{CapitalRedemption, LifeAnnuity, LifeInsurance, VoidedISA}
@@ -27,6 +29,7 @@ import models.propertypensionsinvestments.UkInterest.{FromGiltEdged, FromUkBanks
 import models.propertypensionsinvestments.{Pensions, UkDividendsSharesLoans, UkInsuranceGains, UkInterest}
 import models.tasklist.SectionTitle._
 import models.tasklist._
+import models.tasklist.taskItemTitles.CharitableDonationsTitles.GiftsToOverseasCharities
 import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
 import models.workandbenefits.JobseekersAllowance.Esa
 import models.{Done, UserAnswers}
