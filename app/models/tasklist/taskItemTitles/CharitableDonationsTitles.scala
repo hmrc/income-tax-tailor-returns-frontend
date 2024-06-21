@@ -40,11 +40,11 @@ object CharitableDonationsTitles {
     implicit val writes: OWrites[GiftsOfShares] = OWrites[GiftsOfShares](_ => Json.obj())
   }
 
-  case class GiftsToOverseasCharities() extends WithName("GiftsToOverseasCharities") with TaskTitle
+  case class GiftsToOverseas() extends WithName("GiftsToOverseasCharities") with TaskTitle
 
-  object GiftsToOverseasCharities{
-    implicit val nonStrictReads: Reads[GiftsToOverseasCharities] = Reads.pure(GiftsToOverseasCharities())
-    implicit val writes: OWrites[GiftsToOverseasCharities] = OWrites[GiftsToOverseasCharities](_ => Json.obj())
+  object GiftsToOverseas{
+    implicit val nonStrictReads: Reads[GiftsToOverseas] = Reads.pure(GiftsToOverseas())
+    implicit val writes: OWrites[GiftsToOverseas] = OWrites[GiftsToOverseas](_ => Json.obj())
   }
 
 }
