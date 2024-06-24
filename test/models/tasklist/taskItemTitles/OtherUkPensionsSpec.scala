@@ -28,7 +28,7 @@ class OtherUkPensionsSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = OtherUkPensions()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[OtherUkPensions] mustBe JsSuccess(OtherUkPensions(), JsPath())
+      Json.toJson(underTest).validate[OtherUkPensions] mustBe JsSuccess(OtherUkPensions, JsPath())
     }
   }
 }

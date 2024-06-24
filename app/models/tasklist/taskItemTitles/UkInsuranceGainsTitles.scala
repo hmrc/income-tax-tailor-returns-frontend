@@ -19,9 +19,18 @@ package models.tasklist.taskItemTitles
 import models.WithName
 import models.tasklist.{ReadsWrites, TaskTitle}
 
-object SelfEmploymentTitles {
+object UkInsuranceGainsTitles {
 
-  case class CIS() extends WithName("CISTitle") with TaskTitle
-  object CIS extends ReadsWrites[CIS]
+  case class LifeInsurance() extends WithName("LifeInsuranceTitle") with TaskTitle
+  object LifeInsurance extends ReadsWrites[LifeInsurance]
+
+  case class LifeAnnuity() extends WithName("LifeAnnuityTitle") with TaskTitle
+  object LifeAnnuity extends ReadsWrites[LifeAnnuity]
+
+  case class CapitalRedemption() extends WithName("CapitalRedemptionTitle") with TaskTitle
+  object CapitalRedemption extends ReadsWrites[CapitalRedemption]
+
+  case class VoidedISA() extends WithName("VoidedISATitle") with TaskTitle
+  object VoidedISA extends ReadsWrites[VoidedISA]
 
 }

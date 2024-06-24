@@ -117,6 +117,10 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     configuration.get[String]("microservice.services.income-tax-state-benefits-frontend.url") +
       s"/update-and-submit-income-tax-return/state-benefits/$taxYear/jobseekers-allowance/claims"
 
+  def additionalInfoUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-additional-information-frontend.url") +
+      s"/update-and-submit-income-tax-return/additional-information/$taxYear/gains/gains-gateway"
+
   def tailoringUkResidenceUrl(taxYear: Int):String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/uk-residence-status"
 
   def tailoringFosterCarerUrl(taxYear: Int):String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/foster-carer "

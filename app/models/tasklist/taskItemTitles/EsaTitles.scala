@@ -17,15 +17,11 @@
 package models.tasklist.taskItemTitles
 
 import models.WithName
-import models.tasklist.TaskTitle
-import play.api.libs.json.{Json, OWrites, Reads}
+import models.tasklist.{ReadsWrites, TaskTitle}
 
 object EsaTitles {
 
   case class ESA() extends WithName("ESATitle") with TaskTitle
-  object ESA {
-    implicit val nonStrictReads: Reads[ESA] = Reads.pure(ESA())
-    implicit val writes: OWrites[ESA] = OWrites[ESA](_ => Json.obj())
-  }
+  object ESA extends ReadsWrites[ESA]
 
 }

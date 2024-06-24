@@ -17,39 +17,23 @@
 package models.tasklist.taskItemTitles
 
 import models.WithName
-import models.tasklist.TaskTitle
-import play.api.libs.json.{Json, OWrites, Reads}
+import models.tasklist.{ReadsWrites, TaskTitle}
 
 object UkDividendsTitles {
 
   case class CashDividends() extends WithName("CashDividendsTitle") with TaskTitle
-  object CashDividends {
-    implicit val nonStrictReads: Reads[CashDividends] = Reads.pure(CashDividends())
-    implicit val writes: OWrites[CashDividends] = OWrites[CashDividends](_ => Json.obj())
-  }
+  object CashDividends extends ReadsWrites[CashDividends]
 
   case class StockDividends() extends WithName("StockDividendsTitle") with TaskTitle
-  object StockDividends {
-    implicit val nonStrictReads: Reads[StockDividends] = Reads.pure(StockDividends())
-    implicit val writes: OWrites[StockDividends] = OWrites[StockDividends](_ => Json.obj())
-  }
+  object StockDividends extends ReadsWrites[StockDividends]
 
   case class DividendsFromUnitTrusts() extends WithName("DividendsFromUnitTrustsTitle") with TaskTitle
-  object DividendsFromUnitTrusts {
-    implicit val nonStrictReads: Reads[DividendsFromUnitTrusts] = Reads.pure(DividendsFromUnitTrusts())
-    implicit val writes: OWrites[DividendsFromUnitTrusts] = OWrites[DividendsFromUnitTrusts](_ => Json.obj())
-  }
+  object DividendsFromUnitTrusts extends ReadsWrites[DividendsFromUnitTrusts]
 
   case class FreeRedeemableShares() extends WithName("FreeRedeemableSharesTitle") with TaskTitle
-  object FreeRedeemableShares {
-    implicit val nonStrictReads: Reads[FreeRedeemableShares] = Reads.pure(FreeRedeemableShares())
-    implicit val writes: OWrites[FreeRedeemableShares] = OWrites[FreeRedeemableShares](_ => Json.obj())
-  }
+  object FreeRedeemableShares extends ReadsWrites[FreeRedeemableShares]
 
   case class CloseCompanyLoans() extends WithName("CloseCompanyLoansTitle") with TaskTitle
-  object CloseCompanyLoans {
-    implicit val nonStrictReads: Reads[CloseCompanyLoans] = Reads.pure(CloseCompanyLoans())
-    implicit val writes: OWrites[CloseCompanyLoans] = OWrites[CloseCompanyLoans](_ => Json.obj())
-  }
+  object CloseCompanyLoans extends ReadsWrites[CloseCompanyLoans]
 
 }

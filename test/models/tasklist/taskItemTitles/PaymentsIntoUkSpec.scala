@@ -28,7 +28,7 @@ class PaymentsIntoUkSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = PaymentsIntoUk()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[PaymentsIntoUk] mustBe JsSuccess(PaymentsIntoUk(), JsPath())
+      Json.toJson(underTest).validate[PaymentsIntoUk] mustBe JsSuccess(PaymentsIntoUk, JsPath())
     }
   }
 }

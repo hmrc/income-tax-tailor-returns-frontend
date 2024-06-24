@@ -28,7 +28,7 @@ class OverseasTransferSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = OverseasTransfer()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[OverseasTransfer] mustBe JsSuccess(OverseasTransfer(), JsPath())
+      Json.toJson(underTest).validate[OverseasTransfer] mustBe JsSuccess(OverseasTransfer, JsPath())
     }
   }
 }

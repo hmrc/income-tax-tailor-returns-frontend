@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package models.tasklist.taskItemTitles
+package models.tasklist
 
-import models.tasklist.taskItemTitles.UkDividendsTitles.CashDividends
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.{JsPath, JsSuccess, Json}
+import play.api.libs.json.{Json, OWrites, Reads}
 
-class CashDividendsSpec extends AnyFreeSpec with Matchers {
-
-  "CashDividends" - {
-
-    "must parse to and from json" in {
-      val underTest = CashDividends()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[CashDividends] mustBe JsSuccess(CashDividends, JsPath())
-    }
-  }
+trait ReadsWrites[A] {
+  // Allows to read and write a case class without parameters.
+  implicit val nonStrictReads: Reads[A] = Reads.pure(asInstanceOf[A])
+  implicit val writes: OWrites[A] = OWrites[A](_ => Json.obj())
 }

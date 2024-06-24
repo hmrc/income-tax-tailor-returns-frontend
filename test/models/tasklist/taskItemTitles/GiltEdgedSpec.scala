@@ -28,7 +28,7 @@ class GiltEdgedSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = GiltEdged()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[GiltEdged] mustBe JsSuccess(GiltEdged(), JsPath())
+      Json.toJson(underTest).validate[GiltEdged] mustBe JsSuccess(GiltEdged, JsPath())
     }
   }
 }

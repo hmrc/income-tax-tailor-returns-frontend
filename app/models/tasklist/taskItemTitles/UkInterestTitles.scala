@@ -17,27 +17,17 @@
 package models.tasklist.taskItemTitles
 
 import models.WithName
-import models.tasklist.TaskTitle
-import play.api.libs.json.{Json, OWrites, Reads}
+import models.tasklist.{ReadsWrites, TaskTitle}
 
 object UkInterestTitles {
 
   case class BanksAndBuilding() extends WithName("BanksAndBuildingTitle") with TaskTitle
-  object BanksAndBuilding {
-    implicit val nonStrictReads: Reads[BanksAndBuilding] = Reads.pure(BanksAndBuilding())
-    implicit val writes: OWrites[BanksAndBuilding] = OWrites[BanksAndBuilding](_ => Json.obj())
-  }
+  object BanksAndBuilding extends ReadsWrites[BanksAndBuilding]
 
   case class TrustFundBond() extends WithName("TrustFundBondTitle") with TaskTitle
-  object TrustFundBond {
-    implicit val nonStrictReads: Reads[TrustFundBond] = Reads.pure(TrustFundBond())
-    implicit val writes: OWrites[TrustFundBond] = OWrites[TrustFundBond](_ => Json.obj())
-  }
+  object TrustFundBond extends ReadsWrites[TrustFundBond]
 
   case class GiltEdged() extends WithName("GiltEdgedTitle") with TaskTitle
-  object GiltEdged {
-    implicit val nonStrictReads: Reads[GiltEdged] = Reads.pure(GiltEdged())
-    implicit val writes: OWrites[GiltEdged] = OWrites[GiltEdged](_ => Json.obj())
-  }
+  object GiltEdged extends ReadsWrites[GiltEdged]
 
 }

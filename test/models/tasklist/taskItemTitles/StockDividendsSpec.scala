@@ -28,7 +28,7 @@ class StockDividendsSpec extends AnyFreeSpec with Matchers {
     "must parse to and from json" in {
       val underTest = StockDividends()
       Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[StockDividends] mustBe JsSuccess(StockDividends(), JsPath())
+      Json.toJson(underTest).validate[StockDividends] mustBe JsSuccess(StockDividends, JsPath())
     }
   }
 }

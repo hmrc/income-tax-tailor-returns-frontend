@@ -17,21 +17,14 @@
 package models.tasklist.taskItemTitles
 
 import models.WithName
-import models.tasklist.TaskTitle
-import play.api.libs.json.{Json, OWrites, Reads}
+import models.tasklist.{ReadsWrites, TaskTitle}
 
 object AboutYouItemTitles {
 
   case class UkResidenceStatus() extends WithName("UkResidenceStatusTitle") with TaskTitle
-  object UkResidenceStatus {
-    implicit val nonStrictReads: Reads[UkResidenceStatus] = Reads.pure(UkResidenceStatus())
-    implicit val writes: OWrites[UkResidenceStatus] = OWrites[UkResidenceStatus](_ => Json.obj())
-  }
+  object UkResidenceStatus extends ReadsWrites[UkResidenceStatus]
 
   case class FosterCarer() extends WithName("FosterCarerTitle") with TaskTitle
-  object FosterCarer {
-    implicit val nonStrictReads: Reads[FosterCarer] = Reads.pure(FosterCarer())
-    implicit val writes: OWrites[FosterCarer] = OWrites[FosterCarer](_ => Json.obj())
-  }
+  object FosterCarer extends ReadsWrites[FosterCarer]
 
 }

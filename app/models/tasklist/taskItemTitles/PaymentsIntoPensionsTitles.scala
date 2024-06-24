@@ -17,33 +17,20 @@
 package models.tasklist.taskItemTitles
 
 import models.WithName
-import models.tasklist.TaskTitle
-import play.api.libs.json.{Json, OWrites, Reads}
+import models.tasklist.{ReadsWrites, TaskTitle}
 
 object PaymentsIntoPensionsTitles {
 
   case class PaymentsIntoUk() extends WithName("PaymentsIntoUkTitle") with TaskTitle
-  object PaymentsIntoUk {
-    implicit val nonStrictReads: Reads[PaymentsIntoUk] = Reads.pure(PaymentsIntoUk())
-    implicit val writes: OWrites[PaymentsIntoUk] = OWrites[PaymentsIntoUk](_ => Json.obj())
-  }
+  object PaymentsIntoUk extends ReadsWrites[PaymentsIntoUk]
 
   case class PaymentsIntoOverseas() extends WithName("PaymentsIntoOverseasTitle") with TaskTitle
-  object PaymentsIntoOverseas {
-    implicit val nonStrictReads: Reads[PaymentsIntoOverseas] = Reads.pure(PaymentsIntoOverseas())
-    implicit val writes: OWrites[PaymentsIntoOverseas] = OWrites[PaymentsIntoOverseas](_ => Json.obj())
-  }
+  object PaymentsIntoOverseas extends ReadsWrites[PaymentsIntoOverseas]
 
   case class AnnualAllowances() extends WithName("AnnualAllowancesTitle") with TaskTitle
-  object AnnualAllowances {
-    implicit val nonStrictReads: Reads[AnnualAllowances] = Reads.pure(AnnualAllowances())
-    implicit val writes: OWrites[AnnualAllowances] = OWrites[AnnualAllowances](_ => Json.obj())
-  }
+  object AnnualAllowances extends ReadsWrites[AnnualAllowances]
 
   case class OverseasTransfer() extends WithName("OverseasTransferTitle") with TaskTitle
-  object OverseasTransfer {
-    implicit val nonStrictReads: Reads[OverseasTransfer] = Reads.pure(OverseasTransfer())
-    implicit val writes: OWrites[OverseasTransfer] = OWrites[OverseasTransfer](_ => Json.obj())
-  }
+  object OverseasTransfer extends ReadsWrites[OverseasTransfer]
 
 }
