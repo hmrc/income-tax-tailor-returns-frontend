@@ -26,99 +26,110 @@ class SectionTitleSpec extends AnyFreeSpec with Matchers {
   "AboutYouTitle" - {
 
     "must parse to and from json" in {
-      val underTest = AboutYouTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[AboutYouTitle] mustBe JsSuccess(AboutYouTitle, JsPath())
+      val underTest = Json.toJson(AboutYouTitle)
+
+      underTest.toString() mustBe s"\"${AboutYouTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(AboutYouTitle, JsPath())
     }
   }
 
   "CharitableDonationsTitle" - {
 
     "must parse to and from json" in {
-      val underTest = CharitableDonationsTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[CharitableDonationsTitle] mustBe JsSuccess(CharitableDonationsTitle, JsPath())
+      val underTest = Json.toJson(CharitableDonationsTitle)
+
+      underTest.toString() mustBe s"\"${CharitableDonationsTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(CharitableDonationsTitle, JsPath())
     }
   }
 
   "EmploymentTitle" - {
 
     "must parse to and from json" in {
-      val underTest = EmploymentTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[EmploymentTitle] mustBe JsSuccess(EmploymentTitle, JsPath())
+      val underTest = Json.toJson(EmploymentTitle)
+
+      underTest.toString() mustBe s"\"${EmploymentTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(EmploymentTitle, JsPath())
     }
   }
 
   "SelfEmploymentTitle" - {
 
     "must parse to and from json" in {
-      val underTest = SelfEmploymentTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[SelfEmploymentTitle] mustBe JsSuccess(SelfEmploymentTitle, JsPath())
+      val underTest = Json.toJson(SelfEmploymentTitle)
+
+      underTest.toString() mustBe s"\"${SelfEmploymentTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(SelfEmploymentTitle, JsPath())
     }
   }
 
   "EsaTitle" - {
 
     "must parse to and from json" in {
-      val underTest = EsaTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[EsaTitle] mustBe JsSuccess(EsaTitle, JsPath())
+      val underTest = Json.toJson(EsaTitle)
+
+      underTest.toString() mustBe s"\"${EsaTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(EsaTitle, JsPath())
     }
   }
 
   "JsaTitle" - {
 
     "must parse to and from json" in {
-      val underTest = JsaTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[JsaTitle] mustBe JsSuccess(JsaTitle, JsPath())
+      val underTest = Json.toJson(JsaTitle)
+
+      underTest.toString() mustBe s"\"${JsaTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(JsaTitle, JsPath())
     }
   }
 
   "PensionsTitle" - {
 
     "must parse to and from json" in {
-      val underTest = PensionsTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[PensionsTitle] mustBe JsSuccess(PensionsTitle, JsPath())
+      val underTest = Json.toJson(PensionsTitle)
+
+      underTest.toString() mustBe s"\"${PensionsTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(PensionsTitle, JsPath())
     }
   }
 
   "InsuranceGainsTitle" - {
 
     "must parse to and from json" in {
-      val underTest = InsuranceGainsTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[InsuranceGainsTitle] mustBe JsSuccess(InsuranceGainsTitle, JsPath())
+      val underTest = Json.toJson(InsuranceGainsTitle)
+
+      underTest.toString() mustBe s"\"${InsuranceGainsTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(InsuranceGainsTitle, JsPath())
     }
   }
 
   "PaymentsIntoPensionsTitle" - {
 
     "must parse to and from json" in {
-      val underTest = PaymentsIntoPensionsTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[PaymentsIntoPensionsTitle] mustBe JsSuccess(PaymentsIntoPensionsTitle, JsPath())
+      val underTest = Json.toJson(PaymentsIntoPensionsTitle)
+
+      underTest.toString() mustBe s"\"${PaymentsIntoPensionsTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(PaymentsIntoPensionsTitle, JsPath())
     }
   }
 
   "InterestTitle" - {
 
     "must parse to and from json" in {
-      val underTest = InterestTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[InterestTitle] mustBe JsSuccess(InterestTitle, JsPath())
+      val underTest = Json.toJson(InterestTitle)
+
+      underTest.toString() mustBe s"\"${InterestTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(InterestTitle, JsPath())
     }
   }
 
   "DividendsTitle" - {
 
     "must parse to and from json" in {
-      val underTest = DividendsTitle()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[DividendsTitle] mustBe JsSuccess(DividendsTitle, JsPath())
+      val underTest = Json.toJson(DividendsTitle)
+
+      underTest.toString() mustBe s"\"${DividendsTitle.toString}\""
+      underTest.validate[SectionTitle] mustBe JsSuccess(DividendsTitle, JsPath())
     }
   }
 }

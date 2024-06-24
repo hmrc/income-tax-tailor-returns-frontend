@@ -21,7 +21,7 @@ import models.UserAnswers
 import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
 import models.aboutyou.{CharitableDonations, UkResidenceStatus}
 import models.pensions.PaymentsIntoPensions
-import models.pensions.PaymentsIntoPensions.{Overseas, UkPensions}
+import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
 import models.propertypensionsinvestments.{Pensions, RentalIncome, UkDividendsSharesLoans, UkInsuranceGains, UkInterest}
 import models.propertypensionsinvestments.UkDividendsSharesLoans.{CashDividendsFromUkStocksAndShares, CloseCompanyLoansWrittenOffReleased, DividendsUnitTrustsInvestmentCompanies, FreeOrRedeemableShares, StockDividendsFromUkCompanies}
@@ -91,7 +91,7 @@ trait SpecBase
       FreeOrRedeemableShares,
       CloseCompanyLoansWrittenOffReleased
     )))
-    .flatMap(_.set(PaymentsIntoPensionsPage, Set[PaymentsIntoPensions](UkPensions, PaymentsIntoPensions.NonUkPensions, Overseas)))
+    .flatMap(_.set(PaymentsIntoPensionsPage, Set[PaymentsIntoPensions](UkPensions, AnnualAllowances, PaymentsIntoPensions.NonUkPensions, Overseas)))
     .success.value
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())

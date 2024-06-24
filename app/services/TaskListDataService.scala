@@ -95,7 +95,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       if (items.isEmpty) None else Some(items)
     }
 
-    TaskListSection(AboutYouTitle(), aboutYouItems)
+    TaskListSection(AboutYouTitle, aboutYouItems)
   }
 
   private def charitableDonationsSection()(implicit ua: UserAnswers): TaskListSection = {
@@ -107,19 +107,19 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       val items = Seq(DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities)
 
       val taskTitles = Map[CharitableDonations, TaskTitle](
-        DonationsUsingGiftAid -> TaskTitle.charitableDonationsTitles.DonationsUsingGiftAid(),
-        GiftsOfLandOrProperty -> TaskTitle.charitableDonationsTitles.GiftsOfLandOrProperty(),
-        GiftsOfSharesOrSecurities -> TaskTitle.charitableDonationsTitles.GiftsOfShares()
+        DonationsUsingGiftAid ->  TaskTitle.DonationsUsingGiftAid,
+        GiftsOfLandOrProperty ->  TaskTitle.GiftsOfLandOrProperty,
+        GiftsOfSharesOrSecurities -> TaskTitle.GiftsOfShares
       )
 
       ua.get(CharitableDonationsPage).map(_.toList) match {
         case Some(value) if !value.contains(CharitableDonations.NoDonations) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(charitableDonationsUrl))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(charitableDonationsUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(CharitableDonationsTitle(), charitableDonations)
+    TaskListSection(CharitableDonationsTitle, charitableDonations)
   }
 
 
@@ -131,12 +131,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(AboutYourWorkPage).map(_.toSeq) match {
         case Some(value) if value.contains(Employed) =>
-          Some(Seq(TaskListSectionItem(TaskTitle.employmentTitles.PayeEmployment(), TaskStatus.NotStarted(), Some(employmentUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle.PayeEmployment, TaskStatus.NotStarted, Some(employmentUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(EmploymentTitle(), employment)
+    TaskListSection(EmploymentTitle, employment)
   }
 
 
@@ -148,12 +148,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(AboutYourWorkPage).map(_.toSeq) match {
         case Some(value) if value.contains(SelfEmployed) =>
-          Some(Seq(TaskListSectionItem(TaskTitle.selfEmploymentTitles.CIS(), TaskStatus.NotStarted(), Some(cisGatewayUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle.CIS, TaskStatus.NotStarted, Some(cisGatewayUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(SelfEmploymentTitle(), selfEmployment)
+    TaskListSection(SelfEmploymentTitle, selfEmployment)
   }
 
 
@@ -165,12 +165,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(JobseekersAllowancePage).map(_.toSeq) match {
         case Some(value) if value.contains(Esa) =>
-          Some(Seq(TaskListSectionItem(TaskTitle.esaTitles.ESA(), TaskStatus.NotStarted(), Some(esaUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle.ESA, TaskStatus.NotStarted, Some(esaUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(EsaTitle(), esa)
+    TaskListSection(EsaTitle, esa)
   }
 
 
@@ -182,12 +182,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(JobseekersAllowancePage).map(_.toSeq) match {
         case Some(value) if value.contains(Esa) =>
-          Some(Seq(TaskListSectionItem(TaskTitle.jsaTitles.JSA(), TaskStatus.NotStarted(), Some(jsaUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle.JSA, TaskStatus.NotStarted, Some(jsaUrl))))
         case _ => None
       }
     }
 
-    TaskListSection(JsaTitle(), jsa)
+    TaskListSection(JsaTitle, jsa)
   }
 
 
@@ -209,21 +209,21 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       val items = Seq(StatePension, OtherUkPensions, UnauthorisedPayments, ShortServiceRefunds, models.propertypensionsinvestments.Pensions.NonUkPensions)
 
       val taskTitles = Map[Pensions, TaskTitle](
-        StatePension -> TaskTitle.pensionsTitles.StatePension(),
-        OtherUkPensions -> TaskTitle.pensionsTitles.OtherUkPensions(),
-        UnauthorisedPayments -> TaskTitle.pensionsTitles.UnauthorisedPayments(),
-        ShortServiceRefunds -> TaskTitle.pensionsTitles.ShortServiceRefunds(),
-        models.propertypensionsinvestments.Pensions.NonUkPensions -> TaskTitle.pensionsTitles.IncomeFromOverseas()
+        StatePension -> TaskTitle.StatePension,
+        OtherUkPensions -> TaskTitle.OtherUkPensions,
+        UnauthorisedPayments -> TaskTitle.UnauthorisedPayments,
+        ShortServiceRefunds -> TaskTitle.ShortServiceRefunds,
+        models.propertypensionsinvestments.Pensions.NonUkPensions -> TaskTitle.IncomeFromOverseas
       )
 
       ua.get(PensionsPage).map(_.toSeq) match {
         case Some(value) if !value.contains(Pensions.NoPensions) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(pensionsUrl(k)))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(pensionsUrl(k)))))
         case _ => None
       }
     }
 
-    TaskListSection(PensionsTitle(), pensions)
+    TaskListSection(PensionsTitle, pensions)
   }
 
   private def ukInsuranceGainsSection()(implicit ua: UserAnswers) = {
@@ -243,19 +243,19 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       val items = Seq(LifeInsurance, LifeAnnuity, CapitalRedemption, VoidedISA)
 
       val taskTitles = Map[UkInsuranceGains, TaskTitle](
-        LifeInsurance -> TaskTitle.ukInsuranceGainsTitles.LifeInsurance(),
-        LifeAnnuity -> TaskTitle.ukInsuranceGainsTitles.LifeAnnuity(),
-        CapitalRedemption -> TaskTitle.ukInsuranceGainsTitles.CapitalRedemption(),
-        VoidedISA -> TaskTitle.ukInsuranceGainsTitles.VoidedISA()
+        LifeInsurance -> TaskTitle.LifeInsurance,
+        LifeAnnuity -> TaskTitle.LifeAnnuity,
+        CapitalRedemption -> TaskTitle.CapitalRedemption,
+        VoidedISA -> TaskTitle.VoidedISA
       )
 
       ua.get(UkInsuranceGainsPage).map(_.toSeq) match {
         case Some(value) if !value.contains(UkInsuranceGains.No) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(ukInsuranceGainsUrl(k)))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(ukInsuranceGainsUrl(k)))))
         case _ => None
       }
     }
-    TaskListSection(InsuranceGainsTitle(), ukInsuranceGains)
+    TaskListSection(InsuranceGainsTitle, ukInsuranceGains)
   }
 
   private def paymentsIntoPensionsSection()(implicit ua: UserAnswers): TaskListSection = {
@@ -273,20 +273,20 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       val items = Seq(UkPensions, AnnualAllowances, models.pensions.PaymentsIntoPensions.NonUkPensions, Overseas)
 
       val taskTitles = Map[PaymentsIntoPensions, TaskTitle](
-        UkPensions -> TaskTitle.paymentsIntoPensionsTitles.PaymentsIntoUk(),
-        AnnualAllowances -> TaskTitle.paymentsIntoPensionsTitles.AnnualAllowances(),
-        models.pensions.PaymentsIntoPensions.NonUkPensions -> TaskTitle.paymentsIntoPensionsTitles.PaymentsIntoOverseas(),
-        Overseas -> TaskTitle.paymentsIntoPensionsTitles.OverseasTransfer()
+        UkPensions -> TaskTitle.PaymentsIntoUk,
+        AnnualAllowances -> TaskTitle.AnnualAllowances,
+        models.pensions.PaymentsIntoPensions.NonUkPensions -> TaskTitle.PaymentsIntoOverseas,
+        Overseas -> TaskTitle.OverseasTransfer
       )
 
       ua.get(PaymentsIntoPensionsPage).map(_.toSeq) match {
         case Some(value) if !value.contains(PaymentsIntoPensions.No) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(paymentsIntoPensionsUrl(k)))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(paymentsIntoPensionsUrl(k)))))
         case _ => None
       }
     }
 
-    TaskListSection(PaymentsIntoPensionsTitle(), paymentsIntoPensions)
+    TaskListSection(PaymentsIntoPensionsTitle, paymentsIntoPensions)
   }
 
 
@@ -306,19 +306,19 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       val items = Seq(FromUkBanks, FromUkTrustFunds, FromGiltEdged)
 
       val taskTitles = Map[UkInterest, TaskTitle](
-        FromUkBanks -> TaskTitle.ukInterestTitles.BanksAndBuilding(),
-        FromUkTrustFunds -> TaskTitle.ukInterestTitles.TrustFundBond(),
-        FromGiltEdged -> TaskTitle.ukInterestTitles.GiltEdged()
+        FromUkBanks -> TaskTitle.BanksAndBuilding,
+        FromUkTrustFunds -> TaskTitle.TrustFundBond,
+        FromGiltEdged -> TaskTitle.GiltEdged
       )
 
       ua.get(UkInterestPage).map(_.toSeq) match {
         case Some(value) if !value.contains(UkInterest.NoInterest) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(interestUrl(k)))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(interestUrl(k)))))
         case _ => None
       }
     }
 
-    TaskListSection(InterestTitle(), interest)
+    TaskListSection(InterestTitle, interest)
   }
 
 
@@ -346,21 +346,21 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       )
 
       val taskTitles = Map[UkDividendsSharesLoans, TaskTitle](
-        CashDividendsFromUkStocksAndShares -> TaskTitle.ukDividendsTitles.CashDividends(),
-        StockDividendsFromUkCompanies -> TaskTitle.ukDividendsTitles.StockDividends(),
-        DividendsUnitTrustsInvestmentCompanies -> TaskTitle.ukDividendsTitles.DividendsFromUnitTrusts(),
-        FreeOrRedeemableShares -> TaskTitle.ukDividendsTitles.FreeRedeemableShares(),
-        CloseCompanyLoansWrittenOffReleased -> TaskTitle.ukDividendsTitles.CloseCompanyLoans()
+        CashDividendsFromUkStocksAndShares -> TaskTitle.CashDividends,
+        StockDividendsFromUkCompanies -> TaskTitle.StockDividends,
+        DividendsUnitTrustsInvestmentCompanies -> TaskTitle.DividendsFromUnitTrusts,
+        FreeOrRedeemableShares -> TaskTitle.FreeRedeemableShares,
+        CloseCompanyLoansWrittenOffReleased -> TaskTitle.CloseCompanyLoans
       )
 
       ua.get(UkDividendsSharesLoansPage).map(_.toSeq) match {
         case Some(value) if !value.contains(UkDividendsSharesLoans.NoUkDividendsSharesOrLoans) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted(), Some(dividendsUrl(k)))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(dividendsUrl(k)))))
         case _ => None
       }
     }
 
-    TaskListSection(DividendsTitle(), dividends)
+    TaskListSection(DividendsTitle, dividends)
   }
 
 }

@@ -16,29 +16,25 @@
 
 package models.tasklist
 
-import models.{Enumerable, WithName}
+import enumeratum.{Enum, EnumEntry}
+import models.PlayJsonEnum
 
-trait TaskStatus extends Enumerable.Implicits
+sealed abstract class TaskStatus(override val entryName: String) extends EnumEntry {
+  override def toString: String = entryName
+}
 
-object TaskStatus extends TaskStatus {
+object TaskStatus extends Enum[TaskStatus] with PlayJsonEnum[TaskStatus] {
 
-  case class Completed() extends WithName("completed") with TaskStatus
-  object Completed extends ReadsWrites[Completed]
+  val values: IndexedSeq[TaskStatus] = findValues
 
-  case class InProgress() extends WithName("inProgress") with TaskStatus
-  object InProgress extends ReadsWrites[InProgress]
+  case object Completed extends TaskStatus("completed")
 
-  case class NotStarted() extends WithName("notStarted") with TaskStatus
-  object NotStarted extends ReadsWrites[NotStarted]
+  case object InProgress extends TaskStatus("inProgress")
 
-  case class CheckNow() extends WithName("checkNow") with TaskStatus
-  object CheckNow extends ReadsWrites[CheckNow]
+  case object NotStarted extends TaskStatus("notStarted")
 
-  val values: Seq[TaskStatus] = Seq(
-    Completed(), InProgress(), NotStarted(), CheckNow()
-  )
+  case object CheckNow extends TaskStatus("checkNow")
 
-  implicit val enumerable: Enumerable[TaskStatus] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  case object UnderMaintenance extends TaskStatus("underMaintenance")
 
 }

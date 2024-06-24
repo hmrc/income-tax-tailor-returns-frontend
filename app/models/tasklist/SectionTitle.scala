@@ -16,60 +16,37 @@
 
 package models.tasklist
 
-import models.{Enumerable, WithName}
+import enumeratum._
+import models.PlayJsonEnum
 
-trait SectionTitle extends Enumerable.Implicits
+sealed abstract class SectionTitle(override val entryName: String) extends EnumEntry {
+  override def toString: String = entryName
+}
 
-object SectionTitle extends SectionTitle {
+object SectionTitle extends Enum[SectionTitle] with PlayJsonEnum[SectionTitle] {
 
-  case class AboutYouTitle() extends WithName("AboutYou") with SectionTitle
-  object AboutYouTitle extends ReadsWrites[AboutYouTitle]
+  val values: IndexedSeq[SectionTitle] = findValues
 
-  case class CharitableDonationsTitle() extends WithName("CharitableDonations") with SectionTitle
-  object CharitableDonationsTitle extends ReadsWrites[CharitableDonationsTitle]
+  case object AboutYouTitle extends SectionTitle("AboutYou")
 
-  case class EmploymentTitle() extends WithName("Employment") with SectionTitle
-  object EmploymentTitle extends ReadsWrites[EmploymentTitle]
+  case object CharitableDonationsTitle extends SectionTitle("CharitableDonations")
 
-  case class SelfEmploymentTitle() extends WithName("SelfEmployment") with SectionTitle
-  object SelfEmploymentTitle extends ReadsWrites[SelfEmploymentTitle]
+  case object EmploymentTitle extends SectionTitle("Employment")
 
-  case class EsaTitle() extends WithName("Esa") with SectionTitle
-  object EsaTitle extends ReadsWrites[EsaTitle]
+  case object SelfEmploymentTitle extends SectionTitle("SelfEmployment")
 
-  case class JsaTitle() extends WithName("Jsa") with SectionTitle
-  object JsaTitle extends ReadsWrites[JsaTitle]
+  case object EsaTitle extends SectionTitle("Esa")
 
-  case class PensionsTitle() extends WithName("Pensions") with SectionTitle
-  object PensionsTitle extends ReadsWrites[PensionsTitle]
+  case object JsaTitle extends SectionTitle("Jsa")
 
-  case class PaymentsIntoPensionsTitle() extends WithName("PaymentsIntoPensions") with SectionTitle
-  object PaymentsIntoPensionsTitle extends ReadsWrites[PaymentsIntoPensionsTitle]
+  case object PensionsTitle extends SectionTitle("Pensions")
 
-  case class InterestTitle() extends WithName("Interest") with SectionTitle
-  object InterestTitle extends ReadsWrites[InterestTitle]
+  case object InsuranceGainsTitle extends SectionTitle("InsuranceGains")
 
-  case class DividendsTitle() extends WithName("Dividends") with SectionTitle
-  object DividendsTitle extends ReadsWrites[DividendsTitle]
+  case object PaymentsIntoPensionsTitle extends SectionTitle("PaymentsIntoPensions")
 
-  case class InsuranceGainsTitle() extends WithName("InsuranceGains") with SectionTitle
-  object InsuranceGainsTitle extends ReadsWrites[InsuranceGainsTitle]
+  case object InterestTitle extends SectionTitle("Interest")
 
-  val values: Seq[SectionTitle] = Seq(
-    AboutYouTitle(),
-    CharitableDonationsTitle(),
-    EmploymentTitle(),
-    SelfEmploymentTitle(),
-    EsaTitle(),
-    JsaTitle(),
-    PensionsTitle(),
-    PaymentsIntoPensionsTitle(),
-    InterestTitle(),
-    DividendsTitle(),
-    InsuranceGainsTitle()
-  )
-
-  implicit val enumerable: Enumerable[SectionTitle] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  case object DividendsTitle extends SectionTitle("Dividends")
 
 }

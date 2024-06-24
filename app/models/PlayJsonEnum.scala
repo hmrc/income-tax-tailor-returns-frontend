@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package models.tasklist.taskItemTitles
+package models
 
-import models.WithName
-import models.tasklist.{ReadsWrites, TaskTitle}
+import enumeratum._
+import play.api.libs.json._
 
-object SelfEmploymentTitles {
+trait PlayJsonEnum[A <: EnumEntry] { self: Enum[A] =>
+  implicit val keyWrites: KeyWrites[A] = EnumFormats.keyWrites(this)
 
-  case class CIS() extends WithName("CISTitle") with TaskTitle
-  object CIS extends ReadsWrites[CIS]
+  implicit def contraKeyWrites[K <: A]: KeyWrites[K] = {
+    val w = this.keyWrites
 
+    (k: K) => w.writeKey(k)
+  }
+
+  implicit val jsonFormat: Format[A]               = EnumFormats.formats(this)
+  implicit def contraJsonWrites[B <: A]: Writes[B] = jsonFormat.contramap[B](b => b: A)
 }
