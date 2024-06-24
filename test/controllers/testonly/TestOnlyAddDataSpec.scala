@@ -22,28 +22,28 @@ import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
+import play.api.inject.bind
+import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import play.api.inject.bind
-import play.api.mvc.Call
 
 import scala.concurrent.Future
 
-class TestOnlyClearDataSpec extends SpecBase with MockitoSugar {
+class TestOnlyAddDataSpec extends SpecBase with MockitoSugar {
 
-  def onwardRoute = Call("DELETE", "/foo")
+  def onwardRoute = Call("GET", "/foo")
 
-  "TestOnlyClearData Controller" - {
+  "TestOnlyAddData Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val mockUserDataService = mock[UserDataService]
 
-      when(mockUserDataService.clear(any(), any())( any())) thenReturn Future.successful(Done)
+      when(mockUserDataService.setWithoutUpdate(any())(any())) thenReturn Future.successful(Done)
 
       val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        applicationBuilder(userAnswers = Some(fullUserAnswers))
           .overrides(
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[UserDataService].toInstance(mockUserDataService)
@@ -51,7 +51,7 @@ class TestOnlyClearDataSpec extends SpecBase with MockitoSugar {
           .build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.TestOnlyClearData.testOnlyClear(taxYear).url).withSession(validTaxYears)
+        val request = FakeRequest(GET, routes.TestOnlyAddData.testOnlyAdd(taxYear).url).withSession(validTaxYears)
 
         val result = route(application, request).value
 
