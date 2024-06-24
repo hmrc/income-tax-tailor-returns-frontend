@@ -79,13 +79,13 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
     def ukResidence: Option[Seq[TaskListSectionItem]] =
       ua.get(UkResidenceStatusPage) match {
         case Some(_) =>
-          Some(Seq(TaskListSectionItem(TaskTitle.aboutYouItemTitles.UkResidenceStatus(), TaskStatus.Completed(), Some(residenceStatusUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle.UkResidenceStatus, TaskStatus.Completed, Some(residenceStatusUrl))))
         case _ => None
       }
 
     def fosterCarer: Option[Seq[TaskListSectionItem]] = {
       ua.get(FosterCarerPage) match {
-        case Some(value) if value => Some(Seq(TaskListSectionItem(TaskTitle.aboutYouItemTitles.FosterCarer(), TaskStatus.Completed(), Some(fosterCarerUrl))))
+        case Some(value) if value => Some(Seq(TaskListSectionItem(TaskTitle.FosterCarer, TaskStatus.Completed, Some(fosterCarerUrl))))
         case _ => None
       }
     }

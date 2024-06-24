@@ -63,4 +63,14 @@ class TaskStatusSpec extends AnyFreeSpec with Matchers {
     }
   }
 
+  "UnderMaintenance" - {
+
+    "must parse to and from json" in {
+      val underTest = Json.toJson(UnderMaintenance)
+
+      underTest.toString() mustBe s"\"${UnderMaintenance.toString}\""
+      underTest.validate[TaskStatus] mustBe JsSuccess(UnderMaintenance, JsPath())
+    }
+  }
+
 }
