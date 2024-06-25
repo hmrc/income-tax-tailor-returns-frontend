@@ -26,36 +26,50 @@ class TaskStatusSpec extends AnyFreeSpec with Matchers {
   "Completed" - {
 
     "must parse to and from json" in {
-      val underTest = Completed()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[Completed] mustBe JsSuccess(Completed, JsPath())
+      val underTest = Json.toJson(Completed)
+
+      underTest.toString() mustBe s"\"${Completed.toString}\""
+      underTest.validate[TaskStatus] mustBe JsSuccess(Completed, JsPath())
     }
   }
 
   "InProgress" - {
 
     "must parse to and from json" in {
-      val underTest = InProgress()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[InProgress] mustBe JsSuccess(InProgress, JsPath())
+      val underTest = Json.toJson(InProgress)
+
+      underTest.toString() mustBe s"\"${InProgress.toString}\""
+      underTest.validate[TaskStatus] mustBe JsSuccess(InProgress, JsPath())
     }
   }
 
   "CheckNow" - {
 
     "must parse to and from json" in {
-      val underTest = CheckNow()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[CheckNow] mustBe JsSuccess(CheckNow, JsPath())
+      val underTest = Json.toJson(CheckNow)
+
+      underTest.toString() mustBe s"\"${CheckNow.toString}\""
+      underTest.validate[TaskStatus] mustBe JsSuccess(CheckNow, JsPath())
     }
   }
 
   "NotStarted" - {
 
     "must parse to and from json" in {
-      val underTest = NotStarted()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[NotStarted] mustBe JsSuccess(NotStarted, JsPath())
+      val underTest = Json.toJson(NotStarted)
+
+      underTest.toString() mustBe s"\"${NotStarted.toString}\""
+      underTest.validate[TaskStatus] mustBe JsSuccess(NotStarted, JsPath())
+    }
+  }
+
+  "UnderMaintenance" - {
+
+    "must parse to and from json" in {
+      val underTest = Json.toJson(UnderMaintenance)
+
+      underTest.toString() mustBe s"\"${UnderMaintenance.toString}\""
+      underTest.validate[TaskStatus] mustBe JsSuccess(UnderMaintenance, JsPath())
     }
   }
 

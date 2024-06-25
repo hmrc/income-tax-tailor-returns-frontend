@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package models.tasklist.taskItemTitles
+package models
 
-import models.tasklist.taskItemTitles.UkDividendsTitles.CashDividends
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.must.Matchers
-import play.api.libs.json.{JsPath, JsSuccess, Json}
+import enumeratum._
+import play.api.libs.json._
 
-class CashDividendsSpec extends AnyFreeSpec with Matchers {
+trait PlayJsonEnum[A <: EnumEntry] { self: Enum[A] =>
+  implicit val keyWrites: KeyWrites[A] = EnumFormats.keyWrites(this)
 
-  "CashDividends" - {
+  implicit def contraKeyWrites[K <: A]: KeyWrites[K] = {
+    val w = this.keyWrites
 
-    "must parse to and from json" in {
-      val underTest = CashDividends()
-      Json.toJson(underTest).toString() mustBe "{}"
-      Json.toJson(underTest).validate[CashDividends] mustBe JsSuccess(CashDividends, JsPath())
-    }
+    (k: K) => w.writeKey(k)
   }
+
+  implicit val jsonFormat: Format[A]               = EnumFormats.formats(this)
+  implicit def contraJsonWrites[B <: A]: Writes[B] = jsonFormat.contramap[B](b => b: A)
 }
