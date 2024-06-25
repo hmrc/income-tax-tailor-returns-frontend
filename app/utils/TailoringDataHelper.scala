@@ -17,7 +17,7 @@
 package utils
 
 import models.UserAnswers
-import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
+import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities, GiftsToOverseasCharities}
 import models.aboutyou.{CharitableDonations, UkResidenceStatus}
 import models.pensions.PaymentsIntoPensions
 import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
@@ -37,7 +37,7 @@ import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage, Constru
 object TailoringDataHelper {
 
   def getFullUserAnswers(mtdItId:String, taxYear:Int) : UserAnswers = UserAnswers(mtdItId, taxYear).set(UkResidenceStatusPage, UkResidenceStatus.Uk)
-    .flatMap(_.set(CharitableDonationsPage, Set[CharitableDonations](DonationsUsingGiftAid, GiftsOfSharesOrSecurities, GiftsOfLandOrProperty)))
+    .flatMap(_.set(CharitableDonationsPage, Set[CharitableDonations](DonationsUsingGiftAid, GiftsOfSharesOrSecurities, GiftsOfLandOrProperty, GiftsToOverseasCharities)))
     .flatMap(_.set(FosterCarerPage, true))
     .flatMap(_.set(AboutYourWorkRadioPage, true))
     .flatMap(_.set(AboutYourWorkPage, Set[AboutYourWork](Employed, SelfEmployed)))
