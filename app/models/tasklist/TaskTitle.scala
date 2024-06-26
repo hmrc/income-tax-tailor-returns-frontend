@@ -39,6 +39,8 @@ object TaskTitle extends Enum[TaskTitle] with PlayJsonEnum[TaskTitle] {
 
   case object GiftsOfShares extends TaskTitle("GiftsOfSharesTitle")
 
+  case object GiftsToOverseas extends TaskTitle("GiftsToOverseasCharitiesTitle")
+
   // Employment
   case object PayeEmployment extends TaskTitle("PayeEmploymentTitle")
 

@@ -32,6 +32,7 @@ class TaskTitleSpec extends AnyFreeSpec with Matchers {
         DonationsUsingGiftAid,
         GiftsOfLandOrProperty,
         GiftsOfShares,
+        GiftsToOverseas,
         PayeEmployment,
         CIS,
         ESA,
@@ -113,6 +114,16 @@ class TaskTitleSpec extends AnyFreeSpec with Matchers {
 
       underTest.toString() mustBe s"\"${GiftsOfShares.toString}\""
       underTest.validate[TaskTitle] mustBe JsSuccess(GiftsOfShares, JsPath())
+    }
+  }
+
+  "GiftsToOverseas" - {
+
+    "must parse to and from json" in {
+      val underTest = Json.toJson(GiftsToOverseas)
+
+      underTest.toString() mustBe s"\"${GiftsToOverseas.toString}\""
+      underTest.validate[TaskTitle] mustBe JsSuccess(GiftsToOverseas, JsPath())
     }
   }
 

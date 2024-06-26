@@ -18,7 +18,7 @@ package base
 
 import controllers.actions._
 import models.UserAnswers
-import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities}
+import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities, GiftsToOverseasCharities}
 import models.aboutyou.{CharitableDonations, UkResidenceStatus}
 import models.pensions.PaymentsIntoPensions
 import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
@@ -74,7 +74,7 @@ trait SpecBase
   def emptyUserAnswers : UserAnswers = UserAnswers(mtdItId, taxYear)
 
   val fullUserAnswers: UserAnswers = emptyUserAnswers.copy().set(UkResidenceStatusPage, UkResidenceStatus.Uk)
-    .flatMap(_.set(CharitableDonationsPage, Set[CharitableDonations](DonationsUsingGiftAid, GiftsOfSharesOrSecurities, GiftsOfLandOrProperty)))
+    .flatMap(_.set(CharitableDonationsPage, Set[CharitableDonations](DonationsUsingGiftAid, GiftsOfSharesOrSecurities, GiftsOfLandOrProperty, GiftsToOverseasCharities)))
     .flatMap(_.set(FosterCarerPage, true))
     .flatMap(_.set(AboutYourWorkRadioPage, true))
     .flatMap(_.set(AboutYourWorkPage, Set[AboutYourWork](Employed, SelfEmployed)))
