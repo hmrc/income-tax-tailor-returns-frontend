@@ -19,6 +19,7 @@ package controllers.actions
 import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
+import connectors.IncomeTaxSessionDataConnector
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
@@ -62,8 +63,9 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
-
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -91,8 +93,9 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
-
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -116,8 +119,9 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
-
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -145,8 +149,10 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
+          val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -177,8 +183,10 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+          val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
@@ -205,8 +213,9 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
-
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -233,8 +242,9 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
-
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
@@ -262,8 +272,10 @@ class AuthActionSpec extends SpecBase {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+          val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
@@ -291,8 +303,10 @@ class AuthActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
         val appConfig = application.injector.instanceOf[FrontendAppConfig]
+        val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
 
-        val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig, bodyParsers)(ec).apply(taxYear)
+        val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          sessionDataConnector, bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
@@ -308,8 +322,10 @@ class AuthActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
         val appConfig = application.injector.instanceOf[FrontendAppConfig]
+        val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
 
-        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(InvalidBearerToken()), appConfig, bodyParsers)(ec).apply(taxYear)
+        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(InvalidBearerToken()), appConfig,
+          sessionDataConnector, bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 
@@ -328,8 +344,10 @@ class AuthActionSpec extends SpecBase {
 
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
         val appConfig = application.injector.instanceOf[FrontendAppConfig]
+        val sessionDataConnector = application.injector.instanceOf[IncomeTaxSessionDataConnector]
 
-        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(InternalError()), appConfig, bodyParsers)(ec).apply(taxYear)
+        val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(InternalError()), appConfig,
+          sessionDataConnector,bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
 

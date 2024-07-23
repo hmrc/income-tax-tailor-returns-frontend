@@ -18,9 +18,11 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
+import connectors.IncomeTaxSessionDataConnector
 import models.Enrolment
 import models.SessionValues.CLIENT_MTDITID
 import models.requests.IdentifierRequest
+import models.session.SessionData
 import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
@@ -40,15 +42,17 @@ trait IdentifierActionProvider {
 
 class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
                                              config: FrontendAppConfig,
+                                             sessionDataConnector: IncomeTaxSessionDataConnector,
                                              parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
 
-  def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(authConnector, config, parser)
+  def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(authConnector, config, sessionDataConnector, parser)
 }
 
 class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                              (override val authConnector: AuthConnector,
                                               config: FrontendAppConfig,
+                                              sessionDataConnector: IncomeTaxSessionDataConnector,
                                               val parser: BodyParsers.Default)
                                              (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions with Logging {
@@ -78,8 +82,9 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
+    //TODO removing details from session to session service, it will have impact on headercarrier. revist??This might contain only seesionId?
     implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-
+    //TODO do we need to check mtditid against Nino?
     authorised().retrieve(affinityGroup and allEnrolments and confidenceLevel) {
       case Some(AffinityGroup.Individual) ~ enrolments ~ confidenceLevel =>
         authorized(request, block, enrolments, confidenceLevel)
@@ -101,7 +106,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
   }
 
   private def authorized[A](request: Request[A], block: IdentifierRequest[A] => Future[Result],
-                                enrolments: Enrolments, confidenceLevel: ConfidenceLevel) = {
+                            enrolments: Enrolments, confidenceLevel: ConfidenceLevel) = {
     if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
       getMtdItId(enrolments) match {
         case Some(mtdItId) =>
@@ -116,13 +121,30 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     }
   }
 
-  private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments) = {
-    request.session.get(CLIENT_MTDITID) match {
-      case Some(mtdItId) =>
-        authorisedAgentServices(enrolments) match {
+  def sessionId(request: Request[_])(implicit hc: HeaderCarrier): Option[String] = {
+    lazy val key = "sessionId"
+    if (hc.sessionId.isDefined) {
+      hc.sessionId.map(_.value)
+    } else if (request.headers.get(key).isDefined) {
+      request.headers.get(key)
+    } else {
+      None
+    }
+  }
+
+  private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments)(implicit hc: HeaderCarrier) = {
+
+    def getSessionData(sessionId: String) = sessionDataConnector.getSessionData(sessionId).map {
+      case Left(_) => None
+      case Right(value) => value
+    }
+
+    sessionId(request) match {
+      case Some(sessionId) => getSessionData(sessionId).flatMap {
+        case Some(sessionData) => authorisedAgentServices(enrolments) match {
           case Some(_) =>
-            if (authorisedForMtdItId(mtdItId, enrolments).isDefined) {
-              block(IdentifierRequest(request, mtdItId, isAgent = true))
+            if (authorisedForMtdItId(sessionData.mtditid, enrolments).isDefined) {
+              block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
             }
             else {
               logger.warn("User is not authorized for mtdItId")
@@ -132,26 +154,26 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
             logger.warn("User did not have ARN")
             Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
         }
-      case None =>
-        logger.warn("User did not have MTDID in session")
+      }
+      case None => logger.warn("User did not have MTDID in session")
         Future.successful(Redirect(config.signUpUrlAgent))
     }
   }
 }
 
 class EarlyPrivateLaunchIdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
-                                             config: FrontendAppConfig,
-                                             parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
+                                                               config: FrontendAppConfig,
+                                                               parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
 
   def apply(taxYear: Int): IdentifierAction = new EarlyPrivateLaunchIdentifierAction(taxYear)(authConnector, config, parser)
 }
 
 class EarlyPrivateLaunchIdentifierAction @Inject()(taxYear: Int)
-                                                     (override val authConnector: AuthConnector,
-                                                      config: FrontendAppConfig,
-                                                      val parser: BodyParsers.Default)
-                                                     (implicit val executionContext: ExecutionContext)
+                                                  (override val authConnector: AuthConnector,
+                                                   config: FrontendAppConfig,
+                                                   val parser: BodyParsers.Default)
+                                                  (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {

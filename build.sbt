@@ -92,3 +92,4 @@ lazy val it = project
   .settings(testSettings ++ itSettings)
 
 addCommandAlias("runAllChecks", "clean;compile;scalastyle;coverage;test;it/test;coverageReport")
+scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "40")
