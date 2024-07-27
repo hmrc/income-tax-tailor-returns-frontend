@@ -137,6 +137,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   val privateBeta: Boolean =
     configuration.get[Boolean]("features.privateBeta")
 
+  val sessionCookieServiceEnabled: Boolean =
+    configuration.get[Boolean]("features.sessionCookieService")
+
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
     "cy" -> Lang("cy")

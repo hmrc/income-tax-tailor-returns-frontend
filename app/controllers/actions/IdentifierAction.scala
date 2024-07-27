@@ -106,7 +106,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
   }
 
   private def authorized[A](request: Request[A], block: IdentifierRequest[A] => Future[Result],
-                            enrolments: Enrolments, confidenceLevel: ConfidenceLevel) = {
+                            enrolments: Enrolments, confidenceLevel: ConfidenceLevel): Future[Result] = {
     if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
       getMtdItId(enrolments) match {
         case Some(mtdItId) =>
@@ -115,47 +115,50 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
           logger.error("User did not have MTDITID Enrolment")
           Future.successful(Redirect(config.signUpUrlIndividual))
       }
-    }
-    else {
+    } else {
       Future.successful(Redirect(config.incomeTaxSubmissionIvRedirect))
     }
   }
 
-  def sessionId(request: Request[_])(implicit hc: HeaderCarrier): Option[String] = {
-    lazy val key = "sessionId"
-    if (hc.sessionId.isDefined) {
-      hc.sessionId.map(_.value)
-    } else if (request.headers.get(key).isDefined) {
-      request.headers.get(key)
-    } else {
-      None
+  private def sessionId(request: Request[_])(implicit hc: HeaderCarrier): Option[String] = {
+    lazy val key = "X-Session-ID"
+    hc.sessionId.map(_.value).orElse(request.headers.get(key))
+  }
+
+  private def getSessionData(sessionId: String,request: Request[_])(implicit hc:HeaderCarrier):  Future[Option[SessionData]] = {
+    if(config.sessionCookieServiceEnabled){
+      sessionDataConnector.getSessionData(sessionId).map(_.toOption.flatten)
+    }else{
+      Future.successful {
+        request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
+      }
     }
   }
 
-  private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments)(implicit hc: HeaderCarrier) = {
-
-    def getSessionData(sessionId: String) = sessionDataConnector.getSessionData(sessionId).map {
-      case Left(_) => None
-      case Right(value) => value
-    }
-
+  private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments)
+                          (implicit hc: HeaderCarrier): Future[Result] = {
     sessionId(request) match {
-      case Some(sessionId) => getSessionData(sessionId).flatMap {
-        case Some(sessionData) => authorisedAgentServices(enrolments) match {
-          case Some(_) =>
-            if (authorisedForMtdItId(sessionData.mtditid, enrolments).isDefined) {
-              block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
+      case Some(sessionId) =>
+        getSessionData(sessionId,request).flatMap {
+          case Some(sessionData) =>
+            authorisedAgentServices(enrolments) match {
+              case Some(_) =>
+                if (authorisedForMtdItId(sessionData.mtditid, enrolments).isDefined) {
+                  block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
+                } else {
+                  logger.warn("User is not authorized for mtdItId")
+                  Future.successful(Redirect(config.signUpUrlAgent))
+                }
+              case None =>
+                logger.warn("User did not have ARN")
+                Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
             }
-            else {
-              logger.warn("User is not authorized for mtdItId")
-              Future.successful(Redirect(config.signUpUrlAgent))
-            }
-          case _ =>
-            logger.warn("User did not have ARN")
-            Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
+          case None =>
+            logger.warn("Session data not found")
+            Future.successful(Redirect(config.signUpUrlAgent))
         }
-      }
-      case None => logger.warn("User did not have MTDID in session")
+      case None =>
+        logger.warn("User did not have MTDID in session")
         Future.successful(Redirect(config.signUpUrlAgent))
     }
   }

@@ -19,7 +19,6 @@ package connectors.httpParsers
 import models.APIErrorModel
 import models.session.SessionData
 import play.api.http.Status._
-import play.api.libs.json.Reads
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import utils.PagerDutyHelper.PagerDutyKeys._
 import utils.PagerDutyHelper.pagerDutyLog
@@ -33,11 +32,15 @@ object SessionDataHttpParser extends APIParser {
   implicit object SessionDataResponseReads extends HttpReads[SessionDataResponse] {
     override def read(method: String, url: String, response: HttpResponse): SessionDataResponse = {
       response.status match  {
-        case OK => response.json.validate[SessionData].fold[SessionDataResponse](
+        case OK =>    {
+          println(s"processing")
+          response.json.validate[SessionData].fold[SessionDataResponse](
           validationErrors => badSuccessJsonFromAPI,
           parsedModel => Right(Some(parsedModel))
-        )
+          )
+        }
         case NOT_FOUND =>
+          println(s"in not found")
           pagerDutyLog(FOURXX_RESPONSE_FROM_API, logMessage(response))
           handleAPIError(response)
         case SERVICE_UNAVAILABLE =>
