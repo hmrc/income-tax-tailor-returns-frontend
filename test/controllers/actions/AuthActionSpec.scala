@@ -203,7 +203,9 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
       "must redirect when session data is none" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = None).configure(
+          "features.sessionCookieService" -> true
+        ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
           Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
@@ -223,11 +225,12 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector: IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
-            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           when(sessionDataConnector.getSessionData(any())(any())).thenReturn(
             Future.successful(Right(None))
           )
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
+
 
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890", "sessionId" -> "test-session-id"))
