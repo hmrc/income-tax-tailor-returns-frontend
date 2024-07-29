@@ -67,6 +67,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     } yield id.value
   }
 
+
   private def authorisedForMtdItId(mtdItId: String, enrolments: Enrolments): Option[String] = {
     //  todo possible check for "mtd-it-auth" rule
     enrolments.enrolments.find(x => x.identifiers.exists(i => i.value.equals(mtdItId)))
@@ -84,6 +85,8 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
 
     //TODO removing details from session to session service, it will have impact on headercarrier. revist??This might contain only seesionId?
     implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+//    implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session.--(List("ts","ClientNino","TAX_YEAR","validTaxYears","ClientMTDID")))
+
     //TODO do we need to check mtditid against Nino?
     authorised().retrieve(affinityGroup and allEnrolments and confidenceLevel) {
       case Some(AffinityGroup.Individual) ~ enrolments ~ confidenceLevel =>

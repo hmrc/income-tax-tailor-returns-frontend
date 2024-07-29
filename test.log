@@ -1,0 +1,169 @@
+[info] welcome to sbt 1.9.9 (Homebrew Java 11.0.21)
+[info] loading global plugins from /Users/manishbasotia/.sbt/1.0/plugins
+[info] loading settings for project income-tax-tailor-returns-frontend-build from plugins.sbt,scaffold.sbt ...
+[info] loading project definition from /Users/manishbasotia/Documents/hmrcdev/submissions/income-tax-tailor-returns-frontend/project
+[info] SbtAutoBuildPlugin - adding projectSettings
+[info] loading settings for project root from build.sbt ...
+[info] SbtAutoBuildPlugin - adding projectSettings
+[info] SbtAutoBuildPlugin - adding global settings
+[info] SbtAutoBuildPlugin - repository is marked public. Licence headers will be added to all source files
+[info] SbtAutoBuildPlugin - repository is marked public. Licence headers will be added to all source files
+[info]   __              __
+[info]   \ \     ____   / /____ _ __  __
+[info]    \ \   / __ \ / // __ `// / / /
+[info]    / /  / /_/ // // /_/ // /_/ /
+[info]   /_/  / .___//_/ \__,_/ \__, /
+[info]       /_/               /____/
+[info] 
+[info] Version 3.0.3 running Java 11.0.21
+[info] 
+[info] Play is run entirely by the community. Please consider contributing and/or donating:
+[info] https://www.playframework.com/sponsors
+[info] 
+[info] Building 1 concat group(s)
+[info] compiling 1 Scala source to /Users/manishbasotia/Documents/hmrcdev/submissions/income-tax-tailor-returns-frontend/it/target/scala-2.13/test-classes ...
+[warn] /Users/manishbasotia/Documents/hmrcdev/submissions/income-tax-tailor-returns-frontend/it/test/connectors/IncomeTaxSessionDataConnectorSpec.scala:34:51: Unused import
+[warn] import play.api.mvc.Results.{InternalServerError, NotFound, ServiceUnavailable}
+[warn]                                                   ^
+[warn] /Users/manishbasotia/Documents/hmrcdev/submissions/income-tax-tailor-returns-frontend/it/test/connectors/IncomeTaxSessionDataConnectorSpec.scala:53:15: private val taxYear in class IncomeTaxSessionDataConnectorSpec is never used
+[warn]   private val taxYear: Int = 2024
+[warn]               ^
+[warn] two warnings found
+[info] done compiling
+[warn] javaOptions will be ignored, fork is set to false
+11:24:43,037 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.5.6
+11:24:43,038 |-INFO in ch.qos.logback.classic.util.ContextInitializer@8f65bce - No custom configurators were discovered as a service.
+11:24:43,038 |-INFO in ch.qos.logback.classic.util.ContextInitializer@8f65bce - Trying to configure with ch.qos.logback.classic.joran.SerializedModelConfigurator
+11:24:43,039 |-INFO in ch.qos.logback.classic.util.ContextInitializer@8f65bce - Constructed configurator of type class ch.qos.logback.classic.joran.SerializedModelConfigurator
+11:24:43,039 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.scmo]
+11:24:43,039 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.scmo]
+11:24:43,041 |-INFO in ch.qos.logback.classic.util.ContextInitializer@8f65bce - ch.qos.logback.classic.joran.SerializedModelConfigurator.configure() call lasted 0 milliseconds. ExecutionStatus=INVOKE_NEXT_IF_ANY
+11:24:43,041 |-INFO in ch.qos.logback.classic.util.ContextInitializer@8f65bce - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+11:24:43,041 |-INFO in ch.qos.logback.classic.util.ContextInitializer@8f65bce - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+11:24:43,042 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+11:24:43,042 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/manishbasotia/Documents/hmrcdev/submissions/income-tax-tailor-returns-frontend/target/scala-2.13/classes/logback.xml]
+11:24:43,042 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@5010db13 - Resource [logback.xml] occurs multiple times on the classpath.
+11:24:43,042 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@5010db13 - Resource [logback.xml] occurs at [file:/Users/manishbasotia/Documents/hmrcdev/submissions/income-tax-tailor-returns-frontend/target/scala-2.13/classes/logback.xml]
+11:24:43,042 |-WARN in ch.qos.logback.classic.util.DefaultJoranConfigurator@5010db13 - Resource [logback.xml] occurs at [file:/Users/manishbasotia/Documents/hmrcdev/submissions/income-tax-tailor-returns-frontend/target/scala-2.13/test-classes/logback.xml]
+11:24:43,073 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [FILE]
+11:24:43,073 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+11:24:43,086 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [logs/new_service.log]
+11:24:43,086 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+11:24:43,086 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+11:24:43,087 |-WARN in ch.qos.logback.core.model.processor.AppenderModelHandler - Appender named [CONNECTOR_LOG_FILE] not referenced. Skipping further processing.
+11:24:43,089 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.google.inject] to INFO
+11:24:43,089 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [uk.gov] to INFO
+11:24:43,089 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [application] to DEBUG
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.asynchttpclient.netty] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [io.netty.buffer] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [play.core.netty] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [uk.gov] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [reactivemongo.core] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [pekko] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [play] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.jose4j] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [class org.jose4j] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [javax.management] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.eclipse.jetty] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.http] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.jboss] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [io.netty] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [sun.net.www.protocol.http] to INFO
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [connector] to TRACE
+11:24:43,090 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[connector]
+11:24:43,090 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to DEBUG
+11:24:43,090 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [FILE] to Logger[ROOT]
+11:24:43,090 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+11:24:43,090 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@15727767 - End of configuration.
+11:24:43,091 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@13c4c451 - Registering current configuration as safe fallback point
+11:24:43,091 |-INFO in ch.qos.logback.classic.util.ContextInitializer@8f65bce - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 50 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2024-07-29 11:24:43,478 level=[INFO] logger=[org.eclipse.jetty.server.Server] thread=[pool-8-thread-7] rid=[] user=[] message=[jetty-11.0.12; built: 2022-09-14T02:38:00.723Z; git: d5b8c29485f5f56a14be5f20c2ccce81b93c5555; jvm 11.0.21+0] 
+2024-07-29 11:24:43,513 level=[INFO] logger=[org.eclipse.jetty.server.handler.ContextHandler] thread=[pool-8-thread-7] rid=[] user=[] message=[Started o.e.j.s.ServletContextHandler@505f27c5{/__admin,null,AVAILABLE}] 
+2024-07-29 11:24:43,516 level=[INFO] logger=[org.eclipse.jetty.server.handler.ContextHandler.ROOT] thread=[pool-8-thread-7] rid=[] user=[] message=[RequestHandlerClass from context returned com.github.tomakehurst.wiremock.http.StubRequestHandler. Normalized mapped under returned 'null'] 
+2024-07-29 11:24:43,517 level=[INFO] logger=[org.eclipse.jetty.server.handler.ContextHandler] thread=[pool-8-thread-7] rid=[] user=[] message=[Started o.e.j.s.ServletContextHandler@6c2727b7{/,null,AVAILABLE}] 
+2024-07-29 11:24:43,526 level=[INFO] logger=[org.eclipse.jetty.server.AbstractConnector] thread=[pool-8-thread-7] rid=[] user=[] message=[Started NetworkTrafficServerConnector@2714c49a{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:11111}] 
+2024-07-29 11:24:43,528 level=[INFO] logger=[org.eclipse.jetty.server.Server] thread=[pool-8-thread-7] rid=[] user=[] message=[Started Server@39b9e1b1{STARTING}[11.0.12,sto=1000] @8364ms] 
+2024-07-29 11:24:43,598 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-8-thread-7-ScalaTest-running-IncomeTaxSessionDataConnectorSpec] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2024-07-29 11:24:44,411 level=[INFO] logger=[org.apache.pekko.event.slf4j.Slf4jLogger] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Slf4jLogger started] 
+2024-07-29 11:24:44,413 level=[DEBUG] logger=[org.apache.pekko.event.EventStream] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[logger log1-Slf4jLogger started] 
+2024-07-29 11:24:44,413 level=[DEBUG] logger=[org.apache.pekko.event.EventStream] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Default Loggers started] 
+2024-07-29 11:24:44,462 level=[DEBUG] logger=[org.apache.pekko.serialization.Serialization(pekko://application)] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Replacing JavaSerializer with DisabledJavaSerializer, due to `pekko.actor.allow-java-serialization = off`.] 
+2024-07-29 11:24:44,507 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoJacksonModule]] 
+2024-07-29 11:24:44,507 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoTypedJacksonModule]] 
+2024-07-29 11:24:44,507 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoStreamJacksonModule]] 
+2024-07-29 11:24:44,508 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.module.paramnames.ParameterNamesModule]] 
+2024-07-29 11:24:44,511 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.datatype.jdk8.Jdk8Module]] 
+2024-07-29 11:24:44,511 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.datatype.jsr310.JavaTimeModule]] 
+2024-07-29 11:24:44,549 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.module.scala.DefaultScalaModule]] 
+2024-07-29 11:24:44,554 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoJacksonModule]] 
+2024-07-29 11:24:44,554 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoTypedJacksonModule]] 
+2024-07-29 11:24:44,554 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoStreamJacksonModule]] 
+2024-07-29 11:24:44,554 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.module.paramnames.ParameterNamesModule]] 
+2024-07-29 11:24:44,554 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-4] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.datatype.jdk8.Jdk8Module]] 
+2024-07-29 11:24:44,555 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.datatype.jsr310.JavaTimeModule]] 
+2024-07-29 11:24:44,555 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.module.scala.DefaultScalaModule]] 
+2024-07-29 11:24:44,560 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoJacksonModule]] 
+2024-07-29 11:24:44,560 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoTypedJacksonModule]] 
+2024-07-29 11:24:44,560 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [org.apache.pekko.serialization.jackson.PekkoStreamJacksonModule]] 
+2024-07-29 11:24:44,560 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.module.paramnames.ParameterNamesModule]] 
+2024-07-29 11:24:44,560 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.datatype.jdk8.Jdk8Module]] 
+2024-07-29 11:24:44,560 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.datatype.jsr310.JavaTimeModule]] 
+2024-07-29 11:24:44,561 level=[DEBUG] logger=[org.apache.pekko.serialization.jackson.JacksonObjectMapperProvider$] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Registered Jackson module [com.fasterxml.jackson.module.scala.DefaultScalaModule]] 
+2024-07-29 11:24:44,567 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-8-thread-7-ScalaTest-running-IncomeTaxSessionDataConnectorSpec] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2024-07-29 11:24:44,789 level=[INFO] logger=[uk.gov.hmrc.play.bootstrap.graphite.DisabledGraphiteReporting] thread=[pool-8-thread-7-ScalaTest-running-IncomeTaxSessionDataConnectorSpec] rid=[] user=[] message=[Graphite metrics disabled] 
+2024-07-29 11:24:44,804 level=[INFO] logger=[uk.gov.hmrc.play.bootstrap.filters.CacheControlFilter] thread=[pool-8-thread-7-ScalaTest-running-IncomeTaxSessionDataConnectorSpec] rid=[] user=[] message=[Will allow caching of content types starting with: image/, text/css, application/javascript] 
+2024-07-29 11:24:44,811 level=[DEBUG] logger=[controllers.AssetsConfiguration] thread=[pool-8-thread-7-ScalaTest-running-IncomeTaxSessionDataConnectorSpec] rid=[] user=[] message=[Using the following cache configuration for assets:
+	 enableCaching = true
+	 enableCacheControl = false
+	 defaultCacheControl = public, max-age=3600
+	 aggressiveCacheControl = public, max-age=31536000, immutable
+	 configuredCacheControl:
+		 /public/lib/hmrc-frontend/ = Some(public, max-age=3600)
+] 
+2024-07-29 11:24:44,929 level=[WARN] logger=[uk.gov.hmrc.play.audit.DefaultAuditConnector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[auditing disabled for AuditConnector class uk.gov.hmrc.play.audit.DefaultAuditConnector] 
+2024-07-29 11:24:45,058 level=[DEBUG] logger=[connector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[:GET:26408617228249:26408.617s:-26408423749415:-26408423749415ns:4d5:http://localhost:11111/income-tax-session-data/test-session-id:ok] 
+2024-07-29 11:24:45,058 level=[DEBUG] logger=[connector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[:GET:26408617228249:26408.617s:-26408423749415:-26408423749415ns:4d5:http://localhost:11111/income-tax-session-data/test-session-id:ok] 
+processing
+processing: in not found {"sessionID":"","mtditid":"1234567890","nino":"","saUtr":"","userType":""}
+2024-07-29 11:24:45,090 level=[DEBUG] logger=[connector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[:GET:26408617229250:26408.617s:-26408387008750:-26408387008750ns:4d5:http://localhost:11111/income-tax-session-data/test-session-id:ok] 
+2024-07-29 11:24:45,090 level=[DEBUG] logger=[connector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[:GET:26408617229250:26408.617s:-26408387008750:-26408387008750ns:4d5:http://localhost:11111/income-tax-session-data/test-session-id:ok] 
+2024-07-29 11:24:45,096 level=[ERROR] logger=[utils.PagerDutyHelper] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[INTERNAL_SERVER_ERROR_FROM_API [SessionDataHttpParser][read] Received 500 from income-tax-session-data API. Body:Result(500, TreeMap())] 
+in handleAPIError
+2024-07-29 11:24:45,098 level=[WARN] logger=[connectors.ConnectorFailureLogger] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Received an error from UserAnswersConnector on get with requestId: Undefined] 
+2024-07-29 11:24:45,106 level=[DEBUG] logger=[connector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[:GET:26408617229291:26408.617s:-26408370590374:-26408370590374ns:4d5:http://localhost:11111/income-tax-session-data/test-session-id:ok] 
+2024-07-29 11:24:45,106 level=[DEBUG] logger=[connector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[:GET:26408617229291:26408.617s:-26408370590374:-26408370590374ns:4d5:http://localhost:11111/income-tax-session-data/test-session-id:ok] 
+test: in not found "No session data found"
+2024-07-29 11:24:45,106 level=[ERROR] logger=[utils.PagerDutyHelper] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[FOURXX_RESPONSE_FROM_API [SessionDataHttpParser][read] Received 404 from income-tax-session-data API. Body:"No session data found"] 
+in handleAPIError
+handleAPIError: json response "No session data found"
+2024-07-29 11:24:45,111 level=[ERROR] logger=[utils.PagerDutyHelper] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[UNEXPECTED_RESPONSE_FROM_API [SessionDataHttpParser][read] Unexpected Json from income-tax-session-data API.] 
+2024-07-29 11:24:45,115 level=[DEBUG] logger=[connector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[:GET:26408617229125:26408.617s:-26408361742125:-26408361742125ns:4d5:http://localhost:11111/income-tax-session-data/test-session-id:ok] 
+2024-07-29 11:24:45,115 level=[DEBUG] logger=[connector] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[:GET:26408617229125:26408.617s:-26408361742125:-26408361742125ns:4d5:http://localhost:11111/income-tax-session-data/test-session-id:ok] 
+2024-07-29 11:24:45,115 level=[ERROR] logger=[utils.PagerDutyHelper] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[SERVICE_UNAVAILABLE_FROM_API [SessionDataHttpParser][read] Received 503 from income-tax-session-data API. Body:Result(503, TreeMap())] 
+in handleAPIError
+2024-07-29 11:24:45,115 level=[WARN] logger=[connectors.ConnectorFailureLogger] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[Received an error from UserAnswersConnector on get with requestId: Undefined] 
+2024-07-29 11:24:45,120 level=[INFO] logger=[org.eclipse.jetty.server.Server] thread=[pool-8-thread-7] rid=[] user=[] message=[Stopped Server@39b9e1b1{STOPPING}[11.0.12,sto=1000]] 
+2024-07-29 11:24:45,120 level=[INFO] logger=[org.eclipse.jetty.server.Server] thread=[pool-8-thread-7] rid=[] user=[] message=[Shutdown Server@39b9e1b1{STOPPING}[11.0.12,sto=1000]] 
+2024-07-29 11:24:45,126 level=[INFO] logger=[org.eclipse.jetty.server.AbstractConnector] thread=[pool-8-thread-7] rid=[] user=[] message=[Stopped NetworkTrafficServerConnector@2714c49a{HTTP/1.1, (http/1.1, h2c)}{0.0.0.0:11111}] 
+2024-07-29 11:24:45,126 level=[INFO] logger=[org.eclipse.jetty.server.handler.ContextHandler] thread=[pool-8-thread-7] rid=[] user=[] message=[Stopped o.e.j.s.ServletContextHandler@6c2727b7{/,null,STOPPED}] 
+2024-07-29 11:24:45,127 level=[INFO] logger=[org.eclipse.jetty.server.handler.ContextHandler] thread=[pool-8-thread-7] rid=[] user=[] message=[Stopped o.e.j.s.ServletContextHandler@505f27c5{/__admin,null,STOPPED}] 
+[info] IncomeTaxSessionDataConnectorSpec:
+[info] IncomeTaxSessionDataConnector
+[info] - return session data when getSessionData is called
+[info] - log failure when getSessionData fails with Internal Error *** FAILED ***
+[info]   The future returned an exception of type: com.fasterxml.jackson.core.JsonParseException, with message: Unrecognized token 'Result': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+[info]    at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 7]. (IncomeTaxSessionDataConnectorSpec.scala:81)
+[info] - log failure when getSessionData returns No Data
+[info] - log failure when getSessionData returns SERVICE_UNAVAILABLE *** FAILED ***
+[info]   The future returned an exception of type: com.fasterxml.jackson.core.JsonParseException, with message: Unrecognized token 'Result': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+[info]    at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 7]. (IncomeTaxSessionDataConnectorSpec.scala:95)
+[info] Run completed in 2 seconds, 306 milliseconds.
+[info] Total number of tests run: 4
+[info] Suites: completed 1, aborted 0
+[info] Tests: succeeded 2, failed 2, canceled 0, ignored 0, pending 0
+[info] *** 2 TESTS FAILED ***
+[error] Failed tests:
+[error] 	connectors.IncomeTaxSessionDataConnectorSpec
+[error] (it / Test / testOnly) sbt.TestsFailedException: Tests unsuccessful
+[error] Total time: 7 s, completed 29 Jul 2024, 11:24:45

@@ -33,14 +33,12 @@ object SessionDataHttpParser extends APIParser {
     override def read(method: String, url: String, response: HttpResponse): SessionDataResponse = {
       response.status match  {
         case OK =>    {
-          println(s"processing")
           response.json.validate[SessionData].fold[SessionDataResponse](
           validationErrors => badSuccessJsonFromAPI,
           parsedModel => Right(Some(parsedModel))
           )
         }
         case NOT_FOUND =>
-          println(s"in not found")
           pagerDutyLog(FOURXX_RESPONSE_FROM_API, logMessage(response))
           handleAPIError(response)
         case SERVICE_UNAVAILABLE =>

@@ -37,7 +37,6 @@ trait APIParser {
   }
 
   def handleAPIError[Response](response: HttpResponse, statusOverride: Option[Int] = None): Either[APIErrorModel, Response] = {
-
     val status = statusOverride.getOrElse(response.status)
 
     try {

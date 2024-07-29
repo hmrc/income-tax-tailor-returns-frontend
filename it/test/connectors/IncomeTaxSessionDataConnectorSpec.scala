@@ -18,7 +18,7 @@ package connectors
 
 import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
 import generators.ModelGenerators
-import models.{APIErrorBodyModel, APIErrorModel}
+import models.{APIErrorBodyModel, APIErrorModel, APIErrorsBodyModel}
 import models.session.SessionData
 import org.scalatest.{EitherValues, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
@@ -31,7 +31,6 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import test.connectors.WireMockHelper
 import play.api.http.Status._
 import play.api.libs.json.Json
-import play.api.mvc.Results.{InternalServerError, NotFound}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
@@ -74,19 +73,58 @@ class IncomeTaxSessionDataConnectorSpec
       result shouldBe Right(Some((sessionDataResponse)))
     }
 
-
-    "log failure when getSessionData fails with Internal Error" in {
-      stubGet(testUrl, INTERNAL_SERVER_ERROR,
-        InternalServerError(s"Failed to retrieve session with id: $sessionId").toString())
+    "log failure when getSessionData returns invalid response" in {
+      stubGet(testUrl, OK, Json.toJson(None).toString())
       val result: SessionDataResponse = connector.getSessionData(sessionId)(hc).futureValue
-      result shouldBe Left(APIErrorModel(500, APIErrorBodyModel("PARSING_ERROR", "Error parsing response from API")))
+      result shouldBe Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("PARSING_ERROR", "Error parsing response from API")))
     }
 
-//    "log failure when getSessionData returns No Data" in {
-//      stubGet(testUrl, NOT_FOUND,
-//        NotFound("No session data found").toString())
-//      val result: SessionDataResponse = connector.getSessionData(sessionId)(hc).futureValue
-//      result shouldBe Left(APIErrorModel(404, APIErrorBodyModel("PARSING_ERROR", "NotFound")))
-//    }
+    "log failure when getSessionData fails with Internal Error" in {
+      val serviceUnavailableError = APIErrorBodyModel("INTERNAL_SERVER_ERROR", s"Failed to retrieve session with id: $sessionId")
+      stubGet(testUrl, INTERNAL_SERVER_ERROR,
+        Json.toJson(serviceUnavailableError).toString())
+      val result: SessionDataResponse = connector.getSessionData(sessionId)(hc).futureValue
+      result shouldBe Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("INTERNAL_SERVER_ERROR", s"Failed to retrieve session with id: $sessionId")))
+    }
+
+    "log failure when getSessionData returns No Data" in {
+      val noDataError = APIErrorBodyModel("NOT_FOUND", "No session data found")
+      stubGet(testUrl, NOT_FOUND,
+        Json.toJson(noDataError).toString())
+      val result: SessionDataResponse = connector.getSessionData(sessionId)(hc).futureValue
+      result shouldBe Left(APIErrorModel(NOT_FOUND, APIErrorBodyModel("NOT_FOUND", "No session data found")))
+    }
+
+    "log failure when getSessionData returns multiple error" in {
+      val noDataError = APIErrorBodyModel("NOT_FOUND", "No session data found")
+      val multipleError = APIErrorsBodyModel(Seq(noDataError))
+      stubGet(testUrl, NOT_FOUND,
+        Json.toJson(multipleError).toString())
+      val result: SessionDataResponse = connector.getSessionData(sessionId)(hc).futureValue
+      result shouldBe Left(APIErrorModel(NOT_FOUND,APIErrorsBodyModel(List(APIErrorBodyModel("NOT_FOUND", "No session data found")))))
+    }
+
+    "log failure when getSessionData returns SERVICE_UNAVAILABLE" in {
+      val serviceUnavailableError = APIErrorBodyModel("SERVICE_UNAVAILABLE", "Internal Server error")
+      stubGet(testUrl, SERVICE_UNAVAILABLE,
+        Json.toJson(serviceUnavailableError).toString())
+      val result: SessionDataResponse = connector.getSessionData(sessionId)(hc).futureValue
+      result shouldBe Left(APIErrorModel(SERVICE_UNAVAILABLE, APIErrorBodyModel("SERVICE_UNAVAILABLE", "Internal Server error")))
+    }
+
+    "log failure when getSessionData fails with unknown error" in {
+      val someRandomError = APIErrorBodyModel("TOO_MANY_REQUESTS", s"some random error")
+      stubGet(testUrl, TOO_MANY_REQUESTS,
+        Json.toJson(someRandomError).toString())
+      val result: SessionDataResponse = connector.getSessionData(sessionId)(hc).futureValue
+      result shouldBe Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("TOO_MANY_REQUESTS", s"some random error")))
+    }
+
+    "log failure when getSessionData fails when there is unexpected response format" in {
+      stubGet(testUrl, TOO_MANY_REQUESTS,
+        Json.toJson("unexpected response").toString())
+      val result: SessionDataResponse = connector.getSessionData(sessionId)(hc).futureValue
+      result shouldBe Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("PARSING_ERROR", "Error parsing response from API")))
+    }
   }
 }
