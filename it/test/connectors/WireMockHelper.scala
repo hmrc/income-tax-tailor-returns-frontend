@@ -33,8 +33,6 @@ trait WireMockHelper extends BeforeAndAfterAll with BeforeAndAfterEach {
   val wireMockHost: String = "localhost"
   val server = new WireMockServer(WireMockConfiguration.wireMockConfig().port(wireMockPort))
 
-//  protected val server: WireMockServer = new WireMockServer(wireMockConfig().dynamicPort())
-
   override def beforeAll(): Unit = {
     server.start()
     super.beforeAll()
@@ -69,68 +67,4 @@ trait WireMockHelper extends BeforeAndAfterAll with BeforeAndAfterEach {
           aResponse().withStatus(returnedStatus).withBody(returnedBody)
         ))
 
-  /*def stubGetWithHeadersCheck(url: String, status: Int, body: String, sessionHeader: (String, String), mtdidHeader: (String, String)): StubMapping =
-    stubFor(
-      get(urlMatching(url))
-        .withHeader(sessionHeader._1, equalTo(sessionHeader._2))
-        .withHeader(mtdidHeader._1, equalTo(mtdidHeader._2))
-        .willReturn(
-          aResponse().withStatus(status).withBody(body)
-        ))
-
-  def stubPutWithHeadersCheck(url: String, status: Int, body: String, sessionHeader: (String, String), mtdidHeader: (String, String)): StubMapping =
-    stubFor(
-      put(urlMatching(url))
-        .withHeader(sessionHeader._1, equalTo(sessionHeader._2))
-        .withHeader(mtdidHeader._1, equalTo(mtdidHeader._2))
-        .willReturn(
-          aResponse().withStatus(status).withBody(body)
-        ))
-
-  def stubPutWithBodyAndHeaders[T: Writes](url: String,
-                                           requestBody: T,
-                                           expectedStatus: Int,
-                                           responseBody: JsValue,
-                                           sessionHeader: (String, String),
-                                           mtdidHeader: (String, String)): StubMapping = {
-
-    val stringReqBody = implicitly[Writes[T]]
-      .writes(requestBody)
-      .toString()
-
-    stubFor(
-      put(urlMatching(url))
-        .withHeader(sessionHeader._1, equalTo(sessionHeader._2))
-        .withHeader(mtdidHeader._1, equalTo(mtdidHeader._2))
-        .withRequestBody(equalTo(stringReqBody))
-        .willReturn(
-          aResponse()
-            .withStatus(expectedStatus)
-            .withBody(responseBody.toString())
-            .withHeader("Content-Type", "application/json; charset=utf-8")))
-  }
-
-  def stubPost(url: String, status: Int, responseBody: String, requestHeaders: Seq[HttpHeader] = Seq.empty): StubMapping = {
-    val mappingWithHeaders: MappingBuilder = requestHeaders.foldLeft(post(urlMatching(url))) { (result, nxt) =>
-      result.withHeader(nxt.key(), equalTo(nxt.firstValue()))
-    }
-
-    stubFor(
-      mappingWithHeaders
-        .willReturn(
-          aResponse().withStatus(status).withBody(responseBody)
-        ))
-  }
-
-  def stubPut(url: String, status: Int, responseBody: String, requestHeaders: Seq[HttpHeader] = Seq.empty): StubMapping = {
-    val mappingWithHeaders: MappingBuilder = requestHeaders.foldLeft(put(urlMatching(url))) { (result, nxt) =>
-      result.withHeader(nxt.key(), equalTo(nxt.firstValue()))
-    }
-
-    stubFor(
-      mappingWithHeaders
-        .willReturn(
-          aResponse().withStatus(status).withBody(responseBody)
-        ))
-  }*/
 }

@@ -354,7 +354,6 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
-//          val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
           val sessionDataConnector:IncomeTaxSessionDataConnector = mock[connectors.IncomeTaxSessionDataConnector]
 
           val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
