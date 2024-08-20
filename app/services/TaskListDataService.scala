@@ -30,7 +30,7 @@ import models.propertypensionsinvestments.{Pensions, UkDividendsSharesLoans, UkI
 import models.tasklist.SectionTitle._
 import models.tasklist._
 import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
-import models.workandbenefits.JobseekersAllowance.Esa
+import models.workandbenefits.JobseekersAllowance.{Esa, Jsa}
 import models.{Done, UserAnswers}
 import pages.aboutyou.{CharitableDonationsPage, FosterCarerPage, UkResidenceStatusPage}
 import pages.pensions.PaymentsIntoPensionsPage
@@ -100,7 +100,14 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   private def charitableDonationsSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val charitableDonationsUrl: String = appConfig.charityGatewayUrl(ua.taxYear)
+    def charitableDonationsUrl: CharitableDonations => String = {
+      case DonationsUsingGiftAid => s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/amount-donated-using-gift-aid"
+      case GiftsOfLandOrProperty => s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/value-of-land-or-property"
+      case GiftsOfSharesOrSecurities => s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/value-of-shares-or-securities"
+      case GiftsToOverseasCharities =>
+        s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/donation-of-shares-securities-land-or-property-to-overseas-charities"
+      case _ => ""
+    }
 
     def charitableDonations: Option[Seq[TaskListSectionItem]] = {
 
@@ -115,7 +122,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(CharitableDonationsPage).map(_.toList) match {
         case Some(value) if !value.contains(CharitableDonations.NoDonations) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(charitableDonationsUrl))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(charitableDonationsUrl(k)))))
         case _ => None
       }
     }
@@ -182,7 +189,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
     def jsa: Option[Seq[TaskListSectionItem]] = {
 
       ua.get(JobseekersAllowancePage).map(_.toSeq) match {
-        case Some(value) if value.contains(Esa) =>
+        case Some(value) if value.contains(Jsa) =>
           Some(Seq(TaskListSectionItem(TaskTitle.JSA, TaskStatus.NotStarted, Some(jsaUrl))))
         case _ => None
       }
