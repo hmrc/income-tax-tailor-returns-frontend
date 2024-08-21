@@ -77,9 +77,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
       s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-securities"
 
-  def charityGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
-      s"/update-and-submit-income-tax-return/personal-income/$taxYear/charity/charity-donations-to-charity"
+  def personalFrontendBaseUrl: String =
+    s"${configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url")}/update-and-submit-income-tax-return/personal-income"
 
   def cisGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-cis-frontend.url") +
