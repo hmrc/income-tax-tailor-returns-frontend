@@ -22,10 +22,11 @@ import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
 import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
-@Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration) {
 
-  val host: String    = configuration.get[String]("host")
+@Singleton
+class FrontendAppConfig @Inject()(configuration: Configuration) {
+
+  val host: String = configuration.get[String]("host")
   val appName: String = configuration.get[String]("appName")
 
   private val allowedRedirectUrls: Seq[String] = configuration.get[Seq[String]]("urls.allowedRedirects")
@@ -35,6 +36,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     .url
 
   private val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
+
   def feedbackUrl(implicit request: RequestHeader): String =
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
 
@@ -45,9 +47,10 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   private val loginContinueUrl: String = RedirectUrl(configuration.get[String]("urls.loginContinue"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
+
   def loginUrl(taxYear: Int): String = s"$loginUrl?continue=$loginContinueUrl/$taxYear/start&origin=$appName"
 
-  val signOutUrl: String       =  RedirectUrl(configuration.get[String]("urls.signOut"))
+  val signOutUrl: String = RedirectUrl(configuration.get[String]("urls.signOut"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
@@ -62,12 +65,10 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   //Submission Frontend
   val submissionFrontendTaskListRedirect: Int => String = taxYear => RedirectUrl(
     configuration.get[String]("microservice.services.income-tax-submission-frontend.url") + s"/update-and-submit-income-tax-return/$taxYear/tasklist")
-      .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
-      .url
+    .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
+    .url
 
-  def dividendsGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
-      s"/update-and-submit-income-tax-return/personal-income/$taxYear/dividends/dividends-from-stocks-and-shares"
+  def dividendsBaseUrl: String = configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url")
 
   def ukInterestGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
@@ -120,11 +121,11 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     configuration.get[String]("microservice.services.income-tax-additional-information-frontend.url") +
       s"/update-and-submit-income-tax-return/additional-information/$taxYear/gains/gains-gateway"
 
-  def tailoringUkResidenceUrl(taxYear: Int):String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/uk-residence-status"
+  def tailoringUkResidenceUrl(taxYear: Int): String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/uk-residence-status"
 
-  def tailoringFosterCarerUrl(taxYear: Int):String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/foster-carer "
+  def tailoringFosterCarerUrl(taxYear: Int): String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/foster-carer "
 
-  val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/$appName"
+  val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/$appName"
 
   val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("features.welsh-translation")
@@ -137,7 +138,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
     "cy" -> Lang("cy")
   )
 
-  val timeout: Int   = configuration.get[Int]("timeout-dialog.timeout")
+  val timeout: Int = configuration.get[Int]("timeout-dialog.timeout")
   val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
 
   val checkResidenceStatusUrl: String = configuration.get[String]("external-urls.checkResidenceStatus")

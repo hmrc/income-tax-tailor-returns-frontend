@@ -115,8 +115,8 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       val items = Seq(DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities, GiftsToOverseasCharities)
 
       val taskTitles = Map[CharitableDonations, TaskTitle](
-        DonationsUsingGiftAid ->  TaskTitle.DonationsUsingGiftAid,
-        GiftsOfLandOrProperty ->  TaskTitle.GiftsOfLandOrProperty,
+        DonationsUsingGiftAid -> TaskTitle.DonationsUsingGiftAid,
+        GiftsOfLandOrProperty -> TaskTitle.GiftsOfLandOrProperty,
         GiftsOfSharesOrSecurities -> TaskTitle.GiftsOfShares,
         GiftsToOverseasCharities -> TaskTitle.GiftsToOverseas
       )
@@ -264,6 +264,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
         case _ => None
       }
     }
+
     TaskListSection(InsuranceGainsTitle, ukInsuranceGains)
   }
 
@@ -335,14 +336,24 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   private def dividendsSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val dividendsGatewayUrl = appConfig.dividendsGatewayUrl(ua.taxYear)
+    val cashDividendsUrl =
+      s"${appConfig.dividendsBaseUrl}/update-and-submit-income-tax-return/personal-income/${ua.taxYear}/dividends/how-much-dividends-from-uk-companies"
+    val stockDividendsUrl =
+      s"${appConfig.dividendsBaseUrl}/update-and-submit-income-tax-return/personal-income/${ua.taxYear}/dividends/stock-dividend-amount"
+    val unitTrustsUrl =
+      s"${appConfig.dividendsBaseUrl}/update-and-submit-income-tax-return/personal-income" +
+        s"/${ua.taxYear}/dividends/how-much-dividends-from-uk-trusts-and-open-ended-investment-companies"
+    val redeemableSharesUrl =
+      s"${appConfig.dividendsBaseUrl}/update-and-submit-income-tax-return/personal-income/${ua.taxYear}/dividends/redeemable-shares-amount "
+    val closeCompanyUrl =
+      s"${appConfig.dividendsBaseUrl}/update-and-submit-income-tax-return/personal-income/${ua.taxYear}/dividends/close-company-loan-amount"
 
     def dividendsUrl: UkDividendsSharesLoans => String = {
-      case UkDividendsSharesLoans.CashDividendsFromUkStocksAndShares => dividendsGatewayUrl
-      case UkDividendsSharesLoans.StockDividendsFromUkCompanies => dividendsGatewayUrl
-      case UkDividendsSharesLoans.DividendsUnitTrustsInvestmentCompanies => dividendsGatewayUrl
-      case UkDividendsSharesLoans.FreeOrRedeemableShares => dividendsGatewayUrl
-      case UkDividendsSharesLoans.CloseCompanyLoansWrittenOffReleased => dividendsGatewayUrl
+      case UkDividendsSharesLoans.CashDividendsFromUkStocksAndShares => cashDividendsUrl
+      case UkDividendsSharesLoans.StockDividendsFromUkCompanies => stockDividendsUrl
+      case UkDividendsSharesLoans.DividendsUnitTrustsInvestmentCompanies => unitTrustsUrl
+      case UkDividendsSharesLoans.FreeOrRedeemableShares => redeemableSharesUrl
+      case UkDividendsSharesLoans.CloseCompanyLoansWrittenOffReleased => closeCompanyUrl
       case _ => ""
     }
 
