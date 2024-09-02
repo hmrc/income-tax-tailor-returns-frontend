@@ -39,6 +39,7 @@ import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.util.UUID.randomUUID
 import javax.inject.Inject
 import scala.concurrent.Future
 
@@ -300,12 +301,14 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   private def interestSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val ukInterestGatewayUrl = appConfig.ukInterestGatewayUrl(ua.taxYear)
+    val untaxedUkInterestUrl = s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/interest/add-untaxed-uk-interest-account/${randomUUID().toString}"
+    val taxedUkInterestUrl = s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/interest/which-account-did-you-get-taxed-interest-from"
+    val totalInterestUrl = s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/interest/interest-amount"
 
     def interestUrl: UkInterest => String = {
-      case UkInterest.FromUkBanks => ukInterestGatewayUrl
-      case UkInterest.FromUkTrustFunds => ukInterestGatewayUrl
-      case UkInterest.FromGiltEdged => appConfig.giltEdgedGatewayUrl(ua.taxYear)
+      case UkInterest.FromUkBanks => untaxedUkInterestUrl
+      case UkInterest.FromUkTrustFunds => taxedUkInterestUrl
+      case UkInterest.FromGiltEdged => totalInterestUrl
       case _ => ""
     }
 
