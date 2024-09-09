@@ -23,6 +23,8 @@ import play.api.mvc.RequestHeader
 import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
 
+import java.util.UUID
+
 @Singleton
 class FrontendAppConfig @Inject()(configuration: Configuration) {
 
@@ -119,7 +121,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def additionalInfoUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-additional-information-frontend.url") +
-      s"/update-and-submit-income-tax-return/additional-information/$taxYear/gains/gains-gateway"
+      s"/update-and-submit-income-tax-return/additional-information/$taxYear/gains/policy-name/${UUID.randomUUID().toString}"
 
   def tailoringUkResidenceUrl(taxYear: Int): String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/uk-residence-status"
 
