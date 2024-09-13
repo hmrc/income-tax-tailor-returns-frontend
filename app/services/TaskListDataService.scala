@@ -240,10 +240,10 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
     val gainsUrl: String = appConfig.additionalInfoUrl(ua.taxYear)
 
     val ukInsuranceGainsUrl: UkInsuranceGains => String = {
-      case UkInsuranceGains.LifeInsurance => gainsUrl
-      case UkInsuranceGains.LifeAnnuity => gainsUrl
-      case UkInsuranceGains.CapitalRedemption => gainsUrl
-      case UkInsuranceGains.VoidedISA => gainsUrl
+      case UkInsuranceGains.LifeInsurance => s"$gainsUrl?policyType=Life+Insurance"
+      case UkInsuranceGains.LifeAnnuity => s"$gainsUrl?policyType=Life+Annuity"
+      case UkInsuranceGains.CapitalRedemption => s"$gainsUrl?policyType=Capital+Redemption"
+      case UkInsuranceGains.VoidedISA => s"$gainsUrl?policyType=Voided+ISA"
       case _ => ""
     }
 
