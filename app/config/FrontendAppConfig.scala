@@ -72,6 +72,8 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def dividendsBaseUrl: String = configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url")
 
+  def employmentBaseUrl: String = configuration.get[String]("microservice.services.income-tax-employment-frontend.url")
+
   def ukInterestGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
       s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-UK"

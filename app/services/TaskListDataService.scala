@@ -134,7 +134,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   private def employmentSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val employmentUrl: String = appConfig.employmentGatewayUrl(taxYear = ua.taxYear)
+    val employmentUrl: String = s"${appConfig.employmentBaseUrl}/update-and-submit-income-tax-return/employment-income/${ua.taxYear}/employment-summary"
 
     def employment: Option[Seq[TaskListSectionItem]] = {
 
