@@ -130,7 +130,12 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
 
   private def getSessionData(sessionId: String,request: Request[_])(implicit hc:HeaderCarrier):  Future[Option[SessionData]] = {
     if(config.sessionCookieServiceEnabled){
-      sessionDataConnector.getSessionData(sessionId).map(_.toOption.flatten)
+      sessionDataConnector.getSessionData(sessionId).map {
+        case Left(value) =>
+          request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
+
+        case Right(value) => value
+      }
     }else{
       Future.successful {
         request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
