@@ -101,14 +101,9 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   private def charitableDonationsSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    def charitableDonationsUrl: CharitableDonations => String = {
-      case DonationsUsingGiftAid => s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/amount-donated-using-gift-aid"
-      case GiftsOfLandOrProperty => s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/value-of-land-or-property"
-      case GiftsOfSharesOrSecurities => s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/value-of-shares-or-securities"
-      case GiftsToOverseasCharities =>
-        s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/donation-of-shares-securities-land-or-property-to-overseas-charities"
-      case _ => ""
-    }
+    // This will need individual links for each task once the journey has been split.
+    def charitableDonationsUrl: String = s"${appConfig.personalFrontendBaseUrl}/${ua.taxYear}/charity/charity-donations-to-charity"
+
 
     def charitableDonations: Option[Seq[TaskListSectionItem]] = {
 
@@ -123,7 +118,7 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
       ua.get(CharitableDonationsPage).map(_.toList) match {
         case Some(value) if !value.contains(CharitableDonations.NoDonations) =>
-          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(charitableDonationsUrl(k)))))
+          Some(items.intersect(value).map(k => TaskListSectionItem(taskTitles(k), TaskStatus.NotStarted, Some(charitableDonationsUrl))))
         case _ => None
       }
     }
@@ -151,13 +146,13 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   private def selfEmploymentSection()(implicit ua: UserAnswers): TaskListSection = {
 
-    val cisGatewayUrl: String = appConfig.cisGatewayUrl(taxYear = ua.taxYear)
+    val cisUrl: String = appConfig.cisFrontendUrl(ua.taxYear)
 
     def selfEmployment: Option[Seq[TaskListSectionItem]] = {
 
       ua.get(AboutYourWorkPage).map(_.toSeq) match {
         case Some(value) if value.contains(SelfEmployed) =>
-          Some(Seq(TaskListSectionItem(TaskTitle.CIS, TaskStatus.NotStarted, Some(cisGatewayUrl))))
+          Some(Seq(TaskListSectionItem(TaskTitle.CIS, TaskStatus.NotStarted, Some(cisUrl))))
         case _ => None
       }
     }
