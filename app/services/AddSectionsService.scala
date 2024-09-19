@@ -17,8 +17,9 @@
 package services
 
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
+import models.aboutyou.UkResidenceStatus
 import models.{IncomeFromWorkDependentStates, SectionState, TagStatus, UserAnswers}
-import pages.aboutyou.{FosterCarerPage, TaxAvoidanceSchemesPage}
+import pages.aboutyou.{FosterCarerPage, TaxAvoidanceSchemesPage, UkResidenceStatusPage, YourResidenceStatusPage}
 import pages.pensions.PaymentsIntoPensionsPage
 import pages.propertypensionsinvestments.UkDividendsSharesLoansPage
 import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
@@ -28,7 +29,7 @@ trait AddSectionsService {
     userAnswers match {
       case None => SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted)
       case Some(ua) =>
-        val aboutYou: TagStatus = if ((isPrivateBeta && ua.get(FosterCarerPage).isDefined) || ua.get(TaxAvoidanceSchemesPage).isDefined) {
+        val aboutYou: TagStatus = if (isAboutYouFinished(ua, isPrivateBeta)) {
           Completed
         } else {
           NotStarted
@@ -61,5 +62,13 @@ trait AddSectionsService {
   }
 
   def getState(userAnswers: Option[UserAnswers]): SectionState
+
+  private def isAboutYouFinished(ua: UserAnswers, isPrivateBeta: Boolean) = {
+    if (ua.get(UkResidenceStatusPage).contains(UkResidenceStatus.NonUK)) {
+      ((isPrivateBeta && ua.get(FosterCarerPage).isDefined) || ua.get(TaxAvoidanceSchemesPage).isDefined) && ua.get(YourResidenceStatusPage).isDefined
+    } else {
+      (isPrivateBeta && ua.get(FosterCarerPage).isDefined) || ua.get(TaxAvoidanceSchemesPage).isDefined
+    }
+  }
 
 }
