@@ -19,15 +19,13 @@ package models.session
 
 import play.api.libs.json.{Format, Json}
 
-case class SessionData(sessionID: String,
-                       mtditid: String,
+case class SessionData(mtditid: String,
                        nino: String,
-                       saUtr: String,
-                       clientFirstName: Option[String],
-                       clientLastName: Option[String],
-                       userType: String)
+                       utr: String,
+                       sessionId: String
+                       )
 
 object SessionData {
   implicit val format: Format[SessionData] = Json.format[SessionData]
-  def empty: SessionData = SessionData("", "","","",None,None,"")
+  def empty: SessionData = SessionData("", "","","")
 }

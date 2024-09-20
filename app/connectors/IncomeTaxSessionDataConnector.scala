@@ -26,16 +26,17 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 trait IncomeTaxSessionDataConnector {
-  def getSessionData(sessionDataId: String)(implicit hc: HeaderCarrier): Future[SessionDataResponse]
+  def getSessionData(implicit hc: HeaderCarrier): Future[SessionDataResponse]
 }
 
 @Singleton
 class IncomeTaxSessionDataConnectorImpl @Inject()(config: Configuration, httpClient: HttpClientV2)(implicit ec: ExecutionContext)
   extends IncomeTaxSessionDataConnector{
 
-  def getSessionData(sessionDataId: String)(implicit hc: HeaderCarrier): Future[SessionDataResponse] = {
+  def getSessionData(implicit hc: HeaderCarrier): Future[SessionDataResponse] = {
     val vcSessionServiceBaseUrl = config.get[String]("microservice.services.income-tax-session-data.url")
-    val url = s"$vcSessionServiceBaseUrl/income-tax-session-data/$sessionDataId"
+    println(s"headers $hc")
+    val url = s"$vcSessionServiceBaseUrl/income-tax-session-data/"
     httpClient
       .get(url"$url")
       .execute[SessionDataResponse]

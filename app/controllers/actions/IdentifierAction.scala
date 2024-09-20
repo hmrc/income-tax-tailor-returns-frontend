@@ -20,6 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import connectors.IncomeTaxSessionDataConnector
 import models.Enrolment
+import uk.gov.hmrc.auth.core.{Enrolment => HMRCEnrolment}
 import models.SessionValues.CLIENT_MTDITID
 import models.requests.IdentifierRequest
 import models.session.SessionData
@@ -27,10 +28,14 @@ import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+
+
+
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -69,9 +74,13 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
 
 
   private def authorisedForMtdItId(mtdItId: String, enrolments: Enrolments): Option[String] = {
+
     //  todo possible check for "mtd-it-auth" rule
-    enrolments.enrolments.find(x => x.identifiers.exists(i => i.value.equals(mtdItId)))
+   val result=  enrolments.enrolments.find(x => x.identifiers.exists(i => i.value.equals(mtdItId)))
       .flatMap(_.getIdentifier(Enrolment.MtdIncomeTax.value)).map(_.value)
+
+    println(s"Compare mtdItId $mtdItId with enrollment value ${result.getOrElse("")}")
+    result
   }
 
   private def authorisedAgentServices(enrolments: Enrolments): Option[String] = {
@@ -81,11 +90,11 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     } yield arn.value
   }
 
+
+
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
-    //TODO removing details from session to session service, it will have impact on headercarrier. revist??This might contain only seesionId?
     implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-//    implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session.--(List("ts","ClientNino","TAX_YEAR","validTaxYears","ClientMTDID")))
 
     //TODO do we need to check mtditid against Nino?
     authorised().retrieve(affinityGroup and allEnrolments and confidenceLevel) {
@@ -123,18 +132,16 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     }
   }
 
-  private def sessionId(request: Request[_])(implicit hc: HeaderCarrier): Option[String] = {
-    lazy val key = "X-Session-ID"
-    hc.sessionId.map(_.value).orElse(request.headers.get(key))
-  }
-
-  private def getSessionData(sessionId: String,request: Request[_])(implicit hc:HeaderCarrier):  Future[Option[SessionData]] = {
+  private def getSessionData(request: Request[_])(implicit hc:HeaderCarrier):  Future[Option[SessionData]] = {
+    println(s"********** Session service enabled ${config.sessionCookieServiceEnabled}")
     if(config.sessionCookieServiceEnabled){
-      sessionDataConnector.getSessionData(sessionId).map {
-        case Left(value) =>
+      sessionDataConnector.getSessionData.map {
+        case Left(_) =>
+          println(s"********** No Session data")
           request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
 
-        case Right(value) => value
+        case Right(value) => println(s"********** There is data $value")
+          value
       }
     }else{
       Future.successful {
@@ -143,32 +150,45 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     }
   }
 
+  def predicate(mtdId: String): Predicate =
+    HMRCEnrolment("HMRC-MTD-IT")
+      .withIdentifier("MTDITID", mtdId)
+      .withDelegatedAuthRule("mtd-it-auth")
   private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments)
                           (implicit hc: HeaderCarrier): Future[Result] = {
-    sessionId(request) match {
-      case Some(sessionId) =>
-        getSessionData(sessionId,request).flatMap {
+
+        getSessionData(request).flatMap {
           case Some(sessionData) =>
             authorisedAgentServices(enrolments) match {
               case Some(_) =>
-                if (authorisedForMtdItId(sessionData.mtditid, enrolments).isDefined) {
+                authorised(predicate(sessionData.mtditid)) {
                   block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
-                } else {
-                  logger.warn("User is not authorized for mtdItId")
-                  Future.successful(Redirect(config.signUpUrlAgent))
+                }.recover {
+                  case _: InsufficientEnrolments =>
+                    logger.info(s"[AuthorisedAction][async] - You are not authorised as an agent")
+                    println(s"[AuthorisedAction][async] - You are not authorised as an agent")
+                    //Redirect(config.loginUrl(taxYear))
+                    Redirect(config.setUpAgentServicesAccountUrl)
+                  case e =>
+                    logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
+                    println(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
+                    //Unauthorized
+                    Redirect(config.signUpUrlAgent)
                 }
+//                if (authorisedForMtdItId(sessionData.mtditid, enrolments).isDefined) {
+//                  block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
+//                } else {
+//                  logger.warn("User is not authorized for mtdItId")
+//                  Future.successful(Redirect(config.signUpUrlAgent))
+//                }
               case None =>
-                logger.warn("User did not have ARN")
+                logger.warn("User did not have HMRC-AS-AGENT enrolment ")
                 Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
             }
           case None =>
             logger.warn("Session data not found")
-            Future.successful(Redirect(config.signUpUrlAgent))
+            Future.successful(Redirect(config.signUpUrlAgent))//TODO redirect to V&C
         }
-      case None =>
-        logger.warn("User did not have MTDID in session")
-        Future.successful(Redirect(config.signUpUrlAgent))
-    }
   }
 }
 

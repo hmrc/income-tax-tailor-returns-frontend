@@ -21,16 +21,19 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import connectors.IncomeTaxSessionDataConnector
 import models.session.SessionData
-import org.mockito.ArgumentMatchers.any
-import org.mockito.MockitoSugar
+import org.mockito.Mockito.when
+import org.mockito.ArgumentMatchers.{any, eq => mEq}
+import org.mockito.{Mockito, MockitoSugar}
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.auth.core.{Enrolment => HMRCEnrolment}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
@@ -43,6 +46,11 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
   val mtdEnrollmentKey = "HMRC-MTD-IT"
   val mtdEnrollmentIdentifier = "MTDITID"
+  private val mockAuthConnector: AuthConnector = Mockito.mock(classOf[AuthConnector])
+  private type RetrievalType =  Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel
+  val testMtditId = "1234567890"
+
+
 
   "Auth Action [IdentifierActionProviderImpl]" - {
 
@@ -52,10 +60,15 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
         val application = applicationBuilder(userAnswers = None).build()
 
+        def predicate(mtdId: String): Predicate = mEq(
+          HMRCEnrolment("HMRC-MTD-IT")
+            .withIdentifier("MTDITID", mtdId)
+            .withDelegatedAuthRule("mtd-it-auth"))
+
         running(application) {
 
           val enrolments: Enrolments = Enrolments(Set(
-            Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
+            Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, testMtditId)), "Activated")
           ))
 
           val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
@@ -67,13 +80,15 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
             sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe OK
         }
+
+
       }
     }
     "when the user is an individual" - {
@@ -81,6 +96,11 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       "must succeed with a identifier Request when fully authenticated" in {
 
         val application = applicationBuilder(userAnswers = None).build()
+
+        def predicate(mtdId: String): Predicate = mEq(
+          HMRCEnrolment("HMRC-MTD-IT")
+            .withIdentifier("MTDITID", mtdId)
+            .withDelegatedAuthRule("mtd-it-auth"))
 
         running(application) {
 
@@ -97,7 +117,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
             sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
@@ -109,6 +129,11 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       "must fail with a UNAUTHORIZED when missing mtditid enrolment" in {
 
         val application = applicationBuilder(userAnswers = None).build()
+
+        def predicate(mtdId: String): Predicate = mEq(
+          HMRCEnrolment("HMRC-MTD-IT")
+            .withIdentifier("MTDITID", mtdId)
+            .withDelegatedAuthRule("mtd-it-auth"))
 
         running(application) {
 
@@ -123,7 +148,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
             sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
@@ -136,12 +161,22 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
       "must fail with a Redirect to ivUplift when confidence is to low" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        def predicate(mtdId: String): Predicate = mEq(
+          HMRCEnrolment("HMRC-MTD-IT")
+            .withIdentifier("MTDITID", mtdId)
+            .withDelegatedAuthRule("mtd-it-auth"))
+
+        val mockSessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
+        val application = applicationBuilder(userAnswers = None).configure(
+          "features.sessionCookieService" -> true
+        ).overrides(bind[AuthConnector].toInstance(mockAuthConnector))
+          .overrides(bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector))
+          .build()
 
         running(application) {
 
           val enrolments: Enrolments = Enrolments(Set(
-            Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
+            Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, testMtditId)), "Activated")
           ))
 
           val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
@@ -152,10 +187,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
-          val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
-            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
+
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
+            mockSessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
 
@@ -165,10 +200,19 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       }
     }
     "when the user is authorised as an agent" - {
+      def predicate(mtdId: String): Predicate = mEq(
+        HMRCEnrolment("HMRC-MTD-IT")
+          .withIdentifier("MTDITID", mtdId)
+          .withDelegatedAuthRule("mtd-it-auth"))
 
       "must succeed with a identifier Request" in {
+        val mockSessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val application = applicationBuilder(userAnswers = None).configure(
+          "features.sessionCookieService" -> true
+        ).overrides(bind[AuthConnector].toInstance(mockAuthConnector))
+          .overrides(bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector))
+          .build()
 
         val enrolments: Enrolments = Enrolments(Set(
           Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "7777777777")), "Activated"),
@@ -176,28 +220,38 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           Enrolment(mtdEnrollmentKey, Seq(EnrolmentIdentifier(mtdEnrollmentIdentifier, "1234567890")), "Activated")
         ) + Enrolment(models.Enrolment.Agent.key, Seq(EnrolmentIdentifier(models.Enrolment.Agent.value, "XARN1234567")), "Activated"))
 
-        val authResponse: Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel =
-          new ~(new ~(
-            Some(AffinityGroup.Agent),
-            enrolments),
-            ConfidenceLevel.L50)
+
+
+        val authResponse =
+            Future.successful(new ~(new ~(
+                Some(AffinityGroup.Individual),
+              enrolments),
+              ConfidenceLevel.L250))
+
 
         running(application) {
-
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
-          val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
-            sessionDataConnector, bodyParsers)(ec).apply(taxYear)
-          when(sessionDataConnector.getSessionData(any())(any())).thenReturn(
-            Future.successful(Right(Some(SessionData("test-session-id", "1234567890", "nino", "utr", None, None, userType = "Agent"))))
+
+          when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]])(any(), any()))
+            .thenReturn(authResponse)
+
+          when(mockSessionDataConnector.getSessionData(any())).thenReturn(
+            Future.successful(Right(Some(SessionData("1234567890", "nino", "utr", "test-session-id"))))
           )
+
+          val authAction = new IdentifierActionProviderImpl(mockAuthConnector, appConfig,
+            mockSessionDataConnector, bodyParsers)(ec).apply(taxYear)
+
+
 
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890","sessionId" -> "test-session-id"))
-
+//          val request = FakeRequest(GET,controllers.routes.StartController.onPageLoad(taxYear).url).withSession("ClientMTDID" -> "1234567890","sessionId" -> "test-session-id")
+//          val result = route(application, request).value
           status(result) mustBe OK
+
         }
       }
 
@@ -225,10 +279,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector: IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
 
-          when(sessionDataConnector.getSessionData(any())(any())).thenReturn(
+          when(sessionDataConnector.getSessionData(any())).thenReturn(
             Future.successful(Right(None))
           )
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
             sessionDataConnector, bodyParsers)(ec).apply(taxYear)
 
 
@@ -263,7 +317,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector: IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
             sessionDataConnector, bodyParsers)(ec).apply(taxYear)
 
 
@@ -295,7 +349,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
             sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest())
@@ -324,11 +378,11 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
             sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
-          when(sessionDataConnector.getSessionData(any())(any())).thenReturn(
-            Future.successful(Right(Some(SessionData("test-session-id", "1234567890", "nino", "utr", None, None, userType = "Agent"))))
+          when(sessionDataConnector.getSessionData(any())).thenReturn(
+            Future.successful(Right(Some(SessionData("1234567890", "nino", "utr", "test-session-id"))))
           )
 
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890","sessionId" -> "1234567890"))
@@ -359,12 +413,12 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val appConfig   = application.injector.instanceOf[FrontendAppConfig]
           val sessionDataConnector:IncomeTaxSessionDataConnector = mock[connectors.IncomeTaxSessionDataConnector]
 
-          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+          val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
             sessionDataConnector, bodyParsers)(ec).apply(taxYear)
           val controller = new Harness(authAction)
 
-        when(sessionDataConnector.getSessionData(any())(any())).thenReturn(
-              Future.successful(Right(Some(SessionData("test-session-id", "1234567890", "nino", "utr", None, None, userType = "Agent"))))
+        when(sessionDataConnector.getSessionData(any())).thenReturn(
+              Future.successful(Right(Some(SessionData("1234567890", "nino", "utr", "test-session-id"))))
             )
 
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890","sessionId" -> "test-session-id"))
@@ -375,6 +429,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       }
     }
     "must return UNAUTHORIZED when authConnector returns incorrect enrolments " in {
+      def predicate(mtdId: String): Predicate = mEq(
+        HMRCEnrolment("HMRC-MTD-IT")
+          .withIdentifier("MTDITID", mtdId)
+          .withDelegatedAuthRule("mtd-it-auth"))
 
       val application = applicationBuilder(userAnswers = None).build()
 
@@ -395,10 +453,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
         val appConfig = application.injector.instanceOf[FrontendAppConfig]
         val sessionDataConnector:IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
 
-        val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse), appConfig,
+        val authAction = new IdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse), appConfig,
           sessionDataConnector, bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> testMtditId))
 
         status(result) mustBe UNAUTHORIZED
       }
@@ -417,7 +475,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
         val authAction = new IdentifierActionProviderImpl(new FakeFailingAuthConnector(InvalidBearerToken()), appConfig,
           sessionDataConnector, bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
+        val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> testMtditId))
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustBe "http://localhost:9949/auth-login-stub/gg-sign-in" +
@@ -449,6 +507,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
   "Auth Action [EarlyPrivateLaunchIdentifierActionProviderImpl]" - {
 
     "must succeed with a identifier Request" in {
+      def predicate(mtdId: String): Predicate = mEq(
+        HMRCEnrolment("HMRC-MTD-IT")
+          .withIdentifier("MTDITID", mtdId)
+          .withDelegatedAuthRule("mtd-it-auth"))
 
       val application = new GuiceApplicationBuilder()
         .configure(Map("features.earlyPrivateLaunch" -> "true"))
@@ -459,7 +521,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
         val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(Some("internalId")),
+        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),Some("internalId")),
           appConfig, bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest())
@@ -469,6 +531,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
     }
 
     "must return UNAUTHORIZED when authConnector returns incorrect enrolments " in {
+      def predicate(mtdId: String): Predicate = mEq(
+        HMRCEnrolment("HMRC-MTD-IT")
+          .withIdentifier("MTDITID", mtdId)
+          .withDelegatedAuthRule("mtd-it-auth"))
 
       val application = new GuiceApplicationBuilder()
         .configure(Map("features.earlyPrivateLaunch" -> "true"))
@@ -490,7 +556,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
         val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
         val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
-        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(authResponse),
+        val authAction = new EarlyPrivateLaunchIdentifierActionProviderImpl(new FakeSuccessfulAuthConnector(predicate(testMtditId),authResponse),
           appConfig, bodyParsers)(ec).apply(taxYear)
         val controller = new Harness(authAction)
         val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890"))
@@ -551,7 +617,7 @@ class FakeFailingAuthConnector @Inject()(exceptionToReturn: Throwable) extends A
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
     Future.failed(exceptionToReturn)
 }
-class FakeSuccessfulAuthConnector[T] @Inject()(value: T) extends AuthConnector {
+class FakeSuccessfulAuthConnector[T] @Inject()(predicate: Predicate,value: T) extends AuthConnector {
   val serviceUrl: String = ""
 
   override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
