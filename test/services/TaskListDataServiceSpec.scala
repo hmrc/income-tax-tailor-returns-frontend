@@ -21,13 +21,16 @@ import config.FrontendAppConfig
 import connectors.TaskListDataConnector
 import models.Done
 import models.aboutyou.UkResidenceStatus
+import models.tasklist.{SectionTitle, TaskListModel}
+import models.workandbenefits.AboutYourWork
 import org.mockito.ArgumentMatchers.any
 import org.mockito.MockitoSugar
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
-import org.scalatest.{BeforeAndAfterEach, OptionValues}
+import org.scalatest.{BeforeAndAfterEach, OptionValues, PrivateMethodTester}
 import pages.aboutyou.UkResidenceStatusPage
+import pages.workandbenefits.{AboutYourWorkPage, ConstructionIndustrySchemePage}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,7 +42,8 @@ class TaskListDataServiceSpec
     with MockitoSugar
     with OptionValues
     with ScalaFutures
-    with BeforeAndAfterEach {
+    with BeforeAndAfterEach
+    with PrivateMethodTester {
 
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private val mockConnector = mock[TaskListDataConnector]
@@ -75,5 +79,31 @@ class TaskListDataServiceSpec
       service.set(fullUserAnswers).futureValue mustEqual Done
     }
 
+    "must not have the self employment section when CIS value is false" in {
+
+      val answers = emptyUserAnswers
+        .set(AboutYourWorkPage, Set[AboutYourWork](AboutYourWork.SelfEmployed))
+        .flatMap(_.set(ConstructionIndustrySchemePage, false)).get
+
+      val privateGetTaskList = PrivateMethod[TaskListModel](Symbol("getTaskList"))
+
+      val result = service invokePrivate privateGetTaskList(answers)
+
+      result.taskList.exists(_.sectionTitle == SectionTitle.SelfEmploymentTitle) mustBe false
+    }
+
+    "must have the self employment section when CIS value is true" in {
+
+      val answers = emptyUserAnswers
+        .set(AboutYourWorkPage, Set[AboutYourWork](AboutYourWork.SelfEmployed))
+        .flatMap(_.set(ConstructionIndustrySchemePage, true))
+        .get
+
+      val privateGetTaskList = PrivateMethod[TaskListModel](Symbol("getTaskList"))
+
+      val result = service invokePrivate privateGetTaskList(answers)
+
+      result.taskList.exists(_.sectionTitle == SectionTitle.SelfEmploymentTitle) mustBe true
+    }
   }
 }
