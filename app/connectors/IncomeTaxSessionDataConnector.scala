@@ -35,7 +35,6 @@ class IncomeTaxSessionDataConnectorImpl @Inject()(config: Configuration, httpCli
 
   def getSessionData(implicit hc: HeaderCarrier): Future[SessionDataResponse] = {
     val vcSessionServiceBaseUrl = config.get[String]("microservice.services.income-tax-session-data.url")
-    println(s"headers $hc")
     val url = s"$vcSessionServiceBaseUrl/income-tax-session-data/"
     httpClient
       .get(url"$url")

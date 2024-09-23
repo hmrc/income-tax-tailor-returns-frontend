@@ -159,4 +159,5 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   //Subscription Service
   val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
   val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
+  val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
 }
