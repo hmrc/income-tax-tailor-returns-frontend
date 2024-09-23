@@ -35,7 +35,7 @@ import models.{Done, UserAnswers}
 import pages.aboutyou.{CharitableDonationsPage, FosterCarerPage, UkResidenceStatusPage}
 import pages.pensions.PaymentsIntoPensionsPage
 import pages.propertypensionsinvestments.{PensionsPage, UkDividendsSharesLoansPage, UkInsuranceGainsPage, UkInterestPage}
-import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
+import pages.workandbenefits.{AboutYourWorkPage, ConstructionIndustrySchemePage, JobseekersAllowancePage}
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -48,14 +48,13 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   override def set(ua: UserAnswers)(implicit hc: HeaderCarrier): Future[Done] = {
 
-    val taskListData: TaskListModel = getTaskList(ua)
+    val taskListData: TaskListModel = getTaskList()(ua)
 
     connector.set(TaskListData(ua.mtdItId, ua.taxYear, Json.toJsObject(taskListData)))
   }
 
 
-  private def getTaskList: UserAnswers => TaskListModel = { implicit ua =>
-
+  private def getTaskList()(implicit ua: UserAnswers): TaskListModel =
     TaskListModel(Seq[TaskListSection](
       aboutYouSection,
       charitableDonationsSection,
@@ -69,7 +68,6 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
       interestSection,
       dividendsSection
     ).filter(_.taskItems.isDefined))
-  }
 
   private def aboutYouSection()(implicit ua: UserAnswers): TaskListSection = {
 
@@ -148,10 +146,12 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
     val cisUrl: String = appConfig.cisFrontendUrl(ua.taxYear)
 
+    val hasCis: Boolean = ua.get(ConstructionIndustrySchemePage).contains(true)
+
     def selfEmployment: Option[Seq[TaskListSectionItem]] = {
 
       ua.get(AboutYourWorkPage).map(_.toSeq) match {
-        case Some(value) if value.contains(SelfEmployed) =>
+        case Some(value) if value.contains(SelfEmployed) && hasCis =>
           Some(Seq(TaskListSectionItem(TaskTitle.CIS, TaskStatus.NotStarted, Some(cisUrl))))
         case _ => None
       }
