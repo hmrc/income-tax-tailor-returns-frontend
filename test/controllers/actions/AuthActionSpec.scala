@@ -429,11 +429,6 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
         running(application) {
           val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
           val appConfig = application.injector.instanceOf[FrontendAppConfig]
-
-          //          when(mockSessionDataConnector.getSessionData(any())).thenReturn(
-          //            Future.successful(Right(Some(SessionData("1234567890", "nino", "utr", "test-session-id"))))
-          //          )
-
           val authResponse = Future.successful(
             new ~(new ~(Some(AffinityGroup.Agent), enrolments), ConfidenceLevel.L250)
           )
