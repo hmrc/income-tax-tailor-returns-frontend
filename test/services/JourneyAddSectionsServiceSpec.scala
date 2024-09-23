@@ -18,7 +18,7 @@ package services
 
 import base.SpecBase
 import models.TagStatus.{CannotStartYet, Completed, NotStarted}
-import models.aboutyou.TaxAvoidanceSchemes
+import models.aboutyou.{TaxAvoidanceSchemes, UkResidenceStatus, YourResidenceStatus}
 import models.pensions.PaymentsIntoPensions
 import models.pensions.PaymentsIntoPensions.UkPensions
 import models.propertypensionsinvestments.UkDividendsSharesLoans
@@ -32,7 +32,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.{BeforeAndAfterEach, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
-import pages.aboutyou.TaxAvoidanceSchemesPage
+import pages.aboutyou.{FosterCarerPage, TaxAvoidanceSchemesPage, UkResidenceStatusPage, YourResidenceStatusPage}
 import pages.pensions.PaymentsIntoPensionsPage
 import pages.propertypensionsinvestments.UkDividendsSharesLoansPage
 import pages.workandbenefits.{AboutYourWorkPage, JobseekersAllowancePage}
@@ -49,6 +49,19 @@ class JourneyAddSectionsServiceSpec extends AnyFreeSpec
   private val privateBetaDisabled = Map("features.privateBeta" -> "false")
 
   private val aboutYouComplete = Some(UserAnswers(mtdItId, taxYear).set(TaxAvoidanceSchemesPage, TaxAvoidanceSchemes.values.toSet).success.value)
+
+  private val aboutYouCompleteNonUkResidenceStatus =
+    Some(UserAnswers(mtdItId, taxYear)
+      .set(FosterCarerPage, true)
+      .flatMap(_.set(UkResidenceStatusPage, UkResidenceStatus.NonUK))
+      .success.value)
+
+  private val aboutYouCompleteNonUkNonResidentStatus =
+    Some(UserAnswers(mtdItId, taxYear)
+      .set(FosterCarerPage, true)
+      .flatMap(_.set(UkResidenceStatusPage, UkResidenceStatus.NonUK))
+      .flatMap(_.set(YourResidenceStatusPage, YourResidenceStatus.NonResident))
+      .success.value)
 
   private val incomeFromWorkAndBenefitsComplete = Some(aboutYouComplete.value.copy().set(AboutYourWorkPage, Set[AboutYourWork](Employed))
     .flatMap(_.set(JobseekersAllowancePage, Set[JobseekersAllowance](Jsa)))
@@ -106,6 +119,38 @@ class JourneyAddSectionsServiceSpec extends AnyFreeSpec
           val service = application.injector.instanceOf[JourneyAddSectionsService]
 
           val model = service.getState(aboutYouComplete)
+          val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, NotStarted)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return aboutYou section as NotStarted when only UK Residence Status question is answered" in {
+        val application = applicationBuilder()
+          .configure(privateBetaDisabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[JourneyAddSectionsService]
+
+          val model = service.getState(aboutYouCompleteNonUkResidenceStatus)
+          val expectedResult = SectionState(NotStarted, CannotStartYet, CannotStartYet, NotStarted)
+
+          model mustBe expectedResult
+        }
+      }
+
+      "return aboutYou section as Completed when only UK Residence and Your Resident Status questions are answered" in {
+        val application = applicationBuilder()
+          .configure(privateBetaDisabled)
+          .build()
+
+        running(application) {
+
+          val service = application.injector.instanceOf[PrivateBetaAddSectionsService]
+
+          val model = service.getState(aboutYouCompleteNonUkNonResidentStatus)
           val expectedResult = SectionState(Completed, NotStarted, CannotStartYet, NotStarted)
 
           model mustBe expectedResult
