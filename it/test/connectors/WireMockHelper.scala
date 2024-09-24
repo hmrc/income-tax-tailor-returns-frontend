@@ -17,13 +17,17 @@
 package test.connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Suite}
+import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
+
 
 trait WireMockHelper extends BeforeAndAfterAll with BeforeAndAfterEach {
   this: Suite =>
-
-  protected val server: WireMockServer = new WireMockServer(wireMockConfig().dynamicPort())
+  val wireMockPort: Int = 11111
+  val wireMockHost: String = "localhost"
+  val server = new WireMockServer(WireMockConfiguration.wireMockConfig().port(wireMockPort))
 
   override def beforeAll(): Unit = {
     server.start()
@@ -39,4 +43,24 @@ trait WireMockHelper extends BeforeAndAfterAll with BeforeAndAfterEach {
     super.afterAll()
     server.stop()
   }
+
+  def verifyPost(uri: String, optBody: Option[String] = None): Unit = {
+    val uriMapping = postRequestedFor(urlEqualTo(uri))
+    val postRequest = optBody match {
+      case Some(body) => uriMapping.withRequestBody(equalTo(body))
+      case None => uriMapping
+    }
+    verify(postRequest)
+  }
+
+  def verifyGet(uri: String): Unit =
+    verify(getRequestedFor(urlEqualTo(uri)))
+
+  def stubGet(url: String, returnedStatus: Int, returnedBody: String): StubMapping =
+    server.stubFor(
+      get(urlMatching(url))
+        .willReturn(
+          aResponse().withStatus(returnedStatus).withBody(returnedBody)
+        ))
+
 }

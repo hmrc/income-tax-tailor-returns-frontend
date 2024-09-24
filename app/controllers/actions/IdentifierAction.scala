@@ -18,18 +18,21 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
+import connectors.IncomeTaxSessionDataConnector
 import models.Enrolment
+import uk.gov.hmrc.auth.core.{Enrolment => HMRCEnrolment}
 import models.SessionValues.CLIENT_MTDITID
 import models.requests.IdentifierRequest
+import models.session.SessionData
 import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
-
 import scala.concurrent.{ExecutionContext, Future}
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
@@ -40,15 +43,17 @@ trait IdentifierActionProvider {
 
 class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
                                              config: FrontendAppConfig,
+                                             sessionDataConnector: IncomeTaxSessionDataConnector,
                                              parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
 
-  def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(authConnector, config, parser)
+  def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(authConnector, config, sessionDataConnector, parser)
 }
 
 class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                              (override val authConnector: AuthConnector,
                                               config: FrontendAppConfig,
+                                              sessionDataConnector: IncomeTaxSessionDataConnector,
                                               val parser: BodyParsers.Default)
                                              (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions with Logging {
@@ -63,18 +68,13 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     } yield id.value
   }
 
-  private def authorisedForMtdItId(mtdItId: String, enrolments: Enrolments): Option[String] = {
-    //  todo possible check for "mtd-it-auth" rule
-    enrolments.enrolments.find(x => x.identifiers.exists(i => i.value.equals(mtdItId)))
-      .flatMap(_.getIdentifier(Enrolment.MtdIncomeTax.value)).map(_.value)
-  }
-
   private def authorisedAgentServices(enrolments: Enrolments): Option[String] = {
     for {
       agentEnrolment <- enrolments.getEnrolment(Enrolment.Agent.key)
       arn <- agentEnrolment.getIdentifier(Enrolment.Agent.value)
     } yield arn.value
   }
+
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -101,7 +101,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
   }
 
   private def authorized[A](request: Request[A], block: IdentifierRequest[A] => Future[Result],
-                                enrolments: Enrolments, confidenceLevel: ConfidenceLevel) = {
+                            enrolments: Enrolments, confidenceLevel: ConfidenceLevel): Future[Result] = {
     if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
       getMtdItId(enrolments) match {
         case Some(mtdItId) =>
@@ -110,48 +110,74 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
           logger.error("User did not have MTDITID Enrolment")
           Future.successful(Redirect(config.signUpUrlIndividual))
       }
-    }
-    else {
+    } else {
       Future.successful(Redirect(config.incomeTaxSubmissionIvRedirect))
     }
   }
 
-  private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments) = {
-    request.session.get(CLIENT_MTDITID) match {
-      case Some(mtdItId) =>
+  private def getSessionData(request: Request[_])(implicit hc: HeaderCarrier): Future[Option[SessionData]] = {
+    if (config.sessionCookieServiceEnabled) {
+      sessionDataConnector.getSessionData.map {
+        case Left(_) =>
+          //TODO
+          // It was decided with HMRC to read from session cookie as a fallback option, unless all are other services are
+          // migrated to read from V&C sesion service. This is to not impact users behaviour
+          request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
+        case Right(value) => value
+      }
+    } else {
+      Future.successful {
+        request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
+      }
+    }
+  }
+
+  def predicate(mtdId: String): Predicate =
+    HMRCEnrolment("HMRC-MTD-IT")
+      .withIdentifier("MTDITID", mtdId)
+      .withDelegatedAuthRule("mtd-it-auth")
+
+  private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments)
+                          (implicit hc: HeaderCarrier): Future[Result] = {
+
+    getSessionData(request).flatMap {
+      case Some(sessionData) =>
         authorisedAgentServices(enrolments) match {
           case Some(_) =>
-            if (authorisedForMtdItId(mtdItId, enrolments).isDefined) {
-              block(IdentifierRequest(request, mtdItId, isAgent = true))
+            authorised(predicate(sessionData.mtditid)) {
+              block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
+            }.recover {
+              case _: InsufficientEnrolments =>
+                logger.info(s"[AuthorisedAction][async] - You are not authorised as an agent")
+                Redirect(config.setUpAgentServicesAccountUrl)
+              case e =>
+                logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
+                Redirect(config.signUpUrlAgent)
             }
-            else {
-              logger.warn("User is not authorized for mtdItId")
-              Future.successful(Redirect(config.signUpUrlAgent))
-            }
-          case _ =>
-            logger.warn("User did not have ARN")
+          case None =>
+            logger.warn("User did not have HMRC-AS-AGENT enrolment ")
             Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
         }
       case None =>
-        logger.warn("User did not have MTDID in session")
-        Future.successful(Redirect(config.signUpUrlAgent))
+        logger.warn("Session data not found")
+        Future.successful(Redirect(config.viewAndChangeEnterUtrUrl))
     }
   }
 }
 
 class EarlyPrivateLaunchIdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
-                                             config: FrontendAppConfig,
-                                             parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
+                                                               config: FrontendAppConfig,
+                                                               parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
 
   def apply(taxYear: Int): IdentifierAction = new EarlyPrivateLaunchIdentifierAction(taxYear)(authConnector, config, parser)
 }
 
 class EarlyPrivateLaunchIdentifierAction @Inject()(taxYear: Int)
-                                                     (override val authConnector: AuthConnector,
-                                                      config: FrontendAppConfig,
-                                                      val parser: BodyParsers.Default)
-                                                     (implicit val executionContext: ExecutionContext)
+                                                  (override val authConnector: AuthConnector,
+                                                   config: FrontendAppConfig,
+                                                   val parser: BodyParsers.Default)
+                                                  (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {

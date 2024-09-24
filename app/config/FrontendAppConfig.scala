@@ -137,6 +137,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   val privateBeta: Boolean =
     configuration.get[Boolean]("features.privateBeta")
 
+  val sessionCookieServiceEnabled: Boolean =
+    configuration.get[Boolean]("features.sessionCookieService")
+
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
     "cy" -> Lang("cy")
@@ -156,4 +159,5 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   //Subscription Service
   val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
   val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
+  val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
 }
