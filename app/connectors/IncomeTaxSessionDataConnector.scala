@@ -16,9 +16,10 @@
 
 package connectors
 
+import config.Service
 import connectors.ConnectorFailureLogger.FromResultToConnectorFailureLogger
 import connectors.httpParsers.SessionDataHttpParser.{SessionDataResponse, SessionDataResponseReads}
-import play.api.{Configuration}
+import play.api.Configuration
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
 
@@ -34,7 +35,8 @@ class IncomeTaxSessionDataConnectorImpl @Inject()(config: Configuration, httpCli
   extends IncomeTaxSessionDataConnector{
 
   def getSessionData(implicit hc: HeaderCarrier): Future[SessionDataResponse] = {
-    val vcSessionServiceBaseUrl = config.get[String]("microservice.services.income-tax-session-data.url")
+
+    val vcSessionServiceBaseUrl = config.get[Service]("microservice.services.income-tax-session-data")
     val url = s"$vcSessionServiceBaseUrl/income-tax-session-data/"
     httpClient
       .get(url"$url")
