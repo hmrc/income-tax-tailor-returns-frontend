@@ -175,9 +175,6 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
         authorised(secondaryAgentPredicate(mtdItId)) {
           block(IdentifierRequest(request, mtdItId, isAgent = true, isSecondaryAgent = true))
         }.recoverWith {
-          case _: InternalError =>
-            logger.info(s"[AuthorisedAction][agentAuthentication] - Downstream issue Internal Error")
-            Future(InternalServerError)
           case _: AuthorisationException =>
             logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have secondary delegated authority for Client.")
             Future(Unauthorized)
