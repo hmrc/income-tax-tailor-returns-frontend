@@ -24,7 +24,6 @@ import models.{APIErrorBodyModel, APIErrorModel}
 import models.session.SessionData
 import org.mockito.ArgumentMatchers.{any, eq => mEq}
 import org.mockito.{Mockito, MockitoSugar}
-import play.api.Configuration
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
