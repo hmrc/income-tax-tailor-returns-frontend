@@ -140,6 +140,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   val sessionCookieServiceEnabled: Boolean =
     configuration.get[Boolean]("features.sessionCookieService")
 
+  def emaSupportingAgentsEnabled: Boolean =
+    configuration.get[Boolean]("features.ema-supporting-agents-enabled")
+
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
     "cy" -> Lang("cy")
