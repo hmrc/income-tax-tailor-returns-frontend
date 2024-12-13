@@ -46,7 +46,7 @@ class PrivateBetaAddSectionsServiceSpec extends AnyFreeSpec
   with ScalaFutures
   with BeforeAndAfterEach {
 
-  private val privateBetaEnabled = Map("features.privateBeta" -> "true")
+  private val privateBetaEnabled = Map("feature-switch.privateBeta" -> "true")
 
   private val aboutYouCompleteInBeta = Some(UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value)
 
