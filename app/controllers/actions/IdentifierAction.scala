@@ -33,6 +33,7 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+
 import scala.concurrent.{ExecutionContext, Future}
 
 trait IdentifierAction extends ActionBuilder[IdentifierRequest, AnyContent] with ActionFunction[Request, IdentifierRequest]
@@ -137,6 +138,11 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
       .withIdentifier("MTDITID", mtdId)
       .withDelegatedAuthRule("mtd-it-auth")
 
+  private def secondaryAgentPredicate(mtdId: String): Predicate =
+    HMRCEnrolment("HMRC-MTD-IT-SUPP")
+      .withIdentifier("MTDITID", mtdId)
+      .withDelegatedAuthRule("mtd-it-auth-supp")
+
   private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments)
                           (implicit hc: HeaderCarrier): Future[Result] = {
 
@@ -146,14 +152,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
           case Some(_) =>
             authorised(predicate(sessionData.mtditid)) {
               block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
-            }.recover {
-              case _: InsufficientEnrolments =>
-                logger.info(s"[AuthorisedAction][async] - You are not authorised as an agent")
-                Redirect(config.setUpAgentServicesAccountUrl)
-              case e =>
-                logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
-                Redirect(config.signUpUrlAgent)
-            }
+            }.recoverWith(agentRecovery(request, block, sessionData.mtditid))
           case None =>
             logger.warn("User did not have HMRC-AS-AGENT enrolment ")
             Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
@@ -162,6 +161,31 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
         logger.warn("Session data not found")
         Future.successful(Redirect(config.viewAndChangeEnterUtrUrl))
     }
+  }
+
+  private def agentRecovery[A](request: Request[A],
+                               block: IdentifierRequest[A] => Future[Result],
+                               mtdItId: String)
+                              (implicit hc: HeaderCarrier): PartialFunction[Throwable, Future[Result]] = {
+    case _: NoActiveSession =>
+      logger.info(s"[AuthorisedAction][agentAuthentication] - No active session. Redirecting to ${config.viewAndChangeEnterUtrUrl}")
+      Future(Redirect(config.viewAndChangeEnterUtrUrl))
+    case _: AuthorisationException =>
+      if (config.emaSupportingAgentsEnabled) {
+        authorised(secondaryAgentPredicate(mtdItId)) {
+          block(IdentifierRequest(request, mtdItId, isAgent = true, isSecondaryAgent = true))
+        }.recoverWith {
+          case _: AuthorisationException =>
+            logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have secondary delegated authority for Client.")
+            Future(Unauthorized)
+          case _ =>
+            logger.info(s"[AuthorisedAction][agentAuthentication] - Downstream service error.")
+            Future(InternalServerError)
+        }
+      } else {
+        logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have delegated authority for Client.")
+        Future.successful(Redirect(config.signUpUrlAgent))
+      }
   }
 }
 

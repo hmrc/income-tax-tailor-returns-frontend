@@ -132,13 +132,16 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/$appName"
 
   val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("features.welsh-translation")
+    configuration.get[Boolean]("feature-switch.welsh-translation")
 
   val privateBeta: Boolean =
-    configuration.get[Boolean]("features.privateBeta")
+    configuration.get[Boolean]("feature-switch.privateBeta")
 
   val sessionCookieServiceEnabled: Boolean =
-    configuration.get[Boolean]("features.sessionCookieService")
+    configuration.get[Boolean]("feature-switch.sessionCookieService")
+
+  def emaSupportingAgentsEnabled: Boolean =
+    configuration.get[Boolean]("feature-switch.ema-supporting-agents-enabled")
 
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),

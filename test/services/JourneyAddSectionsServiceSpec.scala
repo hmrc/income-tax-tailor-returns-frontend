@@ -46,7 +46,7 @@ class JourneyAddSectionsServiceSpec extends AnyFreeSpec
   with ScalaFutures
   with BeforeAndAfterEach {
 
-  private val privateBetaDisabled = Map("features.privateBeta" -> "false")
+  private val privateBetaDisabled = Map("feature-switch.privateBeta" -> "false")
 
   private val aboutYouComplete = Some(UserAnswers(mtdItId, taxYear).set(TaxAvoidanceSchemesPage, TaxAvoidanceSchemes.values.toSet).success.value)
 
