@@ -18,6 +18,7 @@ package viewmodels.govuk
 
 import play.api.data.Field
 import play.api.i18n.Messages
+import play.twirl.api.Html
 import uk.gov.hmrc.govukfrontend.views.viewmodels.FormGroup
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.fieldset.{Fieldset, Legend}
@@ -56,28 +57,36 @@ trait RadiosFluency {
 
     def yesNo(
                field: Field,
-               legend: Legend
+               legend: Legend,
+               conditionalHtmlYes: Option[Html] = None,
+               conditionalHtmlNo: Option[Html] = None
              )(implicit messages: Messages): Radios =
       yesNo(
-        field    = field,
-        fieldset = FieldsetViewModel(legend)
+        field               = field,
+        fieldset            = FieldsetViewModel(legend),
+        conditionalHtmlYes  = conditionalHtmlYes,
+        conditionalHtmlNo   = conditionalHtmlNo
       )
 
     def yesNo(
                field: Field,
-               fieldset: Fieldset
+               fieldset: Fieldset,
+               conditionalHtmlYes: Option[Html],
+               conditionalHtmlNo: Option[Html]
              )(implicit messages: Messages): Radios = {
 
       val items = Seq(
         RadioItem(
           id      = Some(field.id),
           value   = Some("true"),
-          content = Text(messages("site.yes"))
+          content = Text(messages("site.yes")),
+          conditionalHtml = conditionalHtmlYes
         ),
         RadioItem(
           id      = Some(s"${field.id}-no"),
           value   = Some("false"),
-          content = Text(messages("site.no"))
+          content = Text(messages("site.no")),
+          conditionalHtml = conditionalHtmlNo
         )
       )
 
@@ -108,5 +117,9 @@ trait RadiosFluency {
 
     def inline(): Radios =
       radios.withCssClass("govuk-radios--inline")
+
+    def removeInline(): Radios = {
+      radios.copy(classes = radios.classes.replace("govuk-radios--inline",""))
+    }
   }
 }

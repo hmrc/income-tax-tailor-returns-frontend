@@ -51,6 +51,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
   val radioForm: Form[Boolean] = radioFormProvider(isAgent = false)
   val radioAgentForm: Form[Boolean] = radioFormProvider(isAgent = true)
 
+  val expectedConditionalIndividual = s"HMRC hold information that you were employed between 6 April ${taxYear-1} and 5 April $taxYear."
+  val expectedConditionalAgent = s"HMRC hold information that your client was employed between 6 April ${taxYear-1} and 5 April $taxYear."
+
   val userAnswersWithFosterCarer: UserAnswers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
 
 
@@ -69,7 +72,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, existingData = false)(request, messages(application)).toString
       }
     }
 
@@ -86,7 +89,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, existingData = false)(request, messages(application)).toString
       }
     }
 
@@ -104,7 +107,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(AboutYourWork.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(AboutYourWork.values.toSet), NormalMode, taxYear, existingData = true)(request, messages(application)).toString
       }
     }
 
@@ -122,7 +125,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(AboutYourWork.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(AboutYourWork.values.toSet), NormalMode, taxYear, existingData = true)(request, messages(application)).toString
       }
     }
 
@@ -170,7 +173,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, existingData = false)(request, messages(application)).toString
       }
     }
 
@@ -191,7 +194,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, existingData = false)(request, messages(application)).toString
       }
     }
 
@@ -241,7 +244,8 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, existingData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
 
@@ -257,7 +261,8 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, existingData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalAgent)
       }
     }
 
@@ -277,7 +282,8 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(radioForm.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(radioForm.fill(true), NormalMode, taxYear, existingData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalIndividual)
       }
     }
 
@@ -297,7 +303,8 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(radioAgentForm.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(radioAgentForm.fill(true), NormalMode, taxYear, existingData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalAgent)
       }
     }
 
@@ -372,7 +379,8 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, existingData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
 
@@ -393,7 +401,8 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, existingData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalAgent)
       }
     }
 
