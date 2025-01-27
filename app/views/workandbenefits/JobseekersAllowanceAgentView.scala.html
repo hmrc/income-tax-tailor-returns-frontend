@@ -29,7 +29,7 @@
     p: ParagraphBody
 )
 
-@(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, taxYear: Int, prePopData: Boolean)(implicit request: Request[_], messages: Messages)
 
 @detailsContent = {
     @p(messages("jobseekersAllowance.agent.details.p"))
@@ -49,6 +49,10 @@
             summary = Text(messages("jobseekersAllowance.details.summary")),
             content = HtmlContent(detailsContent)
         ))
+
+        @if(prePopData) {
+            <div class="govuk-inset-text">@messages("jobseekersAllowance.insetText.agent", (taxYear-1).toString, taxYear.toString)</div>
+        }
 
         @govukCheckboxes(
             CheckboxesViewModel(
