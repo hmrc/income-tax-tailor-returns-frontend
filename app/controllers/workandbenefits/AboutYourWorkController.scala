@@ -141,9 +141,9 @@ class AboutYourWorkController @Inject()(
 
     (request.isAgent, isFosterCarer) match {
       case (true, true) => status(agentRadioView(form, mode, taxYear, prePopCheck)(request, messages))
-      case (true, false) => status(agentView(form, mode, taxYear, prePopCheck)(request, messages))
+      case (true, false) => status(agentView(form, mode, taxYear)(request, messages))
       case (false, true) => status(radioView(form, mode, taxYear, prePopCheck)(request, messages))
-      case (false, false) => status(view(form, mode, taxYear, prePopCheck)(request, messages))
+      case (false, false) => status(view(form, mode, taxYear)(request, messages))
     }
   }
 }

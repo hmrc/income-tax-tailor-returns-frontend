@@ -74,7 +74,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -91,7 +91,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -109,7 +109,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(AboutYourWork.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(AboutYourWork.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -127,7 +127,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(AboutYourWork.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(AboutYourWork.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -175,7 +175,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
@@ -196,7 +196,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 

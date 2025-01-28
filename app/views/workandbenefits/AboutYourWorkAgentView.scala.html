@@ -28,7 +28,7 @@
     govukDetails: GovukDetails
 )
 
-@(form: Form[_], mode: Mode, taxYear: Int, prePopData: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("aboutYourWork.agent.title")), taxYear = taxYear) {
 
