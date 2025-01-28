@@ -40,9 +40,14 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
+  private val prePopEnabled = Map("feature-switch.isPrePopEnabled" -> "true")
+
   val formProvider = new AboutYourWorkRadioPageFormProvider()
   val form: Form[Boolean] = formProvider(isAgent = false)
   val agentForm: Form[Boolean] = formProvider(isAgent = true)
+
+  val expectedConditionalIndividual = s"HMRC hold information that you were employed between 6 April ${taxYear-1} and 5 April $taxYear."
+  val expectedConditionalAgent = s"HMRC hold information that your client was employed between 6 April ${taxYear-1} and 5 April $taxYear."
 
   val userAnswersWithFosterCarer: UserAnswers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
 
@@ -62,7 +67,26 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalIndividual)
+      }
+    }
+    "must return OK and the correct view for a GET and isPrePopEnabled true" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
 
@@ -78,7 +102,26 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalAgent)
+      }
+    }
+    "must return OK and the correct view for a GET for an agent and isPrePopEnabled true" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalAgent)
       }
     }
 
@@ -98,7 +141,30 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalIndividual)
+      }
+    }
+    "must populate the view correctly on a GET when the question has previously been answered and isPrePopEnabled true" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear)
+        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
+        .success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalIndividual)
       }
     }
 
@@ -118,7 +184,30 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalAgent)
+      }
+    }
+    "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled true" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear)
+        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
+        .success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRadioPageRoute).withSession(validTaxYears)
+
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalAgent)
       }
     }
 
@@ -193,7 +282,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
       }
     }
 
@@ -214,7 +303,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
       }
     }
 

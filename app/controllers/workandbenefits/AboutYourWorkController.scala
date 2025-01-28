@@ -16,6 +16,7 @@
 
 package controllers.workandbenefits
 
+import config.FrontendAppConfig
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.{AboutYourWorkFormProvider, AboutYourWorkRadioPageFormProvider}
@@ -40,6 +41,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AboutYourWorkController @Inject()(
                                          override val messagesApi: MessagesApi,
                                          userDataService: UserDataService,
+                                         config: FrontendAppConfig,
                                          navigator: Navigator,
                                          identify: IdentifierActionProvider,
                                          getData: DataRetrievalActionProvider,
@@ -64,7 +66,7 @@ class AboutYourWorkController @Inject()(
 
         val isFosterCarer: Boolean = request.userAnswers.get(FosterCarerPage).getOrElse(false)
 
-        def deriveView[A](form: Form[A], status: Status): Result = getView(isFosterCarer, mode, taxYear)(form, status)
+        def deriveView[A](form: Form[A], status: Status, prePopData: Boolean): Result = getView(isFosterCarer, mode, taxYear, prePopData)(form, status)
 
         if (isFosterCarer) {
 
@@ -73,7 +75,7 @@ class AboutYourWorkController @Inject()(
             case Some(value) => radioForm(request.isAgent).fill(value)
           }
 
-          deriveView(preparedRadioForm, Ok)
+          deriveView(preparedRadioForm, Ok, preparedRadioForm.value.isDefined)
 
         } else {
 
@@ -82,7 +84,7 @@ class AboutYourWorkController @Inject()(
             case Some(value) => form(request.isAgent).fill(value)
           }
 
-          deriveView(preparedCheckboxForm, Ok)
+          deriveView(preparedCheckboxForm, Ok, preparedCheckboxForm.value.isDefined)
         }
     }
 
@@ -93,13 +95,13 @@ class AboutYourWorkController @Inject()(
 
         val isFosterCarer: Boolean = request.userAnswers.get(FosterCarerPage).getOrElse(false)
 
-        def deriveView[A](form: Form[A], status: Status): Result = getView(isFosterCarer, mode, taxYear)(form, status)
+        def deriveView[A](form: Form[A], status: Status, prePopData: Boolean): Result = getView(isFosterCarer, mode, taxYear, prePopData)(form, status)
 
         if (isFosterCarer) {
 
           radioForm(request.isAgent).bindFromRequest().fold(
             formWithErrors =>
-              Future.successful(deriveView(formWithErrors, BadRequest)),
+              Future.successful(deriveView(formWithErrors, BadRequest, formWithErrors.value.isDefined)),
 
             value => {
               val aboutYourWork = if (value) {
@@ -120,7 +122,7 @@ class AboutYourWorkController @Inject()(
 
           form(request.isAgent).bindFromRequest().fold(
             formWithErrors =>
-              Future.successful(deriveView(formWithErrors, BadRequest)),
+              Future.successful(deriveView(formWithErrors, BadRequest, formWithErrors.value.isDefined)),
 
             value =>
               for {
@@ -132,13 +134,15 @@ class AboutYourWorkController @Inject()(
         }
     }
 
-  private def getView[A](isFosterCarer: Boolean, mode: Mode, taxYear: Int)(form: Form[A], status: Status)
+  private def getView[A](isFosterCarer: Boolean, mode: Mode, taxYear: Int, prePopData: Boolean)(form: Form[A], status: Status)
                         (implicit request: DataRequest[_], messages: Messages): Result = {
 
+    val prePopCheck = if (config.isPrePopEnabled) prePopData else false
+
     (request.isAgent, isFosterCarer) match {
-      case (true, true) => status(agentRadioView(form, mode, taxYear)(request, messages))
+      case (true, true) => status(agentRadioView(form, mode, taxYear, prePopCheck)(request, messages))
       case (true, false) => status(agentView(form, mode, taxYear)(request, messages))
-      case (false, true) => status(radioView(form, mode, taxYear)(request, messages))
+      case (false, true) => status(radioView(form, mode, taxYear, prePopCheck)(request, messages))
       case (false, false) => status(view(form, mode, taxYear)(request, messages))
     }
   }

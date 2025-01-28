@@ -28,7 +28,14 @@
     paragraph: ParagraphBody
 )
 
-@(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, taxYear: Int, prePopData: Boolean)(implicit request: Request[_], messages: Messages)
+
+@yesHtml = {
+    <div class="govuk-body">@messages("aboutYourWork.insetText.yes", (taxYear -1).toString, taxYear.toString)</div>
+}
+@noHtml = {
+    <div class="govuk-body">@messages("aboutYourWork.insetText.no", (taxYear -1).toString, taxYear.toString)</div>
+}
 
 @layout(pageTitle = title(form, messages("aboutYourWorkRadioPage.title")), taxYear = taxYear) {
 
@@ -38,20 +45,17 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
-        @heading(messages("aboutYourWorkRadioPage.title"))
-
-        <div class="govuk-inset-text">
-            @paragraph(messages("aboutYourWorkRadioPage.p1"))
-            @list(Seq(
-                Html(messages("aboutYourWorkRadioPage.bullet1"))
-            ))
-        </div>
-
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("aboutYourWorkRadioPage.heading")).withSize(LegendSize.Medium)
+                legend = LegendViewModel(messages("aboutYourWorkRadioPage.heading"))
+                .asPageHeading()
+                .withSize(LegendSize.Large),
+                conditionalHtmlYes = if(prePopData) Some(yesHtml) else None,
+                conditionalHtmlNo = if(prePopData) Some(noHtml) else None,
             )
+            .withHint(Hint(content = messages("aboutYourWorkRadioPage.hint")))
+            .removeInline()
         )
 
         @govukButton(

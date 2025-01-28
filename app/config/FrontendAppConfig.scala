@@ -143,6 +143,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   def emaSupportingAgentsEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.ema-supporting-agents-enabled")
 
+  def isPrePopEnabled: Boolean =
+    configuration.get[Boolean]("feature-switch.isPrePopEnabled")
+
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
     "cy" -> Lang("cy")
