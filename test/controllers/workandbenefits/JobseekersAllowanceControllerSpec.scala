@@ -39,11 +39,16 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
+  private val prePopEnabled = Map("feature-switch.isPrePopEnabled" -> "true")
+
   lazy val jobseekersAllowanceRoute = controllers.workandbenefits.routes.JobseekersAllowanceController.onPageLoad(NormalMode, taxYear).url
 
   val formProvider = new JobseekersAllowanceFormProvider()
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
+
+  val expectedConditionalIndividual = s"HMRC hold information that you received Jobseeker’s Allowance between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on your Income Tax Return, Where you can remove this."
+  val expectedConditionalAgent = s"HMRC hold information that your client received Jobseeker’s Allowance between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on their Income Tax Return, Where you can remove this."
 
   "JobseekersAllowance Controller" - {
 
@@ -60,7 +65,27 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET and isPrePopEnabled" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[JobseekersAllowanceView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
 
@@ -77,7 +102,27 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET as an agent and isPrePopEnabled" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[JobseekersAllowanceAgentView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalAgent)
       }
     }
 
@@ -95,7 +140,28 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered and isPrePopEnabled" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(JobseekersAllowancePage, JobseekersAllowance.values.toSet).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
+
+        val view = application.injector.instanceOf[JobseekersAllowanceView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalIndividual)
       }
     }
 
@@ -113,7 +179,28 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(JobseekersAllowancePage, JobseekersAllowance.values.toSet).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, jobseekersAllowanceRoute).withSession(validTaxYears)
+
+        val view = application.injector.instanceOf[JobseekersAllowanceAgentView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalAgent)
       }
     }
 
@@ -161,7 +248,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
       }
     }
 
@@ -182,7 +269,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
       }
     }
 
