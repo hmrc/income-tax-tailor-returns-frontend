@@ -349,6 +349,8 @@ constructionIndustryScheme.agent.bullet1 = made deductions and passed them to HM
 constructionIndustryScheme.agent.bullet2 = given your client a monthly payment and deduction statement
 constructionIndustryScheme.error.required = Select yes if you had any Construction Industry Scheme deductions taken from your pay
 constructionIndustryScheme.agent.error.required = Select yes if your client had any Construction Industry Scheme deductions taken from their pay
+constructionIndustryScheme.insetText = This will be added to your Income Tax Return. To remove this deduction, set it to 0.
+constructionIndustryScheme.agent.insetText = This will be added to your clients Income Tax Return. To remove this deduction, set it to 0.
 
 employmentLumpSums.title = employmentLumpSums
 employmentLumpSums.agent.title = employmentLumpSums

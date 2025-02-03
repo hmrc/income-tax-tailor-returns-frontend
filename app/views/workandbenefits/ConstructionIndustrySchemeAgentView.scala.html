@@ -29,7 +29,7 @@
     paragraph: ParagraphBody
 )
 
-@(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, taxYear: Int, prePopData: Boolean)(implicit request: Request[_], messages: Messages)
 
 @insetContent1 = {
     @paragraph(messages("constructionIndustryScheme.agent.p1"))
@@ -56,6 +56,10 @@
             content = HtmlContent(insetContent1)
             )
         )
+
+        @if(prePopData) {
+            <div class="govuk-inset-text">@messages("constructionIndustryScheme.agent.insetText")</div>
+        }
 
         @govukRadios(
             RadiosViewModel.yesNo(
