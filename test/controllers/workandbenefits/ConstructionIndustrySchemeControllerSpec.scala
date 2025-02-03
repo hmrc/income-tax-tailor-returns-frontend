@@ -25,6 +25,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.workandbenefits.ConstructionIndustrySchemePage
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -39,10 +40,15 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ConstructionIndustrySchemeFormProvider()
-  val form = formProvider(isAgent = false)
-  val agentForm = formProvider(isAgent = true)
+  val form: Form[Boolean] = formProvider(isAgent = false)
+  val agentForm: Form[Boolean] = formProvider(isAgent = true)
 
-  lazy val constructionIndustrySchemeRoute = controllers.workandbenefits.routes.ConstructionIndustrySchemeController.onPageLoad(NormalMode, taxYear).url
+  private val prePopEnabled = Map("feature-switch.isPrePopEnabled" -> "true")
+
+  val expectedConditionalIndividual = "This will be added to your Income Tax Return. To remove this deduction, set it to 0."
+  val expectedConditionalAgent = "This will be added to your clients Income Tax Return. To remove this deduction, set it to 0."
+
+  lazy val constructionIndustrySchemeRoute: String = controllers.workandbenefits.routes.ConstructionIndustrySchemeController.onPageLoad(NormalMode, taxYear).url
 
   "ConstructionIndustryScheme Controller" - {
 
@@ -58,7 +64,26 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET and isPrePopEnabled true" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
 
@@ -74,7 +99,26 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET for an agent and isPrePopEnabled true" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalAgent)
       }
     }
 
@@ -92,7 +136,28 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered and isPrePopEnabled true" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
+
+        val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalIndividual)
       }
     }
 
@@ -110,7 +175,28 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled true" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
+
+        val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalAgent)
       }
     }
 
@@ -158,7 +244,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
       }
     }
 
@@ -179,7 +265,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
       }
     }
 

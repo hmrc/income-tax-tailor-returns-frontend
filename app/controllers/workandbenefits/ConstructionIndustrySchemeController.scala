@@ -16,12 +16,14 @@
 
 package controllers.workandbenefits
 
+import config.FrontendAppConfig
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.ConstructionIndustrySchemeFormProvider
 import models.Mode
 import navigation.Navigator
 import pages.workandbenefits.ConstructionIndustrySchemePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.UserDataService
@@ -33,6 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ConstructionIndustrySchemeController @Inject()(
                                          override val messagesApi: MessagesApi,
+                                         config: FrontendAppConfig,
                                          userDataService: UserDataService,
                                          navigator: Navigator,
                                          identify: IdentifierActionProvider,
@@ -44,7 +47,9 @@ class ConstructionIndustrySchemeController @Inject()(
                                          agentView: ConstructionIndustrySchemeAgentView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def form(isAgent: Boolean) = formProvider(isAgent)
+  def form(isAgent: Boolean): Form[Boolean] = formProvider(isAgent)
+
+  def prePopCheck(prePopData: Boolean): Boolean = if (config.isPrePopEnabled) prePopData else false
 
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
   (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
@@ -56,9 +61,9 @@ class ConstructionIndustrySchemeController @Inject()(
       }
 
       if (request.isAgent) {
-        Ok(agentView(preparedForm, mode, taxYear))
+        Ok(agentView(preparedForm, mode, taxYear, prePopCheck(preparedForm.value.isDefined)))
       } else {
-        Ok(view(preparedForm, mode, taxYear))
+        Ok(view(preparedForm, mode, taxYear, prePopCheck(preparedForm.value.isDefined)))
       }
   }
 
@@ -69,9 +74,9 @@ class ConstructionIndustrySchemeController @Inject()(
       form(request.isAgent).bindFromRequest().fold(
         formWithErrors =>
           if (request.isAgent) {
-            Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear)))
+            Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear, prePopCheck(formWithErrors.value.isDefined))))
           } else {
-            Future.successful(BadRequest(view(formWithErrors, mode, taxYear)))
+            Future.successful(BadRequest(view(formWithErrors, mode, taxYear, prePopCheck(formWithErrors.value.isDefined))))
           },
 
         value =>

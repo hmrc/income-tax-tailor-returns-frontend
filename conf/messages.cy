@@ -339,6 +339,9 @@ constructionIndustryScheme.agent.bullet1 = gwneud didyniadau a’u rhoi i CThEF
 constructionIndustryScheme.agent.bullet2 = rhoi datganiad misol i’ch cleient o daliadau a didyniadau
 constructionIndustryScheme.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog
 constructionIndustryScheme.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’i gyflog
+# TODO: constructionIndustryScheme.insetText/constructionIndustryScheme.agent.insetText
+constructionIndustryScheme.insetText = This will be added to your Income Tax Return. To remove this deduction, set it to 0.
+constructionIndustryScheme.agent.insetText = This will be added to your clients Income Tax Return. To remove this deduction, set it to 0.
 
 jobseekersAllowance.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
 jobseekersAllowance.agent.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
