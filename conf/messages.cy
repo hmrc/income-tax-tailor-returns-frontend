@@ -39,6 +39,7 @@ error.number = Nodwch rif dilys
 error.required = Nodwch werth
 error.summary.title = Mae problem wedi codi
 
+# TODO Check the three below
 error.incorrect.tax.year.heading = Enter the correct tax year
 error.incorrect.tax.year.not.supported = The tax year that you''ve entered is not supported.
 error.incorrect.tax.year.select.back.to.rectify = Select ‘back’ to return to the previous page and enter the correct tax year.
@@ -88,7 +89,7 @@ addSections.allowances = Lwfansau a rhyddhad treth
 addSections.agent.allowances = Lwfansau a rhyddhad treth
 addSections.status.notStarted = Heb ddechrau
 addSections.status.cannotStart = Methu dechrau eto
-addSections.status.completed = Wedi'i gwblhau
+addSections.status.completed = Wedi’i gwblhau
 
 taxReturnNotReady.title = Nid yw’ch Ffurflen Dreth yn barod i’w llenwi ar hyn o bryd
 taxReturnNotReady.heading = Nid yw’ch Ffurflen Dreth yn barod i’w llenwi ar hyn o bryd
@@ -308,19 +309,17 @@ aboutYourWork.employed.agent.hint = Roedd eich cleient yn gweithio i rywun arall
 aboutYourWork.selfEmployed.agent.hint = Roedd eich cleient yn gweithio i’w hun ac roedd yn anfonebu cleientiaid am y nwyddau neu’r gwasanaethau a ddarparodd.
 aboutYourWork.error.required = Dewiswch yr hyn a wnaethoch o ran gwaith, neu dewiswch ‘Dim un o’r uchod’
 aboutYourWork.agent.error.required = Dewiswch yr hyn a wnaeth eich cleient o ran gwaith, neu dewiswch ‘Dim un o’r uchod’
-# TODO: aboutYourWork.insetText.yes/aboutYourWork.insetText.no/aboutYourWork.insetText.agent.yes/aboutYourWork.insetText.agent.no
-aboutYourWork.insetText.yes = HMRC hold information that you were employed between 6 April {0} and 5 April {1}.
-aboutYourWork.insetText.no = HMRC hold information that you were employed between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return.
-aboutYourWork.insetText.agent.yes = HMRC hold information that your client was employed between 6 April {0} and 5 April {1}.
-aboutYourWork.insetText.agent.no = HMRC hold information that your client was employed between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return.
+aboutYourWork.insetText.yes = Mae gan CThEF wybodaeth yr oeddech wedi’ch cyflogi rhwng 6 Ebrill {0} a 5 Ebrill {1}.
+aboutYourWork.insetText.no = Mae gan CThEF wybodaeth yr oeddech wedi’ch cyflogi rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd yr wybodaeth hon i’w gweld ar eich Ffurflen Dreth Incwm.
+aboutYourWork.insetText.agent.yes = Mae gan CThEF wybodaeth bod eich cleient wedi’i gyflogi rhwng 6 Ebrill {0} a 5 Ebrill {1}.
+aboutYourWork.insetText.agent.no = Mae gan CThEF wybodaeth bod eich cleient wedi’i gyflogi rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd yr wybodaeth i’w gweld ar ei Ffurflen Dreth incwm.
 
 aboutYourWorkRadioPage.title = Ynglŷn â’ch gwaith
 aboutYourWorkRadioPage.agent.title = Ynglŷn â gwaith eich cleient
 aboutYourWorkRadioPage.heading = A oeddech wedi eich cyflogi?
 aboutYourWorkRadioPage.agent.heading = A oedd eich cleient wedi ei gyflogi?
-# TODO: aboutYourWorkRadioPage.hint/aboutYourWorkRadioPage.agent.hint
-aboutYourWorkRadioPage.hint = You worked for somebody else under a contract of employment and had rights such as sick pay and annual leave
-aboutYourWorkRadioPage.agent.hint = Your client worked for somebody else under a contract of employment and had rights such as sick pay and annual leave
+aboutYourWorkRadioPage.hint = Roeddech yn gweithio i rywun arall o dan gontract cyflogaeth ac roedd gennych hawliau fel tâl salwch a gwyliau blynyddol.
+aboutYourWorkRadioPage.agent.hint = Roedd eich cleient yn gweithio i rywun arall o dan gontract cyflogaeth ac roedd ganddo hawliau fel tâl salwch a gwyliau blynyddol.
 aboutYourWorkRadioPage.agent.p1 = Oherwydd roedd eich cleient yn ofalwr maeth neu’n ofalwr cysylltu bywydau, rydym wedi cynnwys yr adran ganlynol:
 aboutYourWorkRadioPage.bullet1 = Hunangyflogedig
 aboutYourWorkRadioPage.error.required = Dewiswch ‘Iawn’ os oeddech yn gyflogedig
@@ -360,10 +359,8 @@ jobseekersAllowance.none = Na, ni chefais yr un o’r budd-daliadau’r wladwria
 jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r wladwriaeth hyn
 jobseekersAllowance.error.required = Dewiswch a gawsoch Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn’
 jobseekersAllowance.agent.error.required = Dewiswch a gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r budd-daliadau’r wladwriaeth hyn’
-
-# TODO
-jobseekersAllowance.insetText = HMRC hold information that you received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
-jobseekersAllowance.insetText.agent = HMRC hold information that your client received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText = Mae gan CThEF wybodaeth y cawsoch Lwfans Ceisio Gwaith rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i’w gweld ar eich Ffurflen Dreth Incwm, lle gallwch ei dileu.
+jobseekersAllowance.insetText.agent = Mae gan CThEF wybodaeth bod eich cleient wedi cael Lwfans Ceisio Gwaith rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i weld ar ei Ffurflen Dreth Incwm, lle gallwch ei dileu.
 
 
 
