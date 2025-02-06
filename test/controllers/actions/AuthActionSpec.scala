@@ -20,7 +20,7 @@ import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import connectors.IncomeTaxSessionDataConnector
-import models.{APIErrorBodyModel, APIErrorModel}
+import models.errors.{APIErrorBodyModel, APIErrorModel}
 import models.session.SessionData
 import org.mockito.ArgumentMatchers.{any, eq => mEq}
 import org.mockito.{Mockito, MockitoSugar}
@@ -28,7 +28,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{status, _}
+import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, Retrieval, ~}

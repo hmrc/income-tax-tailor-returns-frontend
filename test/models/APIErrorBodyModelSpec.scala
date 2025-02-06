@@ -17,6 +17,7 @@
 package models
 
 
+import models.errors.{APIErrorBodyModel, APIErrorModel, APIErrorsBodyModel}
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.http.Status.SERVICE_UNAVAILABLE
 import play.api.libs.json.{JsObject, Json}
