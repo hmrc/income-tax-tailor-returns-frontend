@@ -18,7 +18,7 @@ package connectors
 
 import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
 import generators.ModelGenerators
-import models.{APIErrorBodyModel, APIErrorModel, APIErrorsBodyModel}
+import models.errors.{APIErrorBodyModel, APIErrorModel, APIErrorsBodyModel}
 import models.session.SessionData
 import org.scalatest.{EitherValues, OptionValues}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
