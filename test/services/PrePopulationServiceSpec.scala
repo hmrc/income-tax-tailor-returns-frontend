@@ -16,6 +16,9 @@
 
 package services
 
-class PrePopulationServiceSpec {
+import base.SpecBase
+
+class PrePopulationServiceSpec extends SpecBase {
 
 }
+

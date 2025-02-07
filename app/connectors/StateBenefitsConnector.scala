@@ -16,7 +16,6 @@
 
 package connectors
 
-import cats.data.EitherT
 import config.FrontendAppConfig
 import connectors.httpParsers.StandardGetHttpParser
 import models.prePopulation.StateBenefitsPrePopulationResponse
@@ -45,10 +44,8 @@ class StateBenefitsConnector @Inject()(config: FrontendAppConfig, httpClient: Ht
       dataLog = dataLogString(nino = nino, taxYear = taxYear)
     )
 
-    EitherT(
-      httpClient
-        .get(prePopulationUrl)
-        .execute[HttpResult[StateBenefitsPrePopulationResponse]]
-    )
+    httpClient
+      .get(prePopulationUrl)
+      .execute[HttpResult[StateBenefitsPrePopulationResponse]]
   }
 }
