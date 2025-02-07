@@ -25,4 +25,11 @@ case class StateBenefitsPrePopulationResponse (hasEsaPrePop: Boolean,
 
 object StateBenefitsPrePopulationResponse {
   implicit val reads: Reads[StateBenefitsPrePopulationResponse] = Json.reads[StateBenefitsPrePopulationResponse]
+
+  val empty: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
+    hasEsaPrePop = false,
+    hasJsaPrePop = false,
+    hasPensionsPrePop = false,
+    hasPensionLumpSumsPrePop = false
+  )
 }
