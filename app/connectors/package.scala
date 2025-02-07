@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import cats.data.EitherT
 import models.errors.SimpleErrorWrapper
 
 import scala.concurrent.Future
 
 package object connectors {
-  type ConnectorResponse[O] = EitherT[Future, SimpleErrorWrapper, O]
+  type ConnectorResponse[O] = Future[Either[SimpleErrorWrapper, O]]
   type HttpResult[O] = Either[SimpleErrorWrapper, O]
 }
