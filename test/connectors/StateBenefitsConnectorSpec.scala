@@ -17,7 +17,75 @@
 package connectors
 
 import base.SpecBase
+import mocks.{MockAppConfig, MockHttpClientV2}
+import models.errors.SimpleErrorWrapper
+import models.prePopulation.StateBenefitsPrePopulationResponse
+import play.api.http.Status.{IM_A_TEAPOT, INTERNAL_SERVER_ERROR}
+import play.api.test.DefaultAwaitTimeout
+import play.api.test.Helpers.await
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
 
-class StateBenefitsConnectorSpec extends SpecBase {
+class StateBenefitsConnectorSpec extends SpecBase
+  with MockAppConfig
+  with MockHttpClientV2
+  with DefaultAwaitTimeout {
 
+  trait Test {
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+
+    val nino: String = "AA111111A"
+    val testConnector = new StateBenefitsConnector(
+      config = mockAppConfig,
+      httpClient = mockHttpClientV2
+    )
+
+    implicit val httpReads: HttpReads[HttpResult[StateBenefitsPrePopulationResponse]] =
+      testConnector.StandardGetHttpReads
+
+    val dummyResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
+      hasEsaPrePop = true,
+      hasJsaPrePop = true,
+      hasPensionsPrePop = true,
+      hasPensionLumpSumsPrePop = true
+    )
+
+    val baseUrl = "http://test-BaseUrl"
+    mockStateBenefitsBaseUrl(response = baseUrl)
+    mockHttpClientV2Get(url"$baseUrl/$nino/$taxYear")
+  }
+
+  "getPrePopulation" -> {
+    "should return a success when a success response is received from state benefits backend" in new Test {
+      mockHttpClientV2Execute[HttpResult[StateBenefitsPrePopulationResponse]](Right(dummyResponse))
+
+      val result: Either[SimpleErrorWrapper, StateBenefitsPrePopulationResponse] =
+        await(testConnector.getPrePopulation(nino, taxYear))
+
+      result mustBe a[Right[_, _]]
+      result.getOrElse(StateBenefitsPrePopulationResponse.empty) mustBe dummyResponse
+    }
+
+    "should return an error when a success response is received from state benefits backend" in new Test {
+      mockHttpClientV2Execute[HttpResult[StateBenefitsPrePopulationResponse]](
+        Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR))
+      )
+
+      val result: Either[SimpleErrorWrapper, StateBenefitsPrePopulationResponse] =
+        await(testConnector.getPrePopulation(nino, taxYear))
+
+      result mustBe a[Left[_, _]]
+      result.swap.getOrElse(SimpleErrorWrapper(IM_A_TEAPOT)).status mustBe INTERNAL_SERVER_ERROR
+    }
+
+    "should throw an exception when an exception occurs during call to state benefits backend" in new Test {
+      mockHttpClientV2ExecuteException[HttpResult[StateBenefitsPrePopulationResponse]](
+        new RuntimeException()
+      )
+
+      def result: Either[SimpleErrorWrapper, StateBenefitsPrePopulationResponse] =
+        await(testConnector.getPrePopulation(nino, taxYear))
+
+      assertThrows[RuntimeException](result)
+    }
+  }
 }
