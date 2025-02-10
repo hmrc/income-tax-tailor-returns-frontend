@@ -437,6 +437,9 @@ rentalIncome.agent.nonUk = Eiddo sydd ddim yn y DU
 rentalIncome.agent.none = Na, ni chafod fy nghleient incwm rhent o eiddo
 rentalIncome.error.required = Dewiswch a gawsoch incwm rhent o eiddo yn y DU, o eiddo sydd ddim yn y DU, neu ‘Na, ni chefais incwm rhent o eiddo’
 rentalIncome.agent.error.required = Dewiswch a gafodd eich cleient incwm rhent o eiddo yn y DU, o eiddo sydd ddim yn y DU, neu ‘Na, ni chafodd fy nghleient incwm rhent o eiddo’
+# TODO: rentalIncome.insetText/rentalIncome.agent.insetText
+rentalIncome.insetText = HMRC hold information that you received rental income between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, where you can remove this.
+rentalIncome.agent.insetText = HMRC hold information that your client received rental income between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, where you can remove this.
 
 ukInterest.title = Llog yn y DU
 ukInterest.agent.title = Llog yn y DU

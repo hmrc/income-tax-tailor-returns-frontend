@@ -380,8 +380,8 @@ jobseekersAllowance.checkYourAnswersLabel = Jobseeker’s Allowance and Employme
 jobseekersAllowance.error.required = Select if you got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, I did not get either of these state benefits’
 jobseekersAllowance.agent.error.required = Select if your client got Jobseeker’s Allowance or contribution-based Employment and Support Allowance, or ‘No, my client did not get either of these state benefits’
 jobseekersAllowance.change.hidden = JobseekersAllowance
-jobseekersAllowance.insetText = HMRC hold information that you received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
-jobseekersAllowance.insetText.agent = HMRC hold information that your client received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText = HMRC hold information that you received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, where you can remove this.
+jobseekersAllowance.insetText.agent = HMRC hold information that your client received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, where you can remove this.
 
 shareSchemes.title = shareSchemes
 shareSchemes.agent.title = shareSchemes
@@ -447,6 +447,8 @@ rentalIncome.checkYourAnswersLabel = rentalIncome
 rentalIncome.error.required = Select if you got rental income from UK property, Non-UK property or ‘No, I did not get rental income from property’
 rentalIncome.agent.error.required = Select if your client got rental income from UK property, Non-UK property or ‘No, my client did not get rental income from property’
 rentalIncome.change.hidden = RentalIncome
+rentalIncome.insetText = HMRC hold information that you received rental income between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, where you can remove this.
+rentalIncome.agent.insetText = HMRC hold information that your client received rental income between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, where you can remove this.
 
 pensions.title = Income from pensions
 pensions.agent.title = Income from pensions

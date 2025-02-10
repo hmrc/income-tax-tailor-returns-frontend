@@ -38,17 +38,26 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute = Call("GET", "/foo")
 
+  private val prePopEnabled = Map("feature-switch.isPrePopEnabled" -> "true")
+  private val prePopDisabled = Map("feature-switch.isPrePopEnabled" -> "false")
+
+
   lazy val rentalIncomeRoute = routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url
 
   val formProvider = new RentalIncomeFormProvider()
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
+  val expectedConditionalIndividual = s"HMRC hold information that you received rental income between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on your Income Tax Return, where you can remove this."
+  val expectedConditionalAgent = s"HMRC hold information that your client received rental income between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on their Income Tax Return, where you can remove this."
+
   "RentalIncome Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .configure(prePopDisabled)
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
@@ -59,13 +68,35 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET and isPrePopEnabled" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[RentalIncomeView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
 
     "must return OK and the correct view for a GET as an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
+        .configure(prePopDisabled)
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
@@ -76,7 +107,27 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET as an agent and isPrePopEnabled" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[RentalIncomeAgentView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustNot include(expectedConditionalAgent)
       }
     }
 
@@ -84,7 +135,9 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, RentalIncome.values.toSet).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .configure(prePopDisabled)
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
@@ -94,7 +147,28 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(RentalIncome.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(RentalIncome.values.toSet), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered and isPrePopEnabled" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, RentalIncome.values.toSet).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
+
+        val view = application.injector.instanceOf[RentalIncomeView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form.fill(RentalIncome.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalIndividual)
       }
     }
 
@@ -102,7 +176,9 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, RentalIncome.values.toSet).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
+        .configure(prePopDisabled)
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
@@ -112,7 +188,28 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(RentalIncome.values.toSet), NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(RentalIncome.values.toSet), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled" in {
+
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, RentalIncome.values.toSet).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
+        .configure(prePopEnabled)
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
+
+        val view = application.injector.instanceOf[RentalIncomeAgentView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm.fill(RentalIncome.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) must include(expectedConditionalAgent)
       }
     }
 
@@ -160,7 +257,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
       }
     }
 
@@ -181,7 +278,7 @@ class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
       }
     }
 

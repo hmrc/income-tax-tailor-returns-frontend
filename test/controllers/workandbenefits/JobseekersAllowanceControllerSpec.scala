@@ -47,8 +47,8 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
   val form = formProvider(isAgent = false)
   val agentForm = formProvider(isAgent = true)
 
-  val expectedConditionalIndividual = s"HMRC hold information that you received Jobseeker’s Allowance between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on your Income Tax Return, Where you can remove this."
-  val expectedConditionalAgent = s"HMRC hold information that your client received Jobseeker’s Allowance between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on their Income Tax Return, Where you can remove this."
+  val expectedConditionalIndividual = s"HMRC hold information that you received Jobseeker’s Allowance between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on your Income Tax Return, where you can remove this."
+  val expectedConditionalAgent = s"HMRC hold information that your client received Jobseeker’s Allowance between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on their Income Tax Return, where you can remove this."
 
   "JobseekersAllowance Controller" - {
 
