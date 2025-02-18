@@ -31,14 +31,15 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
   def prePopRetrievalAction(nino: String, taxYear: Int)
                            (implicit hc: HeaderCarrier): () => ConnectorResponse[R]
 
-  protected def blockWithPrePop(nino: String,
-                                taxYear: Int,
-                                successAction: R => Result,
-                                errorAction: SimpleErrorWrapper => Result,
-                                extraLogContext: String,
-                                dataLog: String,
-                                incomeType: String)
-                               (implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Result] = {
+  // This can be made protected if there are any controllers which don't need the agent/individual logic
+  // provided by doHandleWithPrePop below
+  private def blockWithPrePop(prePopulationRetrievalAction: () => ConnectorResponse[R],
+                              successAction: R => Result,
+                              errorAction: SimpleErrorWrapper => Result,
+                              extraLogContext: String,
+                              dataLog: String,
+                              incomeType: String)
+                             (implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Result] = {
     val methodContext: String = "blockWithPrePop"
 
     val infoLogger = infoLog(
@@ -47,12 +48,10 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
       extraContext = Some(extraLogContext)
     )
 
-    def aa = prePopRetrievalAction(nino, taxYear)
-
     infoLogger(s"Attempting to retrieve user's pre-pop data for $incomeType")
 
     val result = for {
-      res <- EitherT(aa())
+      res <- EitherT(prePopulationRetrievalAction())
     } yield {
       infoLogger(s"Successfully retrieved user's pre-pop data for $incomeType. Processing success action")
       successAction(res)
@@ -71,10 +70,9 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
     }.merge
   }
 
-  protected def doHandleWithPrePop(nino: String,
-                                   taxYear: Int,
-                                   isAgent: Boolean,
+  protected def doHandleWithPrePop(isAgent: Boolean,
                                    isErrorScenario: Boolean,
+                                   prePopulationRetrievalAction: () => ConnectorResponse[R],
                                    agentSuccessAction: R => Result,
                                    individualSuccessAction: R => Result,
                                    errorAction: SimpleErrorWrapper => Result,
@@ -84,8 +82,10 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
     val (result, userType) = if (isAgent)(agentSuccessAction, "agent") else (individualSuccessAction, "individual")
     val extraString: String = if(isErrorScenario) " with form errors" else ""
 
+    val methodLoggingContext: String = "handleResult"
+
     val infoLogger = infoLog(
-      methodLoggingContext = "handleResult",
+      methodLoggingContext = methodLoggingContext,
       dataLog = dataLog,
       extraContext = Some(extraLogContext)
     )
@@ -93,16 +93,9 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
     infoLogger(s"Request indicates that user is an $userType. Attempting to return $userType view" + extraString)
 
     blockWithPrePop(
-      nino,
-      taxYear,
-      successAction = {
-        infoLogger(s"Returning $userType view" + extraString)
-        result
-      },
-      errorAction = {
-        //TODO: Log
-        errorAction
-      },
+      prePopulationRetrievalAction = prePopulationRetrievalAction,
+      successAction = result,
+      errorAction = errorAction,
       extraLogContext = extraLogContext,
       dataLog = dataLog,
       incomeType = "state benefits"

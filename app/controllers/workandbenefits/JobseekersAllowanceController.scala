@@ -92,12 +92,13 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
     }
 
     doHandleWithPrePop(
-      nino = nino,
-      taxYear = taxYear,
       isAgent = request.isAgent,
       isErrorScenario = false,
-      agentSuccessAction = (data: StateBenefitsPrePopulationResponse) => Ok(agentView(preparedForm, mode, taxYear, true)),
-      individualSuccessAction = (data: StateBenefitsPrePopulationResponse) => Ok(view(preparedForm, mode, taxYear, true)),
+      prePopulationRetrievalAction = prePopRetrievalAction(nino, taxYear),
+      agentSuccessAction = (data: StateBenefitsPrePopulationResponse) =>
+        Ok(agentView(preparedForm, mode, taxYear, data)),
+      individualSuccessAction = (data: StateBenefitsPrePopulationResponse) =>
+        Ok(view(preparedForm, mode, taxYear, data)),
       errorAction = ???, //TODO
       extraLogContext = "onPageLoad",
       dataLog = dataLog
@@ -121,12 +122,13 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
         )
 
         doHandleWithPrePop(
-          nino = nino,
-          taxYear = taxYear,
           isAgent = request.isAgent,
           isErrorScenario = true,
-          agentSuccessAction = (data: StateBenefitsPrePopulationResponse) => BadRequest(agentView(formWithErrors, mode, taxYear, true)),
-          individualSuccessAction = (data: StateBenefitsPrePopulationResponse) => BadRequest(view(formWithErrors, mode, taxYear, true)),
+          prePopulationRetrievalAction = prePopRetrievalAction(nino, taxYear),
+          agentSuccessAction = (data: StateBenefitsPrePopulationResponse) =>
+            BadRequest(agentView(formWithErrors, mode, taxYear, data)),
+          individualSuccessAction = (data: StateBenefitsPrePopulationResponse) =>
+            BadRequest(view(formWithErrors, mode, taxYear, data)),
           errorAction = (err: SimpleErrorWrapper) => ???, //TODO
           extraLogContext = "onSubmit",
           dataLog = dataLog
