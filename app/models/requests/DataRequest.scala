@@ -19,7 +19,29 @@ package models.requests
 import models.UserAnswers
 import play.api.mvc.{Request, WrappedRequest}
 
-case class OptionalDataRequest[A] (request: Request[A], mtdItId: String, userAnswers: Option[UserAnswers], isAgent: Boolean)
-  extends WrappedRequest[A](request)
+case class OptionalDataRequest[A] (request: Request[A],
+                                   mtdItId: String,
+                                   userAnswers: Option[UserAnswers],
+                                   isAgent: Boolean) extends WrappedRequest[A](request)
 
-case class DataRequest[A] (request: Request[A], mtdItId: String, userAnswers: UserAnswers, isAgent: Boolean) extends WrappedRequest[A](request)
+case class DataRequest[A] (request: Request[A],
+                           mtdItId: String,
+                           userAnswers: UserAnswers,
+                           isAgent: Boolean) extends WrappedRequest[A](request)
+
+case class DataRequestWithNino[A] (request: Request[A],
+                                   mtdItId: String,
+                                   userAnswers: UserAnswers,
+                                   isAgent: Boolean,
+                                   nino: String) extends WrappedRequest[A](request)
+
+object DataRequestWithNino {
+  def apply[A](dataRequest: DataRequest[A], nino: String): DataRequestWithNino[A] =
+    DataRequestWithNino[A](
+      dataRequest.request,
+      dataRequest.mtdItId,
+      dataRequest.userAnswers,
+      dataRequest.isAgent,
+      nino
+    )
+}

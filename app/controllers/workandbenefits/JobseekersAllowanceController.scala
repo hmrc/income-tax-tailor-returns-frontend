@@ -16,72 +16,133 @@
 
 package controllers.workandbenefits
 
-import config.FrontendAppConfig
+import connectors.ConnectorResponse
+import controllers.PrePopulationHelper
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.JobseekersAllowanceFormProvider
 import models.Mode
+import models.errors.SimpleErrorWrapper
+import models.prePopulation.StateBenefitsPrePopulationResponse
+import models.requests.DataRequestWithNino
+import models.workandbenefits.JobseekersAllowance
 import navigation.Navigator
 import pages.workandbenefits.JobseekersAllowancePage
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.UserDataService
+import play.api.mvc._
+import services.{PrePopulationService, UserDataService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.Logging
 import views.html.workandbenefits.{JobseekersAllowanceAgentView, JobseekersAllowanceView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class JobseekersAllowanceController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        userDataService: UserDataService,
-                                        config: FrontendAppConfig,
-                                        navigator: Navigator,
-                                        identify: IdentifierActionProvider,
-                                        getData: DataRetrievalActionProvider,
-                                        requireData: DataRequiredActionProvider,
-                                        formProvider: JobseekersAllowanceFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: JobseekersAllowanceView,
-                                        agentView: JobseekersAllowanceAgentView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class JobseekersAllowanceController @Inject()(override val messagesApi: MessagesApi,
+                                              userDataService: UserDataService,
+                                              prePopService: PrePopulationService,
+                                              navigator: Navigator,
+                                              identify: IdentifierActionProvider,
+                                              getData: DataRetrievalActionProvider,
+                                              requireData: DataRequiredActionProvider,
+                                              requireNino: DataRequiredWithNinoActionProvider,
+                                              formProvider: JobseekersAllowanceFormProvider,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: JobseekersAllowanceView,
+                                              agentView: JobseekersAllowanceAgentView)
+                                             (implicit ec: ExecutionContext) extends FrontendBaseController
+  with I18nSupport with Logging with PrePopulationHelper[StateBenefitsPrePopulationResponse] {
+  override val classLoggingContext: String = "JobseekersAllowanceController"
 
-  def form(isAgent: Boolean) = formProvider(isAgent)
-  def prePopCheck(prePopData: Boolean) = if (config.isPrePopEnabled) prePopData else false
+  override def prePopRetrievalAction(nino: String,
+                                     taxYear: Int)
+                                    (implicit hc: HeaderCarrier): () => ConnectorResponse[StateBenefitsPrePopulationResponse] =
+    () => prePopService.getStateBenefits(nino, taxYear)
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
-    implicit request =>
 
-      val preparedForm = request.userAnswers.get(JobseekersAllowancePage) match {
-        case None => form(request.isAgent)
-        case Some(value) => form(request.isAgent).fill(value)
-      }
+  def form(isAgent: Boolean): Form[Set[JobseekersAllowance]] = formProvider(isAgent)
 
-      if (request.isAgent) {
-        Ok(agentView(preparedForm, mode, taxYear, prePopCheck(preparedForm.value.isDefined)))
-      } else {
-        Ok(view(preparedForm, mode, taxYear, prePopCheck(preparedForm.value.isDefined)))
-      }
+  private def actionChain(taxYear: Int): ActionBuilder[DataRequestWithNino, AnyContent] =
+    identify(taxYear) andThen
+      taxYearAction(taxYear) andThen
+      getData(taxYear) andThen
+      requireData(taxYear) andThen
+      requireNino(taxYear)
+
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
+    val nino: String = request.nino
+    val dataLog: String = dataLogString(nino, taxYear)
+
+    val infoLogger: String => Unit = infoLog(
+      methodLoggingContext = "onPageLoad",
+      dataLog = dataLog
+    )
+
+    infoLogger("Received request to retrieve JobseekersAllowance tailoring page")
+
+    val preparedForm = request.userAnswers.get(JobseekersAllowancePage) match {
+      case None =>
+        infoLogger("No existing state benefits journey answers found in request model")
+        form(request.isAgent)
+      case Some(value) =>
+        infoLogger("Existing state benefits journey answers found. Pre-populating form with previous user answers")
+        form(request.isAgent).fill(value)
+    }
+
+    doHandleWithPrePop(
+      nino = nino,
+      taxYear = taxYear,
+      isAgent = request.isAgent,
+      isErrorScenario = false,
+      agentSuccessAction = (data: StateBenefitsPrePopulationResponse) => Ok(agentView(preparedForm, mode, taxYear, true)),
+      individualSuccessAction = (data: StateBenefitsPrePopulationResponse) => Ok(view(preparedForm, mode, taxYear, true)),
+      errorAction = ???, //TODO
+      extraLogContext = "onPageLoad",
+      dataLog = dataLog
+    )
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
-    implicit request =>
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
+    val nino: String = request.nino
+    val dataLog = dataLogString(nino, taxYear)
 
-      form(request.isAgent).bindFromRequest().fold(
-        formWithErrors =>
-          if (request.isAgent) {
-            Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear, prePopCheck(formWithErrors.value.isDefined))))
-          } else {
-            Future.successful(BadRequest(view(formWithErrors, mode, taxYear, prePopCheck(formWithErrors.value.isDefined))))
-          },
+    val infoLogger: String => Unit = infoLog(methodLoggingContext = "onPageLoad", dataLog = dataLog)
 
-        value =>
+    infoLogger("Request received to submit user journey answers for JobseekersAllowance view")
+
+    form(request.isAgent).bindFromRequest().fold(
+      formWithErrors => {
+        logger.warn(
+          methodContext = "onSubmit",
+          message = s"Errors found in form submission: ${formWithErrors.errors}",
+          dataLog = dataLog
+        )
+
+        doHandleWithPrePop(
+          nino = nino,
+          taxYear = taxYear,
+          isAgent = request.isAgent,
+          isErrorScenario = true,
+          agentSuccessAction = (data: StateBenefitsPrePopulationResponse) => BadRequest(agentView(formWithErrors, mode, taxYear, true)),
+          individualSuccessAction = (data: StateBenefitsPrePopulationResponse) => BadRequest(view(formWithErrors, mode, taxYear, true)),
+          errorAction = (err: SimpleErrorWrapper) => ???, //TODO
+          extraLogContext = "onSubmit",
+          dataLog = dataLog
+        )
+      },
+      value =>
+        {
+          infoLogger("Form bound successfully from request. Attempting to update user's journey answers")
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(JobseekersAllowancePage, value))
-            _              <- userDataService.set(updatedAnswers, request.userAnswers)
-          } yield Redirect(navigator.nextPage(JobseekersAllowancePage, mode, updatedAnswers))
-      )
+            _ <- userDataService.set(updatedAnswers, request.userAnswers)
+          } yield {
+            infoLogger("Journey answers updated successfully. Proceeding to next page in the journey")
+            Redirect(navigator.nextPage(JobseekersAllowancePage, mode, updatedAnswers))
+          }
+        }
+    )
   }
 }

@@ -22,10 +22,12 @@ trait Logging {
   val classLoggingContext : String
   lazy val logger: LoggerWithContext = LoggerWithContext(Logger(this.getClass), classLoggingContext)
 
-  def dataLogString(nino: String, taxYear: Int) = s" for NINO: $nino, and tax year: $taxYear"
+  def dataLogString(nino: String, taxYear: Int) = s" for request with NINO: $nino, and tax year: $taxYear"
 
-  def infoLog(methodLoggingContext: String, dataLog: String = ""): String => Unit = (message: String) =>
-    logger.info(methodLoggingContext, message, dataLog)
+  def infoLog(methodLoggingContext: String,
+              dataLog: String = "",
+              extraContext: Option[String] = None): String => Unit = (message: String) =>
+    logger.info(methodLoggingContext, message, dataLog, extraContext)
 
   def warnLog(methodLoggingContext: String, dataLog: String = ""): String => Unit = (message: String) =>
     logger.warn(methodLoggingContext, message, dataLog)

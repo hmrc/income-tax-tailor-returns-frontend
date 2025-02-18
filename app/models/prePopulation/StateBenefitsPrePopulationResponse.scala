@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, Reads}
 case class StateBenefitsPrePopulationResponse (hasEsaPrePop: Boolean,
                                                hasJsaPrePop: Boolean,
                                                hasPensionsPrePop: Boolean,
-                                               hasPensionLumpSumsPrePop: Boolean)
+                                               hasPensionLumpSumsPrePop: Boolean) extends PrePopulationResponse
 
 object StateBenefitsPrePopulationResponse {
   implicit val reads: Reads[StateBenefitsPrePopulationResponse] = Json.reads[StateBenefitsPrePopulationResponse]
