@@ -18,4 +18,5 @@ package models
 
 object SessionValues {
   val CLIENT_MTDITID = "ClientMTDID"
+  val CLIENT_NINO = "ClientNino"
 }

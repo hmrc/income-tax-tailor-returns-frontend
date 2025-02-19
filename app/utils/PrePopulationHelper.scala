@@ -75,7 +75,7 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
     result.leftMap { err =>
       logger.error(
         methodContext = methodContext,
-        message = s"Failed to retrieve user's pre-pop data for $incomeType." +
+        message = s"Failed to retrieve user's pre-pop data for $incomeType. " +
           s"Received error status: ${err.status} from pre-pop service. Processing error action",
         dataLog = dataLog,
         extraContext = Some(extraLogContext)
