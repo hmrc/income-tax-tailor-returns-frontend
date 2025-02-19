@@ -19,7 +19,7 @@ package utils
 import play.api.Logger
 
 trait Logging {
-  val classLoggingContext : String
+  protected val classLoggingContext : String
   lazy val logger: LoggerWithContext = LoggerWithContext(Logger(this.getClass), classLoggingContext)
 
   def dataLogString(nino: String, taxYear: Int) = s" for request with NINO: $nino, and tax year: $taxYear"

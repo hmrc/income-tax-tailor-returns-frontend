@@ -16,14 +16,14 @@
 
 package forms.workandbenefits
 
-import forms.mappings.Mappings
+import forms.FormProvider
 import models.workandbenefits.JobseekersAllowance
 import play.api.data.Form
 import play.api.data.Forms.set
 
 import javax.inject.Inject
 
-class JobseekersAllowanceFormProvider @Inject() extends Mappings {
+class JobseekersAllowanceFormProvider @Inject() extends FormProvider[JobseekersAllowance] {
 
   def apply(isAgent: Boolean): Form[Set[JobseekersAllowance]] = {
     val error: String =
