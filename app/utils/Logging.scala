@@ -28,6 +28,11 @@ trait Logging {
               dataLog: String = "",
               extraContext: Option[String] = None): String => Unit = (message: String) =>
     logger.info(methodLoggingContext, message, dataLog, extraContext)
+
+  def warnLog(methodLoggingContext: String,
+              dataLog: String = "",
+              extraContext: Option[String] = None): String => Unit = (message: String) =>
+    logger.warn(methodLoggingContext, message, dataLog, extraContext)
 }
 
 case class LoggerWithContext(underlying: Logger, classContext: String) {

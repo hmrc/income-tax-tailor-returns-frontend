@@ -102,16 +102,16 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
    * @param ec Execution context. See scaladoc for blockWithPrePop for usages
    * @return A Result
    */
-  protected def doHandleWithPrePop(isAgent: Boolean,
-                                   isErrorScenario: Boolean,
-                                   prePopulationRetrievalAction: () => ConnectorResponse[R],
-                                   agentSuccessAction: R => Result,
-                                   individualSuccessAction: R => Result,
-                                   errorAction: SimpleErrorWrapper => Result,
-                                   extraLogContext: String,
-                                   dataLog: String,
-                                   incomeType: String)
-                                  (implicit ec: ExecutionContext): Future[Result] = {
+  protected def blockWithPrePopAndUserType(isAgent: Boolean,
+                                           isErrorScenario: Boolean,
+                                           prePopulationRetrievalAction: () => ConnectorResponse[R],
+                                           agentSuccessAction: R => Result,
+                                           individualSuccessAction: R => Result,
+                                           errorAction: SimpleErrorWrapper => Result,
+                                           extraLogContext: String,
+                                           dataLog: String,
+                                           incomeType: String)
+                                          (implicit ec: ExecutionContext): Future[Result] = {
     val (result, userType) = if (isAgent)(agentSuccessAction, "agent") else (individualSuccessAction, "individual")
     val extraString: String = if(isErrorScenario) " with form errors" else ""
 

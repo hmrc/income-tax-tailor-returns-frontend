@@ -87,11 +87,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
                  mode: Mode): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
     val nino: String = request.nino
     val dataLog: String = dataLogString(nino, taxYear)
-
-    val infoLogger: String => Unit = infoLog(
-      methodLoggingContext = "onPageLoad",
-      dataLog = dataLog
-    )
+    val infoLogger: String => Unit = infoLog(methodLoggingContext = "onPageLoad", dataLog = dataLog)
 
     infoLogger(s"Received request to retrieve $pageName tailoring page")
 
@@ -104,7 +100,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
         form(request.isAgent).fill(value)
     }
 
-    doHandleWithPrePop(
+    blockWithPrePopAndUserType(
       isAgent = request.isAgent,
       isErrorScenario = false,
       prePopulationRetrievalAction = prePopActionWithFeatureSwitch(nino, taxYear),
@@ -126,31 +122,33 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
                mode: Mode): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
     val nino: String = request.nino
     val dataLog = dataLogString(nino, taxYear)
-
-    val infoLogger: String => Unit = infoLog(
-      methodLoggingContext = "onSubmit",
-      dataLog = dataLog
-    )
+    val infoLogger: String => Unit = infoLog(methodLoggingContext = "onSubmit", dataLog = dataLog)
+    val warnLogger: String => Unit = warnLog(methodLoggingContext = "onSubmit", dataLog = dataLog)
 
     infoLogger(s"Request received to submit user journey answers for $pageName view")
 
     form(request.isAgent).bindFromRequest().fold(
       formWithErrors => {
-        logger.warn(
-          methodContext = "onSubmit",
-          message = s"Errors found in form submission: ${formWithErrors.errors}",
-          dataLog = dataLog
+        warnLogger( s"Errors found in form submission: ${formWithErrors.errors}")
+
+        def successLog(): Unit = infoLogger(
+          s"Pre-population data successfully retrieved. Redirecting user to $pageName view with form errors"
         )
 
-        doHandleWithPrePop(
+        blockWithPrePopAndUserType(
           isAgent = request.isAgent,
           isErrorScenario = true,
           prePopulationRetrievalAction = prePopActionWithFeatureSwitch(nino, taxYear),
-          agentSuccessAction = (data: R) =>
-            BadRequest(agentViewProvider(formWithErrors, mode, taxYear, data)),
-          individualSuccessAction = (data: R) =>
-            BadRequest(viewProvider(formWithErrors, mode, taxYear, data)),
-          errorAction = (err: SimpleErrorWrapper) => ???, //TODO
+          agentSuccessAction = (data: R) => {
+            successLog(); BadRequest(agentViewProvider(formWithErrors, mode, taxYear, data))
+          },
+          individualSuccessAction = (data: R) => {
+            successLog(); BadRequest(viewProvider(formWithErrors, mode, taxYear, data))
+          },
+          errorAction = (err: SimpleErrorWrapper) => {
+            warnLogger("Failed to load pre-population data. Redirecting user to ???")
+            ??? //TODO
+          },
           extraLogContext = "onSubmit",
           dataLog = dataLog,
           incomeType = incomeType
