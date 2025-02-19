@@ -16,6 +16,7 @@
 
 package controllers.workandbenefits
 
+import config.FrontendAppConfig
 import controllers.ControllerWithPrePop
 import controllers.actions._
 import forms.workandbenefits.JobseekersAllowanceFormProvider
@@ -47,12 +48,15 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
                                               val formProvider: JobseekersAllowanceFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: JobseekersAllowanceView,
-                                              agentView: JobseekersAllowanceAgentView)
+                                              agentView: JobseekersAllowanceAgentView,
+                                              val config: FrontendAppConfig)
                                              (implicit val ec: ExecutionContext)
   extends ControllerWithPrePop[StateBenefitsPrePopulationResponse, JobseekersAllowance]
   with Logging {
 
   override protected val classLoggingContext: String = "JobseekersAllowanceController"
+
+  override val defaultPrePopulationResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse.empty
 
   override protected def prePopRetrievalAction(nino: String, taxYear: Int)(implicit hc: HeaderCarrier): PrePopResult =
     () => prePopService.getStateBenefits(nino, taxYear)
