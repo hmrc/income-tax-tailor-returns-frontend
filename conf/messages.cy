@@ -362,8 +362,12 @@ jobseekersAllowance.error.required = Dewiswch a gawsoch Lwfans Ceisio Gwaith neu
 jobseekersAllowance.agent.error.required = Dewiswch a gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r budd-daliadau’r wladwriaeth hyn’
 
 # TODO
-jobseekersAllowance.insetText = HMRC hold information that you received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
-jobseekersAllowance.insetText.agent = HMRC hold information that your client received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText.jsa = HMRC hold information that you received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText.esa = HMRC hold information that you received Employment and Support Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText.both = HMRC hold information that you received Jobseeker’s Allowance and Employment and Support Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText.agent.jsa = HMRC hold information that your client received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText.agent.esa = HMRC hold information that your client received Employment and Support Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText.agent.both = HMRC hold information that your client received Jobseeker’s Allowance and Employment and Support Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
 
 
 

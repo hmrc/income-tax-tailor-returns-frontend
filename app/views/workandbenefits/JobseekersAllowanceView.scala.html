@@ -51,8 +51,8 @@
             content = HtmlContent(detailsContent)
         ))
 
-        @if(prePopData.hasEsaPrePop) {
-            <div class="govuk-inset-text">@messages("jobseekersAllowance.insetText", (taxYear-1).toString, taxYear.toString)</div>
+        @if(prePopData.hasStateBenefits) {
+            <div class="govuk-inset-text">@messages(stateBenefitsMessageString(false), (taxYear-1).toString, taxYear.toString)</div>
         }
 
         @govukCheckboxes(
