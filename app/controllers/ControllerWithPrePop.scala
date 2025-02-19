@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions.{DataRequiredActionProvider, DataRequiredWithNinoActionProvider, DataRetrievalActionProvider, IdentifierActionProvider}
 import forms.FormProvider
@@ -31,6 +32,7 @@ import play.api.libs.json.Format
 import play.api.mvc.{Action, ActionBuilder, AnyContent, Request}
 import play.twirl.api.HtmlFormat
 import services.UserDataService
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{Logging, PrePopulationHelper}
 
@@ -48,8 +50,11 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
   val getData: DataRetrievalActionProvider
   val requireData: DataRequiredActionProvider
   val requireNino: DataRequiredWithNinoActionProvider
+  val config: FrontendAppConfig
 
   implicit val ec: ExecutionContext
+
+  protected val defaultPrePopulationResponse: R
 
   protected def viewProvider(form: Form[_], mode: Mode, taxYear: Int, prePopData: R)
                             (implicit request: Request[_]): HtmlFormat.Appendable
@@ -66,6 +71,14 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
       getData(taxYear) andThen
       requireData(taxYear) andThen
       requireNino(taxYear)
+
+  private def prePopActionWithFeatureSwitch(nino: String, taxYear: Int)
+                                           (implicit hc: HeaderCarrier): PrePopResult =
+    if (config.isPrePopEnabled) {
+      prePopRetrievalAction(nino, taxYear)
+    } else {
+      () => Future.successful(Right(defaultPrePopulationResponse))
+    }
 
   def onPageLoad(taxYear: Int,
                  pageName: String,
@@ -94,7 +107,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
     doHandleWithPrePop(
       isAgent = request.isAgent,
       isErrorScenario = false,
-      prePopulationRetrievalAction = prePopRetrievalAction(nino, taxYear),
+      prePopulationRetrievalAction = prePopActionWithFeatureSwitch(nino, taxYear),
       agentSuccessAction = (data: R) =>
         Ok(agentViewProvider(preparedForm, mode, taxYear, data)),
       individualSuccessAction = (data: R) =>
@@ -132,7 +145,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
         doHandleWithPrePop(
           isAgent = request.isAgent,
           isErrorScenario = true,
-          prePopulationRetrievalAction = prePopRetrievalAction(nino, taxYear),
+          prePopulationRetrievalAction = prePopActionWithFeatureSwitch(nino, taxYear),
           agentSuccessAction = (data: R) =>
             BadRequest(agentViewProvider(formWithErrors, mode, taxYear, data)),
           individualSuccessAction = (data: R) =>
