@@ -27,7 +27,7 @@ import navigation.Navigator
 import pages.QuestionPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.libs.json.{Reads, Writes}
+import play.api.libs.json.Format
 import play.api.mvc.{Action, ActionBuilder, AnyContent, Request}
 import play.twirl.api.HtmlFormat
 import services.UserDataService
@@ -36,7 +36,7 @@ import utils.{Logging, PrePopulationHelper}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait ControllerWithPrePop[R <: PrePopulationResponse, I]
+abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
   extends FrontendBaseController
   with I18nSupport
   with PrePopulationHelper[R] { _: Logging =>
@@ -71,8 +71,7 @@ trait ControllerWithPrePop[R <: PrePopulationResponse, I]
                  pageName: String,
                  incomeType: String,
                  page: QuestionPage[Set[I]],
-                 mode: Mode)
-                (implicit reads: Reads[I]): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
+                 mode: Mode): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
     val nino: String = request.nino
     val dataLog: String = dataLogString(nino, taxYear)
 
@@ -111,8 +110,7 @@ trait ControllerWithPrePop[R <: PrePopulationResponse, I]
                pageName: String,
                incomeType: String,
                page: QuestionPage[Set[I]],
-               mode: Mode)
-              (implicit writes: Writes[I]): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
+               mode: Mode): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
     val nino: String = request.nino
     val dataLog = dataLogString(nino, taxYear)
 
