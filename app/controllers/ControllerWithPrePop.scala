@@ -100,15 +100,28 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
         form(request.isAgent).fill(value)
     }
 
+    def successLog(): Unit = infoLogger(
+      s"Pre-population data successfully retrieved. Redirecting user to $pageName view with form errors"
+    )
+
     blockWithPrePopAndUserType(
       isAgent = request.isAgent,
       isErrorScenario = false,
       prePopulationRetrievalAction = prePopActionWithFeatureSwitch(nino, taxYear),
-      agentSuccessAction = (data: R) =>
-        Ok(agentViewProvider(preparedForm, mode, taxYear, data)),
-      individualSuccessAction = (data: R) =>
-        Ok(viewProvider(preparedForm, mode, taxYear, data)),
-      errorAction = (err: SimpleErrorWrapper) => ???, //TODO
+      agentSuccessAction = (data: R) => {
+        successLog(); Ok(agentViewProvider(preparedForm, mode, taxYear, data))
+      },
+      individualSuccessAction = (data: R) => {
+        successLog(); Ok(viewProvider(preparedForm, mode, taxYear, data))
+      },
+      errorAction = (_: SimpleErrorWrapper) => {
+        logger.warn(
+          methodContext = "onPageLoad",
+          message = "Failed to load pre-population data. Returning error page",
+          dataLog = dataLog
+        )
+        InternalServerError
+      },
       extraLogContext = "onPageLoad",
       dataLog = dataLog,
       incomeType = incomeType
@@ -145,9 +158,9 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
           individualSuccessAction = (data: R) => {
             successLog(); BadRequest(viewProvider(formWithErrors, mode, taxYear, data))
           },
-          errorAction = (err: SimpleErrorWrapper) => {
-            warnLogger("Failed to load pre-population data. Redirecting user to ???")
-            ??? //TODO
+          errorAction = (_: SimpleErrorWrapper) => {
+            warnLogger("Failed to load pre-population data. Returning error page")
+            InternalServerError
           },
           extraLogContext = "onSubmit",
           dataLog = dataLog,

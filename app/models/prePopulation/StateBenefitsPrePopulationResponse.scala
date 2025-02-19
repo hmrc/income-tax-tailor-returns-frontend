@@ -21,7 +21,20 @@ import play.api.libs.json.{Json, Reads}
 case class StateBenefitsPrePopulationResponse (hasEsaPrePop: Boolean,
                                                hasJsaPrePop: Boolean,
                                                hasPensionsPrePop: Boolean,
-                                               hasPensionLumpSumsPrePop: Boolean) extends PrePopulationResponse
+                                               hasPensionLumpSumsPrePop: Boolean) extends PrePopulationResponse {
+  val hasStateBenefits: Boolean = hasEsaPrePop || hasJsaPrePop
+
+  def stateBenefitsMessageString(isAgent: Boolean): String ={
+    val agentStringOpt = if (isAgent) "agent." else ""
+
+    (hasEsaPrePop, hasJsaPrePop) match {
+      case (true, true) => s"jobseekersAllowance.insetText.${agentStringOpt}both"
+      case (true, false) => s"jobseekersAllowance.insetText.${agentStringOpt}esa"
+      case (false, true) => s"jobseekersAllowance.insetText.${agentStringOpt}jsa"
+      case _ => ""
+    }
+  }
+}
 
 object StateBenefitsPrePopulationResponse {
   implicit val reads: Reads[StateBenefitsPrePopulationResponse] = Json.reads[StateBenefitsPrePopulationResponse]
