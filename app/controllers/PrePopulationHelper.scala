@@ -28,18 +28,34 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
 
-  def prePopRetrievalAction(nino: String, taxYear: Int)
-                           (implicit hc: HeaderCarrier): () => ConnectorResponse[R]
+  type PrePopResult = () => ConnectorResponse[R]
 
-  // This can be made protected if there are any controllers which don't need the agent/individual logic
-  // provided by doHandleWithPrePop below
+  protected def prePopRetrievalAction(nino: String, taxYear: Int)(implicit hc: HeaderCarrier): PrePopResult
+
+  /**
+   * A generic boilerplate method to handle retrieving any pre-pop information, and process the outcome
+   *
+   * N.B - This method has been made private because as far as I can tell all relevant tailoring pages with pre-pop
+   *       can simply instead use the doHandleWithPrePop method below which also handles the logic of switching between
+   *       different views depending on whether the user is an agent or not. If that proves to be untrue this method
+   *       can simply be made protected or public to open up the access.
+   *
+   * @param prePopulationRetrievalAction Function used to attempt to retrieve information about pre-pop
+   * @param successAction Function used to handle a success outcome. Converts pre-pop data to some Result
+   * @param errorAction Function used to handle an error outcome. Converts a SimpleErrorWrapper to some Result
+   * @param extraLogContext String used for logging. Provides information about where this method was called
+   * @param dataLog String used for logging. Contains data about the current user in a log friendly format
+   * @param incomeType String used for logging. Represents the current income type being handled, i.e 'state benefits'
+   * @param ec Execution context. Required for .leftMap on Cats type EitherT to function
+   * @return A Result
+   */
   private def blockWithPrePop(prePopulationRetrievalAction: () => ConnectorResponse[R],
                               successAction: R => Result,
                               errorAction: SimpleErrorWrapper => Result,
                               extraLogContext: String,
                               dataLog: String,
                               incomeType: String)
-                             (implicit ec: ExecutionContext, hc: HeaderCarrier): Future[Result] = {
+                             (implicit ec: ExecutionContext): Future[Result] = {
     val methodContext: String = "blockWithPrePop"
 
     val infoLogger = infoLog(
@@ -70,15 +86,33 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
     }.merge
   }
 
+  /**
+   * Boilerplate function to handle: retrieving pre-population data for an income type, the result of that retrieval
+   * for both individuals and agents, logging, and error handling. Should be applicable for any controller which needs
+   * to handle pre-pop. Most of the implementation is held within the blockWithPrePop method above
+   *
+   * @param isAgent A boolean used to flag that the user is an agent. Affects logging and the success action chosen
+   * @param isErrorScenario A boolean used to flag that a request is being made with errors present. Affects logging
+   * @param prePopulationRetrievalAction Function used to attempt to retrieve information about pre-pop
+   * @param agentSuccessAction Function used to handle a success outcome for agents. Converts pre-pop data into a result
+   * @param individualSuccessAction Function used to handle a success outcome for individuals. Same typing as above
+   * @param errorAction Function used to handle an error outcome. Converts a SimpleErrorWrapper to some result
+   * @param extraLogContext String used for logging. Provides information about where this method was called
+   * @param dataLog String used for logging. Contains data about the current user in a log friendly format
+   * @param incomeType String used for logging. Represents the current income type being handled, i.e 'state benefits'
+   * @param ec Execution context. See scaladoc for blockWithPrePop for usages
+   * @return A Result
+   */
   protected def doHandleWithPrePop(isAgent: Boolean,
                                    isErrorScenario: Boolean,
                                    prePopulationRetrievalAction: () => ConnectorResponse[R],
                                    agentSuccessAction: R => Result,
                                    individualSuccessAction: R => Result,
                                    errorAction: SimpleErrorWrapper => Result,
+                                   extraLogContext: String,
                                    dataLog: String,
-                                   extraLogContext: String)
-                                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Result] = {
+                                   incomeType: String)
+                                  (implicit ec: ExecutionContext): Future[Result] = {
     val (result, userType) = if (isAgent)(agentSuccessAction, "agent") else (individualSuccessAction, "individual")
     val extraString: String = if(isErrorScenario) " with form errors" else ""
 
@@ -98,7 +132,7 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
       errorAction = errorAction,
       extraLogContext = extraLogContext,
       dataLog = dataLog,
-      incomeType = "state benefits"
+      incomeType = incomeType
     )
   }
 }

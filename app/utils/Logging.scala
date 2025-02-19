@@ -28,15 +28,6 @@ trait Logging {
               dataLog: String = "",
               extraContext: Option[String] = None): String => Unit = (message: String) =>
     logger.info(methodLoggingContext, message, dataLog, extraContext)
-
-  def warnLog(methodLoggingContext: String, dataLog: String = ""): String => Unit = (message: String) =>
-    logger.warn(methodLoggingContext, message, dataLog)
-
-  def errorLog(methodLoggingContext: String, dataLog: String = ""): String => Unit = (message: String) =>
-    logger.error(methodLoggingContext, message, dataLog)
-
-  def errorWithExceptionLog(methodLoggingContext: String, ex: Throwable, dataLog: String = ""): String => Unit = (message: String) =>
-    logger.errorWithException(methodLoggingContext, message, ex, dataLog)
 }
 
 case class LoggerWithContext(underlying: Logger, classContext: String) {
