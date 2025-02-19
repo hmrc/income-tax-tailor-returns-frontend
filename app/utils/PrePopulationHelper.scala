@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package utils
 
 import cats.data.EitherT
 import connectors.ConnectorResponse
@@ -22,7 +22,6 @@ import models.errors.SimpleErrorWrapper
 import models.prePopulation.PrePopulationResponse
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
 
