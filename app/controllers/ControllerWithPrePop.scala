@@ -23,16 +23,15 @@ import forms.FormProvider
 import models.Mode
 import models.errors.SimpleErrorWrapper
 import models.prePopulation.PrePopulationResponse
-import models.requests.DataRequestWithNino
+import models.requests.{DataRequest, DataRequestLike, DataRequestWithNino}
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format
-import play.api.mvc.{Action, ActionBuilder, AnyContent, Request}
+import play.api.mvc._
 import play.twirl.api.HtmlFormat
 import services.UserDataService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{Logging, PrePopulationHelper}
 
@@ -65,39 +64,68 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
   protected def form(isAgent: Boolean): Form[Set[I]] = formProvider(isAgent)
 
   // If this needs overriding simply change it to be protected
-  private def actionChain(taxYear: Int): ActionBuilder[DataRequestWithNino, AnyContent] =
+  private def actionChain(taxYear: Int): ActionBuilder[DataRequestLike, AnyContent] = if (config.isPrePopEnabled) {
     identify(taxYear) andThen
       taxYearAction(taxYear) andThen
       getData(taxYear) andThen
       requireData(taxYear) andThen
       requireNino(taxYear)
-
-  private def prePopActionWithFeatureSwitch(nino: String, taxYear: Int)
-                                           (implicit hc: HeaderCarrier): PrePopResult =
-    if (config.isPrePopEnabled) {
-      prePopRetrievalAction(nino, taxYear)
-    } else {
-      () => Future.successful(Right(defaultPrePopulationResponse))
-    }
+  } else {
+    identify(taxYear) andThen
+      taxYearAction(taxYear) andThen
+      getData(taxYear) andThen
+      requireData(taxYear)
+  }
 
   def onPageLoad(taxYear: Int,
                  pageName: String,
                  incomeType: String,
                  page: QuestionPage[Set[I]],
                  mode: Mode): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
-    val nino: String = request.nino
-    val dataLog: String = dataLogString(nino, taxYear)
+    val (dataLog, prePopulationAction) = request match {
+      case _: DataRequest[_] => (
+        dataLogString("N/A", taxYear),
+        () => Future.successful(Right(defaultPrePopulationResponse))
+      )
+      case req: DataRequestWithNino[_] =>
+        val nino: String = req.nino
+        (
+          dataLogString(nino, taxYear),
+          prePopRetrievalAction(nino, taxYear)(hc(req.request))
+        )
+    }
+
+    doOnPageLoad(
+      taxYear = taxYear,
+      pageName = pageName,
+      incomeType = incomeType,
+      page = page,
+      mode = mode,
+      dataLog = dataLog,
+      prePopulationAction = prePopulationAction
+    )
+  }
+
+  private def doOnPageLoad(taxYear: Int,
+                           pageName: String,
+                           incomeType: String,
+                           page: QuestionPage[Set[I]],
+                           mode: Mode,
+                           dataLog: String,
+                           prePopulationAction: PrePopResult)
+                          (implicit dataRequest: DataRequestLike[_]): Future[Result] = {
+    implicit val request: Request[_] = dataRequest.request
     val infoLogger: String => Unit = infoLog(methodLoggingContext = "onPageLoad", dataLog = dataLog)
 
     infoLogger(s"Received request to retrieve $pageName tailoring page")
 
-    val preparedForm = request.userAnswers.get(page) match {
+    val preparedForm = dataRequest.userAnswers.get(page) match {
       case None =>
         infoLogger(s"No existing $incomeType journey answers found in request model")
-        form(request.isAgent)
+        form(dataRequest.isAgent)
       case Some(value) =>
         infoLogger(s"Existing $incomeType journey answers found. Pre-populating form with previous user answers")
-        form(request.isAgent).fill(value)
+        form(dataRequest.isAgent).fill(value)
     }
 
     def successLog(): Unit = infoLogger(
@@ -105,9 +133,9 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
     )
 
     blockWithPrePopAndUserType(
-      isAgent = request.isAgent,
+      isAgent = dataRequest.isAgent,
       isErrorScenario = false,
-      prePopulationRetrievalAction = prePopActionWithFeatureSwitch(nino, taxYear),
+      prePopulationRetrievalAction = prePopulationAction,
       agentSuccessAction = (data: R) => {
         successLog(); Ok(agentViewProvider(preparedForm, mode, taxYear, data))
       },
@@ -133,25 +161,54 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
                incomeType: String,
                page: QuestionPage[Set[I]],
                mode: Mode): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
-    val nino: String = request.nino
-    val dataLog = dataLogString(nino, taxYear)
+    val (dataLog, prePopulationAction) = request match {
+      case _: DataRequest[_] => (
+        dataLogString("N/A", taxYear),
+        () => Future.successful(Right(defaultPrePopulationResponse))
+      )
+      case req: DataRequestWithNino[_] =>
+        val nino: String = req.nino
+        (
+          dataLogString(nino, taxYear),
+          prePopRetrievalAction(nino, taxYear)(hc(req.request))
+        )
+    }
+
+    doOnSubmit(
+      taxYear = taxYear,
+      pageName = pageName,
+      incomeType = incomeType,
+      page = page,
+      mode = mode,
+      dataLog = dataLog,
+      prePopulationAction = prePopulationAction
+    )
+  }
+
+  private def doOnSubmit(taxYear: Int,
+                         pageName: String,
+                         incomeType: String,
+                         page: QuestionPage[Set[I]],
+                         mode: Mode,
+                         dataLog: String,
+                         prePopulationAction: PrePopResult)
+                        (implicit dataRequest: DataRequestLike[_]): Future[Result] = {
+    implicit val request: Request[_] = dataRequest.request
     val infoLogger: String => Unit = infoLog(methodLoggingContext = "onSubmit", dataLog = dataLog)
     val warnLogger: String => Unit = warnLog(methodLoggingContext = "onSubmit", dataLog = dataLog)
 
     infoLogger(s"Request received to submit user journey answers for $pageName view")
 
-    form(request.isAgent).bindFromRequest().fold(
-      formWithErrors => {
+    form(dataRequest.isAgent).bindFromRequest().fold(formWithErrors => {
         warnLogger( s"Errors found in form submission: ${formWithErrors.errors}")
 
-        def successLog(): Unit = infoLogger(
-          s"Pre-population data successfully retrieved. Redirecting user to $pageName view with form errors"
-        )
+        def successLog(): Unit = infoLogger(s"Pre-population data successfully retrieved. " +
+          s"Redirecting user to $pageName view with form errors")
 
         blockWithPrePopAndUserType(
-          isAgent = request.isAgent,
+          isAgent = dataRequest.isAgent,
           isErrorScenario = true,
-          prePopulationRetrievalAction = prePopActionWithFeatureSwitch(nino, taxYear),
+          prePopulationRetrievalAction = prePopulationAction,
           agentSuccessAction = (data: R) => {
             successLog(); BadRequest(agentViewProvider(formWithErrors, mode, taxYear, data))
           },
@@ -159,20 +216,18 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
             successLog(); BadRequest(viewProvider(formWithErrors, mode, taxYear, data))
           },
           errorAction = (_: SimpleErrorWrapper) => {
-            warnLogger("Failed to load pre-population data. Returning error page")
-            InternalServerError
+            warnLogger("Failed to load pre-population data. Returning error page"); InternalServerError
           },
           extraLogContext = "onSubmit",
           dataLog = dataLog,
           incomeType = incomeType
         )
       },
-      value =>
-      {
+      value => {
         infoLogger("Form bound successfully from request. Attempting to update user's journey answers")
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
-          _ <- userDataService.set(updatedAnswers, request.userAnswers)
+          updatedAnswers <- Future.fromTry(dataRequest.userAnswers.set(page, value))
+          _ <- userDataService.set(updatedAnswers, dataRequest.userAnswers)
         } yield {
           infoLogger("Journey answers updated successfully. Proceeding to next page in the journey")
           Redirect(navigator.nextPage(page, mode, updatedAnswers))

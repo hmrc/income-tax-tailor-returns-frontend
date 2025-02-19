@@ -16,9 +16,12 @@
 
 package controllers.actions
 
-import connectors.IncomeTaxSessionDataConnector
 import models.requests.{DataRequest, DataRequestWithNino}
+import play.api.mvc.Results.InternalServerError
 import play.api.mvc._
+import services.NinoRetrievalService
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,20 +33,31 @@ trait DataRequiredWithNinoActionProvider {
 }
 
 @Singleton
-class DataRequiredWithNinoActionProviderImpl @Inject()(connector: IncomeTaxSessionDataConnector,
+class DataRequiredWithNinoActionProviderImpl @Inject()(service: NinoRetrievalService,
                                                        parser: BodyParsers.Default)
                                                       (implicit val executionContext: ExecutionContext)
   extends DataRequiredWithNinoActionProvider {
 
   override def apply(taxYear: Int): DataRequiredWithNinoAction =
-    new DataRequiredWithNinoActionImpl(taxYear)(connector, parser)
+    new DataRequiredWithNinoActionImpl(taxYear)(service, parser)
 }
 
 @Singleton
 class DataRequiredWithNinoActionImpl @Inject()(taxYear: Int)
-                                              (incomeTaxSessionDataConnector: IncomeTaxSessionDataConnector,
+                                              (service: NinoRetrievalService,
                                                val parser: BodyParsers.Default)
                                               (implicit val executionContext: ExecutionContext) extends DataRequiredWithNinoAction {
 
-  protected def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithNino[A]]] = ???
+  override protected def refine[A](request: DataRequest[A]): Future[Either[Result, DataRequestWithNino[A]]] = {
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+    for {
+      serviceResponse <- service.getNinoOpt(request)
+      result = serviceResponse.fold(
+        Left[Result, DataRequestWithNino[A]](InternalServerError).withRight //TODO: This is probably a v&c redirect
+      )(
+        nino => Right(DataRequestWithNino(request, nino))
+      )
+    } yield result
+  }
 }

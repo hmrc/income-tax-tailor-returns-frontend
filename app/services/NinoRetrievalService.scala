@@ -18,28 +18,36 @@ package services
 
 import config.FrontendAppConfig
 import connectors.IncomeTaxSessionDataConnector
+import models.SessionValues
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataConnector,
-                                   config: FrontendAppConfig) {
+class NinoRetrievalService @Inject()(sessionDataConnector: IncomeTaxSessionDataConnector,
+                                     config: FrontendAppConfig) {
+  //TODO: Logging
 
-  def getSessionData(request: Request[_])(implicit hc: HeaderCarrier,
-                                          ec: ExecutionContext) = {
+  def getNinoOpt(request: Request[_])(implicit hc: HeaderCarrier,
+                                      ec: ExecutionContext): Future[Option[String]] = {
+    lazy val sessionNinoOpt =
+      request
+        .session
+        .get(SessionValues.CLIENT_NINO)
+
     if (config.sessionCookieServiceEnabled){
       sessionDataConnector
         .getSessionData
         .map {
-          case Left(_) => ??? //TODO figure out what to do when this fails
-          case Right(value) => value //TODO figure out what to do when the session data is 'None'
+          case Left(_) =>
+            //TODO: a log for this
+            sessionNinoOpt
+          case Right(value) => value.map(_.nino).orElse(sessionNinoOpt)
         }
     } else {
-      ???
-      //TODO figure out an alternative way to acquire the user's NINO
+      Future.successful(sessionNinoOpt)
     }
   }
 
