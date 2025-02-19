@@ -16,7 +16,6 @@
 
 package controllers.workandbenefits
 
-import connectors.ConnectorResponse
 import controllers.PrePopulationHelper
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
@@ -56,11 +55,10 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
   with I18nSupport with Logging with PrePopulationHelper[StateBenefitsPrePopulationResponse] {
   override val classLoggingContext: String = "JobseekersAllowanceController"
 
-  override def prePopRetrievalAction(nino: String,
-                                     taxYear: Int)
-                                    (implicit hc: HeaderCarrier): () => ConnectorResponse[StateBenefitsPrePopulationResponse] =
+  override protected def prePopRetrievalAction(nino: String,
+                                               taxYear: Int)
+                                              (implicit hc: HeaderCarrier): PrePopResult =
     () => prePopService.getStateBenefits(nino, taxYear)
-
 
   def form(isAgent: Boolean): Form[Set[JobseekersAllowance]] = formProvider(isAgent)
 
@@ -99,9 +97,10 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
         Ok(agentView(preparedForm, mode, taxYear, data)),
       individualSuccessAction = (data: StateBenefitsPrePopulationResponse) =>
         Ok(view(preparedForm, mode, taxYear, data)),
-      errorAction = ???, //TODO
+      errorAction = (err: SimpleErrorWrapper) => ???, //TODO
       extraLogContext = "onPageLoad",
-      dataLog = dataLog
+      dataLog = dataLog,
+      incomeType = "state benefits"
     )
   }
 
@@ -109,7 +108,10 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
     val nino: String = request.nino
     val dataLog = dataLogString(nino, taxYear)
 
-    val infoLogger: String => Unit = infoLog(methodLoggingContext = "onPageLoad", dataLog = dataLog)
+    val infoLogger: String => Unit = infoLog(
+      methodLoggingContext = "onSubmit",
+      dataLog = dataLog
+    )
 
     infoLogger("Request received to submit user journey answers for JobseekersAllowance view")
 
@@ -131,7 +133,8 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
             BadRequest(view(formWithErrors, mode, taxYear, data)),
           errorAction = (err: SimpleErrorWrapper) => ???, //TODO
           extraLogContext = "onSubmit",
-          dataLog = dataLog
+          dataLog = dataLog,
+          incomeType = "state benefits"
         )
       },
       value =>
