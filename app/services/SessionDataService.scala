@@ -35,7 +35,7 @@ class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataCon
 
   override protected val classLoggingContext: String = "NinoRetrievalService"
 
-  private def sessionDataCacheResult(implicit hc: HeaderCarrier): EitherT[Future, APIErrorModel, Option[String]] =
+  private def sessionDataCacheNinoResult(implicit hc: HeaderCarrier): EitherT[Future, APIErrorModel, Option[String]] =
     for {
       sessionOpt <- EitherT(sessionDataConnector.getSessionData)
     } yield {
@@ -65,7 +65,7 @@ class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataCon
     val result = if (config.sessionCookieServiceEnabled) {
       infoLogger("Session cookie service is enabled. Attempting to retrieve session data")
 
-      sessionDataCacheResult
+      sessionDataCacheNinoResult
         .leftMap(err => errorLogger(
           s"Request to retrieve session data from session cookie service failed with error status: ${err.status} " +
             s"and error body: ${err.body}"
