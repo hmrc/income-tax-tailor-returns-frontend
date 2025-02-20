@@ -30,7 +30,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import services.{NinoRetrievalService, PrePopulationService, UserDataService}
+import services.{SessionDataService, PrePopulationService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import views.html.workandbenefits.{JobseekersAllowanceAgentView, JobseekersAllowanceView}
@@ -41,7 +41,7 @@ import scala.concurrent.ExecutionContext
 class JobseekersAllowanceController @Inject()(override val messagesApi: MessagesApi,
                                               val userDataService: UserDataService,
                                               prePopService: PrePopulationService,
-                                              val ninoRetrievalService: NinoRetrievalService,
+                                              val ninoRetrievalService: SessionDataService,
                                               val navigator: Navigator,
                                               val identify: IdentifierActionProvider,
                                               val getData: DataRetrievalActionProvider,
