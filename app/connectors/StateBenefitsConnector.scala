@@ -34,11 +34,9 @@ class StateBenefitsConnector @Inject()(config: FrontendAppConfig, httpClient: Ht
   with Logging {
   val classLoggingContext: String = "StateBenefitsConnector"
 
-  def getPrePopulation(nino: String, taxYear: Int)
+  def getPrePopulation(nino: String, taxYear: Int, mtdItId: String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[StateBenefitsPrePopulationResponse] = {
     val prePopulationUrl: URL = url"${config.stateBenefitsBaseUrl}/pre-population/$nino/$taxYear"
-
-    logger.underlying.error(hc.authorization.get.toString)
 
     logger.info(
       methodContext = "[getPrePopulation]",
@@ -48,6 +46,7 @@ class StateBenefitsConnector @Inject()(config: FrontendAppConfig, httpClient: Ht
 
     httpClient
       .get(prePopulationUrl)
+      .setHeader(("mtditid", mtdItId))
       .execute[HttpResult[StateBenefitsPrePopulationResponse]]
   }
 }

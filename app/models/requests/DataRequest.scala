@@ -24,31 +24,7 @@ case class OptionalDataRequest[A] (request: Request[A],
                                    userAnswers: Option[UserAnswers],
                                    isAgent: Boolean) extends WrappedRequest[A](request)
 
-sealed trait DataRequestLike[A]{
-  val request: Request[A]
-  val mtdItId: String
-  val userAnswers: UserAnswers
-  val isAgent: Boolean
-}
-
 case class DataRequest[A] (request: Request[A],
                            mtdItId: String,
                            userAnswers: UserAnswers,
-                           isAgent: Boolean) extends WrappedRequest[A](request) with DataRequestLike[A]
-
-case class DataRequestWithNino[A] (request: Request[A],
-                                   mtdItId: String,
-                                   userAnswers: UserAnswers,
-                                   isAgent: Boolean,
-                                   nino: String) extends WrappedRequest[A](request) with DataRequestLike[A]
-
-object DataRequestWithNino {
-  def apply[A](dataRequest: DataRequest[A], nino: String): DataRequestWithNino[A] =
-    DataRequestWithNino[A](
-      dataRequest.request,
-      dataRequest.mtdItId,
-      dataRequest.userAnswers,
-      dataRequest.isAgent,
-      nino
-    )
-}
+                           isAgent: Boolean) extends WrappedRequest[A](request)

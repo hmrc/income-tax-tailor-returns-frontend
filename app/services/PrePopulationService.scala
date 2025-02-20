@@ -25,8 +25,8 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector) {
 
-  def getStateBenefits(nino: String, taxYear: Int)
+  def getStateBenefits(nino: String, taxYear: Int, mtdItId: String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[StateBenefitsPrePopulationResponse] = {
-    stateBenefitsConnector.getPrePopulation(nino, taxYear)
+    stateBenefitsConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 }

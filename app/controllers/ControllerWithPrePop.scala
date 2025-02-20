@@ -16,14 +16,16 @@
 
 package controllers
 
+import cats.data.EitherT
 import config.FrontendAppConfig
 import controllers.actions.TaxYearAction.taxYearAction
-import controllers.actions.{DataRequiredActionProvider, DataRequiredWithNinoActionProvider, DataRetrievalActionProvider, IdentifierActionProvider}
+import controllers.actions.{DataRequiredActionProvider, DataRetrievalActionProvider, IdentifierActionProvider}
 import forms.FormProvider
+import handlers.ErrorHandler
 import models.Mode
 import models.errors.SimpleErrorWrapper
 import models.prePopulation.PrePopulationResponse
-import models.requests.{DataRequest, DataRequestLike, DataRequestWithNino}
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.data.Form
@@ -31,7 +33,7 @@ import play.api.i18n.I18nSupport
 import play.api.libs.json.Format
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import services.UserDataService
+import services.{NinoRetrievalService, UserDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{Logging, PrePopulationHelper}
 
@@ -48,12 +50,17 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
   val identify: IdentifierActionProvider
   val getData: DataRetrievalActionProvider
   val requireData: DataRequiredActionProvider
-  val requireNino: DataRequiredWithNinoActionProvider
   val config: FrontendAppConfig
+  val errorHandler: ErrorHandler
+  val ninoRetrievalService: NinoRetrievalService
 
   implicit val ec: ExecutionContext
 
   protected val defaultPrePopulationResponse: R
+
+  private def internalServerErrorResult(implicit request: Request[_]): Result = InternalServerError(
+    errorHandler.internalServerErrorTemplate
+  )
 
   protected def viewProvider(form: Form[_], mode: Mode, taxYear: Int, prePopData: R)
                             (implicit request: Request[_]): HtmlFormat.Appendable
@@ -64,57 +71,51 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
   protected def form(isAgent: Boolean): Form[Set[I]] = formProvider(isAgent)
 
   // If this needs overriding simply change it to be protected
-  private def actionChain(taxYear: Int): ActionBuilder[DataRequestLike, AnyContent] = if (config.isPrePopEnabled) {
-    identify(taxYear) andThen
-      taxYearAction(taxYear) andThen
-      getData(taxYear) andThen
-      requireData(taxYear) andThen
-      requireNino(taxYear)
-  } else {
+  private def actionChain(taxYear: Int): ActionBuilder[DataRequest, AnyContent] =
     identify(taxYear) andThen
       taxYearAction(taxYear) andThen
       getData(taxYear) andThen
       requireData(taxYear)
-  }
 
-  def onPageLoad(taxYear: Int,
-                 pageName: String,
-                 incomeType: String,
-                 page: QuestionPage[Set[I]],
-                 mode: Mode): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
-    val (dataLog, prePopulationAction) = request match {
-      case _: DataRequest[_] => (
-        dataLogString("N/A", taxYear),
-        () => Future.successful(Right(defaultPrePopulationResponse))
-      )
-      case req: DataRequestWithNino[_] =>
-        val nino: String = req.nino
-        (
-          dataLogString(nino, taxYear),
-          prePopRetrievalAction(nino, taxYear)(hc(req.request))
+  def blockWithNino(taxYear: Int,
+                    block: (String, Int, PrePopResult, DataRequest[_]) => Future[Result]): Action[AnyContent] =
+    actionChain(taxYear).async { implicit request =>
+      def result: EitherT[Future, Unit, Result] = for {
+        nino <- EitherT(ninoRetrievalService.getNino("blockWithNino"))
+        result <- EitherT.right(
+          block(
+            dataLogString(nino, taxYear),
+            taxYear,
+            prePopRetrievalAction(nino, taxYear, request.mtdItId),
+            request
+          )
         )
-    }
+      } yield result
 
-    doOnPageLoad(
-      taxYear = taxYear,
-      pageName = pageName,
-      incomeType = incomeType,
-      page = page,
-      mode = mode,
-      dataLog = dataLog,
-      prePopulationAction = prePopulationAction
-    )
+      if (config.isPrePopEnabled) {
+        result
+          .leftMap(_ => InternalServerError(errorHandler.internalServerErrorTemplate))
+          .merge
+      } else {
+        block(
+          dataLogString("N/A", taxYear),
+          taxYear,
+          () => Future.successful(Right(defaultPrePopulationResponse)),
+          request
+        )
+      }
   }
 
-  private def doOnPageLoad(taxYear: Int,
-                           pageName: String,
+  protected def onPageLoad(pageName: String,
                            incomeType: String,
                            page: QuestionPage[Set[I]],
-                           mode: Mode,
-                           dataLog: String,
-                           prePopulationAction: PrePopResult)
-                          (implicit dataRequest: DataRequestLike[_]): Future[Result] = {
-    implicit val request: Request[_] = dataRequest.request
+                           mode: Mode)
+                          (dataLog: String,
+                           taxYear: Int,
+                           prePopulationAction: PrePopResult,
+                           dataRequest: DataRequest[_]): Future[Result] = {
+    implicit val request: DataRequest[_] = dataRequest
+
     val infoLogger: String => Unit = infoLog(methodLoggingContext = "onPageLoad", dataLog = dataLog)
 
     infoLogger(s"Received request to retrieve $pageName tailoring page")
@@ -148,7 +149,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
           message = "Failed to load pre-population data. Returning error page",
           dataLog = dataLog
         )
-        InternalServerError
+        internalServerErrorResult
       },
       extraLogContext = "onPageLoad",
       dataLog = dataLog,
@@ -156,44 +157,16 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
     )
   }
 
-  def onSubmit(taxYear: Int,
-               pageName: String,
-               incomeType: String,
-               page: QuestionPage[Set[I]],
-               mode: Mode): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
-    val (dataLog, prePopulationAction) = request match {
-      case _: DataRequest[_] => (
-        dataLogString("N/A", taxYear),
-        () => Future.successful(Right(defaultPrePopulationResponse))
-      )
-      case req: DataRequestWithNino[_] =>
-        val nino: String = req.nino
-        (
-          dataLogString(nino, taxYear),
-          prePopRetrievalAction(nino, taxYear)(hc(req.request))
-        )
-    }
-
-    doOnSubmit(
-      taxYear = taxYear,
-      pageName = pageName,
-      incomeType = incomeType,
-      page = page,
-      mode = mode,
-      dataLog = dataLog,
-      prePopulationAction = prePopulationAction
-    )
-  }
-
-  private def doOnSubmit(taxYear: Int,
-                         pageName: String,
+  protected def onSubmit(pageName: String,
                          incomeType: String,
                          page: QuestionPage[Set[I]],
-                         mode: Mode,
-                         dataLog: String,
-                         prePopulationAction: PrePopResult)
-                        (implicit dataRequest: DataRequestLike[_]): Future[Result] = {
-    implicit val request: Request[_] = dataRequest.request
+                         mode: Mode)
+                        (dataLog: String,
+                         taxYear: Int,
+                         prePopulationAction: PrePopResult,
+                         dataRequest: DataRequest[_]): Future[Result] = {
+    implicit val request: DataRequest[_] = dataRequest
+
     val infoLogger: String => Unit = infoLog(methodLoggingContext = "onSubmit", dataLog = dataLog)
     val warnLogger: String => Unit = warnLog(methodLoggingContext = "onSubmit", dataLog = dataLog)
 
