@@ -29,9 +29,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NinoRetrievalService @Inject()(sessionDataConnector: IncomeTaxSessionDataConnector,
-                                     config: FrontendAppConfig)
-                                    (implicit ec: ExecutionContext) extends Logging {
+class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataConnector,
+                                   config: FrontendAppConfig)
+                                  (implicit ec: ExecutionContext) extends Logging {
 
   override protected val classLoggingContext: String = "NinoRetrievalService"
 

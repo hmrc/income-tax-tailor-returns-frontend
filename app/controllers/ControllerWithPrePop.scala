@@ -33,7 +33,7 @@ import play.api.i18n.I18nSupport
 import play.api.libs.json.Format
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import services.{NinoRetrievalService, UserDataService}
+import services.{SessionDataService, UserDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{Logging, PrePopulationHelper}
 
@@ -52,7 +52,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
   val requireData: DataRequiredActionProvider
   val config: FrontendAppConfig
   val errorHandler: ErrorHandler
-  val ninoRetrievalService: NinoRetrievalService
+  val ninoRetrievalService: SessionDataService
 
   implicit val ec: ExecutionContext
 
