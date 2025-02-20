@@ -29,7 +29,8 @@ trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
 
   type PrePopResult = () => ConnectorResponse[R]
 
-  protected def prePopRetrievalAction(nino: String, taxYear: Int)(implicit hc: HeaderCarrier): PrePopResult
+  protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
+                                     (implicit hc: HeaderCarrier): PrePopResult
 
   /**
    * A generic boilerplate method to handle retrieving any pre-pop information, and process the outcome

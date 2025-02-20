@@ -50,7 +50,6 @@ class Module extends play.api.inject.Module {
       }
 
     Seq(
-      bind[DataRequiredWithNinoActionProvider].to[DataRequiredWithNinoActionProviderImpl].eagerly(),
       bind[DataRetrievalActionProvider].to[DataRetrievalActionProviderImpl].eagerly(),
       bind[DataRequiredActionProvider].to[DataRequiredActionProviderImpl].eagerly(),
       bind[Clock].toInstance(Clock.systemUTC()),

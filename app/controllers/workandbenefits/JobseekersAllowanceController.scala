@@ -20,6 +20,7 @@ import config.FrontendAppConfig
 import controllers.ControllerWithPrePop
 import controllers.actions._
 import forms.workandbenefits.JobseekersAllowanceFormProvider
+import handlers.ErrorHandler
 import models.Mode
 import models.prePopulation.StateBenefitsPrePopulationResponse
 import models.workandbenefits.JobseekersAllowance
@@ -29,7 +30,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import services.{PrePopulationService, UserDataService}
+import services.{NinoRetrievalService, PrePopulationService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import views.html.workandbenefits.{JobseekersAllowanceAgentView, JobseekersAllowanceView}
@@ -40,16 +41,17 @@ import scala.concurrent.ExecutionContext
 class JobseekersAllowanceController @Inject()(override val messagesApi: MessagesApi,
                                               val userDataService: UserDataService,
                                               prePopService: PrePopulationService,
+                                              val ninoRetrievalService: NinoRetrievalService,
                                               val navigator: Navigator,
                                               val identify: IdentifierActionProvider,
                                               val getData: DataRetrievalActionProvider,
                                               val requireData: DataRequiredActionProvider,
-                                              val requireNino: DataRequiredWithNinoActionProvider,
                                               val formProvider: JobseekersAllowanceFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: JobseekersAllowanceView,
                                               agentView: JobseekersAllowanceAgentView,
-                                              val config: FrontendAppConfig)
+                                              val config: FrontendAppConfig,
+                                              val errorHandler: ErrorHandler)
                                              (implicit val ec: ExecutionContext)
   extends ControllerWithPrePop[StateBenefitsPrePopulationResponse, JobseekersAllowance]
   with Logging {
@@ -58,8 +60,9 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
 
   override val defaultPrePopulationResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse.empty
 
-  override protected def prePopRetrievalAction(nino: String, taxYear: Int)(implicit hc: HeaderCarrier): PrePopResult =
-    () => prePopService.getStateBenefits(nino, taxYear)
+  override protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
+                                              (implicit hc: HeaderCarrier): PrePopResult =
+    () => prePopService.getStateBenefits(nino, taxYear, mtdItId)
 
   override protected def viewProvider(form: Form[_],
                                       mode: Mode,
@@ -78,19 +81,23 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
   val pageName = "JobseekersAllowance"
   val incomeType = "state benefits"
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = onPageLoad(
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = blockWithNino(
     taxYear = taxYear,
-    pageName = pageName,
-    incomeType = incomeType,
-    page = JobseekersAllowancePage,
-    mode = mode
+    block = onPageLoad(
+      pageName = pageName,
+      incomeType = incomeType,
+      page = JobseekersAllowancePage,
+      mode = mode
+    )
   )
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = onSubmit(
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = blockWithNino(
     taxYear = taxYear,
-    pageName = pageName,
-    incomeType = incomeType,
-    page = JobseekersAllowancePage,
-    mode = mode
+    block = onSubmit(
+      pageName = pageName,
+      incomeType = incomeType,
+      page = JobseekersAllowancePage,
+      mode = mode
+    )
   )
 }
