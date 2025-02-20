@@ -18,11 +18,25 @@ package models.prePopulation
 
 import play.api.libs.json.{Json, Reads}
 
-case class EmploymentPrePopulationResponse ()
+case class EmploymentPrePopulationResponse (hasEmployment: Boolean) extends PrePopulationResponse {
+
+  val hasEmployments: Boolean = hasEmployment
+
+  def employmentMessageString(isAgent: Boolean): String = {
+    val agentStringOpt = if (isAgent) "agent." else ""
+
+    (hasEmployments) match {
+      case (true) => s"employmentLumpSums.insetText.${agentStringOpt}employment"
+      case _ => ""
+    }
+
+  }
+}
 
 object EmploymentPrePopulationResponse {
   implicit val reads: Reads[EmploymentPrePopulationResponse] = Json.reads[EmploymentPrePopulationResponse]
 
-  val empty: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse()
-
+  val empty: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(
+    hasEmployment = false,
+  )
 }

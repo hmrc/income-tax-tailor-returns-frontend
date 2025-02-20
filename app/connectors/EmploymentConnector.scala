@@ -30,17 +30,17 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class EmploymentConnector @Inject()(config: FrontendAppConfig, httpClient: HttpClientV2)
                                    (implicit ec: ExecutionContext)
-  extends StandardGetHttpParser[EmploymentConnector]
+  extends StandardGetHttpParser[EmploymentPrePopulationResponse]
     with Logging {
   val classLoggingContext: String = "EmploymentConnector"
 
   def getPrePopulation(nino: String, taxYear: Int)
                       (implicit hc: HeaderCarrier): ConnectorResponse[EmploymentPrePopulationResponse] = {
-    val prePopulationUrl: URL = url"${config.employmentGatewayUrl}/$nino/$taxYear"
+    val prePopulationUrl: URL = url"${config.employmentBackendBaseUrl}/$nino/$taxYear"
 
     logger.info(
       methodContext = "[getPrePopulation]",
-      message = "Attempting to retrieve user's pre-pop data for state benefits",
+      message = "Attempting to retrieve user's pre-pop data for employment",
       dataLog = dataLogString(nino = nino, taxYear = taxYear)
     )
 
