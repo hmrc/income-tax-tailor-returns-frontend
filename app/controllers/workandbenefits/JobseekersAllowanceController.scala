@@ -53,7 +53,7 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
                                               val config: FrontendAppConfig,
                                               val errorHandler: ErrorHandler)
                                              (implicit val ec: ExecutionContext)
-  extends ControllerWithPrePop[StateBenefitsPrePopulationResponse, JobseekersAllowance]
+  extends ControllerWithPrePop[JobseekersAllowance, StateBenefitsPrePopulationResponse]
   with Logging {
 
   override protected val classLoggingContext: String = "JobseekersAllowanceController"
@@ -68,8 +68,9 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
                                       mode: Mode,
                                       taxYear: Int,
                                       prePopData: StateBenefitsPrePopulationResponse)
-                                     (implicit request: Request[_]): HtmlFormat.Appendable =
+                                     (implicit request: Request[_]): HtmlFormat.Appendable = {
     view(form, mode, taxYear, prePopData)
+  }
 
   override protected def agentViewProvider(form: Form[_],
                                            mode: Mode,

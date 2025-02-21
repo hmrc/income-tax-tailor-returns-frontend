@@ -39,7 +39,7 @@ import utils.{Logging, PrePopulationHelper}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
+abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
   extends FrontendBaseController
   with I18nSupport
   with PrePopulationHelper[R] { _: Logging =>
@@ -120,10 +120,10 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
 
     infoLogger(s"Received request to retrieve $pageName tailoring page")
 
-    val preparedForm = dataRequest.userAnswers.get(page) match {
+    def preparedForm(prePop: R): Form[Set[I]] = dataRequest.userAnswers.get(page) match {
       case None =>
         infoLogger(s"No existing $incomeType journey answers found in request model")
-        form(dataRequest.isAgent)
+        form(dataRequest.isAgent).fill(prePop.toPageModel)
       case Some(value) =>
         infoLogger(s"Existing $incomeType journey answers found. Pre-populating form with previous user answers")
         form(dataRequest.isAgent).fill(value)
@@ -138,10 +138,12 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
       isErrorScenario = false,
       prePopulationRetrievalAction = prePopulationAction,
       agentSuccessAction = (data: R) => {
-        successLog(); Ok(agentViewProvider(preparedForm, mode, taxYear, data))
+        successLog()
+        Ok(agentViewProvider(preparedForm(data), mode, taxYear, data))
       },
       individualSuccessAction = (data: R) => {
-        successLog(); Ok(viewProvider(preparedForm, mode, taxYear, data))
+        successLog()
+        Ok(viewProvider(preparedForm(data), mode, taxYear, data))
       },
       errorAction = (_: SimpleErrorWrapper) => {
         logger.warn(

@@ -16,4 +16,6 @@
 
 package models.prePopulation
 
-trait PrePopulationResponse
+trait PrePopulationResponse[I] {
+  def toPageModel: Set[I]
+}
