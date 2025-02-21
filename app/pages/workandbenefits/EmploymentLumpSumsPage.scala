@@ -16,11 +16,10 @@
 
 package pages.workandbenefits
 
-import models.workandbenefits.AboutYourWork
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 
-case object EmploymentLumpSumsPage extends QuestionPage[Set[AboutYourWork]] {
+case object EmploymentLumpSumsPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = JsPath \ toString
 

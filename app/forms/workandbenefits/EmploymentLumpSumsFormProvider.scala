@@ -17,15 +17,13 @@
 package forms.workandbenefits
 
 import forms.FormProvider
-import models.workandbenefits.AboutYourWork
 import play.api.data.Form
-import play.api.data.Forms.set
 
 import javax.inject.Inject
 
-class EmploymentLumpSumsFormProvider @Inject() extends FormProvider[AboutYourWork] {
+class EmploymentLumpSumsFormProvider @Inject() extends FormProvider[Boolean] {
 
-  def apply(isAgent: Boolean): Form[Set[AboutYourWork]] = {
+  def apply(isAgent: Boolean): Form[Boolean] = {
     val error: String =
       if (isAgent) {
         "employmentLumpSums.agent.error.required"
@@ -33,9 +31,7 @@ class EmploymentLumpSumsFormProvider @Inject() extends FormProvider[AboutYourWor
         "employmentLumpSums.error.required"
       }
     Form(
-      "value" -> set(enumerable[AboutYourWork](error)).verifying(
-        firstError(nonEmptySet(error), exclusiveItemInSet(error, AboutYourWork.No.toString))
-      )
+      "value" -> boolean(error)
     )
   }
 }

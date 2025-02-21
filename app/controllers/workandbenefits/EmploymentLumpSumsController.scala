@@ -21,11 +21,10 @@ import controllers.ControllerWithPrePop
 import controllers.actions._
 import forms.workandbenefits.EmploymentLumpSumsFormProvider
 import handlers.ErrorHandler
-import pages.workandbenefits.EmploymentLumpSumsPage
 import models.Mode
 import models.prePopulation.EmploymentPrePopulationResponse
-import models.workandbenefits.AboutYourWork
 import navigation.Navigator
+import pages.workandbenefits.EmploymentLumpSumsPage
 import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
@@ -36,7 +35,7 @@ import utils.Logging
 import views.html.workandbenefits.{EmploymentLumpSumsAgentView, EmploymentLumpSumsView}
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class EmploymentLumpSumsController @Inject()(override val messagesApi: MessagesApi,
                                              val userDataService: UserDataService,
@@ -53,10 +52,10 @@ class EmploymentLumpSumsController @Inject()(override val messagesApi: MessagesA
                                              val config: FrontendAppConfig,
                                              val errorHandler: ErrorHandler)
                                             (implicit val ec: ExecutionContext)
-  extends ControllerWithPrePop[EmploymentPrePopulationResponse, AboutYourWork]
+  extends ControllerWithPrePop[EmploymentPrePopulationResponse, Boolean]
     with Logging {
 
-  override protected val classLoggingContext: String = "EmploymentLumpSumsController"
+  override protected val classLoggingContext: String = classOf[EmploymentLumpSumsController].getSimpleName
 
   override val defaultPrePopulationResponse: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse.empty
 

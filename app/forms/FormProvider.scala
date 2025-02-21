@@ -24,5 +24,5 @@ import play.api.data.Form
  * @tparam I Any type wrapped by a form provider
  */
 trait FormProvider[I] extends Mappings {
-  def apply(isAgent: Boolean): Form[Set[I]]
+  def apply(isAgent: Boolean): Form[I]
 }

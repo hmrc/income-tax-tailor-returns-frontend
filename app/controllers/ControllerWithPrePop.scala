@@ -68,7 +68,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
   protected def agentViewProvider(form: Form[_], mode: Mode, taxYear: Int, prePopData: R)
                                  (implicit request: Request[_]): HtmlFormat.Appendable
 
-  protected def form(isAgent: Boolean): Form[Set[I]] = formProvider(isAgent)
+  protected def form(isAgent: Boolean): Form[I] = formProvider(isAgent)
 
   // If this needs overriding simply change it to be protected
   private def actionChain(taxYear: Int): ActionBuilder[DataRequest, AnyContent] =
@@ -108,7 +108,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
 
   protected def onPageLoad(pageName: String,
                            incomeType: String,
-                           page: QuestionPage[Set[I]],
+                           page: QuestionPage[I],
                            mode: Mode)
                           (dataLog: String,
                            taxYear: Int,
@@ -159,7 +159,7 @@ abstract class ControllerWithPrePop[R <: PrePopulationResponse, I: Format]
 
   protected def onSubmit(pageName: String,
                          incomeType: String,
-                         page: QuestionPage[Set[I]],
+                         page: QuestionPage[I],
                          mode: Mode)
                         (dataLog: String,
                          taxYear: Int,

@@ -32,7 +32,7 @@ class EmploymentConnector @Inject()(config: FrontendAppConfig, httpClient: HttpC
                                    (implicit ec: ExecutionContext)
   extends StandardGetHttpParser[EmploymentPrePopulationResponse]
     with Logging {
-  val classLoggingContext: String = "EmploymentConnector"
+  val classLoggingContext: String = classOf[EmploymentConnector].getSimpleName
 
   def getPrePopulation(nino: String, taxYear: Int)
                       (implicit hc: HeaderCarrier): ConnectorResponse[EmploymentPrePopulationResponse] = {
