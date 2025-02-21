@@ -16,15 +16,15 @@
 
 package models.prePopulation
 
+import models.workandbenefits.JobseekersAllowance
 import play.api.libs.json.{Json, Reads}
 
 case class StateBenefitsPrePopulationResponse (hasEsaPrePop: Boolean,
-                                               hasJsaPrePop: Boolean,
-                                               hasPensionsPrePop: Boolean,
-                                               hasPensionLumpSumsPrePop: Boolean) extends PrePopulationResponse {
+                                               hasJsaPrePop: Boolean)
+  extends PrePopulationResponse[JobseekersAllowance] {
   val hasStateBenefits: Boolean = hasEsaPrePop || hasJsaPrePop
 
-  def stateBenefitsMessageString(isAgent: Boolean): String ={
+  def stateBenefitsMessageString(isAgent: Boolean): String = {
     val agentStringOpt = if (isAgent) "agent." else ""
 
     (hasEsaPrePop, hasJsaPrePop) match {
@@ -34,6 +34,10 @@ case class StateBenefitsPrePopulationResponse (hasEsaPrePop: Boolean,
       case _ => ""
     }
   }
+
+  def toPageModel: Set[JobseekersAllowance] =
+    (if (hasEsaPrePop) Set(JobseekersAllowance.Esa) else Set()) ++
+      (if (hasJsaPrePop) Set(JobseekersAllowance.Jsa) else Set())
 }
 
 object StateBenefitsPrePopulationResponse {
@@ -41,8 +45,6 @@ object StateBenefitsPrePopulationResponse {
 
   val empty: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
     hasEsaPrePop = false,
-    hasJsaPrePop = false,
-    hasPensionsPrePop = false,
-    hasPensionLumpSumsPrePop = false
+    hasJsaPrePop = false
   )
 }

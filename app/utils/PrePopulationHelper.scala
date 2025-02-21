@@ -25,7 +25,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait PrePopulationHelper[R <: PrePopulationResponse] { _: Logging =>
+trait PrePopulationHelper[R <: PrePopulationResponse[_]] { _: Logging =>
 
   type PrePopResult = () => ConnectorResponse[R]
 
