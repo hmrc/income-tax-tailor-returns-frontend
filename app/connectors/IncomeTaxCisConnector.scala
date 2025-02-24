@@ -32,7 +32,7 @@ class IncomeTaxCisConnector @Inject()(config: FrontendAppConfig, httpClient: Htt
                                      (implicit ec: ExecutionContext)
   extends StandardGetHttpParser[IncomeTaxCisPrePopulationResponse]
   with Logging {
-  val classLoggingContext: String = "IncomeTaxCisConnector"
+  val classLoggingContext: String = classOf[IncomeTaxCisConnector].getSimpleName
 
   def getPrePopulation(nino: String, taxYear: Int, mtdItId:String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
