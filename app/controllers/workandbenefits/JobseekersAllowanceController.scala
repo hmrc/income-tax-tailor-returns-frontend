@@ -22,7 +22,7 @@ import controllers.actions._
 import forms.workandbenefits.JobseekersAllowanceFormProvider
 import handlers.ErrorHandler
 import models.Mode
-import models.prePopulation.StateBenefitsPrePopulationResponse
+import models.prePopulation.EsaJsaPrePopulationResponse
 import models.workandbenefits.JobseekersAllowance
 import navigation.Navigator
 import pages.workandbenefits.JobseekersAllowancePage
@@ -53,21 +53,21 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
                                               val config: FrontendAppConfig,
                                               val errorHandler: ErrorHandler)
                                              (implicit val ec: ExecutionContext)
-  extends ControllerWithPrePop[Set[JobseekersAllowance], StateBenefitsPrePopulationResponse]
+  extends ControllerWithPrePop[Set[JobseekersAllowance], EsaJsaPrePopulationResponse]
   with Logging {
 
   override protected val primaryContext: String = "JobseekersAllowanceController"
 
-  override val defaultPrePopulationResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse.empty
+  override val defaultPrePopulationResponse: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse.empty
 
   override protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
                                               (implicit hc: HeaderCarrier): PrePopResult =
-    () => prePopService.getStateBenefits(nino, taxYear, mtdItId)
+    () => prePopService.getEsaJsa(nino, taxYear, mtdItId)
 
   override protected def viewProvider(form: Form[_],
                                       mode: Mode,
                                       taxYear: Int,
-                                      prePopData: StateBenefitsPrePopulationResponse)
+                                      prePopData: EsaJsaPrePopulationResponse)
                                      (implicit request: Request[_]): HtmlFormat.Appendable = {
     view(form, mode, taxYear, prePopData)
   }
@@ -75,7 +75,7 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
   override protected def agentViewProvider(form: Form[_],
                                            mode: Mode,
                                            taxYear: Int,
-                                           prePopData: StateBenefitsPrePopulationResponse)
+                                           prePopData: EsaJsaPrePopulationResponse)
                                           (implicit request: Request[_]): HtmlFormat.Appendable =
     agentView(form, mode, taxYear, prePopData)
 

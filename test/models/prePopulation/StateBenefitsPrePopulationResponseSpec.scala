@@ -27,9 +27,7 @@ class StateBenefitsPrePopulationResponseSpec extends SpecBase {
         """
           |{
           |   "hasEsaPrePop": true,
-          |   "hasJsaPrePop": true,
-          |   "hasPensionsPrePop": true,
-          |   "hasPensionLumpSumsPrePop": true
+          |   "hasJsaPrePop": true
           |}
         """.stripMargin
 
@@ -38,8 +36,8 @@ class StateBenefitsPrePopulationResponseSpec extends SpecBase {
       result.get mustBe StateBenefitsPrePopulationResponse(
         hasEsaPrePop = true,
         hasJsaPrePop = true,
-        hasPensionsPrePop = true,
-        hasPensionLumpSumsPrePop = true
+        hasPensionsPrePop = false,
+        hasPensionLumpSumsPrePop = false
       )
     }
 

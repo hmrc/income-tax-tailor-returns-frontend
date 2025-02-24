@@ -19,8 +19,26 @@ package models.prePopulation
 import models.workandbenefits.JobseekersAllowance
 import play.api.libs.json.{Json, Reads}
 
-case class StateBenefitsPrePopulationResponse (hasEsaPrePop: Boolean,
-                                               hasJsaPrePop: Boolean)
+case class StateBenefitsPrePopulationResponse(hasEsaPrePop: Boolean,
+                                              hasJsaPrePop: Boolean,
+                                              hasPensionsPrePop: Boolean,
+                                              hasPensionLumpSumsPrePop: Boolean) {
+  def toEsaJsaModel: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse(hasEsaPrePop, hasJsaPrePop)
+}
+
+object StateBenefitsPrePopulationResponse {
+  implicit val reads: Reads[StateBenefitsPrePopulationResponse] = Json.reads[StateBenefitsPrePopulationResponse]
+
+  val empty: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
+    hasEsaPrePop = false,
+    hasJsaPrePop = false,
+    hasPensionsPrePop = false,
+    hasPensionLumpSumsPrePop = false
+  )
+}
+
+case class EsaJsaPrePopulationResponse(hasEsaPrePop: Boolean,
+                                       hasJsaPrePop: Boolean)
   extends PrePopulationResponse[Set[JobseekersAllowance]] {
   val hasStateBenefits: Boolean = hasEsaPrePop || hasJsaPrePop
 
@@ -40,10 +58,8 @@ case class StateBenefitsPrePopulationResponse (hasEsaPrePop: Boolean,
       (if (hasJsaPrePop) Set(JobseekersAllowance.Jsa) else Set())
 }
 
-object StateBenefitsPrePopulationResponse {
-  implicit val reads: Reads[StateBenefitsPrePopulationResponse] = Json.reads[StateBenefitsPrePopulationResponse]
-
-  val empty: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
+object EsaJsaPrePopulationResponse {
+  val empty: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse(
     hasEsaPrePop = false,
     hasJsaPrePop = false
   )

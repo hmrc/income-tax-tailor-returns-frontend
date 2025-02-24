@@ -18,7 +18,7 @@ package mocks
 
 import connectors.{ConnectorResponse, HttpResult, StateBenefitsConnector}
 import models.prePopulation.StateBenefitsPrePopulationResponse
-import org.scalamock.handlers.CallHandler3
+import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,22 +28,25 @@ import scala.concurrent.Future
 trait MockStateBenefitsConnector extends MockFactory { this: TestSuite =>
   val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
 
-  type MockType = CallHandler3[String, Int, HeaderCarrier, ConnectorResponse[StateBenefitsPrePopulationResponse]]
+  type MockType = CallHandler4[String, Int, String, HeaderCarrier,
+    ConnectorResponse[StateBenefitsPrePopulationResponse]]
 
   def mockGetPrePopulation(nino: String,
-              taxYear: Int,
-              response: HttpResult[StateBenefitsPrePopulationResponse]): MockType =
+                           taxYear: Int,
+                           mtdItId: String,
+                           response: HttpResult[StateBenefitsPrePopulationResponse]): MockType =
     (mockStateBenefitsConnector
-      .getPrePopulation(_: String, _: Int)(_: HeaderCarrier))
-      .expects(nino, taxYear, *)
+      .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
+      .expects(nino, taxYear, mtdItId, *)
       .returning(Future.successful(response))
 
   def mockGetPrePopulationException(nino: String,
                                     taxYear: Int,
+                                    mtdItId: String,
                                     ex: Throwable): MockType =
     (mockStateBenefitsConnector
-      .getPrePopulation(_: String, _: Int)(_: HeaderCarrier))
-      .expects(nino, taxYear, *)
+      .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
+      .expects(nino, taxYear, mtdItId, *)
       .returning(Future.failed(ex))
 
 }

@@ -19,7 +19,7 @@ package connectors
 import base.SpecBase
 import mocks.{MockAppConfig, MockHttpClientV2}
 import models.errors.SimpleErrorWrapper
-import models.prePopulation.StateBenefitsPrePopulationResponse
+import models.prePopulation.{EsaJsaPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import play.api.http.Status.{IM_A_TEAPOT, INTERNAL_SERVER_ERROR}
 import play.api.test.DefaultAwaitTimeout
 import play.api.test.Helpers.await
@@ -45,7 +45,9 @@ class StateBenefitsConnectorSpec extends SpecBase
 
     val dummyResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
       hasEsaPrePop = true,
-      hasJsaPrePop = true
+      hasJsaPrePop = true,
+      hasPensionsPrePop = false,
+      hasPensionLumpSumsPrePop = false
     )
 
     val baseUrl = "http://test-BaseUrl"
