@@ -53,7 +53,7 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
                                               val config: FrontendAppConfig,
                                               val errorHandler: ErrorHandler)
                                              (implicit val ec: ExecutionContext)
-  extends ControllerWithPrePop[JobseekersAllowance, StateBenefitsPrePopulationResponse]
+  extends ControllerWithPrePop[Set[JobseekersAllowance], StateBenefitsPrePopulationResponse]
   with Logging {
 
   override protected val classLoggingContext: String = "JobseekersAllowanceController"
