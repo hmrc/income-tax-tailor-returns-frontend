@@ -38,19 +38,19 @@ class StandardGetHttpParserSpec extends SpecBase {
   "parseToDataModel" -> {
     val dummyError: SimpleErrorWrapper = SimpleErrorWrapper(IM_A_TEAPOT)
     "should return an error when body string cannot be parsed to JSON" -> {
-      val result = DummyGetHttpParser.parseToDataModel("", "data log")
+      val result = DummyGetHttpParser.parseToDataModel("")
       result mustBe a[Left[_, _]]
       result.swap.getOrElse(dummyError) mustBe SimpleErrorWrapper(INTERNAL_SERVER_ERROR)
     }
 
     "should return an error when body string cannot be parsed to data model" -> {
-      val result = DummyGetHttpParser.parseToDataModel("""{}""", "data log")
+      val result = DummyGetHttpParser.parseToDataModel("""{}""")
       result mustBe a[Left[_, _]]
       result.swap.getOrElse(dummyError) mustBe SimpleErrorWrapper(INTERNAL_SERVER_ERROR)
     }
 
     "should return a data model when body string can be parsed to data model" -> {
-      val result = DummyGetHttpParser.parseToDataModel("""{"someData": "data"}""", "data log")
+      val result = DummyGetHttpParser.parseToDataModel("""{"someData": "data"}""")
       result mustBe a[Right[_, _]]
       result.getOrElse(DummyDataModel("nonsense")).someData mustBe "data"
     }

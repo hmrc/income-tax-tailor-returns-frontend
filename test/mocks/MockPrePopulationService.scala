@@ -32,19 +32,19 @@ trait MockPrePopulationService extends MockFactory { this: TestSuite =>
   type MockType = CallHandler5[String, Int, String, HeaderCarrier, ExecutionContext,
     ConnectorResponse[EsaJsaPrePopulationResponse]]
 
-  def mockGetStateBenefits(nino: String,
-                           taxYear: Int,
-                           mtdItId: String,
-                           response: HttpResult[EsaJsaPrePopulationResponse]): MockType =
+  def mockGetEsaJsa(nino: String,
+                    taxYear: Int,
+                    mtdItId: String,
+                    response: HttpResult[EsaJsaPrePopulationResponse]): MockType =
     (mockPrePopulationService
       .getEsaJsa(_: String, _: Int, _: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(nino, taxYear, mtdItId, *, *)
       .returning(Future.successful(response))
 
-  def mockGetStateBenefitsException(nino: String,
-                                    taxYear: Int,
-                                    mtdItId: String,
-                                    ex: Throwable): MockType =
+  def mockGetEsaJsaException(nino: String,
+                             taxYear: Int,
+                             mtdItId: String,
+                             ex: Throwable): MockType =
     (mockPrePopulationService
       .getEsaJsa(_: String, _: Int, _: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(nino, taxYear, mtdItId, *, *)

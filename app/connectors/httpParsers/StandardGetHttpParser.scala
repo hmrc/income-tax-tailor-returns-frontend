@@ -84,7 +84,7 @@ abstract class StandardGetHttpParser[O: Reads] {_: Logging =>
    *         and conforms to the expected format of the data model O an instance of Right[O] will be returned.
    *         Otherwise, an internal server error is returned expressed as an instance of Left[SimpleErrorWrapper]
    */
-  protected[httpParsers] def parseToDataModel(rawBodyString: String, dataLog: String): HttpResult[O] = {
+  protected[httpParsers] def parseToDataModel(rawBodyString: String, dataLog: String = ""): HttpResult[O] = {
     val methodLogContext: String = "parseToDataModel"
     val infoLogger: String => Unit = infoLog(interfaceLoggingContext, dataLog, Some(methodLogContext))
     infoLogger("Attempting to parse response body to JSON")
