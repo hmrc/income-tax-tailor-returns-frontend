@@ -56,7 +56,7 @@ class ConstructionIndustrySchemeController @Inject()(
   extends ControllerWithPrePop[Boolean, IncomeTaxCisPrePopulationResponse]
   with Logging {
 
-  override protected val classLoggingContext: String = "ConstructionIndustrySchemeController"
+  override protected val classLoggingContext: String = classOf[ConstructionIndustrySchemeController].getSimpleName
   override val defaultPrePopulationResponse: IncomeTaxCisPrePopulationResponse = IncomeTaxCisPrePopulationResponse.empty
   override protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
                                               (implicit hc: HeaderCarrier): PrePopResult =

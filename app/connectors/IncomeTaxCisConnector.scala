@@ -36,7 +36,7 @@ class IncomeTaxCisConnector @Inject()(config: FrontendAppConfig, httpClient: Htt
 
   def getPrePopulation(nino: String, taxYear: Int, mtdItId:String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
-    val prePopulationUrl: URL = url"${config.cisBaseUrl}/$nino/$taxYear"
+    val prePopulationUrl: URL = url"${config.cisBaseUrl}/pre-population/$nino/$taxYear"
 
     logger.info(
       methodContext = "[IncomeTaxCis-getPrePopulation]",
