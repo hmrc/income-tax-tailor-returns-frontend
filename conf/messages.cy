@@ -38,11 +38,9 @@ error.non_numeric = Rhowch werth gan ddefnyddio rhifau yn unig
 error.number = Nodwch rif dilys
 error.required = Nodwch werth
 error.summary.title = Mae problem wedi codi
-
-# TODO Check the three below
-error.incorrect.tax.year.heading = Enter the correct tax year
-error.incorrect.tax.year.not.supported = The tax year that you''ve entered is not supported.
-error.incorrect.tax.year.select.back.to.rectify = Select ‘back’ to return to the previous page and enter the correct tax year.
+error.incorrect.tax.year.heading = Rhowch y flwyddyn dreth gywir
+error.incorrect.tax.year.not.supported = Nid yw’r flwyddyn dreth rydych wedi’i nodi’n cael ei chefnogi.
+error.incorrect.tax.year.select.back.to.rectify = Dewiswch ‘yn ôl’ i fynd yn ôl i’r dudalen flaenorol a nodi’r flwyddyn dreth gywir.
 
 checkYourAnswers.title = Gwirio’ch Atebion
 checkYourAnswers.heading = Gwirio’ch Atebion
@@ -338,9 +336,8 @@ constructionIndustryScheme.agent.bullet1 = gwneud didyniadau a’u rhoi i CThEF
 constructionIndustryScheme.agent.bullet2 = rhoi datganiad misol i’ch cleient o daliadau a didyniadau
 constructionIndustryScheme.error.required = Dewiswch ‘Iawn’ os cawsoch unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’ch cyflog
 constructionIndustryScheme.agent.error.required = Dewiswch ‘Iawn’ os cafodd eich cleient unrhyw ddidyniadau Cynllun y Diwydiant Adeiladu wedi’u tynnu o’i gyflog
-# TODO: constructionIndustryScheme.insetText/constructionIndustryScheme.agent.insetText
-constructionIndustryScheme.insetText = This will be added to your Income Tax Return. To remove this deduction, set it to 0.
-constructionIndustryScheme.agent.insetText = This will be added to your clients Income Tax Return. To remove this deduction, set it to 0.
+constructionIndustryScheme.insetText = Bydd hyn yn cael ei ychwanegu at eich Ffurflen Dreth Incwm. I dynnu’r didyniad hwn, gosodwch ef i 0.
+constructionIndustryScheme.agent.insetText = Bydd hyn yn cael ei ychwanegu at Ffurflen Dreth Incwm eich cleient. I dynnu’r didyniad hwn, gosodwch ef i 0.
 
 jobseekersAllowance.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
 jobseekersAllowance.agent.title = Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth
@@ -437,9 +434,8 @@ rentalIncome.agent.nonUk = Eiddo sydd ddim yn y DU
 rentalIncome.agent.none = Na, ni chafod fy nghleient incwm rhent o eiddo
 rentalIncome.error.required = Dewiswch a gawsoch incwm rhent o eiddo yn y DU, o eiddo sydd ddim yn y DU, neu ‘Na, ni chefais incwm rhent o eiddo’
 rentalIncome.agent.error.required = Dewiswch a gafodd eich cleient incwm rhent o eiddo yn y DU, o eiddo sydd ddim yn y DU, neu ‘Na, ni chafodd fy nghleient incwm rhent o eiddo’
-# TODO: rentalIncome.insetText/rentalIncome.agent.insetText
-rentalIncome.insetText = HMRC hold information that you received rental income between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, where you can remove this.
-rentalIncome.agent.insetText = HMRC hold information that your client received rental income between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, where you can remove this.
+rentalIncome.insetText = Mae gan CThEF wybodaeth yr oeddech wedi cael incwm rhent rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i’w gweld ar eich Ffurflen Dreth Incwm, lle gallwch ei dileu.
+rentalIncome.agent.insetText = Mae gan CThEF wybodaeth yr oedd eich cleient wedi cael incwm rhent rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i weld ar ei Ffurflen Dreth Incwm, lle gallwch ei dileu.
 
 ukInterest.title = Llog yn y DU
 ukInterest.agent.title = Llog yn y DU
