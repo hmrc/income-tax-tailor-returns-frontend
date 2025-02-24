@@ -21,7 +21,7 @@ import play.api.libs.json.{Json, Reads}
 
 case class StateBenefitsPrePopulationResponse (hasEsaPrePop: Boolean,
                                                hasJsaPrePop: Boolean)
-  extends PrePopulationResponse[JobseekersAllowance] {
+  extends PrePopulationResponse[Set[JobseekersAllowance]] {
   val hasStateBenefits: Boolean = hasEsaPrePop || hasJsaPrePop
 
   def stateBenefitsMessageString(isAgent: Boolean): String = {

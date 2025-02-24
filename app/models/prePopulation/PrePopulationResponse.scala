@@ -17,5 +17,5 @@
 package models.prePopulation
 
 trait PrePopulationResponse[I] {
-  def toPageModel: Set[I]
+  def toPageModel: I
 }
