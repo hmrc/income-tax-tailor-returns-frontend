@@ -18,4 +18,6 @@ package models.prePopulation
 
 trait PrePopulationResponse[I] {
   def toPageModel: I
+  def toMessageString(isAgent: Boolean): String
+  val hasPrePop: Boolean
 }

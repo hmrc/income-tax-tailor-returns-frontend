@@ -16,7 +16,6 @@
 
 package models.prePopulation
 
-import models.workandbenefits.JobseekersAllowance
 import play.api.libs.json.{Json, Reads}
 
 case class StateBenefitsPrePopulationResponse(hasEsaPrePop: Boolean,
@@ -34,33 +33,5 @@ object StateBenefitsPrePopulationResponse {
     hasJsaPrePop = false,
     hasPensionsPrePop = false,
     hasPensionLumpSumsPrePop = false
-  )
-}
-
-case class EsaJsaPrePopulationResponse(hasEsaPrePop: Boolean,
-                                       hasJsaPrePop: Boolean)
-  extends PrePopulationResponse[Set[JobseekersAllowance]] {
-  val hasStateBenefits: Boolean = hasEsaPrePop || hasJsaPrePop
-
-  def stateBenefitsMessageString(isAgent: Boolean): String = {
-    val agentStringOpt = if (isAgent) "agent." else ""
-
-    (hasEsaPrePop, hasJsaPrePop) match {
-      case (true, true) => s"jobseekersAllowance.insetText.${agentStringOpt}both"
-      case (true, false) => s"jobseekersAllowance.insetText.${agentStringOpt}esa"
-      case (false, true) => s"jobseekersAllowance.insetText.${agentStringOpt}jsa"
-      case _ => ""
-    }
-  }
-
-  def toPageModel: Set[JobseekersAllowance] =
-    (if (hasEsaPrePop) Set(JobseekersAllowance.Esa) else Set()) ++
-      (if (hasJsaPrePop) Set(JobseekersAllowance.Jsa) else Set())
-}
-
-object EsaJsaPrePopulationResponse {
-  val empty: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse(
-    hasEsaPrePop = false,
-    hasJsaPrePop = false
   )
 }

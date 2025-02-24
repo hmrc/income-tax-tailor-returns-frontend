@@ -21,6 +21,7 @@ import config.FrontendAppConfig
 import connectors.IncomeTaxSessionDataConnector
 import models.SessionValues
 import models.errors.APIErrorModel
+import models.session.SessionData
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
@@ -35,12 +36,23 @@ class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataCon
 
   override protected val primaryContext: String = "NinoRetrievalService"
 
-  private def sessionDataCacheNinoResult(implicit hc: HeaderCarrier): EitherT[Future, APIErrorModel, Option[String]] =
-    for {
-      sessionOpt <- EitherT(sessionDataConnector.getSessionData)
-    } yield {
-      sessionOpt.map(_.nino)
-    }
+  private def sessionDataCacheResult(implicit hc: HeaderCarrier): EitherT[Future, APIErrorModel, Option[SessionData]] =
+    EitherT(sessionDataConnector.getSessionData)
+
+  protected def sessionValOpt(key: String,
+                              valName: String,
+                              infoLogger: String => Unit,
+                              errorLogger: String => Unit)
+                             (implicit request: Request[_]): Either[Unit, String] =
+    request
+      .session.get(key)
+      .fold {
+        errorLogger(s"No $valName was found in local session data")
+        Left[Unit, String]().withRight
+      } { sessionVal =>
+        infoLogger(s"Successfully retrieved $valName: $sessionVal from local session data")
+        Right(sessionVal)
+      }
 
   def getNino(extraContext: String)
              (implicit request: Request[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Unit, String]] = {
@@ -51,35 +63,29 @@ class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataCon
 
     infoLogger("Attempting to retrieve NINO for request")
 
-    lazy val sessionNinoOpt: Either[Unit, String] =
-      request
-        .session.get(SessionValues.CLIENT_NINO)
-        .fold {
-          errorLogger("No NINO was found in local session data")
-          Left[Unit, String]().withRight
-        } { nino =>
-          infoLogger(s"Successfully retrieved NINO: $nino from local session data")
-          Right(nino)
-        }
+    lazy val sessionNinoOpt: Either[Unit, String] = sessionValOpt(
+      key = SessionValues.CLIENT_NINO,
+      valName = "NINO",
+      infoLogger = infoLogger,
+      errorLogger = errorLogger
+    )
 
     val result = if (config.sessionCookieServiceEnabled) {
       infoLogger("Session cookie service is enabled. Attempting to retrieve session data")
 
-      sessionDataCacheNinoResult
+      sessionDataCacheResult
         .leftMap(err => errorLogger(
-          s"Request to retrieve session data from session cookie service failed with error status: ${err.status} " +
-            s"and error body: ${err.body}"
+          s"Request to retrieve session data failed with error status: ${err.status} and error body: ${err.body}"
         ))
-        .flatMap { ninoOpt =>
+        .flatMap { sessionDataOpt =>
           infoLogger("Request to retrieve session data from session cookie service completed successfully")
 
           EitherT(Future.successful(
-            ninoOpt.fold {
-              warnLogger("Session cookie service returned an empty session data object")
-              Left[Unit, String]().withRight
-            }(nino => {
-              infoLogger(s"Successfully extracted NINO: $nino from session data response")
-              Right(nino)
+            sessionDataOpt.fold(
+              Left[Unit, String](warnLogger("Session cookie service returned an empty session data object")).withRight
+            )(sessionData => {
+              infoLogger(s"Successfully extracted NINO: ${sessionData.nino} from session data response")
+              Right(sessionData.nino)
             })
           ))
         }
@@ -88,7 +94,7 @@ class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataCon
           EitherT(Future.successful(sessionNinoOpt))
         }
     } else {
-      infoLogger("Session cookie service is disabled. Attempting to retrieve nino from local session data only")
+      infoLogger("Session cookie service is disabled. Attempting to retrieve NINO from local session data only")
       EitherT(Future.successful(sessionNinoOpt))
     }
 
