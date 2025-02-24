@@ -17,34 +17,37 @@
 package mocks
 
 import connectors.{ConnectorResponse, HttpResult}
-import models.prePopulation.StateBenefitsPrePopulationResponse
-import org.scalamock.handlers.CallHandler3
+import models.prePopulation.EsaJsaPrePopulationResponse
+import org.scalamock.handlers.CallHandler5
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import services.PrePopulationService
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockPrePopulationService extends MockFactory { this: TestSuite =>
   val mockPrePopulationService: PrePopulationService = mock[PrePopulationService]
 
-  type MockType = CallHandler3[String, Int, HeaderCarrier, ConnectorResponse[StateBenefitsPrePopulationResponse]]
+  type MockType = CallHandler5[String, Int, String, HeaderCarrier, ExecutionContext,
+    ConnectorResponse[EsaJsaPrePopulationResponse]]
 
   def mockGetStateBenefits(nino: String,
                            taxYear: Int,
-                           response: HttpResult[StateBenefitsPrePopulationResponse]): MockType =
+                           mtdItId: String,
+                           response: HttpResult[EsaJsaPrePopulationResponse]): MockType =
     (mockPrePopulationService
-      .getStateBenefits(_: String, _: Int)(_: HeaderCarrier))
-      .expects(nino, taxYear, *)
+      .getEsaJsa(_: String, _: Int, _: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(nino, taxYear, mtdItId, *, *)
       .returning(Future.successful(response))
 
   def mockGetStateBenefitsException(nino: String,
                                     taxYear: Int,
+                                    mtdItId: String,
                                     ex: Throwable): MockType =
     (mockPrePopulationService
-      .getStateBenefits(_: String, _: Int)(_: HeaderCarrier))
-      .expects(nino, taxYear, *)
+      .getEsaJsa(_: String, _: Int, _: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(nino, taxYear, mtdItId, *, *)
       .returning(Future.failed(ex))
 
 
