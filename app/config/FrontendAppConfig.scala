@@ -74,14 +74,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def employmentBaseUrl: String = configuration.get[String]("microservice.services.income-tax-employment-frontend.url")
 
-  def ukInterestGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
-      s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-UK"
-
-  def giltEdgedGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
-      s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-securities"
-
   def personalFrontendBaseUrl: String =
     s"${configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url")}/update-and-submit-income-tax-return/personal-income"
 
@@ -91,10 +83,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   def cisFrontendUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-cis-frontend.url") +
       s"/update-and-submit-income-tax-return/construction-industry-scheme-deductions/$taxYear/contractor-details"
-
-  def employmentGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.income-tax-employment-frontend.url") +
-      s"/update-and-submit-income-tax-return/employment-income/$taxYear/income-from-employment"
 
   def pensionsGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
@@ -136,9 +124,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.welsh-translation")
-
-  lazy val privateBeta: Boolean =
-    configuration.get[Boolean]("feature-switch.privateBeta")
 
   lazy val sessionCookieServiceEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.sessionCookieService")

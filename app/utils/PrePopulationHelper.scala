@@ -59,7 +59,7 @@ trait PrePopulationHelper[R <: PrePopulationResponse[_]] { _: Logging =>
     val methodContext: String = "blockWithPrePop"
 
     val infoLogger = infoLog(
-      methodLoggingContext = methodContext,
+      secondaryContext = methodContext,
       dataLog = dataLog,
       extraContext = Some(extraLogContext)
     )
@@ -75,7 +75,7 @@ trait PrePopulationHelper[R <: PrePopulationResponse[_]] { _: Logging =>
 
     result.leftMap { err =>
       logger.error(
-        methodContext = methodContext,
+        secondaryContext = methodContext,
         message = s"Failed to retrieve user's pre-pop data for $incomeType. " +
           s"Received error status: ${err.status} from pre-pop service. Processing error action",
         dataLog = dataLog,
@@ -119,7 +119,7 @@ trait PrePopulationHelper[R <: PrePopulationResponse[_]] { _: Logging =>
     val methodLoggingContext: String = "handleResult"
 
     val infoLogger = infoLog(
-      methodLoggingContext = methodLoggingContext,
+      secondaryContext = methodLoggingContext,
       dataLog = dataLog,
       extraContext = Some(extraLogContext)
     )

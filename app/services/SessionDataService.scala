@@ -33,7 +33,7 @@ class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataCon
                                    config: FrontendAppConfig)
                                   (implicit ec: ExecutionContext) extends Logging {
 
-  override protected val classLoggingContext: String = "NinoRetrievalService"
+  override protected val primaryContext: String = "NinoRetrievalService"
 
   private def sessionDataCacheNinoResult(implicit hc: HeaderCarrier): EitherT[Future, APIErrorModel, Option[String]] =
     for {
