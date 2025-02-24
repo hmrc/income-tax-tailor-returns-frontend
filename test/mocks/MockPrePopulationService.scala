@@ -49,7 +49,4 @@ trait MockPrePopulationService extends MockFactory { this: TestSuite =>
       .getEsaJsa(_: String, _: Int, _: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(nino, taxYear, mtdItId, *, *)
       .returning(Future.failed(ex))
-
-
-
 }

@@ -65,7 +65,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
       }
     }
 
@@ -84,7 +84,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
         contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
@@ -102,7 +102,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
       }
     }
 
@@ -121,7 +121,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
         contentAsString(result) mustNot include(expectedConditionalAgent)
       }
     }
@@ -140,7 +140,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
       }
     }
 
@@ -160,7 +160,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
         contentAsString(result) must include(expectedConditionalIndividual)
       }
     }
@@ -179,7 +179,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
       }
     }
 
@@ -199,7 +199,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(agentForm.fill(JobseekersAllowance.values.toSet), NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
         contentAsString(result) must include(expectedConditionalAgent)
       }
     }
@@ -248,7 +248,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
       }
     }
 
@@ -269,7 +269,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = ???)(request, messages(application)).toString
       }
     }
 
