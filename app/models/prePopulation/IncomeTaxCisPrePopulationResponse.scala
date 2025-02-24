@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package forms.workandbenefits
+package models.prePopulation
 
-import forms.FormProvider
-import play.api.data.Form
+import play.api.libs.json.{Json, Reads}
 
-import javax.inject.Inject
+case class IncomeTaxCisPrePopulationResponse (hasCis: Boolean) extends PrePopulationResponse[Boolean] {
+  override def toPageModel: Boolean = hasCis
+}
 
-class ConstructionIndustrySchemeFormProvider @Inject() extends FormProvider[Boolean] {
+object IncomeTaxCisPrePopulationResponse {
+  implicit val reads: Reads[IncomeTaxCisPrePopulationResponse] = Json.reads[IncomeTaxCisPrePopulationResponse]
 
-  def apply(isAgent: Boolean): Form[Boolean] = {
-    val error: String =
-      if (isAgent) {
-        "constructionIndustryScheme.agent.error.required"
-      } else {
-        "constructionIndustryScheme.error.required"
-      }
-    Form(
-      "value" -> boolean(error)
-    )
-  }
+  val empty: IncomeTaxCisPrePopulationResponse = IncomeTaxCisPrePopulationResponse(hasCis = false)
 }

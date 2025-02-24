@@ -16,17 +16,22 @@
 
 package services
 
-import connectors.{ConnectorResponse, StateBenefitsConnector}
-import models.prePopulation.StateBenefitsPrePopulationResponse
+import connectors.{ConnectorResponse, IncomeTaxCisConnector, StateBenefitsConnector}
+import models.prePopulation.{IncomeTaxCisPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector) {
+class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector, cisConnector: IncomeTaxCisConnector) {
 
   def getStateBenefits(nino: String, taxYear: Int, mtdItId: String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[StateBenefitsPrePopulationResponse] = {
     stateBenefitsConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
+
+  def getCis(nino: String, taxYear: Int,mtdItId: String)(implicit hc:HeaderCarrier):ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
+    cisConnector.getPrePopulation(nino, taxYear, mtdItId)
+  }
+
 }
