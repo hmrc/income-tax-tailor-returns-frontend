@@ -41,7 +41,7 @@ class IncomeTaxSessionDataConnectorImpl @Inject()(config: Configuration, httpCli
     httpClient
       .get(url"$url")
       .execute[SessionDataResponse]
-      .logFailureReason(connectorName = "UserAnswersConnector on get")
+      .logFailureReason(connectorName = "IncomeTaxSessionDataConnector on get")
 
   }
 }
