@@ -18,11 +18,10 @@ package connectors.httpParsers
 
 import base.SpecBase
 import models.errors.SimpleErrorWrapper
-import play.api.Logger
 import play.api.http.Status.{BAD_REQUEST, IM_A_TEAPOT, INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.{Json, Reads}
 import uk.gov.hmrc.http.HttpResponse
-import utils.LoggerWithContext
+import utils.Logging
 
 class StandardGetHttpParserSpec extends SpecBase {
 
@@ -32,8 +31,8 @@ class StandardGetHttpParserSpec extends SpecBase {
     implicit val reads: Reads[DummyDataModel] = Json.reads[DummyDataModel]
   }
 
-  object DummyGetHttpParser extends StandardGetHttpParser[DummyDataModel] {
-    override val logger: LoggerWithContext = LoggerWithContext(Logger("dummy"), "")
+  object DummyGetHttpParser extends StandardGetHttpParser[DummyDataModel] with Logging {
+    override protected val primaryContext: String = "DummyLogString"
   }
 
   "parseToDataModel" -> {

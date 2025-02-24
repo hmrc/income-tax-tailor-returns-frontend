@@ -31,6 +31,7 @@ class PrePopulationServiceSpec extends SpecBase
 
   val nino: String = "AA111111A"
   override val taxYear: Int = 2025
+  override val mtdItId = "111111"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
@@ -40,22 +41,20 @@ class PrePopulationServiceSpec extends SpecBase
 
   val dummyResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
     hasEsaPrePop = true,
-    hasJsaPrePop = true,
-    hasPensionsPrePop = true,
-    hasPensionLumpSumsPrePop = true
+    hasJsaPrePop = true
   )
 
   "getStateBenefits" -> {
     "should return a success response when connector returns success response" in {
       mockGetPrePopulation(nino, taxYear, Right(dummyResponse))
-      val result = await(testService.getStateBenefits(nino, taxYear))
+      val result = await(testService.getStateBenefits(nino, taxYear, mtdItId))
       result mustBe a[Right[_, _]]
       result.getOrElse(StateBenefitsPrePopulationResponse.empty) mustBe dummyResponse
     }
 
     "should return an error response when connector returns error response" in {
       mockGetPrePopulation(nino, taxYear, Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR)))
-      val result = await(testService.getStateBenefits(nino, taxYear))
+      val result = await(testService.getStateBenefits(nino, taxYear, mtdItId))
       result mustBe a[Left[_, _]]
       result.swap.getOrElse(SimpleErrorWrapper(IM_A_TEAPOT)).status mustBe INTERNAL_SERVER_ERROR
     }
@@ -63,7 +62,7 @@ class PrePopulationServiceSpec extends SpecBase
     "should throw an exception when an exception is thrown by the connector" in {
       mockGetPrePopulationException(nino, taxYear, new RuntimeException())
       assertThrows[RuntimeException](
-        await(testService.getStateBenefits(nino, taxYear))
+        await(testService.getStateBenefits(nino, taxYear, mtdItId))
       )
     }
   }

@@ -34,6 +34,7 @@ class StateBenefitsConnectorSpec extends SpecBase
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val nino: String = "AA111111A"
+    val mtdItId: String = "111111"
     val testConnector = new StateBenefitsConnector(
       config = mockAppConfig,
       httpClient = mockHttpClientV2
@@ -44,9 +45,7 @@ class StateBenefitsConnectorSpec extends SpecBase
 
     val dummyResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
       hasEsaPrePop = true,
-      hasJsaPrePop = true,
-      hasPensionsPrePop = true,
-      hasPensionLumpSumsPrePop = true
+      hasJsaPrePop = true
     )
 
     val baseUrl = "http://test-BaseUrl"
@@ -59,7 +58,7 @@ class StateBenefitsConnectorSpec extends SpecBase
       mockHttpClientV2Execute[HttpResult[StateBenefitsPrePopulationResponse]](Right(dummyResponse))
 
       val result: Either[SimpleErrorWrapper, StateBenefitsPrePopulationResponse] =
-        await(testConnector.getPrePopulation(nino, taxYear))
+        await(testConnector.getPrePopulation(nino, taxYear, mtdItId))
 
       result mustBe a[Right[_, _]]
       result.getOrElse(StateBenefitsPrePopulationResponse.empty) mustBe dummyResponse
@@ -71,7 +70,7 @@ class StateBenefitsConnectorSpec extends SpecBase
       )
 
       val result: Either[SimpleErrorWrapper, StateBenefitsPrePopulationResponse] =
-        await(testConnector.getPrePopulation(nino, taxYear))
+        await(testConnector.getPrePopulation(nino, taxYear, mtdItId))
 
       result mustBe a[Left[_, _]]
       result.swap.getOrElse(SimpleErrorWrapper(IM_A_TEAPOT)).status mustBe INTERNAL_SERVER_ERROR
@@ -83,7 +82,7 @@ class StateBenefitsConnectorSpec extends SpecBase
       )
 
       def result: Either[SimpleErrorWrapper, StateBenefitsPrePopulationResponse] =
-        await(testConnector.getPrePopulation(nino, taxYear))
+        await(testConnector.getPrePopulation(nino, taxYear, mtdItId))
 
       assertThrows[RuntimeException](result)
     }

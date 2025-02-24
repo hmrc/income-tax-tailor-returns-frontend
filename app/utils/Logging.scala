@@ -19,40 +19,40 @@ package utils
 import play.api.Logger
 
 trait Logging {
-  protected val classLoggingContext : String
-  lazy val logger: LoggerWithContext = LoggerWithContext(Logger(this.getClass), classLoggingContext)
+  protected val primaryContext : String
+  lazy val logger: LoggerWithContext = LoggerWithContext(Logger(this.getClass), primaryContext)
 
   def dataLogString(nino: String, taxYear: Int) = s" for request with NINO: $nino, and tax year: $taxYear"
 
-  def infoLog(methodLoggingContext: String,
+  def infoLog(secondaryContext: String,
               dataLog: String = "",
               extraContext: Option[String] = None): String => Unit = (message: String) =>
-    logger.info(methodLoggingContext, message, dataLog, extraContext)
+    logger.info(secondaryContext, message, dataLog, extraContext)
 
-  def warnLog(methodLoggingContext: String,
+  def warnLog(secondaryContext: String,
               dataLog: String = "",
               extraContext: Option[String] = None): String => Unit = (message: String) =>
-    logger.warn(methodLoggingContext, message, dataLog, extraContext)
+    logger.warn(secondaryContext, message, dataLog, extraContext)
 
-  def errorLog(methodLoggingContext: String,
-              dataLog: String = "",
-              extraContext: Option[String] = None): String => Unit = (message: String) =>
-    logger.error(methodLoggingContext, message, dataLog, extraContext)
+  def errorLog(secondaryContext: String,
+               dataLog: String = "",
+               extraContext: Option[String] = None): String => Unit = (message: String) =>
+    logger.error(secondaryContext, message, dataLog, extraContext)
 }
 
-case class LoggerWithContext(underlying: Logger, classContext: String) {
+case class LoggerWithContext(underlying: Logger, primaryContext: String) {
   private def contextFoldOpt(additionalContext: Option[String]): String =
     additionalContext.fold("")(ctx => s"[$ctx]")
 
-  def info(methodContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
-    underlying.info(s"[$classContext][$methodContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
+  def info(secondaryContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
+    underlying.info(s"[$primaryContext][$secondaryContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
 
-  def warn(methodContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
-    underlying.warn(s"[$classContext][$methodContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
+  def warn(secondaryContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
+    underlying.warn(s"[$primaryContext][$secondaryContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
 
-  def error(methodContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
-    underlying.error(s"[$classContext][$methodContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
+  def error(secondaryContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
+    underlying.error(s"[$primaryContext][$secondaryContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
 
-  def errorWithException(methodContext: String, message: String, ex: Throwable, dataLog: String = "", extraContext: Option[String] = None): Unit =
-    underlying.error(s"[$classContext][$methodContext]${contextFoldOpt(extraContext)} - $message" + dataLog, ex)
+  def errorWithException(secondaryContext: String, message: String, ex: Throwable, dataLog: String = "", extraContext: Option[String] = None): Unit =
+    underlying.error(s"[$primaryContext][$secondaryContext]${contextFoldOpt(extraContext)} - $message" + dataLog, ex)
 }

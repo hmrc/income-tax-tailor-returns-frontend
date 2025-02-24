@@ -116,7 +116,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
                            dataRequest: DataRequest[_]): Future[Result] = {
     implicit val request: DataRequest[_] = dataRequest
 
-    val infoLogger: String => Unit = infoLog(methodLoggingContext = "onPageLoad", dataLog = dataLog)
+    val infoLogger: String => Unit = infoLog(secondaryContext = "onPageLoad", dataLog = dataLog)
 
     infoLogger(s"Received request to retrieve $pageName tailoring page")
 
@@ -147,7 +147,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
       },
       errorAction = (_: SimpleErrorWrapper) => {
         logger.warn(
-          methodContext = "onPageLoad",
+          secondaryContext = "onPageLoad",
           message = "Failed to load pre-population data. Returning error page",
           dataLog = dataLog
         )
@@ -169,8 +169,8 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
                          dataRequest: DataRequest[_]): Future[Result] = {
     implicit val request: DataRequest[_] = dataRequest
 
-    val infoLogger: String => Unit = infoLog(methodLoggingContext = "onSubmit", dataLog = dataLog)
-    val warnLogger: String => Unit = warnLog(methodLoggingContext = "onSubmit", dataLog = dataLog)
+    val infoLogger: String => Unit = infoLog(secondaryContext = "onSubmit", dataLog = dataLog)
+    val warnLogger: String => Unit = warnLog(secondaryContext = "onSubmit", dataLog = dataLog)
 
     infoLogger(s"Request received to submit user journey answers for $pageName view")
 

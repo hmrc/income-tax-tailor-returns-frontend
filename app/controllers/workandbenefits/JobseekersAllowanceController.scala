@@ -56,7 +56,7 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
   extends ControllerWithPrePop[Set[JobseekersAllowance], StateBenefitsPrePopulationResponse]
   with Logging {
 
-  override protected val classLoggingContext: String = "JobseekersAllowanceController"
+  override protected val primaryContext: String = "JobseekersAllowanceController"
 
   override val defaultPrePopulationResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse.empty
 
