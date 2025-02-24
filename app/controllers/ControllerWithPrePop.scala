@@ -68,7 +68,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
   protected def agentViewProvider(form: Form[_], mode: Mode, taxYear: Int, prePopData: R)
                                  (implicit request: Request[_]): HtmlFormat.Appendable
 
-  protected def form(isAgent: Boolean): Form[Set[I]] = formProvider(isAgent)
+  protected def form(isAgent: Boolean): Form[I] = formProvider(isAgent)
 
   // If this needs overriding simply change it to be protected
   private def actionChain(taxYear: Int): ActionBuilder[DataRequest, AnyContent] =
@@ -108,7 +108,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
 
   protected def onPageLoad(pageName: String,
                            incomeType: String,
-                           page: QuestionPage[Set[I]],
+                           page: QuestionPage[I],
                            mode: Mode)
                           (dataLog: String,
                            taxYear: Int,
@@ -120,7 +120,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
 
     infoLogger(s"Received request to retrieve $pageName tailoring page")
 
-    def preparedForm(prePop: R): Form[Set[I]] = dataRequest.userAnswers.get(page) match {
+    def preparedForm(prePop: R): Form[I] = dataRequest.userAnswers.get(page) match {
       case None =>
         infoLogger(s"No existing $incomeType journey answers found in request model")
         form(dataRequest.isAgent).fill(prePop.toPageModel)
@@ -161,7 +161,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
 
   protected def onSubmit(pageName: String,
                          incomeType: String,
-                         page: QuestionPage[Set[I]],
+                         page: QuestionPage[I],
                          mode: Mode)
                         (dataLog: String,
                          taxYear: Int,

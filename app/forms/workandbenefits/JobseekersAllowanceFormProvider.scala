@@ -23,7 +23,7 @@ import play.api.data.Forms.set
 
 import javax.inject.Inject
 
-class JobseekersAllowanceFormProvider @Inject() extends FormProvider[JobseekersAllowance] {
+class JobseekersAllowanceFormProvider @Inject() extends FormProvider[Set[JobseekersAllowance]] {
 
   def apply(isAgent: Boolean): Form[Set[JobseekersAllowance]] = {
     val error: String =
