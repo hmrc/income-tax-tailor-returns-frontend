@@ -81,7 +81,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
                     block: (String, Int, PrePopResult, DataRequest[_]) => Future[Result]): Action[AnyContent] =
     actionChain(taxYear).async { implicit request =>
       def result: EitherT[Future, Unit, Result] = for {
-        nino <- EitherT(ninoRetrievalService.getNino("blockWithNino"))
+        nino   <- EitherT(ninoRetrievalService.getNino("blockWithNino"))
         result <- EitherT.right(
           block(
             dataLogString(nino, taxYear),
@@ -123,7 +123,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
     def preparedForm(prePop: R): Form[I] = dataRequest.userAnswers.get(page) match {
       case None =>
         infoLogger(s"No existing $incomeType journey answers found in request model")
-        form(dataRequest.isAgent).fill(prePop.toPageModel)
+        noUserDataFound(form(dataRequest.isAgent), prePop.toPageModel)
       case Some(value) =>
         infoLogger(s"Existing $incomeType journey answers found. Pre-populating form with previous user answers")
         form(dataRequest.isAgent).fill(value)
@@ -158,6 +158,9 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
       incomeType = incomeType
     )
   }
+
+  protected def noUserDataFound(form: Form[I], pageModel: I):Form[I]  =
+    form.fill(pageModel)
 
   protected def onSubmit(pageName: String,
                          incomeType: String,

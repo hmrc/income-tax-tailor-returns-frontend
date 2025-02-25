@@ -77,8 +77,11 @@ class ConstructionIndustrySchemeController @Inject()(
     agentView(form, mode, taxYear, prePopData.hasCis)
 
 
-  val pageName = classOf[ConstructionIndustrySchemeController].getSimpleName
+  private val pageName = classOf[ConstructionIndustrySchemeController].getSimpleName
   val incomeType = "cis employment"
+
+  override def noUserDataFound(form:  Form[Boolean], pageModel:  Boolean): Form[Boolean] =
+    if(pageModel) form.fill(true) else form
 
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
     blockWithNino(
