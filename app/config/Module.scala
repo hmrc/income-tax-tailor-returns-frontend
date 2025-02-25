@@ -16,7 +16,7 @@
 
 package config
 
-import connectors.{IncomeTaxSessionDataConnector, IncomeTaxSessionDataConnectorImpl}
+import connectors.{SessionDataConnector, SessionDataConnectorImpl}
 import controllers.actions._
 import navigation.{JourneyNavigator, Navigator, PrivateBetaNavigator}
 import play.api.inject.Binding
@@ -53,7 +53,7 @@ class Module extends play.api.inject.Module {
       bind[DataRetrievalActionProvider].to[DataRetrievalActionProviderImpl].eagerly(),
       bind[DataRequiredActionProvider].to[DataRequiredActionProviderImpl].eagerly(),
       bind[Clock].toInstance(Clock.systemUTC()),
-      bind[IncomeTaxSessionDataConnector].to(classOf[IncomeTaxSessionDataConnectorImpl]).eagerly(),
+      bind[SessionDataConnector].to(classOf[SessionDataConnectorImpl]).eagerly(),
       authBinding
     ) ++ privateBetaBinding
 

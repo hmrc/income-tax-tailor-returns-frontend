@@ -52,7 +52,7 @@ class IncomeTaxSessionDataConnectorSpec
   implicit private lazy val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("X-Session-ID"->sessionId)
   private val taxYear: Int = 2024
   private val mtdItId: String = "1234567890"
-  private lazy val connector = app.injector.instanceOf[IncomeTaxSessionDataConnector]
+  private lazy val connector = app.injector.instanceOf[SessionDataConnector]
   private val testUrl = s"/income-tax-session-data/"
   private val sessionDataResponse = SessionData.empty.copy(mtditid = mtdItId)
 
@@ -70,7 +70,7 @@ class IncomeTaxSessionDataConnectorSpec
     "return session data when getSessionData is called" in {
       stubGet(testUrl, OK, Json.toJson(sessionDataResponse).toString())
       val result: SessionDataResponse = connector.getSessionData(hc).futureValue
-      result shouldBe Right(Some((sessionDataResponse)))
+      result shouldBe Right(Some(sessionDataResponse))
     }
 
     "log failure when getSessionData returns invalid response" in {

@@ -18,7 +18,7 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.IncomeTaxSessionDataConnector
+import connectors.SessionDataConnector
 import models.Enrolment
 import models.SessionValues.CLIENT_MTDITID
 import models.requests.IdentifierRequest
@@ -43,7 +43,7 @@ trait IdentifierActionProvider {
 
 class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
                                              config: FrontendAppConfig,
-                                             sessionDataConnector: IncomeTaxSessionDataConnector,
+                                             sessionDataConnector: SessionDataConnector,
                                              parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
 
@@ -53,7 +53,7 @@ class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
 class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                              (override val authConnector: AuthConnector,
                                               config: FrontendAppConfig,
-                                              sessionDataConnector: IncomeTaxSessionDataConnector,
+                                              sessionDataConnector: SessionDataConnector,
                                               val parser: BodyParsers.Default)
                                              (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions with Logging {

@@ -18,7 +18,7 @@ package services
 
 import cats.data.EitherT
 import config.FrontendAppConfig
-import connectors.IncomeTaxSessionDataConnector
+import connectors.SessionDataConnector
 import models.SessionValues
 import models.errors.APIErrorModel
 import models.session.SessionData
@@ -30,7 +30,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataConnector,
+class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector,
                                    config: FrontendAppConfig)
                                   (implicit ec: ExecutionContext) extends Logging {
 
@@ -39,11 +39,11 @@ class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataCon
   private def sessionDataCacheResult(implicit hc: HeaderCarrier): EitherT[Future, APIErrorModel, Option[SessionData]] =
     EitherT(sessionDataConnector.getSessionData)
 
-  protected def sessionValOpt(key: String,
-                              valName: String,
-                              infoLogger: String => Unit,
-                              errorLogger: String => Unit)
-                             (implicit request: Request[_]): Either[Unit, String] =
+  protected[services] def sessionValOpt(key: String,
+                                        valName: String,
+                                        infoLogger: String => Unit,
+                                        errorLogger: String => Unit)
+                                       (implicit request: Request[_]): Either[Unit, String] =
     request
       .session.get(key)
       .fold {
@@ -81,9 +81,10 @@ class SessionDataService @Inject()(sessionDataConnector: IncomeTaxSessionDataCon
           infoLogger("Request to retrieve session data from session cookie service completed successfully")
 
           EitherT(Future.successful(
-            sessionDataOpt.fold(
-              Left[Unit, String](warnLogger("Session cookie service returned an empty session data object")).withRight
-            )(sessionData => {
+            sessionDataOpt.fold {
+              warnLogger("Session cookie service returned an empty session data object")
+              Left[Unit, String]().withRight
+            }(sessionData => {
               infoLogger(s"Successfully extracted NINO: ${sessionData.nino} from session data response")
               Right(sessionData.nino)
             })

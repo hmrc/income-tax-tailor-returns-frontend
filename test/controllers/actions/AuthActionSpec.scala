@@ -19,7 +19,7 @@ package controllers.actions
 import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.IncomeTaxSessionDataConnector
+import connectors.SessionDataConnector
 import models.errors.{APIErrorBodyModel, APIErrorModel}
 import models.session.SessionData
 import org.mockito.ArgumentMatchers.{any, eq => mEq}
@@ -48,7 +48,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
   val mtdEnrollmentIdentifier = "MTDITID"
   private val mockAuthConnector: AuthConnector = Mockito.mock(classOf[AuthConnector])
   private type RetrievalType = Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel
-  val mockSessionDataConnector: IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
+  val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
   val testMtditId = "1234567890"
 
   def predicate(mtdId: String): Predicate = mEq(
@@ -151,11 +151,11 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       }
 
       "must fail with a Redirect to ivUplift when confidence is to low" in {
-        val mockSessionDataConnector: IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
+        val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
         val application = applicationBuilder(userAnswers = None).configure(
           "feature-switch.sessionCookieService" -> true
         ).overrides(bind[AuthConnector].toInstance(mockAuthConnector))
-          .overrides(bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector))
+          .overrides(bind[SessionDataConnector].toInstance(mockSessionDataConnector))
           .build()
 
         running(application) {
@@ -192,7 +192,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.sessionCookieService" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -231,7 +231,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
         val application = applicationBuilder(userAnswers = None).configure(
           "feature-switch.sessionCookieService" -> true
         ).overrides(bind[AuthConnector].toInstance(mockAuthConnector))
-          .overrides(bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector))
+          .overrides(bind[SessionDataConnector].toInstance(mockSessionDataConnector))
           .build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -271,7 +271,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.sessionCookieService" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -308,7 +308,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.sessionCookieService" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -349,7 +349,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.sessionCookieService" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -387,7 +387,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.ema-supporting-agents-enabled" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -426,7 +426,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.ema-supporting-agents-enabled" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -499,7 +499,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.ema-supporting-agents-enabled" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -542,7 +542,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             "feature-switch.sessionCookieService" -> true,
             "feature-switch.ema-supporting-agents-enabled" -> true
           ).overrides(bind[AuthConnector].toInstance(mockAuthConnector))
-          .overrides(bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector))
+          .overrides(bind[SessionDataConnector].toInstance(mockSessionDataConnector))
           .build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -584,7 +584,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.ema-supporting-agents-enabled" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -626,7 +626,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.ema-supporting-agents-enabled" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -671,7 +671,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.ema-supporting-agents-enabled" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -713,7 +713,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.ema-supporting-agents-enabled" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(
@@ -755,7 +755,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           "feature-switch.ema-supporting-agents-enabled" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
-          bind[IncomeTaxSessionDataConnector].toInstance(mockSessionDataConnector)
+          bind[SessionDataConnector].toInstance(mockSessionDataConnector)
         ).build()
 
         val enrolments: Enrolments = Enrolments(Set(

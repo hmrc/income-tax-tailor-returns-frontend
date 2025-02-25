@@ -16,7 +16,7 @@
 
 package mocks
 
-import connectors.IncomeTaxSessionDataConnector
+import connectors.SessionDataConnector
 import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
@@ -25,19 +25,19 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-trait MockIncomeTaxSessionDataConnector extends MockFactory { this: TestSuite =>
-  val mockIncomeTaxSessionDataConnector: IncomeTaxSessionDataConnector = mock[IncomeTaxSessionDataConnector]
+trait MockSessionDataConnector extends MockFactory { this: TestSuite =>
+  val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
 
   private type MockType = CallHandler1[HeaderCarrier, Future[SessionDataResponse]]
 
   def mockGetSessionData(resp: SessionDataResponse): MockType =
-    (mockIncomeTaxSessionDataConnector
+    (mockSessionDataConnector
       .getSessionData(_: HeaderCarrier))
       .expects(*)
       .returning(Future.successful(resp))
 
   def mockGetSessionDataException(err: Throwable): MockType =
-    (mockIncomeTaxSessionDataConnector
+    (mockSessionDataConnector
       .getSessionData(_: HeaderCarrier))
       .expects(*)
       .returning(Future.failed(err))

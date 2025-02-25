@@ -29,4 +29,14 @@ trait MockAppConfig extends MockFactory {this: TestSuite =>
     (() => mockAppConfig.stateBenefitsBaseUrl)
       .expects()
       .returning(response)
+
+  def mockSessionServiceBaseUrl(response: String): CallHandler0[String] =
+    (() => mockAppConfig.vcSessionServiceBaseUrl)
+      .expects()
+      .returning(response)
+
+  def mockSessionServiceEnabled(response: Boolean): CallHandler0[Boolean] =
+    (() => mockAppConfig.sessionCookieServiceEnabled)
+      .expects()
+      .returning(response)
 }

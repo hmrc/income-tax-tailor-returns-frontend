@@ -125,7 +125,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.welsh-translation")
 
-  lazy val sessionCookieServiceEnabled: Boolean =
+  def sessionCookieServiceEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.sessionCookieService")
 
   def emaSupportingAgentsEnabled: Boolean =
@@ -154,4 +154,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   lazy val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
   lazy val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
   lazy val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
+
+  def vcSessionServiceBaseUrl: String = configuration.get[String]("microservice.services.income-tax-session-data")
 }
