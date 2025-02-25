@@ -20,6 +20,10 @@ import play.api.libs.json.{Json, Reads}
 
 case class IncomeTaxCisPrePopulationResponse (hasCis: Boolean) extends PrePopulationResponse[Boolean] {
   override def toPageModel: Boolean = hasCis
+
+  override def toMessageString(isAgent:  Boolean): String = ""
+
+  override  val hasPrePop: Boolean = hasCis
 }
 
 object IncomeTaxCisPrePopulationResponse {
