@@ -35,7 +35,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
-class IncomeTaxSessionDataConnectorSpec
+class SessionDataConnectorSpec
   extends AnyFreeSpec
     with WireMockHelper
     with ScalaFutures
@@ -50,7 +50,6 @@ class IncomeTaxSessionDataConnectorSpec
 
   private val sessionId = "test-session-id"
   implicit private lazy val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("X-Session-ID"->sessionId)
-  private val taxYear: Int = 2024
   private val mtdItId: String = "1234567890"
   private lazy val connector = app.injector.instanceOf[SessionDataConnector]
   private val testUrl = s"/income-tax-session-data/"
