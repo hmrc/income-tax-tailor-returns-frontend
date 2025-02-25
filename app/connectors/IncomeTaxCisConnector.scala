@@ -32,14 +32,14 @@ class IncomeTaxCisConnector @Inject()(config: FrontendAppConfig, httpClient: Htt
                                      (implicit ec: ExecutionContext)
   extends StandardGetHttpParser[IncomeTaxCisPrePopulationResponse]
   with Logging {
-  val classLoggingContext: String = classOf[IncomeTaxCisConnector].getSimpleName
+  val primaryContext: String = classOf[IncomeTaxCisConnector].getSimpleName
 
   def getPrePopulation(nino: String, taxYear: Int, mtdItId:String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
     val prePopulationUrl: URL = url"${config.cisBaseUrl}/pre-population/$nino/$taxYear"
 
     logger.info(
-      methodContext = "[IncomeTaxCis-getPrePopulation]",
+      secondaryContext = "[IncomeTaxCis-getPrePopulation]",
       message = "Attempting to retrieve user's cis pre-pop data ",
       dataLog = dataLogString(nino = nino, taxYear = taxYear)
     )
