@@ -23,6 +23,7 @@ import forms.workandbenefits.JobseekersAllowanceFormProvider
 import handlers.ErrorHandler
 import models.Mode
 import models.prePopulation.EsaJsaPrePopulationResponse
+import models.requests.DataRequest
 import models.workandbenefits.JobseekersAllowance
 import navigation.Navigator
 import pages.workandbenefits.JobseekersAllowancePage
@@ -30,7 +31,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import services.{SessionDataService, PrePopulationService, UserDataService}
+import services.{PrePopulationService, SessionDataService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import views.html.workandbenefits.{JobseekersAllowanceAgentView, JobseekersAllowanceView}
@@ -68,16 +69,13 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
                                       mode: Mode,
                                       taxYear: Int,
                                       prePopData: EsaJsaPrePopulationResponse)
-                                     (implicit request: Request[_]): HtmlFormat.Appendable = {
-    view(form, mode, taxYear, prePopData)
+                                     (implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    if (request.isAgent) {
+      agentView(form, mode, taxYear, prePopData)
+    } else {
+      view(form, mode, taxYear, prePopData)
+    }
   }
-
-  override protected def agentViewProvider(form: Form[_],
-                                           mode: Mode,
-                                           taxYear: Int,
-                                           prePopData: EsaJsaPrePopulationResponse)
-                                          (implicit request: Request[_]): HtmlFormat.Appendable =
-    agentView(form, mode, taxYear, prePopData)
 
   val pageName = "JobseekersAllowance"
   val incomeType = "state benefits"

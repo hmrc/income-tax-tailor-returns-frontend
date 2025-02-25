@@ -56,7 +56,10 @@ class StateBenefitsPrePopulationResponseSpec extends SpecBase {
 
   "toEsaJsaModel" -> {
     "should convert successfully" in {
-      StateBenefitsPrePopulationResponse.empty.toEsaJsaModel mustBe EsaJsaPrePopulationResponse.empty
+      StateBenefitsPrePopulationResponse.empty.toEsaJsaModel mustBe EsaJsaPrePopulationResponse(
+        hasEsaPrePop = false,
+        hasJsaPrePop = false
+      )
     }
   }
 

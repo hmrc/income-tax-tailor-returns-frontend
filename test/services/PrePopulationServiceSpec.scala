@@ -46,12 +46,17 @@ class PrePopulationServiceSpec extends SpecBase
     hasPensionLumpSumsPrePop = false
   )
 
+  val emptyPrePopResponse: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse(
+    hasEsaPrePop = false,
+    hasJsaPrePop = false
+  )
+
   "getEsaJsa" -> {
     "should return a success response when connector returns success response" in {
       mockGetPrePopulation(nino, taxYear, mtdItId, Right(dummyResponse))
       val result = await(testService.getEsaJsa(nino, taxYear, mtdItId))
       result mustBe a[Right[_, _]]
-      result.getOrElse(EsaJsaPrePopulationResponse.empty) mustBe dummyResponse
+      result.getOrElse(emptyPrePopResponse) mustBe dummyResponse
     }
 
     "should return an error response when connector returns error response" in {

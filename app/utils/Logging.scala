@@ -45,14 +45,14 @@ case class LoggerWithContext(underlying: Logger, primaryContext: String) {
     additionalContext.fold("")(ctx => s"[$ctx]")
 
   def info(secondaryContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
-    underlying.info(s"[$primaryContext][$secondaryContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
+    underlying.info(s"[$primaryContext]${contextFoldOpt(extraContext)}[$secondaryContext] - $message" + dataLog)
 
   def warn(secondaryContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
-    underlying.warn(s"[$primaryContext][$secondaryContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
+    underlying.warn(s"[$primaryContext]${contextFoldOpt(extraContext)}[$secondaryContext] - $message" + dataLog)
 
   def error(secondaryContext: String, message: String, dataLog: String = "", extraContext: Option[String] = None): Unit =
-    underlying.error(s"[$primaryContext][$secondaryContext]${contextFoldOpt(extraContext)} - $message" + dataLog)
+    underlying.error(s"[$primaryContext]${contextFoldOpt(extraContext)}[$secondaryContext] - $message" + dataLog)
 
   def errorWithException(secondaryContext: String, message: String, ex: Throwable, dataLog: String = "", extraContext: Option[String] = None): Unit =
-    underlying.error(s"[$primaryContext][$secondaryContext]${contextFoldOpt(extraContext)} - $message" + dataLog, ex)
+    underlying.error(s"[$primaryContext]${contextFoldOpt(extraContext)}[$secondaryContext] - $message" + dataLog, ex)
 }

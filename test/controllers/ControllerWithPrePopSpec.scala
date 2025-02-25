@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package models.prePopulation
+package controllers
 
-/**
- * @tparam I The relevant user answers page model associated with the pre-population data
- */
-trait PrePopulationResponse[I] {
-  def toPageModel: I
-  def toMessageString(isAgent: Boolean): String
-  val hasPrePop: Boolean
+import base.SpecBase
+
+class ControllerWithPrePopSpec extends SpecBase {
+
 }

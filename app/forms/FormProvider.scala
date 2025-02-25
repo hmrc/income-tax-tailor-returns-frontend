@@ -20,8 +20,8 @@ import forms.mappings.Mappings
 import play.api.data.Form
 
 /**
- * This trait allows the ControllerWithPrePop trait to work by providing a common interface for form providers
- * @tparam I Any type wrapped by a form provider
+ * A common interface for any class which provides HTML forms for use in views
+ * @tparam I The relevant user answers page model associated with a given form
  */
 trait FormProvider[I] extends Mappings {
   def apply(isAgent: Boolean): Form[I]
