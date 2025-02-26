@@ -84,7 +84,7 @@ class ControllerWithPrePopSpec extends SpecBase
     override def viewProvider(form: Form[_], mode: Mode, taxYear: Int, prePopData: DummyPrePop)
                              (implicit request: DataRequest[_]): HtmlFormat.Appendable = {
       val errsString = if (form.errors.isEmpty) "" else s" with errors: ${form.errors.toString()}"
-      HtmlFormat.raw(form.value.getOrElse("N/A").toString + errsString)
+      HtmlFormat.raw(form.value.map(_.toString).getOrElse("N/A") + errsString)
     }
 
     override def controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()

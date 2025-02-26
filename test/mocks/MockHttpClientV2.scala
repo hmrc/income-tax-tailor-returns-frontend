@@ -16,7 +16,7 @@
 
 package mocks
 
-import org.scalamock.handlers.CallHandler2
+import org.scalamock.handlers.{CallHandler1, CallHandler2}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import uk.gov.hmrc.http.client.{HttpClientV2, RequestBuilder}
@@ -33,6 +33,12 @@ trait MockHttpClientV2 extends MockFactory { this: TestSuite =>
     (mockHttpClientV2
       .get(_ : URL)(_: HeaderCarrier))
       .expects(url, *)
+      .returning(mockRequestBuilder)
+
+  def mockHttpClientV2SetHeader(): CallHandler1[(String, String), RequestBuilder] =
+    (mockRequestBuilder
+      .setHeader(_: (String, String)))
+      .expects(*)
       .returning(mockRequestBuilder)
 
   def mockHttpClientV2Execute[O: HttpReads](response: O): CallHandler2[HttpReads[O], ExecutionContext, Future[O]] =

@@ -52,11 +52,12 @@ class StateBenefitsConnectorSpec extends SpecBase
 
     val baseUrl = "http://test-BaseUrl"
     mockStateBenefitsBaseUrl(response = baseUrl)
-    mockHttpClientV2Get(url"$baseUrl/$nino/$taxYear")
+    mockHttpClientV2Get(url"$baseUrl/pre-population/$nino/$taxYear")
   }
 
   "getPrePopulation" -> {
     "should return a success when a success response is received from state benefits backend" in new Test {
+      mockHttpClientV2SetHeader()
       mockHttpClientV2Execute[HttpResult[StateBenefitsPrePopulationResponse]](Right(dummyResponse))
 
       val result: Either[SimpleErrorWrapper, StateBenefitsPrePopulationResponse] =
@@ -67,6 +68,7 @@ class StateBenefitsConnectorSpec extends SpecBase
     }
 
     "should return an error when a success response is received from state benefits backend" in new Test {
+      mockHttpClientV2SetHeader()
       mockHttpClientV2Execute[HttpResult[StateBenefitsPrePopulationResponse]](
         Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR))
       )
@@ -79,6 +81,7 @@ class StateBenefitsConnectorSpec extends SpecBase
     }
 
     "should throw an exception when an exception occurs during call to state benefits backend" in new Test {
+      mockHttpClientV2SetHeader()
       mockHttpClientV2ExecuteException[HttpResult[StateBenefitsPrePopulationResponse]](
         new RuntimeException()
       )

@@ -27,7 +27,9 @@ class StateBenefitsPrePopulationResponseSpec extends SpecBase {
         """
           |{
           |   "hasEsaPrePop": true,
-          |   "hasJsaPrePop": true
+          |   "hasJsaPrePop": true,
+          |   "hasPensionsPrePop": false,
+          |   "hasPensionLumpSumsPrePop": false
           |}
         """.stripMargin
 
