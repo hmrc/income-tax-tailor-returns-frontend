@@ -155,5 +155,5 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   lazy val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
   lazy val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
 
-  def vcSessionServiceBaseUrl: String = configuration.get[String]("microservice.services.income-tax-session-data")
+  def vcSessionServiceBaseUrl: String = configuration.get[Service]("microservice.services.income-tax-session-data").baseUrl
 }

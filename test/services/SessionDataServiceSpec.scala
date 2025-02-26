@@ -51,7 +51,7 @@ class SessionDataServiceSpec extends SpecBase
       "should return NINO when call to session cookie service is successful" in {
         mockGetSessionData(Right(dummyResponse))
         mockSessionServiceEnabled(true)
-        val result = await(testService.getNino(""))
+        val result = await(testService.getNino())
 
         result mustBe a[Right[_, _]]
         result.getOrElse("dummy val") mustBe "AA111111A"
@@ -60,7 +60,7 @@ class SessionDataServiceSpec extends SpecBase
       "should fallback to local session NINO when session cookie service returns None" in {
         mockGetSessionData(Right(None))
         mockSessionServiceEnabled(true)
-        val result = await(testService.getNino(""))
+        val result = await(testService.getNino())
 
         result mustBe a[Right[_, _]]
         result.getOrElse("dummy val") mustBe "value"
@@ -69,7 +69,7 @@ class SessionDataServiceSpec extends SpecBase
       "should fallback to local session NINO when session cookie service call fails" in {
         mockGetSessionData(Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("", ""))))
         mockSessionServiceEnabled(true)
-        val result = await(testService.getNino(""))
+        val result = await(testService.getNino())
 
         result mustBe a[Right[_, _]]
         result.getOrElse("dummy val") mustBe "value"
@@ -81,7 +81,7 @@ class SessionDataServiceSpec extends SpecBase
 
         mockGetSessionData(Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("", ""))))
         mockSessionServiceEnabled(true)
-        val result = await(testService.getNino(""))
+        val result = await(testService.getNino())
 
         result mustBe a[Left[_, _]]
       }
@@ -89,7 +89,7 @@ class SessionDataServiceSpec extends SpecBase
       "should return an exception when an error occurs during session cookie service call" in {
         mockGetSessionDataException(new RuntimeException)
         mockSessionServiceEnabled(true)
-        assertThrows[RuntimeException](await(testService.getNino("")))
+        assertThrows[RuntimeException](await(testService.getNino()))
       }
     }
 
@@ -99,7 +99,7 @@ class SessionDataServiceSpec extends SpecBase
           FakeRequest.apply("", "").withSession("ClientNino" -> "value")
 
         mockSessionServiceEnabled(false)
-        val result = await(testService.getNino(""))
+        val result = await(testService.getNino())
 
         result mustBe a[Right[_, _]]
         result.getOrElse("Not nino") mustBe "value"
@@ -110,7 +110,7 @@ class SessionDataServiceSpec extends SpecBase
           FakeRequest.apply("", "").withSession("NotClientNino" -> "value")
 
         mockSessionServiceEnabled(false)
-        val result = await(testService.getNino(""))
+        val result = await(testService.getNino())
 
         result mustBe a[Left[_, _]]
       }

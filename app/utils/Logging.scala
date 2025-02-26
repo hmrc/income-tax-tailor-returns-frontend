@@ -20,21 +20,22 @@ import play.api.Logger
 
 trait Logging {
   protected val primaryContext : String
-  lazy val logger: LoggerWithContext = LoggerWithContext(Logger(this.getClass), primaryContext)
+  protected lazy val logger: LoggerWithContext = LoggerWithContext(Logger(this.getClass), primaryContext)
 
-  def dataLogString(nino: String, taxYear: Int) = s" for request with NINO: $nino, and tax year: $taxYear"
+  protected def dataLogString(nino: String, taxYear: Int, requestContext: String = "") =
+    s" for $requestContext request with NINO: $nino, and tax year: $taxYear"
 
-  def infoLog(secondaryContext: String,
+  protected def infoLog(secondaryContext: String,
               dataLog: String = "",
               extraContext: Option[String] = None): String => Unit = (message: String) =>
     logger.info(secondaryContext, message, dataLog, extraContext)
 
-  def warnLog(secondaryContext: String,
+  protected def warnLog(secondaryContext: String,
               dataLog: String = "",
               extraContext: Option[String] = None): String => Unit = (message: String) =>
     logger.warn(secondaryContext, message, dataLog, extraContext)
 
-  def errorLog(secondaryContext: String,
+  protected def errorLog(secondaryContext: String,
                dataLog: String = "",
                extraContext: Option[String] = None): String => Unit = (message: String) =>
     logger.error(secondaryContext, message, dataLog, extraContext)

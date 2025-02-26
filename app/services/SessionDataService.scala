@@ -54,12 +54,11 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector,
         Right(sessionVal)
       }
 
-  def getNino(extraContext: String)
-             (implicit request: Request[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Unit, String]] = {
+  def getNino()(implicit request: Request[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Unit, String]] = {
     val methodLoggingContext: String = "getNino"
-    val infoLogger: String => Unit = infoLog(methodLoggingContext, extraContext = Some(extraContext))
-    val errorLogger: String => Unit = errorLog(methodLoggingContext, extraContext = Some(extraContext))
-    val warnLogger: String => Unit = warnLog(methodLoggingContext, extraContext = Some(extraContext))
+    val infoLogger: String => Unit = infoLog(methodLoggingContext)
+    val errorLogger: String => Unit = errorLog(methodLoggingContext)
+    val warnLogger: String => Unit = warnLog(methodLoggingContext)
 
     infoLogger("Attempting to retrieve NINO for request")
 

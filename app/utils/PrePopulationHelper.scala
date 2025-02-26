@@ -32,8 +32,6 @@ import scala.concurrent.{ExecutionContext, Future}
  */
 trait PrePopulationHelper[R <: PrePopulationResponse[_]] { _: Logging =>
 
-  type PrePopResult = () => ConnectorResponse[R]
-
   /**
    * A generic method for attempting to retrieve pre-population data, and performing either an error, or success action
    * depending on whether the attempt is successful or not.

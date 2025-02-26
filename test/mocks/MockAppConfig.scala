@@ -39,4 +39,9 @@ trait MockAppConfig extends MockFactory {this: TestSuite =>
     (() => mockAppConfig.sessionCookieServiceEnabled)
       .expects()
       .returning(response)
+
+  def mockPrePopEnabled(response: Boolean): CallHandler0[Boolean] =
+  (() => mockAppConfig.isPrePopEnabled)
+    .expects()
+    .returning(response)
 }

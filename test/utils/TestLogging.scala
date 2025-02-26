@@ -19,15 +19,15 @@ package utils
 trait TestLogging extends Logging {
   override protected val primaryContext: String = "no-context"
 
-  override def infoLog(secondaryContext: String,
+  protected override def infoLog(secondaryContext: String,
                        dataLog: String = "",
                        extraContext: Option[String] = None): String => Unit = (_: String) => ()
 
-  override def warnLog(secondaryContext: String,
+  protected override def warnLog(secondaryContext: String,
                        dataLog: String = "",
                        extraContext: Option[String] = None): String => Unit = (_: String) => ()
 
-  override def errorLog(secondaryContext: String,
+  protected override def errorLog(secondaryContext: String,
                         dataLog: String = "",
                         extraContext: Option[String] = None): String => Unit = (_: String) => ()
 

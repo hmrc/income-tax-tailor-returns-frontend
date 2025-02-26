@@ -18,6 +18,7 @@ package controllers.workandbenefits
 
 import config.FrontendAppConfig
 import controllers.ControllerWithPrePop
+import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.JobseekersAllowanceFormProvider
 import handlers.ErrorHandler
@@ -61,6 +62,12 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
 
   override val defaultPrePopulationResponse: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse.empty
 
+  override protected def actionChain(taxYear: Int): ActionBuilder[DataRequest, AnyContent] =
+    identify(taxYear) andThen
+      taxYearAction(taxYear) andThen
+      getData(taxYear) andThen
+      requireData(taxYear)
+
   override protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
                                               (implicit hc: HeaderCarrier): PrePopResult =
     () => prePopService.getEsaJsa(nino, taxYear, mtdItId)
@@ -80,23 +87,19 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
   val pageName = "JobseekersAllowance"
   val incomeType = "state benefits"
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = blockWithNino(
-    taxYear = taxYear,
-    block = onPageLoad(
-      pageName = pageName,
-      incomeType = incomeType,
-      page = JobseekersAllowancePage,
-      mode = mode
-    )
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = onPageLoad(
+    pageName = pageName,
+    incomeType = incomeType,
+    page = JobseekersAllowancePage,
+    mode = mode,
+    taxYear = taxYear
   )
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = blockWithNino(
-    taxYear = taxYear,
-    block = onSubmit(
-      pageName = pageName,
-      incomeType = incomeType,
-      page = JobseekersAllowancePage,
-      mode = mode
-    )
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = onSubmit(
+    pageName = pageName,
+    incomeType = incomeType,
+    page = JobseekersAllowancePage,
+    mode = mode,
+    taxYear = taxYear
   )
 }
