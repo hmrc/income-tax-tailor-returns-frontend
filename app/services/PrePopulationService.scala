@@ -16,15 +16,15 @@
 
 package services
 
-import connectors.{ConnectorResponse, StateBenefitsConnector}
-import models.prePopulation.EsaJsaPrePopulationResponse
+import connectors.{ConnectorResponse, IncomeTaxCisConnector, StateBenefitsConnector}
+import models.prePopulation.{EsaJsaPrePopulationResponse, IncomeTaxCisPrePopulationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector) {
+class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector, cisConnector: IncomeTaxCisConnector) {
 
   def getEsaJsa(nino: String, taxYear: Int, mtdItId: String)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): ConnectorResponse[EsaJsaPrePopulationResponse] =
@@ -33,4 +33,8 @@ class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnec
       esaJsaResult = result.map(_.toEsaJsaModel)
     } yield esaJsaResult
 
+
+  def getCis(nino: String, taxYear: Int,mtdItId: String)(implicit hc:HeaderCarrier):ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
+    cisConnector.getPrePopulation(nino, taxYear, mtdItId)
+  }
 }

@@ -16,274 +16,269 @@
 
 package controllers.workandbenefits
 
-import base.SpecBase
-import controllers.routes
+import controllers.{ControllerWithPrePopSpecBase, routes}
 import forms.workandbenefits.ConstructionIndustrySchemeFormProvider
-import models.{Done, NormalMode, UserAnswers}
+import models.prePopulation.IncomeTaxCisPrePopulationResponse
+import models.{Done, NormalMode, SessionValues}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import pages.workandbenefits.ConstructionIndustrySchemePage
-import play.api.data.Form
-import play.api.inject.bind
-import play.api.mvc.Call
-import play.api.test.FakeRequest
+import play.api.inject.guice.GuiceableModule
 import play.api.test.Helpers._
+import play.api.{Application, inject}
 import services.UserDataService
-import views.html.workandbenefits.{ConstructionIndustrySchemeAgentView, ConstructionIndustrySchemeView}
+import uk.gov.hmrc.http.HeaderCarrier
+import views.html.workandbenefits.{
+  ConstructionIndustrySchemeAgentView,
+  ConstructionIndustrySchemeView
+}
 
 import scala.concurrent.Future
 
-class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSugar {
+class ConstructionIndustrySchemeControllerSpec extends
+  ControllerWithPrePopSpecBase[ConstructionIndustrySchemeView, ConstructionIndustrySchemeAgentView, Boolean] {
 
-  def onwardRoute: Call = Call("GET", "/foo")
+  override def formProvider:ConstructionIndustrySchemeFormProvider = new ConstructionIndustrySchemeFormProvider()
 
-  private def prePopEnabled(isEnabled: Boolean): Map[String, String] =
-    Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
+  override val viewProvider: Application => ConstructionIndustrySchemeView =
+    (application: Application) => application.injector.instanceOf[ConstructionIndustrySchemeView]
 
-  val formProvider = new ConstructionIndustrySchemeFormProvider()
-  val form: Form[Boolean] = formProvider(isAgent = false)
-  val agentForm: Form[Boolean] = formProvider(isAgent = true)
+  override val agentViewProvider: Application => ConstructionIndustrySchemeAgentView =
+    (application: Application) => application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
+
+  override def requestRoute: String =
+    controllers
+      .workandbenefits
+      .routes
+      .ConstructionIndustrySchemeController
+      .onPageLoad(NormalMode, taxYear).url
 
   val expectedConditionalIndividual = "This will be added to your Income Tax Return. To remove this deduction, set it to 0."
   val expectedConditionalAgent = "This will be added to your clients Income Tax Return. To remove this deduction, set it to 0."
 
   lazy val constructionIndustrySchemeRoute: String = controllers.workandbenefits.routes.ConstructionIndustrySchemeController.onPageLoad(NormalMode, taxYear).url
 
+  trait GETPrePropEnabledIndividual extends GetWithPrePopTest{
+    def cis = false
+    mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+    override def defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
+
+    when(
+      mockIncomeTaxCisConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
+    ).thenReturn(Future.successful(Right(IncomeTaxCisPrePopulationResponse(cis))))
+
+  }
+  trait GETPrePropEnabledAgent extends GetWithPrePopAgentTest{
+    mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+    override def defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
+
+    when(
+      mockIncomeTaxCisConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
+    ).thenReturn(Future.successful(Right(IncomeTaxCisPrePopulationResponse(true))))
+
+  }
+
+  trait PostSubmitWithNoPrePopTest extends SubmitWithNoPrePopTest {
+
+    override def formUrlEncodedBody: (String, String) = ("value", "true")
+    val mockUserDataService: UserDataService = mock[UserDataService]
+    when(mockUserDataService.set(any(), any())(any())) thenReturn Future
+      .successful(Done)
+
+    override def applicationOverrides: Seq[GuiceableModule] = Seq(
+      inject.bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+      inject.bind[UserDataService].toInstance(mockUserDataService)
+    )
+  }
+
   "ConstructionIndustryScheme Controller" - {
+    "GET" - {
+      "must return OK and the correct view for a GET for an agent" in new GetWithNoPrePopAgentTest {
 
-    "must return OK and the correct view for a GET" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .configure(prePopEnabled(false))
-        .build()
+        running(application) {
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual agentView(
+            agentForm,
+            NormalMode,
+            taxYear,
+            prePopData = false
+          )(request, messages(application)).toString
+        }
+      }
 
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-        val result = route(application, request).value
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
+      "must return OK and the correct view for a GET" in new GETPrePropEnabledIndividual {
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        running(application) {
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(
+            form,
+            NormalMode,
+            taxYear,
+            prePopData = false
+          )(request, messages(application)).toString
+        }
+      }
+
+      "must return OK and the correct view for a GET and isPrePopEnabled true" in new GETPrePropEnabledIndividual {
+
+        running(application) {
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(
+            form,
+            NormalMode,
+            taxYear,
+            prePopData = false
+          )(request, messages(application)).toString
+          contentAsString(result) mustNot include(expectedConditionalIndividual)
+        }
+      }
+
+      "must return OK and the correct view for a GET for an agent and isPrePopEnabled true" in new GETPrePropEnabledIndividual {
+
+        running(application) {
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(
+            agentForm,
+            NormalMode,
+            taxYear,
+            prePopData = false
+          )(request, messages(application)).toString
+          contentAsString(result) mustNot include(expectedConditionalAgent)
+        }
+
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered" in new GETPrePropEnabledIndividual {
+        override val userAnswers =
+          emptyUserAnswers.set(ConstructionIndustrySchemePage, true).toOption
+
+        running(application) {
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(
+            form.fill(true),
+            NormalMode,
+            taxYear,
+            prePopData = false
+          )(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered and isPrePopEnabled true" in new GETPrePropEnabledIndividual {
+        override def cis = true
+
+        running(application) {
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(
+            form.fill(true),
+            NormalMode,
+            taxYear,
+            prePopData = true
+          )(request, messages(application)).toString
+          contentAsString(result) must include(expectedConditionalIndividual)
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered for an agent" in new GetWithNoPrePopTest {
+        override val userAnswers =
+          emptyUserAnswers.set(ConstructionIndustrySchemePage, true).toOption
+        running(application) {
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(
+            agentForm.fill(true),
+            NormalMode,
+            taxYear,
+            prePopData = false
+          )(request, messages(application)).toString
+        }
+      }
+
+      "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled true" in new GETPrePropEnabledAgent {
+
+        running(application) {
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual agentView(
+            agentForm.fill(true),
+            NormalMode,
+            taxYear,
+            prePopData = true
+          )(request, messages(application)).toString
+          contentAsString(result) must include(expectedConditionalAgent)
+        }
+      }
+
+      "must redirect to Journey Recovery for a GET if no existing data is found" in new GETPrePropEnabledIndividual {
+        override val userAnswers = None
+        running(application) {
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(
+            result
+          ).value mustEqual routes.JourneyRecoveryController
+            .onPageLoad(taxYear = taxYear)
+            .url
+        }
       }
     }
 
-    "must return OK and the correct view for a GET and isPrePopEnabled true" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .configure(prePopEnabled(true))
-        .build()
+    "POST" - {
+      "must redirect to the next page when valid data is submitted" in new PostSubmitWithNoPrePopTest {
 
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-        val result = route(application, request).value
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
+        running(application) {
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
 
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
-    }
 
-    "must return OK and the correct view for a GET for an agent" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
-        .configure(prePopEnabled(false))
-        .build()
+      "must return a Bad Request and errors when invalid data is submitted" in new PostSubmitWithNoPrePopTest {
+        override def formUrlEncodedBody: (String, String) = ("value", "")
 
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-        val result = route(application, request).value
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        running(application) {
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual view(
+            boundForm,
+            NormalMode,
+            taxYear,
+            prePopData = false
+          )(request, messages(application)).toString
+        }
       }
-    }
 
-    "must return OK and the correct view for a GET for an agent and isPrePopEnabled true" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
-        .configure(prePopEnabled(true))
-        .build()
+      "must redirect to Journey Recovery for a POST if no existing data is found" in new PostSubmitWithNoPrePopTest {
+        override val userAnswers = None
+        override def formUrlEncodedBody: (String, String) = ("value", "")
 
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-        val result = route(application, request).value
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalAgent)
+        running(application) {
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(
+            result
+          ).value mustEqual routes.JourneyRecoveryController
+            .onPageLoad(taxYear = taxYear)
+            .url
+        }
       }
-    }
 
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
+      "must return a Bad Request and errors when invalid data is submitted for an agent" in new SubmitWithNoPrePopAgentTest {
+        override def formUrlEncodedBody: (String, String) = ("value", "")
+        val mockUserDataService: UserDataService = mock[UserDataService]
+        when(mockUserDataService.set(any(), any())(any())) thenReturn Future
+          .successful(Done)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .configure(prePopEnabled(false))
-        .build()
+        override def applicationOverrides: Seq[GuiceableModule] = Seq(
+          inject.bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+          inject.bind[UserDataService].toInstance(mockUserDataService)
+        )
 
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered and isPrePopEnabled true" in {
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .configure(prePopEnabled(true))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
-        contentAsString(result) must include(expectedConditionalIndividual)
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled true" in {
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
-        .configure(prePopEnabled(true))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
-        contentAsString(result) must include(expectedConditionalAgent)
-      }
-    }
-
-    "must redirect to the next page when valid data is submitted" in {
-      val mockUserDataService = mock[UserDataService]
-
-      when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[UserDataService].toInstance(mockUserDataService)
-          )
-          .configure(prePopEnabled(false))
-          .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, constructionIndustrySchemeRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-            .withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-      }
-    }
-
-    "must return a Bad Request and errors when invalid data is submitted" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, constructionIndustrySchemeRoute)
-            .withFormUrlEncodedBody(("value", ""))
-            .withSession(validTaxYears)
-
-        val boundForm = form.bind(Map("value" -> ""))
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeView]
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-      }
-    }
-
-    "must return a Bad Request and errors when invalid data is submitted for an agent" in {
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, constructionIndustrySchemeRoute)
-            .withFormUrlEncodedBody(("value", ""))
-            .withSession(validTaxYears)
-
-        val boundForm = agentForm.bind(Map("value" -> ""))
-        val view = application.injector.instanceOf[ConstructionIndustrySchemeAgentView]
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-      }
-    }
-
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
-      val application = applicationBuilder(userAnswers = None)
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
-      }
-    }
-
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
-      val application = applicationBuilder(userAnswers = None)
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, constructionIndustrySchemeRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-            .withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+        running(application) {
+          status(result) mustEqual BAD_REQUEST
+          contentAsString(result) mustEqual agentView(
+            boundForm,
+            NormalMode,
+            taxYear,
+            prePopData = false
+          )(request, messages(application)).toString
+        }
       }
     }
   }

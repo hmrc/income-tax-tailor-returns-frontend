@@ -36,7 +36,8 @@ class PrePopulationServiceSpec extends SpecBase
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val testService = new PrePopulationService(
-    stateBenefitsConnector = mockStateBenefitsConnector
+    stateBenefitsConnector = mockStateBenefitsConnector,
+    cisConnector =  mockSIncomeTaxCisConnector
   )
 
   val dummyResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
