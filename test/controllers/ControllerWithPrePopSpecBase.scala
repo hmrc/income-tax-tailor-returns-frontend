@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
-import connectors.{ConnectorResponse, SessionDataConnector, StateBenefitsConnector}
+import connectors.{ConnectorResponse, IncomeTaxCisConnector, SessionDataConnector, StateBenefitsConnector}
 import forms.FormProvider
 import handlers.ErrorHandler
 import models.UserAnswers
@@ -104,6 +104,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
     val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
     val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
+    val mockIncomeTaxCisConnector: IncomeTaxCisConnector = mock[IncomeTaxCisConnector]
     val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
 
     val mockSessionDataService = new SessionDataService(
@@ -112,7 +113,8 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     )
 
     val mockPrePopulationService = new PrePopulationService(
-      stateBenefitsConnector = mockStateBenefitsConnector
+      stateBenefitsConnector = mockStateBenefitsConnector,
+      cisConnector = mockIncomeTaxCisConnector
     )
 
     val mockErrorView: String = "This is some dummy error page"
