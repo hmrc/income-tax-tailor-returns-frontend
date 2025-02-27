@@ -17,10 +17,13 @@
 package controllers.workandbenefits
 
 import config.FrontendAppConfig
+import controllers.ControllerWithPrePop
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.{AboutYourWorkFormProvider, AboutYourWorkRadioPageFormProvider}
+import handlers.ErrorHandler
 import models.Mode
+import models.prePopulation.{EmploymentPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import models.requests.DataRequest
 import models.workandbenefits.AboutYourWork
 import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
@@ -28,11 +31,13 @@ import navigation.Navigator
 import pages.aboutyou.FosterCarerPage
 import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.libs.json.Format.GenericFormat
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.UserDataService
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
+import play.twirl.api.HtmlFormat
+import services.{PrePopulationService, SessionDataService, UserDataService}
+import uk.gov.hmrc.http.HeaderCarrier
+import utils.Logging
 import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkRadioPageAgentView, AboutYourWorkRadioPageView, AboutYourWorkView}
 
 import javax.inject.Inject
@@ -40,22 +45,55 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AboutYourWorkController @Inject()(
                                          override val messagesApi: MessagesApi,
-                                         userDataService: UserDataService,
-                                         config: FrontendAppConfig,
-                                         navigator: Navigator,
-                                         identify: IdentifierActionProvider,
-                                         getData: DataRetrievalActionProvider,
-                                         requireData: DataRequiredActionProvider,
-                                         formProvider: AboutYourWorkFormProvider,
-                                         radioFormProvider: AboutYourWorkRadioPageFormProvider,
+                                         prePopService: PrePopulationService,
+                                         val userDataService: UserDataService,
+                                         val config: FrontendAppConfig,
+                                         val navigator: Navigator,
+                                         val identify: IdentifierActionProvider,
+                                         val getData: DataRetrievalActionProvider,
+                                         val requireData: DataRequiredActionProvider,
+                                         val formProvider: AboutYourWorkFormProvider,
+                                         val radioFormProvider: AboutYourWorkRadioPageFormProvider,
                                          val controllerComponents: MessagesControllerComponents,
+                                         val errorHandler: ErrorHandler,
+                                         val ninoRetrievalService: SessionDataService,
                                          view: AboutYourWorkView,
                                          agentView: AboutYourWorkAgentView,
                                          radioView: AboutYourWorkRadioPageView,
                                          agentRadioView: AboutYourWorkRadioPageAgentView
-                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                       )(implicit val ec: ExecutionContext) extends ControllerWithPrePop[EmploymentPrePopulationResponse, Set[AboutYourWork]]
+  with Logging {
 
-  def form(isAgent: Boolean): Form[Set[AboutYourWork]] = formProvider(isAgent)
+  override protected val classLoggingContext: String = "EmploymentAllowanceController"
+
+  override val defaultPrePopulationResponse: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse.empty
+
+  override protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
+                                              (implicit hc: HeaderCarrier): PrePopResult =
+    () => prePopService.getEmployment(nino, taxYear, mtdItId)
+
+  override protected def viewProvider(form: Form[_],
+                                      mode: Mode,
+                                      taxYear: Int,
+                                      prePopData: EmploymentPrePopulationResponse)
+                                     (implicit request: Request[_]): HtmlFormat.Appendable =
+    view(form, mode, taxYear, prePopData)
+
+  override protected def agentViewProvider(form: Form[_],
+                                           mode: Mode,
+                                           taxYear: Int,
+                                           prePopData: EmploymentPrePopulationResponse)
+                                          (implicit request: Request[_]): HtmlFormat.Appendable =
+    agentView(form, mode, taxYear, prePopData)
+
+//  val pageName = "Employment"
+//  val incomeType = "employment"
+
+
+
+  // ------------
+
+//  def form(isAgent: Boolean): Form[Set[AboutYourWork]] = formProvider(isAgent)
 
   def radioForm(isAgent: Boolean): Form[Boolean] = radioFormProvider(isAgent)
 
