@@ -360,8 +360,6 @@ employmentLumpSums.checkYourAnswersLabel = employmentLumpSums
 employmentLumpSums.error.required = Select yes if employmentLumpSums
 employmentLumpSums.agent.error.required = Select yes if employmentLumpSums
 employmentLumpSums.change.hidden = EmploymentLumpSums
-##### ToDo - check what message is needed here - Also need to add the Welsh
-employmentLumpSums.insertText.employment = HMRC hold information that you received ??? between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
 
 jobseekersAllowance.title = Jobseeker’s Allowance and Employment and Support Allowance
 jobseekersAllowance.agent.title = Jobseeker’s Allowance and Employment and Support Allowance

@@ -16,12 +16,12 @@
 
 package forms.workandbenefits
 
-import forms.FormProvider
+import forms.mappings.Mappings
 import play.api.data.Form
 
 import javax.inject.Inject
 
-class EmploymentLumpSumsFormProvider @Inject() extends FormProvider[Boolean] {
+class EmploymentLumpSumsFormProvider @Inject() extends Mappings {
 
   def apply(isAgent: Boolean): Form[Boolean] = {
     val error: String =
