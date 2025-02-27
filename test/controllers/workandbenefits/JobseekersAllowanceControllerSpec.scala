@@ -17,42 +17,27 @@
 package controllers.workandbenefits
 
 import base.SpecBase
-import config.FrontendAppConfig
-import connectors.SessionDataConnector
-import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
 import forms.workandbenefits.JobseekersAllowanceFormProvider
-import handlers.ErrorHandler
 import models.errors.{APIErrorBodyModel, APIErrorModel}
 import models.prePopulation.EsaJsaPrePopulationResponse
-import models.session.SessionData
 import models.workandbenefits.JobseekersAllowance
 import models.workandbenefits.JobseekersAllowance.{Esa, Jsa}
 import models.{NormalMode, UserAnswers}
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.mockito.stubbing.OngoingStubbing
 import org.scalatestplus.mockito.MockitoSugar
 import pages.workandbenefits.JobseekersAllowancePage
-import play.api.{Application, inject}
 import play.api.data.Form
-import play.api.mvc.{AnyContentAsEmpty, Call, Request, Result}
-import play.api.test.FakeRequest
+import play.api.mvc.Call
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import services.SessionDataService
-import uk.gov.hmrc.http.HeaderCarrier
 import views.html.workandbenefits.{JobseekersAllowanceAgentView, JobseekersAllowanceView}
 
 import scala.concurrent.Future
 
-class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
+class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar with ControllerWithPrePopTestBase[JobseekersAllowanceView,JobseekersAllowanceAgentView] {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private def isPrePopEnabled(isEnabled: Boolean): Map[String, String] =
-    Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
 
-  lazy val jobseekersAllowanceRoute: String =
+  def url: String =
     controllers.workandbenefits.routes.JobseekersAllowanceController.onPageLoad(NormalMode, taxYear).url
 
   val formProvider: JobseekersAllowanceFormProvider = new JobseekersAllowanceFormProvider()
@@ -61,64 +46,6 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
 
   val expectedConditionalIndividual = s"HMRC hold information that you received Jobseeker’s Allowance between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on your Income Tax Return, where you can remove this."
   val expectedConditionalAgent = s"HMRC hold information that your client received Jobseeker’s Allowance between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on their Income Tax Return, where you can remove this."
-
-  trait Test {
-    def isAgent: Boolean = true
-    def application: Application
-    def request: Request[AnyContentAsEmpty.type]
-    def result: Future[Result] = route(application, request).value
-    def view: JobseekersAllowanceView = application.injector.instanceOf[JobseekersAllowanceView]
-    def agentView: JobseekersAllowanceAgentView = application.injector.instanceOf[JobseekersAllowanceAgentView]
-
-    def errorView(implicit request: Request[_]): Html =
-      application
-        .injector
-        .instanceOf[ErrorHandler]
-        .internalServerErrorTemplate
-
-    val userAnswers: Option[UserAnswers] = Some(emptyUserAnswers)
-
-    val dummySessionData: SessionData = SessionData(
-      mtditid = "someMtdItId",
-      nino = "AA111111A",
-      utr = "12345",
-      sessionId = "id"
-    )
-  }
-
-  trait PrePopDisabledTest extends Test {
-    def application: Application = applicationBuilder(userAnswers, isAgent)
-      .configure(isPrePopEnabled(false))
-      .build()
-  }
-
-  trait PrePopEnabledTest extends Test {
-    val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
-    val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
-
-    val sessionDataService = new SessionDataService(
-      sessionDataConnector = mockSessionDataConnector,
-      config = mockAppConfig
-    )
-
-    def mockSessionCookieServiceEnabledConfig(isEnabled: Boolean): OngoingStubbing[Boolean] =
-      when(mockAppConfig.sessionCookieServiceEnabled)
-        .thenReturn(isEnabled)
-
-    def mockSessionDataConnectorGet(result: Future[SessionDataResponse]): OngoingStubbing[Future[SessionDataResponse]] =
-      when(mockSessionDataConnector.getSessionData(any[HeaderCarrier]))
-        .thenReturn(result)
-
-    def application: Application = applicationBuilder(userAnswers, isAgent)
-      .configure(isPrePopEnabled(true))
-      .bindings(inject.bind[SessionDataService].toInstance(sessionDataService))
-      .build()
-  }
-
-  trait GetRequest {
-    def session: (String, String) = validTaxYears
-    def request: Request[AnyContentAsEmpty.type] = FakeRequest(GET, jobseekersAllowanceRoute).withSession(session)
-  }
 
   "JobseekersAllowance Controller" - {
     "when trying to retrieve the view with a GET" -> {
@@ -130,7 +57,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(
+              view.apply(
                 form = form,
                 mode = NormalMode,
                 taxYear = taxYear,
@@ -146,7 +73,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              agentView(
+              agentView.apply(
                 form = form,
                 mode = NormalMode,
                 taxYear = taxYear,
@@ -169,7 +96,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(
+              view.apply(
                 form = filledForm,
                 mode = NormalMode,
                 taxYear = taxYear,
@@ -194,7 +121,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              agentView(
+              agentView.apply(
                 form = filledForm,
                 mode = NormalMode,
                 taxYear = taxYear,
