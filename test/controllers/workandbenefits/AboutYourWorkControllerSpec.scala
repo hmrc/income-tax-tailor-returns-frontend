@@ -42,6 +42,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
   def onwardRoute: Call = Call("GET", "/foo")
 
   private val prePopEnabled = Map("feature-switch.isPrePopEnabled" -> "true")
+  private val prePopEnabledFalse = Map("feature-switch.isPrePopEnabled" -> "false")
 
   lazy val aboutYourWorkRoute: String = controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url
 
@@ -310,7 +311,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
         .success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).configure(prePopEnabledFalse).build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -353,7 +354,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
         .success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).configure(prePopEnabledFalse).build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)

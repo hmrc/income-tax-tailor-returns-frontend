@@ -44,6 +44,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
   val agentForm: Form[Boolean] = formProvider(isAgent = true)
 
   private val prePopEnabled = Map("feature-switch.isPrePopEnabled" -> "true")
+  private val prePopEnabledFalse = Map("feature-switch.isPrePopEnabled" -> "false")
 
   val expectedConditionalIndividual = "This will be added to your Income Tax Return. To remove this deduction, set it to 0."
   val expectedConditionalAgent = "This will be added to your clients Income Tax Return. To remove this deduction, set it to 0."
@@ -126,7 +127,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
 
       val userAnswers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).configure(prePopEnabledFalse).build()
 
       running(application) {
         val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
@@ -165,7 +166,7 @@ class ConstructionIndustrySchemeControllerSpec extends SpecBase with MockitoSuga
 
       val userAnswers = UserAnswers(mtdItId, taxYear).set(ConstructionIndustrySchemePage, true).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).configure(prePopEnabledFalse).build()
 
       running(application) {
         val request = FakeRequest(GET, constructionIndustrySchemeRoute).withSession(validTaxYears)
