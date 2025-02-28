@@ -30,8 +30,8 @@ class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnec
     stateBenefitsConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 
-  def getEmployment(nino: String, taxYear: Int)
+  def getEmployment(nino: String, taxYear: Int, mtdItId: String)
                    (implicit hc: HeaderCarrier): ConnectorResponse[EmploymentPrePopulationResponse] = {
-    employmentConnector.getPrePopulation(nino, taxYear)
+    employmentConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 }

@@ -29,7 +29,7 @@
     govukDetails: GovukDetails
 )
 
-@(form: Form[_], mode: Mode, taxYear: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, taxYear: Int, prePopData: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = title(form, messages("aboutYourWork.title")), taxYear = taxYear) {
 
@@ -37,6 +37,10 @@
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "AboutYourWork")))
+        }
+
+        @if(prePopData) {
+            <div class="govuk-inset-text">@messages("constructionIndustryScheme.agent.insetText")</div>
         }
 
         @govukCheckboxes(
