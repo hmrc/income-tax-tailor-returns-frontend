@@ -233,7 +233,6 @@ class ControllerWithPrePopSpec extends SpecBase
   "onSubmit" -> {
     "when there are no form errors in the request" -> {
       "should redirect to next page when user data service and journey answers update successfully" in new Test {
-        setupStubs()
         mockSetUserData(dummyUserAnswers.set(DummyPage, "validValue").get, dummyUserAnswers)
 
         val result: Future[Result] = controller.onSubmit(
@@ -250,26 +249,7 @@ class ControllerWithPrePopSpec extends SpecBase
     }
 
     "when form errors exist in the request" -> {
-      "should return an error page when pre-population retrieval fails" in new Test{
-        setupStubs()
-        mockInternalServerError(Html(""))
-
-        override val dummyPrePopResult: Either[SimpleErrorWrapper, DummyPrePop] = Left(SimpleErrorWrapper(IM_A_TEAPOT))
-
-        val result: Future[Result] = controller.onSubmit(
-          pageName = "N/A",
-          incomeType = "N/A",
-          page = DummyPage,
-          mode = NormalMode,
-          taxYear = taxYear
-        )(FakeRequest())
-
-        status(result) mustBe INTERNAL_SERVER_ERROR
-      }
-
-      "should return view with form errors when pre-population retrieval succeeds" in new Test {
-        setupStubs()
-
+      "should return view with form errors " in new Test {
         val result: Future[Result] = controller.onSubmit(
           pageName = "N/A",
           incomeType = "N/A",

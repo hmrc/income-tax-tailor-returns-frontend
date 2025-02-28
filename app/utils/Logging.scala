@@ -25,6 +25,9 @@ trait Logging {
   protected def dataLogString(nino: String, taxYear: Int, requestContext: String = "") =
     s" for $requestContext request with NINO: $nino, and tax year: $taxYear"
 
+  protected def noNinoDataLogString(mtdItId: String, taxYear: Int, requestContext: String = "") =
+    s" for $requestContext request with tax year: $taxYear, and mtdItId: $mtdItId"
+
   protected def infoLog(secondaryContext: String,
               dataLog: String = "",
               extraContext: Option[String] = None): String => Unit = (message: String) =>

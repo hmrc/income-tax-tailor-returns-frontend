@@ -127,7 +127,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
     )
 
     actionChain(taxYear).async { implicit request =>
-      val dataLog: String = s" for $requestToAgentString request with tax year: $taxYear, and mtdItId: ${request.mtdItId}"
+      val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, requestToAgentString)
       val infoLogger = infoLog(methodContext, dataLog, Some(extraContext))
       val errorLogger = errorLog(methodContext, dataLog, Some(extraContext))
 
@@ -157,7 +157,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
       } else {
         infoLogger("Pre-population feature switch disabled. Processing block without NINO, or pre-population actions")
         block(
-          dataLogString("N/A", taxYear),
+          dataLog,
           () => Future.successful(Right(defaultPrePopulationResponse)),
           request
         )
@@ -212,7 +212,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
   }
 
   /**
-   * A generic boilerplate method for submitting tailoring question pages with pre-pop actions
+   * A generic boilerplate method for submitting tailoring question pages
    *
    * @param pageName   String used for logging. Represents the current tailoring page being handled
    * @param incomeType String used for logging. Represents the current income type being handled
@@ -226,42 +226,29 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
                                       incomeType: String,
                                       page: QuestionPage[I],
                                       mode: Mode,
-                                      taxYear: Int): Action[AnyContent] = blockWithNino(taxYear, "onSubmit") {
-    (dataLog: String, prePopulationAction: PrePopResult, dataRequest: DataRequest[_]) => {
-      implicit val request: DataRequest[_] = dataRequest
+                                      taxYear: Int): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
+    val methodLogString: String = "onSubmit"
+    val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, requestToAgentString)
+    val infoLogger: String => Unit = infoLog(secondaryContext = methodLogString, dataLog = dataLog)
+    val warnLogger: String => Unit = warnLog(secondaryContext = methodLogString, dataLog = dataLog)
 
-      val infoLogger: String => Unit = infoLog(secondaryContext = "onSubmit", dataLog = dataLog)
-      val warnLogger: String => Unit = warnLog(secondaryContext = "onSubmit", dataLog = dataLog)
+    infoLogger(s"Request received to submit user journey answers for $pageName view")
 
-      infoLogger(s"Request received to submit user journey answers for $pageName view")
-
-      form.bindFromRequest().fold(formWithErrors => {
-        warnLogger(s"Errors found in form submission: ${formWithErrors.errors}")
-
-        blockWithPrePop(
-          prePopulationRetrievalAction = prePopulationAction,
-          successAction = (data: R) => {
-            infoLogger(prePopSuccessMessage + " with form errors")
-            BadRequest(viewProvider(formWithErrors, mode, taxYear, data))
-          },
-          errorAction = prePopErrorResult(warnLogger),
-          extraLogContext = "onSubmit",
-          dataLog = dataLog,
-          incomeType = incomeType
-        )
-      },
-        value => {
-          infoLogger("Form bound successfully from request. Attempting to update user's journey answers")
-          for {
-            updatedAnswers <- Future.fromTry(dataRequest.userAnswers.set(page, value))
-            _ <- userDataService.set(updatedAnswers, dataRequest.userAnswers)
-          } yield {
-            infoLogger("Journey answers updated successfully. Proceeding to next page in the journey")
-            Redirect(navigator.nextPage(page, mode, updatedAnswers))
-          }
+    form.bindFromRequest().fold(formWithErrors => {
+      warnLogger(s"Errors found in form submission. Returning $pageName view with errors: ${formWithErrors.errors}")
+      Future.successful(BadRequest(viewProvider(formWithErrors, mode, taxYear, defaultPrePopulationResponse)))
+    },
+      value => {
+        infoLogger("Form bound successfully from request. Attempting to update user's journey answers")
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
+          _ <- userDataService.set(updatedAnswers, request.userAnswers)
+        } yield {
+          infoLogger("Journey answers updated successfully. Proceeding to next page in the journey")
+          Redirect(navigator.nextPage(page, mode, updatedAnswers))
         }
-      )
-    }
+      }
+    )
   }
 
   protected def fillFormFromPageModel(form: Form[I], pageModel: I): Form[I]  = form.fill(pageModel)
