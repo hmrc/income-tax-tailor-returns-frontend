@@ -16,21 +16,29 @@
 
 package services
 
-import connectors.{ConnectorResponse, StateBenefitsConnector}
-import models.prePopulation.EsaJsaPrePopulationResponse
+import connectors.{ConnectorResponse, EmploymentConnector, StateBenefitsConnector}
+import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector) {
+class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector, employmentConnector: EmploymentConnector) {
 
   def getEsaJsa(nino: String, taxYear: Int, mtdItId: String)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): ConnectorResponse[EsaJsaPrePopulationResponse] =
     for {
       result <- stateBenefitsConnector.getPrePopulation(nino, taxYear, mtdItId)
       esaJsaResult = result.map(_.toEsaJsaModel)
+    } yield esaJsaResult
+
+
+  def getEmployment(nino: String, taxYear: Int, mtdItId: String)
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): ConnectorResponse[EmploymentPrePopulationResponse] =
+    for {
+      result <- employmentConnector.getPrePopulation(nino, taxYear, mtdItId)
+      esaJsaResult = result.map(_.toEmploymentModel)
     } yield esaJsaResult
 
 }
