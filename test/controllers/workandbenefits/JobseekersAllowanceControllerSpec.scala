@@ -22,7 +22,7 @@ import models.errors.{APIErrorBodyModel, APIErrorModel, SimpleErrorWrapper}
 import models.prePopulation.{EsaJsaPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import models.workandbenefits.JobseekersAllowance
 import models.workandbenefits.JobseekersAllowance.{Esa, Jsa}
-import models.{Done, NormalMode, UserAnswers}
+import models.{Done, NormalMode, SessionValues, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -164,6 +164,88 @@ class JobseekersAllowanceControllerSpec extends
             running(application) {
               status(result) mustEqual INTERNAL_SERVER_ERROR
               contentAsString(result) mustEqual mockErrorView
+            }
+          }
+        }
+
+        "handle session NINO fallback" -> {
+          "[GET] should fallback to session NINO when session data service is not enabled" in new GetWithPrePopTest {
+            override val sessionCookieServiceEnabled: Boolean = false
+            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
+
+            mockStateBenefitsConnectorGet(
+              result = Future.successful(Right(StateBenefitsPrePopulationResponse(
+                hasEsaPrePop = false,
+                hasJsaPrePop = false,
+                hasPensionsPrePop = false,
+                hasPensionLumpSumsPrePop = false
+              )))
+            )
+
+            running(application) {
+              status(result) mustEqual OK
+
+              contentAsString(result) mustEqual
+                view(
+                  form = form,
+                  mode = NormalMode,
+                  taxYear = taxYear,
+                  prePopData = EsaJsaPrePopulationResponse(hasJsaPrePop = false, hasEsaPrePop = false)
+                )(request, messages(application)).toString
+            }
+          }
+
+          "[GET] should fallback to session NINO when session data service returns an error" in new GetWithPrePopTest {
+            mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
+
+            mockStateBenefitsConnectorGet(
+              result = Future.successful(Right(StateBenefitsPrePopulationResponse(
+                hasEsaPrePop = false,
+                hasJsaPrePop = false,
+                hasPensionsPrePop = false,
+                hasPensionLumpSumsPrePop = false
+              )))
+            )
+
+            running(application) {
+              status(result) mustEqual OK
+
+              contentAsString(result) mustEqual
+                view(
+                  form = form,
+                  mode = NormalMode,
+                  taxYear = taxYear,
+                  prePopData = EsaJsaPrePopulationResponse(hasJsaPrePop = false, hasEsaPrePop = false)
+                )(request, messages(application)).toString
+            }
+          }
+
+          "[GET] should fallback to session NINO when session data service returns None" in new GetWithPrePopTest {
+            mockSessionDataConnectorGet(Future.successful(Right(None)))
+
+            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
+
+            mockStateBenefitsConnectorGet(
+              result = Future.successful(Right(StateBenefitsPrePopulationResponse(
+                hasEsaPrePop = false,
+                hasJsaPrePop = false,
+                hasPensionsPrePop = false,
+                hasPensionLumpSumsPrePop = false
+              )))
+            )
+
+            running(application) {
+              status(result) mustEqual OK
+
+              contentAsString(result) mustEqual
+                view(
+                  form = form,
+                  mode = NormalMode,
+                  taxYear = taxYear,
+                  prePopData = EsaJsaPrePopulationResponse(hasJsaPrePop = false, hasEsaPrePop = false)
+                )(request, messages(application)).toString
             }
           }
         }

@@ -72,7 +72,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
       sessionId = "id"
     )
 
-    def defaultSession: (String, String) = validTaxYears
+    def defaultSession: Seq[(String, String)] = Seq(validTaxYears)
 
     def isPrePopEnabled(isEnabled: Boolean): Map[String, String] =
       Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
@@ -155,7 +155,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
   trait GetRequest extends BaseRequest[AnyContentAsEmpty.type] {_: ControllerWithPrePopTest =>
     def filledForm(f: FormType): Form[FormType] = formProvider(isAgent).fill(f)
 
-    override def request: Request[AnyContentAsEmpty.type] = FakeRequest(GET, requestRoute).withSession(defaultSession)
+    override def request: Request[AnyContentAsEmpty.type] = FakeRequest(GET, requestRoute).withSession(defaultSession :_*)
     override def result: Future[Result] = route(application, request).value
   }
 
@@ -165,7 +165,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
 
     override def request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest(POST, requestRoute)
       .withFormUrlEncodedBody(formUrlEncodedBody)
-      .withSession(defaultSession)
+      .withSession(defaultSession :_*)
 
     override def result: Future[Result] = route(application, request).value
   }
