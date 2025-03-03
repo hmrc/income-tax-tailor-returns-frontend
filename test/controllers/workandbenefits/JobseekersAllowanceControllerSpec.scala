@@ -19,7 +19,7 @@ package controllers.workandbenefits
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
-import connectors.{ConnectorResponse, SessionDataConnector, StateBenefitsConnector}
+import connectors.{ConnectorResponse, SessionDataConnector, StateBenefitsConnector, EmploymentConnector}
 import forms.workandbenefits.JobseekersAllowanceFormProvider
 import handlers.ErrorHandler
 import models.errors.{APIErrorBodyModel, APIErrorModel, SimpleErrorWrapper}
@@ -94,6 +94,7 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
     val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
     val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
     val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
+    val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
     val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
 
     val sessionDataService = new SessionDataService(
@@ -102,7 +103,8 @@ class JobseekersAllowanceControllerSpec extends SpecBase with MockitoSugar {
     )
 
     val prePopulationService = new PrePopulationService(
-      stateBenefitsConnector = mockStateBenefitsConnector
+      stateBenefitsConnector = mockStateBenefitsConnector,
+      employmentConnector = mockEmploymentConnector
     )
 
     val errorView: String = "This is some dummy error page"

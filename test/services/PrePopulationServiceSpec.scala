@@ -17,7 +17,7 @@
 package services
 
 import base.SpecBase
-import mocks.MockStateBenefitsConnector
+import mocks.{MockEmploymentConnector, MockStateBenefitsConnector}
 import models.errors.SimpleErrorWrapper
 import models.prePopulation.{EsaJsaPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import play.api.http.Status.{IM_A_TEAPOT, INTERNAL_SERVER_ERROR}
@@ -27,6 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 class PrePopulationServiceSpec extends SpecBase
   with MockStateBenefitsConnector
+  with MockEmploymentConnector
   with DefaultAwaitTimeout {
 
   val nino: String = "AA111111A"
@@ -37,7 +38,7 @@ class PrePopulationServiceSpec extends SpecBase
 
   val testService = new PrePopulationService(
     stateBenefitsConnector = mockStateBenefitsConnector,
-    employmentConnector = ???
+    employmentConnector = mockEmploymentConnector
   )
 
   val dummyResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(
