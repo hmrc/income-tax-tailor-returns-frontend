@@ -16,7 +16,7 @@
 
 package connectors.httpParsers
 
-import models.{APIErrorBodyModel, APIErrorModel, APIErrorsBodyModel}
+import models.errors.{APIErrorBodyModel, APIErrorModel, APIErrorsBodyModel}
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import uk.gov.hmrc.http.HttpResponse
 import utils.PagerDutyHelper.PagerDutyKeys.{BAD_SUCCESS_JSON_FROM_API, UNEXPECTED_RESPONSE_FROM_API}

@@ -23,6 +23,7 @@ object AppDependencies {
     "uk.gov.hmrc.mongo"             %% "hmrc-mongo-play-30"                     % hmrcMongoVersion,
     "uk.gov.hmrc"                   %% "tax-year"                               % "5.0.0",
     "com.fasterxml.jackson.module"  %% "jackson-module-scala"                   % "2.18.2",
+    "org.typelevel"                 %% "cats-core"                              % "2.13.0",
     "com.beachape"                  %% "enumeratum"                             % "1.7.5",
     "com.beachape"                  %% "enumeratum-play-json"                   % "1.8.2" excludeAll (jacksonAndPlayExclusions *)
   )
@@ -34,6 +35,8 @@ object AppDependencies {
     "org.mockito"             %% "mockito-scala"           % "1.17.37",
     "org.scalacheck"          %% "scalacheck"              % "1.18.1",
     "org.jsoup"               %  "jsoup"                   % "1.18.3",
+    "org.wiremock"            %  "wiremock"                % "3.11.0",
+    "org.scalamock"           %% "scalamock"               % "6.2.0",
     "org.playframework"       %% "play-test"               % current
   ).map(_ % "test")
 

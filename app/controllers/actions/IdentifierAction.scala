@@ -18,19 +18,18 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.IncomeTaxSessionDataConnector
+import connectors.SessionDataConnector
 import models.Enrolment
-import uk.gov.hmrc.auth.core.{Enrolment => HMRCEnrolment}
 import models.SessionValues.CLIENT_MTDITID
 import models.requests.IdentifierRequest
 import models.session.SessionData
 import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
-import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.{Enrolment => HMRCEnrolment, _}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
@@ -44,7 +43,7 @@ trait IdentifierActionProvider {
 
 class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
                                              config: FrontendAppConfig,
-                                             sessionDataConnector: IncomeTaxSessionDataConnector,
+                                             sessionDataConnector: SessionDataConnector,
                                              parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
 
@@ -54,11 +53,10 @@ class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
 class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                              (override val authConnector: AuthConnector,
                                               config: FrontendAppConfig,
-                                              sessionDataConnector: IncomeTaxSessionDataConnector,
+                                              sessionDataConnector: SessionDataConnector,
                                               val parser: BodyParsers.Default)
                                              (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions with Logging {
-
 
   private val unauthorized: Future[Result] = Future.successful(Unauthorized)
 

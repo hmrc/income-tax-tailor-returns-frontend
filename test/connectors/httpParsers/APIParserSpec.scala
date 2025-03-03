@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package httpParsers
+package connectors.httpParsers
 
-import connectors.httpParsers.APIParser
-import models.{APIErrorBodyModel, APIErrorModel, APIErrorsBodyModel}
+import models.errors.{APIErrorBodyModel, APIErrorModel, APIErrorsBodyModel}
+import org.scalatest.freespec.AnyFreeSpec
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HttpResponse
-import org.scalatest.freespec.AnyFreeSpec
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
 class APIParserSpec extends AnyFreeSpec {
 

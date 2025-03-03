@@ -28,44 +28,44 @@ import java.util.UUID
 @Singleton
 class FrontendAppConfig @Inject()(configuration: Configuration) {
 
-  val host: String = configuration.get[String]("host")
-  val appName: String = configuration.get[String]("appName")
+  lazy val host: String = configuration.get[String]("host")
+  lazy val appName: String = configuration.get[String]("appName")
 
-  private val allowedRedirectUrls: Seq[String] = configuration.get[Seq[String]]("urls.allowedRedirects")
+  private lazy val allowedRedirectUrls: Seq[String] = configuration.get[Seq[String]]("urls.allowedRedirects")
 
-  private val contactHost = RedirectUrl(configuration.get[String]("contact-frontend.host"))
+  private lazy val contactHost = RedirectUrl(configuration.get[String]("contact-frontend.host"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  private val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
+  private lazy val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
 
   def feedbackUrl(implicit request: RequestHeader): String =
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
 
-  private val loginUrl: String = RedirectUrl(configuration.get[String]("urls.login"))
+  private lazy val loginUrl: String = RedirectUrl(configuration.get[String]("urls.login"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  private val loginContinueUrl: String = RedirectUrl(configuration.get[String]("urls.loginContinue"))
+  private lazy val loginContinueUrl: String = RedirectUrl(configuration.get[String]("urls.loginContinue"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
   def loginUrl(taxYear: Int): String = s"$loginUrl?continue=$loginContinueUrl/$taxYear/start&origin=$appName"
 
-  val signOutUrl: String = RedirectUrl(configuration.get[String]("urls.signOut"))
+  lazy val signOutUrl: String = RedirectUrl(configuration.get[String]("urls.signOut"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  val incomeTaxSubmissionIvRedirect: String = RedirectUrl(configuration.get[String]("urls.ivUplift"))
+  lazy val incomeTaxSubmissionIvRedirect: String = RedirectUrl(configuration.get[String]("urls.ivUplift"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  private val exitSurveyBaseUrl: String = RedirectUrl(configuration.get[String]("feedback-frontend.host"))
+  private lazy val exitSurveyBaseUrl: String = RedirectUrl(configuration.get[String]("feedback-frontend.host"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
   //Submission Frontend
-  val submissionFrontendTaskListRedirect: Int => String = taxYear => RedirectUrl(
+  lazy val submissionFrontendTaskListRedirect: Int => String = taxYear => RedirectUrl(
     configuration.get[String]("microservice.services.income-tax-submission-frontend.url") + s"/update-and-submit-income-tax-return/$taxYear/tasklist")
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
@@ -74,24 +74,15 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def employmentBaseUrl: String = configuration.get[String]("microservice.services.income-tax-employment-frontend.url")
 
-  def ukInterestGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
-      s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-UK"
-
-  def giltEdgedGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
-      s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-securities"
-
   def personalFrontendBaseUrl: String =
     s"${configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url")}/update-and-submit-income-tax-return/personal-income"
+
+  def stateBenefitsBaseUrl: String =
+    configuration.get[String]("microservice.services.income-tax-state-benefits.url") + "/income-tax-state-benefits"
 
   def cisFrontendUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-cis-frontend.url") +
       s"/update-and-submit-income-tax-return/construction-industry-scheme-deductions/$taxYear/contractor-details"
-
-  def employmentGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.income-tax-employment-frontend.url") +
-      s"/update-and-submit-income-tax-return/employment-income/$taxYear/income-from-employment"
 
   def pensionsGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
@@ -129,15 +120,12 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def tailoringFosterCarerUrl(taxYear: Int): String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/foster-carer "
 
-  val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/$appName"
+  lazy val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/$appName"
 
-  val languageTranslationEnabled: Boolean =
+  lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.welsh-translation")
 
-  val privateBeta: Boolean =
-    configuration.get[Boolean]("feature-switch.privateBeta")
-
-  val sessionCookieServiceEnabled: Boolean =
+  def sessionCookieServiceEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.sessionCookieService")
 
   def emaSupportingAgentsEnabled: Boolean =
@@ -151,19 +139,21 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
     "cy" -> Lang("cy")
   )
 
-  val timeout: Int = configuration.get[Int]("timeout-dialog.timeout")
-  val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
+  lazy val timeout: Int = configuration.get[Int]("timeout-dialog.timeout")
+  lazy val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
 
-  val checkResidenceStatusUrl: String = configuration.get[String]("external-urls.checkResidenceStatus")
-  val understandingTaxAvoidanceUrl: String = configuration.get[String]("external-urls.understandingTaxAvoidance")
-  val understandingRemunerationUrl: String = configuration.get[String]("external-urls.understandingRemuneration")
-  val unauthorisedPaymentsUrl: String = configuration.get[String]("external-urls.unauthorisedPayments")
-  val overseasTransferChargeUrl: String = configuration.get[String]("external-urls.overseasTransferCharge")
-  val taxOnDividendsUrl: String = configuration.get[String]("external-urls.taxOnDividends")
-  val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
-  val setUpAgentServicesAccountUrl: String = configuration.get[String]("external-urls.set-up-agent-services-account")
+  lazy val checkResidenceStatusUrl: String = configuration.get[String]("external-urls.checkResidenceStatus")
+  lazy val understandingTaxAvoidanceUrl: String = configuration.get[String]("external-urls.understandingTaxAvoidance")
+  lazy val understandingRemunerationUrl: String = configuration.get[String]("external-urls.understandingRemuneration")
+  lazy val unauthorisedPaymentsUrl: String = configuration.get[String]("external-urls.unauthorisedPayments")
+  lazy val overseasTransferChargeUrl: String = configuration.get[String]("external-urls.overseasTransferCharge")
+  lazy val taxOnDividendsUrl: String = configuration.get[String]("external-urls.taxOnDividends")
+  lazy val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
+  lazy val setUpAgentServicesAccountUrl: String = configuration.get[String]("external-urls.set-up-agent-services-account")
   //Subscription Service
-  val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
-  val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
-  val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
+  lazy val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
+  lazy val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
+  lazy val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
+
+  def vcSessionServiceBaseUrl: String = configuration.get[Service]("microservice.services.income-tax-session-data").baseUrl
 }

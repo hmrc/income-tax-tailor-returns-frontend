@@ -16,28 +16,25 @@
 
 package connectors
 
-import config.Service
+import config.FrontendAppConfig
 import connectors.ConnectorFailureLogger.FromResultToConnectorFailureLogger
 import connectors.httpParsers.SessionDataHttpParser.{SessionDataResponse, SessionDataResponseReads}
-import play.api.Configuration
-import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-trait IncomeTaxSessionDataConnector {
+trait SessionDataConnector {
   def getSessionData(implicit hc: HeaderCarrier): Future[SessionDataResponse]
 }
 
 @Singleton
-class IncomeTaxSessionDataConnectorImpl @Inject()(config: Configuration, httpClient: HttpClientV2)(implicit ec: ExecutionContext)
-  extends IncomeTaxSessionDataConnector{
+class SessionDataConnectorImpl @Inject()(config: FrontendAppConfig, httpClient: HttpClientV2)(implicit ec: ExecutionContext)
+  extends SessionDataConnector {
 
   def getSessionData(implicit hc: HeaderCarrier): Future[SessionDataResponse] = {
-
-    val vcSessionServiceBaseUrl = config.get[Service]("microservice.services.income-tax-session-data")
-    val url = s"$vcSessionServiceBaseUrl/income-tax-session-data/"
+    val url = s"${config.vcSessionServiceBaseUrl}/income-tax-session-data/"
     httpClient
       .get(url"$url")
       .execute[SessionDataResponse]

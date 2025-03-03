@@ -17,6 +17,7 @@
 @import components._
 @import viewmodels.LegendSize
 @import models.workandbenefits.JobseekersAllowance
+@import models.prePopulation.EsaJsaPrePopulationResponse
 
 @this(
     layout: templates.Layout,
@@ -29,7 +30,7 @@
     p: ParagraphBody
 )
 
-@(form: Form[_], mode: Mode, taxYear: Int, prePopData: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, taxYear: Int, prePopData: EsaJsaPrePopulationResponse)(implicit request: Request[_], messages: Messages)
 
 @detailsContent = {
     @p(messages("jobseekersAllowance.details.p"))
@@ -50,8 +51,8 @@
             content = HtmlContent(detailsContent)
         ))
 
-        @if(prePopData) {
-            <div class="govuk-inset-text">@messages("jobseekersAllowance.insetText", (taxYear-1).toString, taxYear.toString)</div>
+        @if(prePopData.hasPrePop) {
+            <div class="govuk-inset-text">@messages(prePopData.toMessageString(false), (taxYear-1).toString, taxYear.toString)</div>
         }
 
         @govukCheckboxes(

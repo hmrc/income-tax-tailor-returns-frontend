@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-package models.requests
+package models.errors
 
-import play.api.mvc.{Request, WrappedRequest}
-
-case class IdentifierRequest[A] (request: Request[A],
-                                 mtdItId: String,
-                                 isAgent: Boolean,
-                                 isSecondaryAgent: Boolean = false) extends WrappedRequest[A](request)
+case class SimpleErrorWrapper (status: Int)
