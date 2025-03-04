@@ -74,24 +74,12 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def employmentBaseUrl: String = configuration.get[String]("microservice.services.income-tax-employment-frontend.url")
 
-  def ukInterestGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
-      s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-UK"
-
-  def giltEdgedGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url") +
-      s"/update-and-submit-income-tax-return/personal-income/$taxYear/interest/interest-from-securities"
-
   def personalFrontendBaseUrl: String =
     s"${configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url")}/update-and-submit-income-tax-return/personal-income"
 
   def cisFrontendUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-cis-frontend.url") +
       s"/update-and-submit-income-tax-return/construction-industry-scheme-deductions/$taxYear/contractor-details"
-
-  def employmentGatewayUrl(taxYear: Int): String =
-    configuration.get[String]("microservice.services.income-tax-employment-frontend.url") +
-      s"/update-and-submit-income-tax-return/employment-income/$taxYear/income-from-employment"
 
   def pensionsGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +
@@ -131,20 +119,11 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/$appName"
 
-  val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.welsh-translation")
+  val languageTranslationEnabled: Boolean = configuration.get[Boolean]("feature-switch.welsh-translation")
+  val privateBeta: Boolean = configuration.get[Boolean]("feature-switch.privateBeta")
+  val sessionCookieServiceEnabled: Boolean = configuration.get[Boolean]("feature-switch.sessionCookieService")
 
-  val privateBeta: Boolean =
-    configuration.get[Boolean]("feature-switch.privateBeta")
-
-  val sessionCookieServiceEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.sessionCookieService")
-
-  def emaSupportingAgentsEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.ema-supporting-agents-enabled")
-
-  def isPrePopEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.isPrePopEnabled")
+  def isPrePopEnabled: Boolean = configuration.get[Boolean]("feature-switch.isPrePopEnabled")
 
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
@@ -162,8 +141,13 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   val taxOnDividendsUrl: String = configuration.get[String]("external-urls.taxOnDividends")
   val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
   val setUpAgentServicesAccountUrl: String = configuration.get[String]("external-urls.set-up-agent-services-account")
+
   //Subscription Service
-  val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
-  val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
-  val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
+  private val vcBaseUrl: String =
+    configuration.get[String]("microservice.services.view-and-change.url") +
+    "/report-quarterly/income-and-expenses"
+
+  def viewAndChangeEnterUtrUrl: String = s"$vcBaseUrl/view/agents/client-utr"
+  def viewAndChangeViewUrlAgent: String = s"$vcBaseUrl/view/agents"
+  def signUpUrlIndividual: String = s"$vcBaseUrl/sign-up/eligibility"
 }

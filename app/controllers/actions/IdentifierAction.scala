@@ -171,20 +171,15 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
       logger.info(s"[AuthorisedAction][agentAuthentication] - No active session. Redirecting to ${config.viewAndChangeEnterUtrUrl}")
       Future(Redirect(config.viewAndChangeEnterUtrUrl))
     case _: AuthorisationException =>
-      if (config.emaSupportingAgentsEnabled) {
-        authorised(secondaryAgentPredicate(mtdItId)) {
-          block(IdentifierRequest(request, mtdItId, isAgent = true, isSecondaryAgent = true))
-        }.recoverWith {
-          case _: AuthorisationException =>
-            logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have secondary delegated authority for Client.")
-            Future(Unauthorized)
-          case _ =>
-            logger.info(s"[AuthorisedAction][agentAuthentication] - Downstream service error.")
-            Future(InternalServerError)
-        }
-      } else {
-        logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have delegated authority for Client.")
-        Future.successful(Redirect(config.signUpUrlAgent))
+      authorised(secondaryAgentPredicate(mtdItId)) {
+        block(IdentifierRequest(request, mtdItId, isAgent = true))
+      }.recoverWith {
+        case _: AuthorisationException =>
+          logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have secondary delegated authority for Client.")
+          Future(Unauthorized)
+        case _ =>
+          logger.info(s"[AuthorisedAction][agentAuthentication] - Downstream service error.")
+          Future(InternalServerError)
       }
   }
 }
