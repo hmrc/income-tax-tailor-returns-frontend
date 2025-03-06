@@ -16,9 +16,25 @@
 
 package models.prePopulation
 
+import models.workandbenefits.AboutYourWork
 import play.api.libs.json.{Json, Reads}
 
-case class EmploymentPrePopulationResponse (hasEmploymentPrePop: Boolean) {
+case class EmploymentPrePopulationResponse (hasEmploymentPrePop: Boolean) extends PrePopulationResponse[Set[AboutYourWork]] {
+
+  val hasPrePop: Boolean = hasEmploymentPrePop
+
+  def toMessageString(isAgent: Boolean): String = {
+    val agentStringOpt = if (isAgent) "agent." else ""
+
+    (hasEmploymentPrePop) match {
+      case (true) => s"employment.insetText.${agentStringOpt}both"
+      case _ => ""
+    }
+  }
+
+  def toPageModel: Set[AboutYourWork] =
+    (if (hasEmploymentPrePop) Set(AboutYourWork.Employed) else Set())
+
   def toEmploymentModel: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(hasEmploymentPrePop)
 }
 
@@ -29,3 +45,4 @@ case class EmploymentPrePopulationResponse (hasEmploymentPrePop: Boolean) {
       hasEmploymentPrePop = false,
     )
   }
+
