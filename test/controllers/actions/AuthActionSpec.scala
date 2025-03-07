@@ -145,7 +145,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val result = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some("http://localhost:9589/report-quarterly/income-and-expenses/sign-up/eligibility")
+          redirectLocation(result) mustBe Some("http://localhost:9081/report-quarterly/income-and-expenses/sign-up/eligibility")
 
         }
       }
@@ -260,7 +260,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890", "sessionId" -> "test-session-id"))
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some("http://localhost:9589/report-quarterly/income-and-expenses/view/agents/client-utr")
+          redirectLocation(result) mustBe Some("http://localhost:9081/report-quarterly/income-and-expenses/view/agents/client-utr")
 
         }
       }
@@ -377,14 +377,13 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val result = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some("http://localhost:9589/report-quarterly/income-and-expenses/view/agents/client-utr")
+          redirectLocation(result) mustBe Some("http://localhost:9081/report-quarterly/income-and-expenses/view/agents/client-utr")
         }
       }
       "must fail with a UNAUTHORIZED when ClientMTDID from User Session does not exist in users enrolments" in {
 
         val application = applicationBuilder(userAnswers = None, isAgent = true).configure(
-          "feature-switch.sessionCookieService" -> false,
-          "feature-switch.ema-supporting-agents-enabled" -> false
+          "feature-switch.sessionCookieService" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
           bind[SessionDataConnector].toInstance(mockSessionDataConnector)
@@ -406,6 +405,8 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             .thenReturn(authResponse)
           when(mockAuthConnector.authorise(predicate("1234567890"), mEq(EmptyRetrieval))(any(), any()))
             .thenReturn(Future.failed(InsufficientEnrolments()))
+          when(mockAuthConnector.authorise(secondaryAgentPredicate("1234567890"), mEq(EmptyRetrieval))(any(), any()))
+            .thenReturn(Future.failed(InsufficientEnrolments()))
 
           val authAction = new IdentifierActionProviderImpl(mockAuthConnector, appConfig,
             mockSessionDataConnector, bodyParsers)(ec).apply(taxYear)
@@ -414,16 +415,14 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890", "sessionId" -> "1234567890"))
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some("http://localhost:9589/report-quarterly/income-and-expenses/sign-up/eligibility/client")
+          status(result) mustBe UNAUTHORIZED
         }
       }
 
-      "must fail with a UNAUTHORIZED when authConnector returns any error" in {
+      "must fail with a UNAUTHORIZED when authConnector fails to authenticate secondary agent " in {
 
         val application = applicationBuilder(userAnswers = None, isAgent = true).configure(
-          "feature-switch.sessionCookieService" -> false,
-          "feature-switch.ema-supporting-agents-enabled" -> false
+          "feature-switch.sessionCookieService" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
           bind[SessionDataConnector].toInstance(mockSessionDataConnector)
@@ -444,6 +443,8 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
             .thenReturn(authResponse)
           when(mockAuthConnector.authorise(predicate("1234567890"), mEq(EmptyRetrieval))(any(), any()))
             .thenReturn(Future.failed(UnsupportedCredentialRole()))
+          when(mockAuthConnector.authorise(any, mEq(EmptyRetrieval))(any(), any()))
+            .thenReturn(Future.failed(InsufficientConfidenceLevel()))
 
           val authAction = new IdentifierActionProviderImpl(mockAuthConnector, appConfig,
             mockSessionDataConnector, bodyParsers)(ec).apply(taxYear)
@@ -452,8 +453,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> "1234567890", "sessionId" -> "1234567890"))
 
-          status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some("http://localhost:9589/report-quarterly/income-and-expenses/sign-up/eligibility/client")
+          status(result) mustBe UNAUTHORIZED
         }
       }
 
@@ -492,11 +492,10 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
 
     "when the user is authorised as a secondary agent" - {
 
-      "must succeed with a identifier Request" in {
+      "must succeed with a identifier Request and redirect " in {
 
         val application = applicationBuilder(userAnswers = None, isAgent = true).configure(
-          "feature-switch.sessionCookieService" -> true,
-          "feature-switch.ema-supporting-agents-enabled" -> true
+          "feature-switch.sessionCookieService" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
           bind[SessionDataConnector].toInstance(mockSessionDataConnector)
@@ -532,15 +531,15 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> testMtditId, "sessionId" -> "test-session-id"))
 
-          status(result) mustBe OK
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result) mustBe Some(controllers.routes.SupportingAgentAuthErrorController.show.url)
         }
       }
 
       "must redirect when session data is none" in {
 
         val application = applicationBuilder(userAnswers = None).configure(
-            "feature-switch.sessionCookieService" -> true,
-            "feature-switch.ema-supporting-agents-enabled" -> true
+            "feature-switch.sessionCookieService" -> true
           ).overrides(bind[AuthConnector].toInstance(mockAuthConnector))
           .overrides(bind[SessionDataConnector].toInstance(mockSessionDataConnector))
           .build()
@@ -572,16 +571,15 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> testMtditId, "sessionId" -> "test-session-id"))
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some("http://localhost:9589/report-quarterly/income-and-expenses/view/agents/client-utr")
+          redirectLocation(result) mustBe Some("http://localhost:9081/report-quarterly/income-and-expenses/view/agents/client-utr")
 
         }
       }
 
-      "must succeed with a identifier Request, while session cookie service feature is off" in {
+      "must succeed with a identifier Request, while session cookie service feature is off and redirect" in {
 
         val application = applicationBuilder(userAnswers = None,isAgent = true).configure(
-          "feature-switch.sessionCookieService" -> false,
-          "feature-switch.ema-supporting-agents-enabled" -> true
+          "feature-switch.sessionCookieService" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
           bind[SessionDataConnector].toInstance(mockSessionDataConnector)
@@ -615,15 +613,15 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> testMtditId, "sessionId" -> "test-session-id"))
 
-          status(result) mustBe OK
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result) mustBe Some(controllers.routes.SupportingAgentAuthErrorController.show.url)
         }
       }
 
       "must succeed with a identifier Request, while session cookie service feature is on but returns error" in {
 
         val application = applicationBuilder(userAnswers = None, isAgent = true).configure(
-          "feature-switch.sessionCookieService" -> true,
-          "feature-switch.ema-supporting-agents-enabled" -> true
+          "feature-switch.sessionCookieService" -> true
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
           bind[SessionDataConnector].toInstance(mockSessionDataConnector)
@@ -661,14 +659,14 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val controller = new Harness(authAction)
           val result = controller.onPageLoad()(FakeRequest().withSession("ClientMTDID" -> testMtditId, "sessionId" -> "test-session-id"))
 
-          status(result) mustBe OK
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result) mustBe Some(controllers.routes.SupportingAgentAuthErrorController.show.url)
         }
       }
 
       "must fail with a redirect when missing ClientMTDID from User Session" in {
         val application = applicationBuilder(userAnswers = None, isAgent = true).configure(
-          "feature-switch.sessionCookieService" -> false,
-          "feature-switch.ema-supporting-agents-enabled" -> true
+          "feature-switch.sessionCookieService" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
           bind[SessionDataConnector].toInstance(mockSessionDataConnector)
@@ -702,15 +700,14 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
           val result = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result) mustBe Some("http://localhost:9589/report-quarterly/income-and-expenses/view/agents/client-utr")
+          redirectLocation(result) mustBe Some("http://localhost:9081/report-quarterly/income-and-expenses/view/agents/client-utr")
         }
       }
 
       "must fail with a UNAUTHORIZED when ClientMTDID from User Session does not exist in users enrolments" in {
 
         val application = applicationBuilder(userAnswers = None, isAgent = true).configure(
-          "feature-switch.sessionCookieService" -> false,
-          "feature-switch.ema-supporting-agents-enabled" -> true
+          "feature-switch.sessionCookieService" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
           bind[SessionDataConnector].toInstance(mockSessionDataConnector)
@@ -751,8 +748,7 @@ class AuthActionSpec extends SpecBase with MockitoSugar {
       "must fail with a UNAUTHORIZED when authConnector returns any error" in {
 
         val application = applicationBuilder(userAnswers = None, isAgent = true).configure(
-          "feature-switch.sessionCookieService" -> false,
-          "feature-switch.ema-supporting-agents-enabled" -> true
+          "feature-switch.sessionCookieService" -> false
         ).overrides(
           bind[AuthConnector].toInstance(mockAuthConnector),
           bind[SessionDataConnector].toInstance(mockSessionDataConnector)

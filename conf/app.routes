@@ -14,6 +14,8 @@ GET        /refresh-session/:taxYear                                            
 
 GET        /there-is-a-problem/:taxYear                                                                                 controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None, taxYear: Int)
 
+GET         /error/supporting-agent-not-authorised                                                                      controllers.SupportingAgentAuthErrorController.show
+
 GET        /account/sign-out                                                                                            controllers.auth.AuthController.signOutNoSurvey
 GET        /account/sign-out-survey                                                                                     controllers.auth.AuthController.signOut
 GET        /account/signed-out                                                                                          controllers.auth.SignedOutController.onPageLoad
