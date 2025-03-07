@@ -28,44 +28,44 @@ import java.util.UUID
 @Singleton
 class FrontendAppConfig @Inject()(configuration: Configuration) {
 
-  lazy val host: String = configuration.get[String]("host")
-  lazy val appName: String = configuration.get[String]("appName")
+  val host: String = configuration.get[String]("host")
+  val appName: String = configuration.get[String]("appName")
 
-  private lazy val allowedRedirectUrls: Seq[String] = configuration.get[Seq[String]]("urls.allowedRedirects")
+  private val allowedRedirectUrls: Seq[String] = configuration.get[Seq[String]]("urls.allowedRedirects")
 
-  private lazy val contactHost = RedirectUrl(configuration.get[String]("contact-frontend.host"))
+  private val contactHost = RedirectUrl(configuration.get[String]("contact-frontend.host"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  private lazy val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
+  private val contactFormServiceIdentifier = configuration.get[String]("contact-frontend.serviceId")
 
   def feedbackUrl(implicit request: RequestHeader): String =
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier&backUrl=${host + request.uri}"
 
-  private lazy val loginUrl: String = RedirectUrl(configuration.get[String]("urls.login"))
+  private val loginUrl: String = RedirectUrl(configuration.get[String]("urls.login"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  private lazy val loginContinueUrl: String = RedirectUrl(configuration.get[String]("urls.loginContinue"))
+  private val loginContinueUrl: String = RedirectUrl(configuration.get[String]("urls.loginContinue"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
   def loginUrl(taxYear: Int): String = s"$loginUrl?continue=$loginContinueUrl/$taxYear/start&origin=$appName"
 
-  lazy val signOutUrl: String = RedirectUrl(configuration.get[String]("urls.signOut"))
+  val signOutUrl: String = RedirectUrl(configuration.get[String]("urls.signOut"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  lazy val incomeTaxSubmissionIvRedirect: String = RedirectUrl(configuration.get[String]("urls.ivUplift"))
+  val incomeTaxSubmissionIvRedirect: String = RedirectUrl(configuration.get[String]("urls.ivUplift"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  private lazy val exitSurveyBaseUrl: String = RedirectUrl(configuration.get[String]("feedback-frontend.host"))
+  private val exitSurveyBaseUrl: String = RedirectUrl(configuration.get[String]("feedback-frontend.host"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
   //Submission Frontend
-  lazy val submissionFrontendTaskListRedirect: Int => String = taxYear => RedirectUrl(
+  val submissionFrontendTaskListRedirect: Int => String = taxYear => RedirectUrl(
     configuration.get[String]("microservice.services.income-tax-submission-frontend.url") + s"/update-and-submit-income-tax-return/$taxYear/tasklist")
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
@@ -76,12 +76,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def personalFrontendBaseUrl: String =
     s"${configuration.get[String]("microservice.services.personal-income-tax-submission-frontend.url")}/update-and-submit-income-tax-return/personal-income"
-
-  def stateBenefitsBaseUrl: String =
-    configuration.get[String]("microservice.services.income-tax-state-benefits.url") + "/income-tax-state-benefits"
-
-  def cisBaseUrl: String =
-    configuration.get[String]("microservice.services.income-tax-cis.url") + "/income-tax-cis"
 
   def cisFrontendUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-cis-frontend.url") +
@@ -123,40 +117,37 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def tailoringFosterCarerUrl(taxYear: Int): String = s"$host/update-and-submit-income-tax-return/tailored-return/$taxYear/about-you/foster-carer "
 
-  lazy val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/$appName"
+  val exitSurveyUrl: String = s"$exitSurveyBaseUrl/feedback/$appName"
 
-  lazy val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.welsh-translation")
+  val languageTranslationEnabled: Boolean = configuration.get[Boolean]("feature-switch.welsh-translation")
+  val privateBeta: Boolean = configuration.get[Boolean]("feature-switch.privateBeta")
+  val sessionCookieServiceEnabled: Boolean = configuration.get[Boolean]("feature-switch.sessionCookieService")
 
-  def sessionCookieServiceEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.sessionCookieService")
-
-  def emaSupportingAgentsEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.ema-supporting-agents-enabled")
-
-  def isPrePopEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.isPrePopEnabled")
+  def isPrePopEnabled: Boolean = configuration.get[Boolean]("feature-switch.isPrePopEnabled")
 
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
     "cy" -> Lang("cy")
   )
 
-  lazy val timeout: Int = configuration.get[Int]("timeout-dialog.timeout")
-  lazy val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
+  val timeout: Int = configuration.get[Int]("timeout-dialog.timeout")
+  val countdown: Int = configuration.get[Int]("timeout-dialog.countdown")
 
-  lazy val checkResidenceStatusUrl: String = configuration.get[String]("external-urls.checkResidenceStatus")
-  lazy val understandingTaxAvoidanceUrl: String = configuration.get[String]("external-urls.understandingTaxAvoidance")
-  lazy val understandingRemunerationUrl: String = configuration.get[String]("external-urls.understandingRemuneration")
-  lazy val unauthorisedPaymentsUrl: String = configuration.get[String]("external-urls.unauthorisedPayments")
-  lazy val overseasTransferChargeUrl: String = configuration.get[String]("external-urls.overseasTransferCharge")
-  lazy val taxOnDividendsUrl: String = configuration.get[String]("external-urls.taxOnDividends")
-  lazy val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
-  lazy val setUpAgentServicesAccountUrl: String = configuration.get[String]("external-urls.set-up-agent-services-account")
+  val checkResidenceStatusUrl: String = configuration.get[String]("external-urls.checkResidenceStatus")
+  val understandingTaxAvoidanceUrl: String = configuration.get[String]("external-urls.understandingTaxAvoidance")
+  val understandingRemunerationUrl: String = configuration.get[String]("external-urls.understandingRemuneration")
+  val unauthorisedPaymentsUrl: String = configuration.get[String]("external-urls.unauthorisedPayments")
+  val overseasTransferChargeUrl: String = configuration.get[String]("external-urls.overseasTransferCharge")
+  val taxOnDividendsUrl: String = configuration.get[String]("external-urls.taxOnDividends")
+  val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
+  val setUpAgentServicesAccountUrl: String = configuration.get[String]("external-urls.set-up-agent-services-account")
+
   //Subscription Service
-  lazy val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
-  lazy val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
-  lazy val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
+  private val vcBaseUrl: String =
+    configuration.get[String]("microservice.services.view-and-change.url") +
+    "/report-quarterly/income-and-expenses"
 
-  def vcSessionServiceBaseUrl: String = configuration.get[Service]("microservice.services.income-tax-session-data")
+  def viewAndChangeEnterUtrUrl: String = s"$vcBaseUrl/view/agents/client-utr"
+  def viewAndChangeViewUrlAgent: String = s"$vcBaseUrl/view/agents"
+  def signUpUrlIndividual: String = s"$vcBaseUrl/sign-up/eligibility"
 }
