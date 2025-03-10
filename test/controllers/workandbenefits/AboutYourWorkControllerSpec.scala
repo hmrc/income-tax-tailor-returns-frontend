@@ -41,7 +41,8 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
   def onwardRoute: Call = Call("GET", "/foo")
 
-  private val prePopEnabled = Map("feature-switch.isPrePopEnabled" -> "true")
+  private def prePopEnabled(isEnabled: Boolean): Map[String, String] =
+    Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
 
   lazy val aboutYourWorkRoute: String = controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url
 
@@ -58,12 +59,13 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
   val userAnswersWithFosterCarer: UserAnswers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
 
-
   "AboutYourWork Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -80,7 +82,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET as an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -99,7 +103,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, AboutYourWork.values.toSet).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -117,7 +123,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
       val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, AboutYourWork.values.toSet).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -143,6 +151,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[UserDataService].toInstance(mockUserDataService)
           )
+          .configure(prePopEnabled(false))
           .build()
 
       running(application) {
@@ -160,7 +169,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request =
@@ -181,7 +192,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted for an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request =
@@ -202,7 +215,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to Journey Recovery for a GET if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -216,7 +231,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must redirect to Journey Recovery for a POST if no existing data is found" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = None)
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request =
@@ -236,7 +253,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -253,7 +272,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
     "must return OK and the correct view for a GET and isPrePopEnabled true" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
-        .configure(prePopEnabled)
+        .configure(prePopEnabled(true))
         .build()
 
       running(application) {
@@ -271,7 +290,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must return OK and the correct view for a GET for an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -288,7 +309,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
     "must return OK and the correct view for a GET for an agent and isPrePopEnabled true" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
-        .configure(prePopEnabled)
+        .configure(prePopEnabled(true))
         .build()
 
       running(application) {
@@ -310,7 +331,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
         .success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -331,7 +354,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         .success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .configure(prePopEnabled)
+        .configure(prePopEnabled(true))
         .build()
 
       running(application) {
@@ -353,7 +376,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
         .success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
@@ -374,7 +399,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         .success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
-        .configure(prePopEnabled)
+        .configure(prePopEnabled(true))
         .build()
 
       running(application) {
@@ -402,6 +427,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[UserDataService].toInstance(mockUserDataService)
           )
+          .configure(prePopEnabled(false))
           .build()
 
       running(application) {
@@ -429,6 +455,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[UserDataService].toInstance(mockUserDataService)
           )
+          .configure(prePopEnabled(false))
           .build()
 
       running(application) {
@@ -446,7 +473,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request =
@@ -468,7 +497,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
     "must return a Bad Request and errors when invalid data is submitted and isPrePopEnabled true" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
-        .configure(prePopEnabled)
+        .configure(prePopEnabled(true))
         .build()
 
       running(application) {
@@ -491,7 +520,9 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
 
     "must return a Bad Request and errors when invalid data is submitted for an agent" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
+        .configure(prePopEnabled(false))
+        .build()
 
       running(application) {
         val request =
@@ -513,7 +544,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
     "must return a Bad Request and errors when invalid data is submitted for an agent and isPrePopEnabled true" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
-        .configure(prePopEnabled)
+        .configure(prePopEnabled(true))
         .build()
 
       running(application) {

@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package models.requests
+package mocks
 
-import models.UserAnswers
-import play.api.mvc.{Request, WrappedRequest}
+import handlers.ErrorHandler
+import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
+import play.api.mvc.Request
+import play.twirl.api.Html
 
-case class OptionalDataRequest[A] (request: Request[A],
-                                   mtdItId: String,
-                                   userAnswers: Option[UserAnswers],
-                                   isAgent: Boolean) extends WrappedRequest[A](request)
+trait MockErrorHandler extends MockFactory {this: TestSuite =>
 
-case class DataRequest[A] (request: Request[A],
-                           mtdItId: String,
-                           userAnswers: UserAnswers,
-                           isAgent: Boolean) extends WrappedRequest[A](request)
+  protected val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
+
+  def mockInternalServerError(result: Html): Unit = {
+    (mockErrorHandler.internalServerErrorTemplate(_: Request[_]))
+      .expects(*)
+      .returns(result)
+  }
+}

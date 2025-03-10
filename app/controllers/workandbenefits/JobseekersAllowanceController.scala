@@ -17,71 +17,89 @@
 package controllers.workandbenefits
 
 import config.FrontendAppConfig
+import controllers.ControllerWithPrePop
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.JobseekersAllowanceFormProvider
+import handlers.ErrorHandler
 import models.Mode
+import models.prePopulation.EsaJsaPrePopulationResponse
+import models.requests.DataRequest
+import models.workandbenefits.JobseekersAllowance
 import navigation.Navigator
 import pages.workandbenefits.JobseekersAllowancePage
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.UserDataService
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import play.api.data.Form
+import play.api.i18n.MessagesApi
+import play.api.mvc._
+import play.twirl.api.HtmlFormat
+import services.{PrePopulationService, SessionDataService, UserDataService}
+import uk.gov.hmrc.http.HeaderCarrier
+import utils.Logging
 import views.html.workandbenefits.{JobseekersAllowanceAgentView, JobseekersAllowanceView}
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-class JobseekersAllowanceController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        userDataService: UserDataService,
-                                        config: FrontendAppConfig,
-                                        navigator: Navigator,
-                                        identify: IdentifierActionProvider,
-                                        getData: DataRetrievalActionProvider,
-                                        requireData: DataRequiredActionProvider,
-                                        formProvider: JobseekersAllowanceFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: JobseekersAllowanceView,
-                                        agentView: JobseekersAllowanceAgentView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class JobseekersAllowanceController @Inject()(override val messagesApi: MessagesApi,
+                                              val userDataService: UserDataService,
+                                              prePopService: PrePopulationService,
+                                              val ninoRetrievalService: SessionDataService,
+                                              val navigator: Navigator,
+                                              val identify: IdentifierActionProvider,
+                                              val getData: DataRetrievalActionProvider,
+                                              val requireData: DataRequiredActionProvider,
+                                              val formProvider: JobseekersAllowanceFormProvider,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: JobseekersAllowanceView,
+                                              agentView: JobseekersAllowanceAgentView,
+                                              val config: FrontendAppConfig,
+                                              val errorHandler: ErrorHandler)
+                                             (implicit val ec: ExecutionContext)
+  extends ControllerWithPrePop[Set[JobseekersAllowance], EsaJsaPrePopulationResponse]
+  with Logging {
 
-  def form(isAgent: Boolean) = formProvider(isAgent)
-  def prePopCheck(prePopData: Boolean) = if (config.isPrePopEnabled) prePopData else false
+  override protected val primaryContext: String = "JobseekersAllowanceController"
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
-    implicit request =>
+  override val defaultPrePopulationResponse: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse.empty
 
-      val preparedForm = request.userAnswers.get(JobseekersAllowancePage) match {
-        case None => form(request.isAgent)
-        case Some(value) => form(request.isAgent).fill(value)
-      }
+  override protected def actionChain(taxYear: Int): ActionBuilder[DataRequest, AnyContent] =
+    identify(taxYear) andThen
+      taxYearAction(taxYear) andThen
+      getData(taxYear) andThen
+      requireData(taxYear)
 
-      if (request.isAgent) {
-        Ok(agentView(preparedForm, mode, taxYear, prePopCheck(preparedForm.value.isDefined)))
-      } else {
-        Ok(view(preparedForm, mode, taxYear, prePopCheck(preparedForm.value.isDefined)))
-      }
+  override protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
+                                              (implicit hc: HeaderCarrier): PrePopResult =
+    () => prePopService.getEsaJsa(nino, taxYear, mtdItId)
+
+  override protected def viewProvider(form: Form[_],
+                                      mode: Mode,
+                                      taxYear: Int,
+                                      prePopData: EsaJsaPrePopulationResponse)
+                                     (implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    if (request.isAgent) {
+      agentView(form, mode, taxYear, prePopData)
+    } else {
+      view(form, mode, taxYear, prePopData)
+    }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
-    implicit request =>
+  val pageName = "JobseekersAllowance"
+  val incomeType = "state benefits"
 
-      form(request.isAgent).bindFromRequest().fold(
-        formWithErrors =>
-          if (request.isAgent) {
-            Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear, prePopCheck(formWithErrors.value.isDefined))))
-          } else {
-            Future.successful(BadRequest(view(formWithErrors, mode, taxYear, prePopCheck(formWithErrors.value.isDefined))))
-          },
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = onPageLoad(
+    pageName = pageName,
+    incomeType = incomeType,
+    page = JobseekersAllowancePage,
+    mode = mode,
+    taxYear = taxYear
+  )
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(JobseekersAllowancePage, value))
-            _              <- userDataService.set(updatedAnswers, request.userAnswers)
-          } yield Redirect(navigator.nextPage(JobseekersAllowancePage, mode, updatedAnswers))
-      )
-  }
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = onSubmit(
+    pageName = pageName,
+    incomeType = incomeType,
+    page = JobseekersAllowancePage,
+    mode = mode,
+    taxYear = taxYear
+  )
 }

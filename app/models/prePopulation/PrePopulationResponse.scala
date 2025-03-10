@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package models.requests
+package models.prePopulation
 
-import play.api.mvc.{Request, WrappedRequest}
-
-case class IdentifierRequest[A] (request: Request[A],
-                                 mtdItId: String,
-                                 isAgent: Boolean,
-                                 isSecondaryAgent: Boolean = false) extends WrappedRequest[A](request)
+/**
+ * @tparam I The relevant user answers page model associated with the pre-population data
+ */
+trait PrePopulationResponse[I] {
+  def toPageModel: I
+  def toMessageString(isAgent: Boolean): String
+  val hasPrePop: Boolean
+}

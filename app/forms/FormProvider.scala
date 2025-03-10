@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package models.requests
+package forms
 
-import play.api.mvc.{Request, WrappedRequest}
+import forms.mappings.Mappings
+import play.api.data.Form
 
-case class IdentifierRequest[A] (request: Request[A],
-                                 mtdItId: String,
-                                 isAgent: Boolean,
-                                 isSecondaryAgent: Boolean = false) extends WrappedRequest[A](request)
+/**
+ * A common interface for any class which provides HTML forms for use in views
+ * @tparam I The relevant user answers page model associated with a given form
+ */
+trait FormProvider[I] extends Mappings {
+  def apply(isAgent: Boolean): Form[I]
+}
