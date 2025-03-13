@@ -131,9 +131,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   def sessionCookieServiceEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.sessionCookieService")
 
-  def emaSupportingAgentsEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.ema-supporting-agents-enabled")
-
   def isPrePopEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.isPrePopEnabled")
 
@@ -154,9 +151,13 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   lazy val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
   lazy val setUpAgentServicesAccountUrl: String = configuration.get[String]("external-urls.set-up-agent-services-account")
   //Subscription Service
-  lazy val signUpUrlAgent: String = configuration.get[String]("urls.signUpAgent")
-  lazy val signUpUrlIndividual: String = configuration.get[String]("urls.signUpIndividual")
-  lazy val viewAndChangeEnterUtrUrl: String = configuration.get[String]("urls.viewAndChangeEnterUtrUrl")
+  private def vcBaseUrl: String =
+    configuration.get[String]("microservice.services.view-and-change.url") +
+    "/report-quarterly/income-and-expenses"
+
+  def viewAndChangeEnterUtrUrl: String = s"$vcBaseUrl/view/agents/client-utr"
+  def viewAndChangeViewUrlAgent: String = s"$vcBaseUrl/view/agents"
+  def signUpUrlIndividual: String = s"$vcBaseUrl/sign-up/eligibility"
 
   def vcSessionServiceBaseUrl: String = configuration.get[Service]("microservice.services.income-tax-session-data")
 }

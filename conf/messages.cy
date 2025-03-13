@@ -24,6 +24,10 @@ timeout.message = Er eich diogelwch, byddwn yn eich allgofnodi ymhen
 timeout.keepAlive = Parhau i fod wedi’ch mewngofnodi
 timeout.signOut = Allgofnodi
 
+error.unauthorised.title = Nid ydych wedi’ch awdurdodi i ddefnyddio’r gwasanaeth hwn
+error.supp.agent.unauthorised.paragraph = Rydych yn asiant ategol ar gyfer y cleient hwn. Dim ond eich cleient neu ei brif asiant, os oes ganddo un, sy’n gallu cael at a chyflwyno ei Ffurflen Dreth.
+error.supp.agent.unauthorised.link = Yn ôl i hafan y cyfrif
+
 error.browser.title.prefix = Gwall:
 error.boolean = Rhowch ateb
 error.invalid_date = Rhowch ddyddiad cywir

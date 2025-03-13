@@ -16,6 +16,7 @@
 
 package base
 
+import config.FrontendAppConfig
 import controllers.actions._
 import models.UserAnswers
 import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOrProperty, GiftsOfSharesOrSecurities, GiftsToOverseasCharities}
@@ -95,6 +96,7 @@ trait SpecBase
     .success.value
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
+  def config(app: Application): FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None, isAgent: Boolean = false): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()

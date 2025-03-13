@@ -148,9 +148,12 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
       case Some(sessionData) =>
         authorisedAgentServices(enrolments) match {
           case Some(_) =>
-            authorised(predicate(sessionData.mtditid)) {
+            authorised(predicate(sessionData.mtditid)){
+              logger.info(s"[AuthorisedAction][agentAuthentication] - authorised as Primary Agent")
               block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
-            }.recoverWith(agentRecovery(request, block, sessionData.mtditid))
+            }.recoverWith{
+              agentRecovery(sessionData.mtditid)
+            }
           case None =>
             logger.warn("User did not have HMRC-AS-AGENT enrolment ")
             Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
@@ -161,29 +164,26 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     }
   }
 
-  private def agentRecovery[A](request: Request[A],
-                               block: IdentifierRequest[A] => Future[Result],
-                               mtdItId: String)
+  private def agentRecovery[A](mtdItId: String)
                               (implicit hc: HeaderCarrier): PartialFunction[Throwable, Future[Result]] = {
     case _: NoActiveSession =>
       logger.info(s"[AuthorisedAction][agentAuthentication] - No active session. Redirecting to ${config.viewAndChangeEnterUtrUrl}")
       Future(Redirect(config.viewAndChangeEnterUtrUrl))
-    case _: AuthorisationException =>
-      if (config.emaSupportingAgentsEnabled) {
-        authorised(secondaryAgentPredicate(mtdItId)) {
-          block(IdentifierRequest(request, mtdItId, isAgent = true, isSecondaryAgent = true))
-        }.recoverWith {
-          case _: AuthorisationException =>
-            logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have secondary delegated authority for Client.")
-            Future(Unauthorized)
-          case _ =>
-            logger.info(s"[AuthorisedAction][agentAuthentication] - Downstream service error.")
-            Future(InternalServerError)
-        }
-      } else {
-        logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have delegated authority for Client.")
-        Future.successful(Redirect(config.signUpUrlAgent))
+    case e: AuthorisationException =>
+      logger.info(s"[AuthorisedAction][agentRecovery.failed.authorised] - ${e.getMessage}")
+      authorised(secondaryAgentPredicate(mtdItId)) {
+        Future.successful(Redirect(controllers.routes.SupportingAgentAuthErrorController.show.url))
+      }.recoverWith {
+        case _: AuthorisationException =>
+          logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have secondary delegated authority for Client.")
+          Future(Unauthorized)
+        case _ =>
+          logger.info(s"[AuthorisedAction][agentAuthentication] - Downstream service error.")
+          Future(InternalServerError)
       }
+    case e =>
+      logger.info(s"[AuthorisedAction][agentAuthentication] - Agent Authenticator error. ${e.getMessage}")
+      Future(InternalServerError)
   }
 }
 
