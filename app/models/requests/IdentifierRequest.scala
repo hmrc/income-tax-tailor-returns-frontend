@@ -20,5 +20,5 @@ import play.api.mvc.{Request, WrappedRequest}
 
 case class IdentifierRequest[A] (request: Request[A],
                                  mtdItId: String,
-                                 isAgent: Boolean,
-                                 isSecondaryAgent: Boolean = false) extends WrappedRequest[A](request)
+                                 isAgent: Boolean
+                                ) extends WrappedRequest[A](request)
