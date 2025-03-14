@@ -36,7 +36,7 @@ class EmploymentConnector @Inject()(config: FrontendAppConfig, httpClient: HttpC
 
   def getPrePopulation(nino: String, taxYear: Int, mtdItId: String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[EmploymentPrePopulationResponse] = {
-    val prePopulationUrl: URL = url"${config.employmentBackendBaseUrl}/$nino/$taxYear"
+    val prePopulationUrl: URL = url"${config.employmentBackendBaseUrl}/pre-population/$nino/$taxYear"
 
     logger.info(
       secondaryContext = "[getPrePopulation]",
