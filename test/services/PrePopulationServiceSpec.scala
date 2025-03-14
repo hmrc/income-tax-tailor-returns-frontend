@@ -37,7 +37,8 @@ class PrePopulationServiceSpec extends SpecBase
 
   val testService = new PrePopulationService(
     stateBenefitsConnector = mockStateBenefitsConnector,
-    cisConnector =  mockSIncomeTaxCisConnector
+    cisConnector =  mockSIncomeTaxCisConnector,
+    employmentConnector = mockEmploymentConnector
   )
 
   val dummyResponse: StateBenefitsPrePopulationResponse = StateBenefitsPrePopulationResponse(

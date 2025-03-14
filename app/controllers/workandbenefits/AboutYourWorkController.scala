@@ -32,6 +32,7 @@ import pages.workandbenefits.AboutYourWorkPage
 import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents, Result}
+import play.twirl.api.HtmlFormat
 import services.{PrePopulationService, SessionDataService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
@@ -76,15 +77,15 @@ class AboutYourWorkController @Inject()(
                                       mode: Mode,
                                       taxYear: Int,
                                       prePopData: EmploymentPrePopulationResponse)
-                                     (implicit request: DataRequest[_]): Result = {
+                                     (implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     val isFosterCarer = request.userAnswers.get(FosterCarerPage).getOrElse(false)
     val prePopCheck = config.isPrePopEnabled && prePopData.hasEmploymentPrePop
 
     (request.isAgent, isFosterCarer) match {
-      case (true, true) => Ok(agentRadioView(form, mode, taxYear, prePopCheck))
-      case (true, false) => Ok(agentView(form, mode, taxYear))
-      case (false, true) => Ok(radioView(form, mode, taxYear, prePopCheck))
-      case (false, false) => Ok(view(form, mode, taxYear))
+      case (true, true) => agentRadioView(form, mode, taxYear, prePopCheck)
+      case (true, false) => agentView(form, mode, taxYear)
+      case (false, true) => radioView(form, mode, taxYear, prePopCheck)
+      case (false, false) => view(form, mode, taxYear)
     }
   }
 
@@ -96,7 +97,7 @@ class AboutYourWorkController @Inject()(
     incomeType = incomeType,
     page = AboutYourWorkPage,
     mode = mode,
-    taxYear = taxYear
+    taxYear = taxYear,
   )
 
   def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = onSubmit(

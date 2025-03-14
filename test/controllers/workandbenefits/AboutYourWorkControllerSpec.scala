@@ -16,20 +16,19 @@
 
 package controllers.workandbenefits
 
-import base.SpecBase
-import controllers.routes
+import controllers.{ControllerWithPrePopSpecBase, routes}
 import forms.workandbenefits.{AboutYourWorkFormProvider, AboutYourWorkRadioPageFormProvider}
+import models.prePopulation.EmploymentPrePopulationResponse
 import models.workandbenefits.AboutYourWork
 import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import pages.aboutyou.FosterCarerPage
 import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
+import play.api.Application
 import play.api.data.Form
 import play.api.inject.bind
-import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
@@ -37,16 +36,33 @@ import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkRadioPag
 
 import scala.concurrent.Future
 
-class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
+class AboutYourWorkControllerSpec extends
+  ControllerWithPrePopSpecBase[AboutYourWorkView, AboutYourWorkAgentView, Set[AboutYourWork]] {
 
-  def onwardRoute: Call = Call("GET", "/foo")
+  override def formProvider: AboutYourWorkFormProvider = new AboutYourWorkFormProvider()
+
+  override val viewProvider: Application => AboutYourWorkView =
+    (application: Application) => application.injector.instanceOf[AboutYourWorkView]
+
+  override val agentViewProvider: Application => AboutYourWorkAgentView =
+    (application: Application) => application.injector.instanceOf[AboutYourWorkAgentView]
+
+  override val requestRoute: String =
+    controllers
+      .workandbenefits
+      .routes
+      .AboutYourWorkController
+      .onPageLoad(NormalMode, taxYear).url
+
+
+//  def onwardRoute: Call = Call("GET", "/foo")
 
   private def prePopEnabled(isEnabled: Boolean): Map[String, String] =
     Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
 
   lazy val aboutYourWorkRoute: String = controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url
 
-  val formProvider = new AboutYourWorkFormProvider()
+//  val formProvider = new AboutYourWorkFormProvider()
   val form: Form[Set[AboutYourWork]] = formProvider(isAgent = false)
   val agentForm: Form[Set[AboutYourWork]] = formProvider(isAgent = true)
 
@@ -269,6 +285,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
+
     "must return OK and the correct view for a GET and isPrePopEnabled true" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
@@ -306,6 +323,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         contentAsString(result) mustNot include(expectedConditionalAgent)
       }
     }
+
     "must return OK and the correct view for a GET for an agent and isPrePopEnabled true" in {
 
       val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
@@ -343,7 +361,7 @@ class AboutYourWorkControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(radioForm.fill(true), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(radioForm.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
         contentAsString(result) mustNot include(expectedConditionalIndividual)
       }
     }
