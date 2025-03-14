@@ -38,10 +38,7 @@ class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnec
     cisConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 
-  def getEmployment(nino: String, taxYear: Int, mtdItId: String)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): ConnectorResponse[EmploymentPrePopulationResponse] =
-    for {
-      result <- employmentConnector.getPrePopulation(nino, taxYear, mtdItId)
-      esaJsaResult = result.map(_.toEmploymentModel)
-    } yield esaJsaResult
+  def getEmployment(nino: String, taxYear: Int,mtdItId: String)(implicit hc:HeaderCarrier):ConnectorResponse[EmploymentPrePopulationResponse] = {
+    employmentConnector.getPrePopulation(nino, taxYear, mtdItId)
+  }
 }

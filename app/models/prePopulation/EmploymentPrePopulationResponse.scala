@@ -16,33 +16,21 @@
 
 package models.prePopulation
 
-import models.workandbenefits.AboutYourWork
 import play.api.libs.json.{Json, Reads}
 
-case class EmploymentPrePopulationResponse (hasEmploymentPrePop: Boolean) extends PrePopulationResponse[Set[AboutYourWork]] {
+case class EmploymentPrePopulationResponse (hasEmploymentPrePop: Boolean) extends PrePopulationResponse[Boolean] {
 
-  val hasPrePop: Boolean = hasEmploymentPrePop
+  override def toPageModel: Boolean = hasEmploymentPrePop
 
-  def toMessageString(isAgent: Boolean): String = {
-    val agentStringOpt = if (isAgent) "agent." else ""
+  override def toMessageString(isAgent:  Boolean): String = ""
 
-    (hasEmploymentPrePop) match {
-      case (true) => s"employment.insetText.${agentStringOpt}both"
-      case _ => ""
-    }
-  }
+  override  val hasPrePop: Boolean = hasEmploymentPrePop
 
-  def toPageModel: Set[AboutYourWork] =
-    (if (hasEmploymentPrePop) Set(AboutYourWork.Employed) else Set())
-
-  def toEmploymentModel: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(hasEmploymentPrePop)
 }
 
   object EmploymentPrePopulationResponse {
     implicit val reads: Reads[EmploymentPrePopulationResponse] = Json.reads[EmploymentPrePopulationResponse]
 
-    val empty: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(
-      hasEmploymentPrePop = false,
-    )
+    val empty: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(hasEmploymentPrePop = false)
   }
 
