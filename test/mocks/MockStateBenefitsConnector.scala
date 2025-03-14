@@ -16,7 +16,7 @@
 
 package mocks
 
-import connectors.{ConnectorResponse, HttpResult, IncomeTaxCisConnector, StateBenefitsConnector}
+import connectors.{ConnectorResponse, EmploymentConnector, HttpResult, IncomeTaxCisConnector, StateBenefitsConnector}
 import models.prePopulation.StateBenefitsPrePopulationResponse
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
@@ -28,6 +28,7 @@ import scala.concurrent.Future
 trait MockStateBenefitsConnector extends MockFactory { this: TestSuite =>
   val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
   val mockSIncomeTaxCisConnector: IncomeTaxCisConnector = mock[IncomeTaxCisConnector]
+  val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
 
   type MockType = CallHandler4[String, Int, String, HeaderCarrier,
     ConnectorResponse[StateBenefitsPrePopulationResponse]]
