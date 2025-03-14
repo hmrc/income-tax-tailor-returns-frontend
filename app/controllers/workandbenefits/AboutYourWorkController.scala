@@ -28,10 +28,10 @@ import models.requests.DataRequest
 import models.workandbenefits.AboutYourWork
 import navigation.Navigator
 import pages.aboutyou.FosterCarerPage
-import pages.workandbenefits.AboutYourWorkPage
+import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
 import play.api.data.Form
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import services.{PrePopulationService, SessionDataService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -60,7 +60,7 @@ class AboutYourWorkController @Inject()(
                                          agentRadioView: AboutYourWorkRadioPageAgentView,
                                          val errorHandler: ErrorHandler
                                        )(implicit val ec: ExecutionContext)
-  extends ControllerWithPrePop[Set[AboutYourWork], EmploymentPrePopulationResponse]
+  extends ControllerWithPrePop[Boolean, EmploymentPrePopulationResponse]
     with Logging {
 
   override protected val primaryContext: String = "EmploymentController"
@@ -95,7 +95,7 @@ class AboutYourWorkController @Inject()(
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = onPageLoad(
     pageName = pageName,
     incomeType = incomeType,
-    page = AboutYourWorkPage,
+    page = AboutYourWorkRadioPage,
     mode = mode,
     taxYear = taxYear,
   )
@@ -103,7 +103,7 @@ class AboutYourWorkController @Inject()(
   def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = onSubmit(
     pageName = pageName,
     incomeType = incomeType,
-    page = AboutYourWorkPage,
+    page = AboutYourWorkRadioPage,
     mode = mode,
     taxYear = taxYear
   )
