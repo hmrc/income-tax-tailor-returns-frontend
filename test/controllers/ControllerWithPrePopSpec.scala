@@ -94,7 +94,8 @@ class ControllerWithPrePopSpec extends SpecBase
     override val errorHandler: ErrorHandler = mockErrorHandler
     override val config: FrontendAppConfig = mockAppConfig
 
-    override def actionChain(taxYear: Int): ActionBuilder[DataRequest, AnyContent] =
+    override def actionChain(taxYear: Int,
+                             requestOverrideOpt: Option[DataRequest[_]]): ActionBuilder[DataRequest, AnyContent] =
       new ActionBuilder[DataRequest, AnyContent] {
         override def parser: BodyParser[AnyContent] = stubBodyParser(AnyContentAsEmpty)
 
