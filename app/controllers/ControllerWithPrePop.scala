@@ -99,9 +99,11 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
    * A chain of actions to be completed before any block is processed. Can be overriden so long as the resulting
    * Request type is still a DataRequest[_].
    * @param taxYear The tax year associated with the current self-assessment tax submission
+   * @param requestOverrideOpt An optional pre-existing data request model to be used for this request
    * @return A chain of actions resulting in a DataRequest request model being created
    */
-  protected def actionChain(taxYear: Int): ActionBuilder[DataRequest, AnyContent]
+  protected def actionChain(taxYear: Int,
+                            requestOverrideOpt: Option[DataRequest[_]] = None): ActionBuilder[DataRequest, AnyContent]
 
   /**
    * This method wraps around some block which requires a NINO. It first attempts to retrieve the NINO from the session
@@ -116,7 +118,9 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
    * @param block   An action to be completed once the NINO for the request is retrieved
    * @return An action resulting from the provided block
    */
-  protected[controllers] def blockWithNino(taxYear: Int, extraContext: String)
+  protected[controllers] def blockWithNino(taxYear: Int,
+                                           extraContext: String,
+                                           requestOverrideOpt: Option[DataRequest[_]] = None)
                                           (block: (String, PrePopResult, DataRequest[_]) => Future[Result]): Action[AnyContent] = {
     val methodContext: String = "blockWithNino"
 
@@ -126,7 +130,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
       extraContext = Some(extraContext)
     )
 
-    actionChain(taxYear).async { implicit request =>
+    actionChain(taxYear, requestOverrideOpt).async { implicit request =>
       val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, requestToAgentString)
       val infoLogger = infoLog(methodContext, dataLog, Some(extraContext))
       val errorLogger = errorLog(methodContext, dataLog, Some(extraContext))
@@ -173,43 +177,46 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
    * @param page       The relevant page model for the current tailoring page being handled
    * @param mode       A helper trait used during view generation
    * @param taxYear    The tax year associated with the current self-assessment tax submission
+   * @param requestOverrideOpt An optional pre-existing data request model to be used for this request
    * @return Some action. Typically, either an error view or the current tailoring question page is served
    */
   protected[controllers] def onPageLoad(pageName: String,
                                         incomeType: String,
                                         page: QuestionPage[I],
                                         mode: Mode,
-                                        taxYear: Int): Action[AnyContent] = blockWithNino(taxYear, "onPageLoad") {
-    (dataLog: String, prePopulationAction: PrePopResult, dataRequest: DataRequest[_]) =>
-      implicit val request: DataRequest[_] = dataRequest
+                                        taxYear: Int,
+                                        requestOverrideOpt: Option[DataRequest[_]] = None): Action[AnyContent] =
+    blockWithNino(taxYear, "onPageLoad", requestOverrideOpt) {
+      (dataLog: String, prePopulationAction: PrePopResult, dataRequest: DataRequest[_]) =>
+        implicit val request: DataRequest[_] = dataRequest
 
-      val methodContext: String = "onPageLoad"
-      val infoLogger: String => Unit = infoLog(secondaryContext = methodContext, dataLog = dataLog)
-      val errorLogger: String => Unit = errorLog(secondaryContext = methodContext, dataLog = dataLog)
+        val methodContext: String = "onPageLoad"
+        val infoLogger: String => Unit = infoLog(secondaryContext = methodContext, dataLog = dataLog)
+        val errorLogger: String => Unit = errorLog(secondaryContext = methodContext, dataLog = dataLog)
 
-      infoLogger(s"Received request to retrieve $pageName tailoring page")
+        infoLogger(s"Received request to retrieve $pageName tailoring page")
 
-      def preparedForm(prePop: R): Form[I] = dataRequest.userAnswers.get(page) match {
-        case None =>
-          infoLogger(s"No existing $incomeType journey answers found in request model")
-          fillFormFromPageModel(form, prePop.toPageModel)
-        case Some(value) =>
-          infoLogger(s"Existing $incomeType journey answers found. Pre-populating form with previous user answers")
-          form.fill(value)
-      }
+        def preparedForm(prePop: R): Form[I] = dataRequest.userAnswers.get(page) match {
+          case None =>
+            infoLogger(s"No existing $incomeType journey answers found in request model")
+            fillFormFromPageModel(form, prePop.toPageModel)
+          case Some(value) =>
+            infoLogger(s"Existing $incomeType journey answers found. Pre-populating form with previous user answers")
+            form.fill(value)
+        }
 
-      blockWithPrePop(
-        prePopulationRetrievalAction = prePopulationAction,
-        successAction = (data: R) => {
-          infoLogger(prePopSuccessMessage)
-          Ok(viewProvider(preparedForm(data), mode, taxYear, data))
-        },
-        errorAction = prePopErrorResult(errorLogger),
-        extraLogContext = "onPageLoad",
-        dataLog = dataLog,
-        incomeType = incomeType
-      )
-  }
+        blockWithPrePop(
+          prePopulationRetrievalAction = prePopulationAction,
+          successAction = (data: R) => {
+            infoLogger(prePopSuccessMessage)
+            Ok(viewProvider(preparedForm(data), mode, taxYear, data))
+          },
+          errorAction = prePopErrorResult(errorLogger),
+          extraLogContext = "onPageLoad",
+          dataLog = dataLog,
+          incomeType = incomeType
+        )
+    }
 
   /**
    * A generic boilerplate method for submitting tailoring question pages
@@ -219,6 +226,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
    * @param page       The relevant page model for the current tailoring page being handled
    * @param mode       A helper trait used during view generation
    * @param taxYear    The tax year associated with the current self-assessment tax submission
+   * @param requestOverrideOpt An optional pre-existing data request model to be used for this request
    * @return Some action. This may be an error view, the current tailoring question page if there are form errors
    *         present in the request, or the next page in the journey if there are not
    */
@@ -226,30 +234,32 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
                                       incomeType: String,
                                       page: QuestionPage[I],
                                       mode: Mode,
-                                      taxYear: Int): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
-    val methodLogString: String = "onSubmit"
-    val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, requestToAgentString)
-    val infoLogger: String => Unit = infoLog(secondaryContext = methodLogString, dataLog = dataLog)
-    val warnLogger: String => Unit = warnLog(secondaryContext = methodLogString, dataLog = dataLog)
+                                      taxYear: Int,
+                                      requestOverrideOpt: Option[DataRequest[_]] = None): Action[AnyContent] =
+    actionChain(taxYear, requestOverrideOpt).async { implicit request =>
+      val methodLogString: String = "onSubmit"
+      val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, requestToAgentString)
+      val infoLogger: String => Unit = infoLog(secondaryContext = methodLogString, dataLog = dataLog)
+      val warnLogger: String => Unit = warnLog(secondaryContext = methodLogString, dataLog = dataLog)
 
-    infoLogger(s"Request received to submit user journey answers for $pageName view")
+      infoLogger(s"Request received to submit user journey answers for $pageName view")
 
-    form.bindFromRequest().fold(formWithErrors => {
-      warnLogger(s"Errors found in form submission. Returning $pageName view with errors: ${formWithErrors.errors}")
-      Future.successful(BadRequest(viewProvider(formWithErrors, mode, taxYear, defaultPrePopulationResponse)))
-    },
-      value => {
-        infoLogger("Form bound successfully from request. Attempting to update user's journey answers")
-        for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
-          _ <- userDataService.set(updatedAnswers, request.userAnswers)
-        } yield {
-          infoLogger("Journey answers updated successfully. Proceeding to next page in the journey")
-          Redirect(navigator.nextPage(page, mode, updatedAnswers))
+      form.bindFromRequest().fold(formWithErrors => {
+        warnLogger(s"Errors found in form submission. Returning $pageName view with errors: ${formWithErrors.errors}")
+        Future.successful(BadRequest(viewProvider(formWithErrors, mode, taxYear, defaultPrePopulationResponse)))
+      },
+        value => {
+          infoLogger("Form bound successfully from request. Attempting to update user's journey answers")
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
+            _ <- userDataService.set(updatedAnswers, request.userAnswers)
+          } yield {
+            infoLogger("Journey answers updated successfully. Proceeding to next page in the journey")
+            Redirect(navigator.nextPage(page, mode, updatedAnswers))
+          }
         }
-      }
-    )
-  }
+      )
+    }
 
   protected def fillFormFromPageModel(form: Form[I], pageModel: I): Form[I]  = form.fill(pageModel)
 

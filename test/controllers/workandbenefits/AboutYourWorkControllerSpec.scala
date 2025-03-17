@@ -18,7 +18,6 @@ package controllers.workandbenefits
 
 import controllers.{ControllerWithPrePopSpecBase, routes}
 import forms.workandbenefits.{AboutYourWorkFormProvider, AboutYourWorkRadioPageFormProvider}
-import models.prePopulation.EmploymentPrePopulationResponse
 import models.workandbenefits.AboutYourWork
 import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
@@ -51,7 +50,7 @@ class AboutYourWorkControllerSpec extends
     controllers
       .workandbenefits
       .routes
-      .AboutYourWorkController
+      .AboutYourWorkBaseController
       .onPageLoad(NormalMode, taxYear).url
 
 
@@ -60,7 +59,7 @@ class AboutYourWorkControllerSpec extends
   private def prePopEnabled(isEnabled: Boolean): Map[String, String] =
     Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
 
-  lazy val aboutYourWorkRoute: String = controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url
+  lazy val aboutYourWorkRoute: String = controllers.workandbenefits.routes.AboutYourWorkBaseController.onPageLoad(NormalMode, taxYear).url
 
 //  val formProvider = new AboutYourWorkFormProvider()
   val form: Form[Set[AboutYourWork]] = formProvider(isAgent = false)

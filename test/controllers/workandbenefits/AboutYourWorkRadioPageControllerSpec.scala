@@ -52,7 +52,7 @@ class AboutYourWorkRadioPageControllerSpec extends SpecBase with MockitoSugar {
 
   val userAnswersWithFosterCarer: UserAnswers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
 
-  lazy val aboutYourWorkRadioPageRoute: String = controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url
+  lazy val aboutYourWorkRadioPageRoute: String = controllers.workandbenefits.routes.AboutYourWorkBaseController.onPageLoad(NormalMode, taxYear).url
 
   "AboutYourWorkRadioPage Controller" - {
     "must return OK and the correct view for a GET" in {

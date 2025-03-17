@@ -36,7 +36,7 @@ case class AddSectionsViewModel(state: SectionState, taxYear: Int, prefix: Strin
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${IncomeFromWork.toString}"))),
       status = itemStatus(state.incomeFromWork),
-      href = itemHref(controllers.workandbenefits.routes.AboutYourWorkController.onPageLoad(NormalMode, taxYear).url, state.incomeFromWork)
+      href = itemHref(controllers.workandbenefits.routes.AboutYourWorkBaseController.onPageLoad(NormalMode, taxYear).url, state.incomeFromWork)
     ),
     TaskListItem(
       title = TaskListItemTitle(HtmlContent(messages(s"$prefix.${IncomeFromProperty.toString}"))),

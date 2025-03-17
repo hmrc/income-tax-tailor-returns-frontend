@@ -20,48 +20,46 @@ import config.FrontendAppConfig
 import controllers.ControllerWithPrePop
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
-import forms.workandbenefits.AboutYourWorkFormProvider
+import forms.workandbenefits.AboutYourWorkRadioPageFormProvider
 import handlers.ErrorHandler
 import models.Mode
-import models.prePopulation.EmploymentPrePopulationResponse.EmploymentPrePop
+import models.prePopulation.EmploymentPrePopulationResponse.EmploymentRadioPrePop
 import models.requests.DataRequest
-import models.workandbenefits.AboutYourWork
 import navigation.Navigator
-import pages.workandbenefits.AboutYourWorkPage
+import pages.workandbenefits.AboutYourWorkRadioPage
 import play.api.data.Form
 import play.api.i18n.MessagesApi
-import play.api.mvc._
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
 import services.{PrePopulationService, SessionDataService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkView}
+import views.html.workandbenefits.{AboutYourWorkRadioPageAgentView, AboutYourWorkRadioPageView}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AboutYourWorkController @Inject()(override val messagesApi: MessagesApi,
-                                        val userDataService: UserDataService,
-                                        prePopService: PrePopulationService,
-                                        val ninoRetrievalService: SessionDataService,
-                                        val config: FrontendAppConfig,
-                                        val navigator: Navigator,
-                                        val identify: IdentifierActionProvider,
-                                        val getData: DataRetrievalActionProvider,
-                                        val requireData: DataRequiredActionProvider,
-                                        val overrideRequestActionProvider: OverrideRequestActionProvider,
-                                        val formProvider: AboutYourWorkFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: AboutYourWorkView,
-                                        agentView: AboutYourWorkAgentView,
-                                        val errorHandler: ErrorHandler
-                                       )(implicit val ec: ExecutionContext)
-  extends ControllerWithPrePop[Set[AboutYourWork], EmploymentPrePop]
+class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesApi,
+                                             val userDataService: UserDataService,
+                                             prePopService: PrePopulationService,
+                                             val ninoRetrievalService: SessionDataService,
+                                             val config: FrontendAppConfig,
+                                             val navigator: Navigator,
+                                             val identify: IdentifierActionProvider,
+                                             val getData: DataRetrievalActionProvider,
+                                             val requireData: DataRequiredActionProvider,
+                                             val overrideRequestActionProvider: OverrideRequestActionProvider,
+                                             val formProvider: AboutYourWorkRadioPageFormProvider,
+                                             val controllerComponents: MessagesControllerComponents,
+                                             radioView: AboutYourWorkRadioPageView,
+                                             agentRadioView: AboutYourWorkRadioPageAgentView,
+                                             val errorHandler: ErrorHandler)(implicit val ec: ExecutionContext)
+  extends ControllerWithPrePop[Boolean, EmploymentRadioPrePop]
     with Logging {
 
-  override protected val primaryContext: String = "AboutYourWorkController"
-  override val defaultPrePopulationResponse: EmploymentPrePop = EmploymentPrePop.empty
+  override protected val primaryContext: String = "AboutYourWorkRadioController"
+  override val defaultPrePopulationResponse: EmploymentRadioPrePop = EmploymentRadioPrePop.empty
 
   override protected def actionChain(taxYear: Int,
                                      requestOverrideOpt: Option[DataRequest[_]] = None): ActionBuilder[DataRequest, AnyContent] =
@@ -71,18 +69,21 @@ class AboutYourWorkController @Inject()(override val messagesApi: MessagesApi,
 
   override protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
                                               (implicit hc: HeaderCarrier): PrePopResult =
-    () => prePopService.getEmployment(nino, taxYear, mtdItId).map(_.map(_.toPrePopModel))
+    () => prePopService.getEmployment(nino, taxYear, mtdItId).map(_.map(_.toPrePopRadioModel))
 
   override protected def viewProvider(form: Form[_],
                                       mode: Mode,
                                       taxYear: Int,
-                                      prePopData: EmploymentPrePop)
-                                     (implicit request: DataRequest[_]): HtmlFormat.Appendable =
+                                      prePopData: EmploymentRadioPrePop)
+                                     (implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    val prePopCheck = config.isPrePopEnabled && prePopData.hasEmploymentPrePop
+
     if (request.isAgent) {
-      agentView(form, mode, taxYear)
+      agentRadioView(form, mode, taxYear, prePopCheck)
     } else {
-      view(form, mode, taxYear)
+      radioView(form, mode, taxYear, prePopCheck)
     }
+  }
 
   val pageName = "Employment" //TODO: Change this
   val incomeType = "employment" //TODO: Change this
@@ -92,7 +93,7 @@ class AboutYourWorkController @Inject()(override val messagesApi: MessagesApi,
                  requestOverrideOpt: Option[DataRequest[_]]): Action[AnyContent] = onPageLoad(
     pageName = pageName,
     incomeType = incomeType,
-    page = AboutYourWorkPage,
+    page = AboutYourWorkRadioPage,
     mode = mode,
     taxYear = taxYear,
     requestOverrideOpt = requestOverrideOpt
@@ -103,7 +104,7 @@ class AboutYourWorkController @Inject()(override val messagesApi: MessagesApi,
                requestOverrideOpt: Option[DataRequest[_]]): Action[AnyContent] = onSubmit(
     pageName = pageName,
     incomeType = incomeType,
-    page = AboutYourWorkPage,
+    page = AboutYourWorkRadioPage,
     mode = mode,
     taxYear = taxYear,
     requestOverrideOpt = requestOverrideOpt
