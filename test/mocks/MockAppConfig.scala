@@ -30,6 +30,11 @@ trait MockAppConfig extends MockFactory {this: TestSuite =>
       .expects()
       .returning(response)
 
+  def mockEmploymentUrl(response: String): CallHandler0[String] =
+    (() => mockAppConfig.employmentBackendBaseUrl)
+      .expects()
+      .returning(response)
+
   def mockSessionServiceBaseUrl(response: String): CallHandler0[String] =
     (() => mockAppConfig.vcSessionServiceBaseUrl)
       .expects()
