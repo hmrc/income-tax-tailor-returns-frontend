@@ -16,8 +16,8 @@
 
 package mocks
 
-import connectors.{ConnectorResponse, EmploymentConnector, HttpResult}
-import models.prePopulation.EmploymentPrePopulationResponse
+import connectors.{ConnectorResponse, HttpResult, IncomeTaxCisConnector}
+import models.prePopulation.IncomeTaxCisPrePopulationResponse
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
@@ -25,26 +25,26 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-trait MockEmploymentConnector extends MockFactory { this: TestSuite =>
-  val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
+trait MockCisConnector extends MockFactory { this: TestSuite =>
+  val mockCisConnector: IncomeTaxCisConnector = mock[IncomeTaxCisConnector]
 
   private type MockType = CallHandler4[String, Int, String, HeaderCarrier,
-    ConnectorResponse[EmploymentPrePopulationResponse]]
+    ConnectorResponse[IncomeTaxCisPrePopulationResponse]]
 
-  def mockGetEmploymentPrePopulation(nino: String,
-                                     taxYear: Int,
-                                     mtdItId: String,
-                                     response: HttpResult[EmploymentPrePopulationResponse]): MockType =
-    (mockEmploymentConnector
+  def mockGetCisPrePopulation(nino: String,
+                              taxYear: Int,
+                              mtdItId: String,
+                              response: HttpResult[IncomeTaxCisPrePopulationResponse]): MockType =
+    (mockCisConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)
       .returning(Future.successful(response))
 
-  def mockGetEmploymentPrePopulationException(nino: String,
-                                              taxYear: Int,
-                                              mtdItId: String,
-                                              ex: Throwable): MockType =
-    (mockEmploymentConnector
+  def mockGetCisPrePopulationException(nino: String,
+                                       taxYear: Int,
+                                       mtdItId: String,
+                                       ex: Throwable): MockType =
+    (mockCisConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)
       .returning(Future.failed(ex))

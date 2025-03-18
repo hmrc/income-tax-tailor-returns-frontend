@@ -19,7 +19,7 @@ package connectors
 import base.SpecBase
 import mocks.{MockAppConfig, MockHttpClientV2}
 import models.errors.SimpleErrorWrapper
-import models.prePopulation.{EmploymentPrePopulationResponse, StateBenefitsPrePopulationResponse}
+import models.prePopulation.EmploymentPrePopulationResponse
 import play.api.http.Status.{IM_A_TEAPOT, INTERNAL_SERVER_ERROR}
 import play.api.test.DefaultAwaitTimeout
 import play.api.test.Helpers.await
