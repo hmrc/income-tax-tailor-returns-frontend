@@ -16,15 +16,13 @@
 
 package models.prePopulation
 
-import models.prePopulation.EmploymentPrePopulationResponse.{EmploymentPrePop, EmploymentRadioPrePop}
-import models.workandbenefits.AboutYourWork
+import models.prePopulation.EmploymentPrePopulationResponse.EmploymentRadioPrePop
 import play.api.libs.json.{Json, Reads}
 
 case class EmploymentPrePopulationResponse(hasEmploymentPrePop: Boolean) {
   val hasPrePop: Boolean = hasEmploymentPrePop
 
   def toPrePopRadioModel: EmploymentRadioPrePop = new EmploymentRadioPrePop(hasPrePop)
-  def toPrePopModel: EmploymentPrePop = new EmploymentPrePop(hasPrePop)
 }
 
 object EmploymentPrePopulationResponse {
@@ -42,17 +40,5 @@ object EmploymentPrePopulationResponse {
 
   object EmploymentRadioPrePop {
     val empty: EmploymentRadioPrePop = new EmploymentRadioPrePop(hasEmploymentPrePop = false)
-  }
-
-  class EmploymentPrePop(hasEmploymentPrePop: Boolean) extends EmploymentPrePopulationResponse(hasEmploymentPrePop)
-    with PrePopulationResponse[Set[AboutYourWork]] {
-
-    override def toPageModel: Set[AboutYourWork] = ??? //TODO: Figure this out
-
-    override def toMessageString(isAgent: Boolean): String = ""
-  }
-
-  object EmploymentPrePop {
-    val empty: EmploymentPrePop = new EmploymentPrePop(hasEmploymentPrePop = false)
   }
 }
