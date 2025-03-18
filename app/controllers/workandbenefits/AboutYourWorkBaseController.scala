@@ -41,7 +41,7 @@ class AboutYourWorkBaseController @Inject()(controller: AboutYourWorkController,
     request.userAnswers.get(FosterCarerPage).getOrElse(false)
 
   def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
-    if (isFosterCarer()) {
+    if (!isFosterCarer()) {
       controller.onPageLoad(mode, taxYear, Some(request))(request)
     } else {
       radioController.onPageLoad(mode, taxYear, Some(request))(request)
@@ -49,7 +49,7 @@ class AboutYourWorkBaseController @Inject()(controller: AboutYourWorkController,
   }
 
   def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = actionChain(taxYear).async { implicit request =>
-    if (isFosterCarer()) {
+    if (!isFosterCarer()) {
       controller.onSubmit(mode, taxYear, Some(request))(request)
     } else {
       radioController.onSubmit(mode, taxYear, Some(request))(request)
