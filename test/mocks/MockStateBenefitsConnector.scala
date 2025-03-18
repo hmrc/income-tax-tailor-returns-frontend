@@ -16,7 +16,7 @@
 
 package mocks
 
-import connectors.{ConnectorResponse, EmploymentConnector, HttpResult, IncomeTaxCisConnector, StateBenefitsConnector}
+import connectors.{ConnectorResponse, HttpResult, StateBenefitsConnector}
 import models.prePopulation.StateBenefitsPrePopulationResponse
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
@@ -27,25 +27,23 @@ import scala.concurrent.Future
 
 trait MockStateBenefitsConnector extends MockFactory { this: TestSuite =>
   val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
-  val mockSIncomeTaxCisConnector: IncomeTaxCisConnector = mock[IncomeTaxCisConnector]
-  val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
 
-  type MockType = CallHandler4[String, Int, String, HeaderCarrier,
+  private type MockType = CallHandler4[String, Int, String, HeaderCarrier,
     ConnectorResponse[StateBenefitsPrePopulationResponse]]
 
-  def mockGetPrePopulation(nino: String,
-                           taxYear: Int,
-                           mtdItId: String,
-                           response: HttpResult[StateBenefitsPrePopulationResponse]): MockType =
+  def mockGetStateBenefitsPrePopulation(nino: String,
+                                        taxYear: Int,
+                                        mtdItId: String,
+                                        response: HttpResult[StateBenefitsPrePopulationResponse]): MockType =
     (mockStateBenefitsConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)
       .returning(Future.successful(response))
 
-  def mockGetPrePopulationException(nino: String,
-                                    taxYear: Int,
-                                    mtdItId: String,
-                                    ex: Throwable): MockType =
+  def mockGetStateBenefitsPrePopulationException(nino: String,
+                                                 taxYear: Int,
+                                                 mtdItId: String,
+                                                 ex: Throwable): MockType =
     (mockStateBenefitsConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)
