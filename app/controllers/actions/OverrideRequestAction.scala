@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package controllers.actions
 import models.requests.DataRequest
 import play.api.mvc._
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 trait OverrideRequestAction extends ActionBuilder[DataRequest, AnyContent]
@@ -29,6 +29,7 @@ trait OverrideRequestActionProvider {
   def apply(overrideRequest: DataRequest[_]): ActionBuilder[DataRequest, AnyContent]
 }
 
+@Singleton
 class OverrideRequestActionProviderImpl @Inject()(implicit val ec: ExecutionContext,
                                                   parser: BodyParsers.Default) extends OverrideRequestActionProvider {
   override def apply(overrideRequest: DataRequest[_]): ActionBuilder[DataRequest, AnyContent] =
