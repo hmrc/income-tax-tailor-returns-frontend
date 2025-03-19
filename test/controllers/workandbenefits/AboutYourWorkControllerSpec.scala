@@ -56,8 +56,8 @@ class AboutYourWorkControllerSpec extends
 
 //  def onwardRoute: Call = Call("GET", "/foo")
 
-  private def prePopEnabled(isEnabled: Boolean): Map[String, String] =
-    Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
+//  private def prePopEnabled(isEnabled: Boolean): Map[String, String] =
+//    Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
 
   lazy val aboutYourWorkRoute: String = controllers.workandbenefits.routes.AboutYourWorkBaseController.onPageLoad(NormalMode, taxYear).url
 
@@ -79,10 +79,10 @@ class AboutYourWorkControllerSpec extends
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .configure(prePopEnabled(false))
         .build()
 
       running(application) {
+
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
 
         val result = route(application, request).value
@@ -98,7 +98,6 @@ class AboutYourWorkControllerSpec extends
     "must return OK and the correct view for a GET as an agent" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
-        .configure(prePopEnabled(false))
         .build()
 
       running(application) {
@@ -114,12 +113,48 @@ class AboutYourWorkControllerSpec extends
       }
     }
 
+    "must return OK when no override is provided on GET" in {
+      val application = applicationBuilder(Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val controller = application.injector.instanceOf[AboutYourWorkController]
+
+        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
+        val result = controller.onPageLoad(NormalMode, taxYear, None).apply(request)
+
+        status(result) mustEqual OK
+      }
+    }
+
+    "must return OK when no override is provided on POST" in {
+      val mockUserDataService = mock[UserDataService]
+      when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
+
+      val application = applicationBuilder(Some(emptyUserAnswers))
+        .overrides(
+          bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+          bind[UserDataService].toInstance(mockUserDataService)
+        ).build()
+
+      running(application) {
+        val controller = application.injector.instanceOf[AboutYourWorkController]
+
+        val request = FakeRequest(POST, aboutYourWorkRoute)
+          .withFormUrlEncodedBody("value[0]" -> AboutYourWork.values.head.toString)
+          .withSession(validTaxYears)
+
+        val result = controller.onSubmit(NormalMode, taxYear, None).apply(request)
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, AboutYourWork.values.toSet).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .configure(prePopEnabled(false))
         .build()
 
       running(application) {
@@ -139,7 +174,6 @@ class AboutYourWorkControllerSpec extends
       val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, AboutYourWork.values.toSet).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
-        .configure(prePopEnabled(false))
         .build()
 
       running(application) {
@@ -166,7 +200,6 @@ class AboutYourWorkControllerSpec extends
             bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
             bind[UserDataService].toInstance(mockUserDataService)
           )
-          .configure(prePopEnabled(false))
           .build()
 
       running(application) {
@@ -185,7 +218,6 @@ class AboutYourWorkControllerSpec extends
     "must return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .configure(prePopEnabled(false))
         .build()
 
       running(application) {
@@ -208,7 +240,6 @@ class AboutYourWorkControllerSpec extends
     "must return a Bad Request and errors when invalid data is submitted for an agent" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
-        .configure(prePopEnabled(false))
         .build()
 
       running(application) {
@@ -231,7 +262,6 @@ class AboutYourWorkControllerSpec extends
     "must redirect to Journey Recovery for a GET if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None)
-        .configure(prePopEnabled(false))
         .build()
 
       running(application) {
@@ -247,7 +277,6 @@ class AboutYourWorkControllerSpec extends
     "must redirect to Journey Recovery for a POST if no existing data is found" in {
 
       val application = applicationBuilder(userAnswers = None)
-        .configure(prePopEnabled(false))
         .build()
 
       running(application) {
@@ -265,322 +294,6 @@ class AboutYourWorkControllerSpec extends
   }
 
   "AboutYourWork Controller when Foster Carer is true" - {
-
-    "must return OK and the correct view for a GET" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalIndividual)
-      }
-    }
-
-    "must return OK and the correct view for a GET and isPrePopEnabled true" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
-        .configure(prePopEnabled(true))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalIndividual)
-      }
-    }
-
-    "must return OK and the correct view for a GET for an agent" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalAgent)
-      }
-    }
-
-    "must return OK and the correct view for a GET for an agent and isPrePopEnabled true" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
-        .configure(prePopEnabled(true))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalAgent)
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = UserAnswers(mtdItId, taxYear)
-        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
-        .success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(radioForm.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalIndividual)
-      }
-    }
-    "must populate the view correctly on a GET when the question has previously been answered and isPrePopEnabled true" in {
-
-      val userAnswers = UserAnswers(mtdItId, taxYear)
-        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
-        .success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .configure(prePopEnabled(true))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(radioForm.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
-        contentAsString(result) must include(expectedConditionalIndividual)
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
-
-      val userAnswers = UserAnswers(mtdItId, taxYear)
-        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
-        .success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(radioAgentForm.fill(true), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalAgent)
-      }
-    }
-    "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled true" in {
-
-      val userAnswers = UserAnswers(mtdItId, taxYear)
-        .set(FosterCarerPage, true).flatMap(_.set(AboutYourWorkRadioPage, true))
-        .success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
-        .configure(prePopEnabled(true))
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(radioAgentForm.fill(true), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
-        contentAsString(result) must include(expectedConditionalAgent)
-      }
-    }
-
-    "must redirect to the next page when true is submitted" in {
-
-      val mockUserDataService = mock[UserDataService]
-
-      when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[UserDataService].toInstance(mockUserDataService)
-          )
-          .configure(prePopEnabled(false))
-          .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-            .withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-      }
-    }
-
-    "must redirect to the next page when false is submitted" in {
-
-      val mockUserDataService = mock[UserDataService]
-
-      when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
-
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[UserDataService].toInstance(mockUserDataService)
-          )
-          .configure(prePopEnabled(false))
-          .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRoute)
-            .withFormUrlEncodedBody(("value", "false"))
-            .withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
-      }
-    }
-
-    "must return a Bad Request and errors when invalid data is submitted" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRoute)
-            .withFormUrlEncodedBody(("value", ""))
-            .withSession(validTaxYears)
-
-        val boundForm = radioForm.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalIndividual)
-      }
-    }
-    "must return a Bad Request and errors when invalid data is submitted and isPrePopEnabled true" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer))
-        .configure(prePopEnabled(true))
-        .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRoute)
-            .withFormUrlEncodedBody(("value", ""))
-            .withSession(validTaxYears)
-
-        val boundForm = radioForm.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalIndividual)
-      }
-    }
-
-    "must return a Bad Request and errors when invalid data is submitted for an agent" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
-        .configure(prePopEnabled(false))
-        .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRoute)
-            .withFormUrlEncodedBody(("value", ""))
-            .withSession(validTaxYears)
-
-        val boundForm = radioAgentForm.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalAgent)
-      }
-    }
-    "must return a Bad Request and errors when invalid data is submitted for an agent and isPrePopEnabled true" in {
-
-      val application = applicationBuilder(userAnswers = Some(userAnswersWithFosterCarer), isAgent = true)
-        .configure(prePopEnabled(true))
-        .build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, aboutYourWorkRoute)
-            .withFormUrlEncodedBody(("value", ""))
-            .withSession(validTaxYears)
-
-        val boundForm = radioAgentForm.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalAgent)
-      }
-    }
 
     "must redirect to Journey Recovery for a GET if no existing data is found" in {
 
