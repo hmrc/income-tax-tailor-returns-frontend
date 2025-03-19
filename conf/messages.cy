@@ -360,16 +360,12 @@ jobseekersAllowance.none = Na, ni chefais yr un o’r budd-daliadau’r wladwria
 jobseekersAllowance.agent.none = Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r wladwriaeth hyn
 jobseekersAllowance.error.required = Dewiswch a gawsoch Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chefais yr un o’r budd-daliadau’r wladwriaeth hyn’
 jobseekersAllowance.agent.error.required = Dewiswch a gafodd eich cleient Lwfans Ceisio Gwaith neu Lwfans Cyflogaeth a Chymorth ar sail cyfraniadau, neu ‘Na, ni chafodd fy nghleient yr un o’r budd-daliadau’r budd-daliadau’r wladwriaeth hyn’
-
-# TODO Review this
-jobseekersAllowance.insetText = Mae gan CThEF wybodaeth y cawsoch Lwfans Ceisio Gwaith rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i’w gweld ar eich Ffurflen Dreth Incwm, lle gallwch ei dileu.
-jobseekersAllowance.insetText.agent = Mae gan CThEF wybodaeth bod eich cleient wedi cael Lwfans Ceisio Gwaith rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i weld ar ei Ffurflen Dreth Incwm, lle gallwch ei dileu.
-jobseekersAllowance.insetText.jsa = HMRC hold information that you received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
-jobseekersAllowance.insetText.esa = HMRC hold information that you received Employment and Support Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
-jobseekersAllowance.insetText.both = HMRC hold information that you received Jobseeker’s Allowance and Employment and Support Allowance between 6 April {0} and 5 April {1}. This will appear on your Income Tax Return, Where you can remove this.
-jobseekersAllowance.insetText.agent.jsa = HMRC hold information that your client received Jobseeker’s Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
-jobseekersAllowance.insetText.agent.esa = HMRC hold information that your client received Employment and Support Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
-jobseekersAllowance.insetText.agent.both = HMRC hold information that your client received Jobseeker’s Allowance and Employment and Support Allowance between 6 April {0} and 5 April {1}. This will appear on their Income Tax Return, Where you can remove this.
+jobseekersAllowance.insetText.jsa = Mae gan CThEF wybodaeth eich bod wedi gwneud hawliad am Lwfans Ceisio Gwaith rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i’w gweld ar eich Ffurflen Dreth Incwm, lle gallwch ei dileu.
+jobseekersAllowance.insetText.esa = Mae gan CThEF wybodaeth eich bod wedi gwneud hawliad am Lwfans Cyflogaeth a Chymorth rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i’w gweld ar eich Ffurflen Dreth Incwm, lle gallwch ei dileu.
+jobseekersAllowance.insetText.both = Mae gan CThEF wybodaeth eich bod wedi gwneud hawliad am Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i’w gweld ar eich Ffurflen Dreth Incwm, lle gallwch ei dileu.
+jobseekersAllowance.insetText.agent.jsa = Mae gan CThEF wybodaeth bod eich cleient wedi gwneud hawliad am Lwfans Ceisio Gwaith rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i weld ar ei Ffurflen Dreth Incwm, lle gallwch ei dileu.
+jobseekersAllowance.insetText.agent.esa = Mae gan CThEF wybodaeth bod eich cleient wedi gwneud hawliad am Lwfans Cyflogaeth a Chymorth rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i weld ar ei Ffurflen Dreth Incwm, lle gallwch ei dileu.
+jobseekersAllowance.insetText.agent.both = Mae gan CThEF wybodaeth bod eich cleient wedi gwneud hawliad am Lwfans Ceisio Gwaith a Lwfans Cyflogaeth a Chymorth rhwng 6 Ebrill {0} a 5 Ebrill {1}. Bydd hwn i weld ar ei Ffurflen Dreth Incwm, lle gallwch ei dileu.
 
 
 

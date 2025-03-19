@@ -7,7 +7,7 @@ import uk.gov.hmrc.DefaultBuildSettings
 lazy val appName: String = "income-tax-tailor-returns-frontend"
 
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "2.13.16"
 
 val excludedPackages: Seq[String] = Seq(
   "<empty>",
