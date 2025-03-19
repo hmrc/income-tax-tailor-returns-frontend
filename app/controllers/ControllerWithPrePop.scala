@@ -21,7 +21,7 @@ import config.FrontendAppConfig
 import connectors.ConnectorResponse
 import forms.FormProvider
 import handlers.ErrorHandler
-import models.Mode
+import models.{Mode, UserAnswers}
 import models.errors.SimpleErrorWrapper
 import models.prePopulation.PrePopulationResponse
 import models.requests.DataRequest
@@ -251,7 +251,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
         value => {
           infoLogger("Form bound successfully from request. Attempting to update user's journey answers")
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(page, value))
+            updatedAnswers <- updateAnswers(page, value)
             _ <- userDataService.set(updatedAnswers, request.userAnswers)
           } yield {
             infoLogger("Journey answers updated successfully. Proceeding to next page in the journey")
@@ -260,6 +260,10 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
         }
       )
     }
+
+  protected def updateAnswers(page: QuestionPage[I], value: I)
+                             (implicit request: DataRequest[_]): Future[UserAnswers] =
+    Future.fromTry(request.userAnswers.set(page, value))
 
   protected def fillFormFromPageModel(form: Form[I], pageModel: I): Form[I]  = form.fill(pageModel)
 

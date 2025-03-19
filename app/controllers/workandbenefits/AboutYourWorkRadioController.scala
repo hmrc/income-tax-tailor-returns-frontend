@@ -22,11 +22,14 @@ import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.AboutYourWorkRadioPageFormProvider
 import handlers.ErrorHandler
-import models.Mode
+import models.{Mode, UserAnswers}
 import models.prePopulation.EmploymentPrePopulationResponse.EmploymentRadioPrePop
 import models.requests.DataRequest
+import models.workandbenefits.AboutYourWork
+import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
 import navigation.Navigator
-import pages.workandbenefits.AboutYourWorkRadioPage
+import pages.QuestionPage
+import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
 import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
@@ -37,7 +40,7 @@ import utils.Logging
 import views.html.workandbenefits.{AboutYourWorkRadioPageAgentView, AboutYourWorkRadioPageView}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesApi,
@@ -60,6 +63,9 @@ class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesA
 
   override protected val primaryContext: String = "AboutYourWorkRadioController"
   override val defaultPrePopulationResponse: EmploymentRadioPrePop = EmploymentRadioPrePop.empty
+
+  val pageName = "Employment" //TODO: Change this
+  val incomeType = "employment" //TODO: Change this
 
   override protected def actionChain(taxYear: Int,
                                      requestOverrideOpt: Option[DataRequest[_]] = None): ActionBuilder[DataRequest, AnyContent] =
@@ -85,8 +91,20 @@ class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesA
     }
   }
 
-  val pageName = "Employment" //TODO: Change this
-  val incomeType = "employment" //TODO: Change this
+  override protected def updateAnswers(page: QuestionPage[Boolean], value: Boolean)
+                                      (implicit request: DataRequest[_]): Future[UserAnswers] = {
+    val aboutYourWork = if (value) {
+      Set[AboutYourWork](Employed, SelfEmployed)
+    } else {
+      Set[AboutYourWork](SelfEmployed)
+    }
+
+    Future.fromTry(
+      request.userAnswers
+        .set(AboutYourWorkRadioPage, value)
+        .flatMap(_.set(AboutYourWorkPage, aboutYourWork))
+    )
+  }
 
   def onPageLoad(mode: Mode,
                  taxYear: Int,
