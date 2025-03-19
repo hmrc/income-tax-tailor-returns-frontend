@@ -131,7 +131,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
     )
 
     actionChain(taxYear, requestOverrideOpt).async { implicit request =>
-      val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, requestToAgentString)
+      val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, Some(requestToAgentString))
       val infoLogger = infoLog(methodContext, dataLog, Some(extraContext))
       val errorLogger = errorLog(methodContext, dataLog, Some(extraContext))
 
@@ -143,7 +143,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
           infoLogger(s"Successfully retrieved NINO from session data service. Processing block with NINO: $nino")
 
           block(
-            dataLogString(nino, taxYear, requestToAgentString),
+            dataLogString(nino, taxYear, Some(requestToAgentString)),
             prePopRetrievalAction(nino, taxYear, request.mtdItId),
             request
           )
@@ -238,7 +238,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
                                       requestOverrideOpt: Option[DataRequest[_]] = None): Action[AnyContent] =
     actionChain(taxYear, requestOverrideOpt).async { implicit request =>
       val methodLogString: String = "onSubmit"
-      val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, requestToAgentString)
+      val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, Some(requestToAgentString))
       val infoLogger: String => Unit = infoLog(secondaryContext = methodLogString, dataLog = dataLog)
       val warnLogger: String => Unit = warnLog(secondaryContext = methodLogString, dataLog = dataLog)
 
