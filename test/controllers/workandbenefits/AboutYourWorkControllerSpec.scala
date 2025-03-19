@@ -31,7 +31,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.UserDataService
-import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkRadioPageAgentView, AboutYourWorkRadioPageView, AboutYourWorkView}
+import views.html.workandbenefits.{AboutYourWorkAgentView, AboutYourWorkView}
 
 import scala.concurrent.Future
 
@@ -53,62 +53,40 @@ class AboutYourWorkControllerSpec extends
       .AboutYourWorkBaseController
       .onPageLoad(NormalMode, taxYear).url
 
-
-//  def onwardRoute: Call = Call("GET", "/foo")
-
-//  private def prePopEnabled(isEnabled: Boolean): Map[String, String] =
-//    Map("feature-switch.isPrePopEnabled" -> isEnabled.toString)
-
   lazy val aboutYourWorkRoute: String = controllers.workandbenefits.routes.AboutYourWorkBaseController.onPageLoad(NormalMode, taxYear).url
 
-//  val formProvider = new AboutYourWorkFormProvider()
   val form: Form[Set[AboutYourWork]] = formProvider(isAgent = false)
   val agentForm: Form[Set[AboutYourWork]] = formProvider(isAgent = true)
 
   val radioFormProvider = new AboutYourWorkRadioPageFormProvider()
   val radioForm: Form[Boolean] = radioFormProvider(isAgent = false)
-  val radioAgentForm: Form[Boolean] = radioFormProvider(isAgent = true)
-
-  val expectedConditionalIndividual = s"HMRC hold information that you were employed between 6 April ${taxYear-1} and 5 April $taxYear."
-  val expectedConditionalAgent = s"HMRC hold information that your client was employed between 6 April ${taxYear-1} and 5 April $taxYear."
-
-  val userAnswersWithFosterCarer: UserAnswers = UserAnswers(mtdItId, taxYear).set(FosterCarerPage, true).success.value
 
   "AboutYourWork Controller" - {
 
     "must return OK and the correct view for a GET" in {
-
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .build()
 
       running(application) {
-
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[AboutYourWorkView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual view(form, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
 
     "must return OK and the correct view for a GET as an agent" in {
-
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
         .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
         val result = route(application, request).value
-
         val view = application.injector.instanceOf[AboutYourWorkAgentView]
 
         status(result) mustEqual OK
-
         contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear)(request, messages(application)).toString
       }
     }
@@ -118,7 +96,6 @@ class AboutYourWorkControllerSpec extends
 
       running(application) {
         val controller = application.injector.instanceOf[AboutYourWorkController]
-
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
         val result = controller.onPageLoad(NormalMode, taxYear, None).apply(request)
 
@@ -138,11 +115,9 @@ class AboutYourWorkControllerSpec extends
 
       running(application) {
         val controller = application.injector.instanceOf[AboutYourWorkController]
-
         val request = FakeRequest(POST, aboutYourWorkRoute)
           .withFormUrlEncodedBody("value[0]" -> AboutYourWork.values.head.toString)
           .withSession(validTaxYears)
-
         val result = controller.onSubmit(NormalMode, taxYear, None).apply(request)
 
         status(result) mustEqual SEE_OTHER
@@ -151,7 +126,6 @@ class AboutYourWorkControllerSpec extends
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
-
       val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, AboutYourWork.values.toSet).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -159,9 +133,7 @@ class AboutYourWorkControllerSpec extends
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
         val view = application.injector.instanceOf[AboutYourWorkView]
-
         val result = route(application, request).value
 
         status(result) mustEqual OK
@@ -170,7 +142,6 @@ class AboutYourWorkControllerSpec extends
     }
 
     "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
-
       val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkPage, AboutYourWork.values.toSet).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
@@ -178,9 +149,7 @@ class AboutYourWorkControllerSpec extends
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
         val view = application.injector.instanceOf[AboutYourWorkAgentView]
-
         val result = route(application, request).value
 
         status(result) mustEqual OK
@@ -189,7 +158,6 @@ class AboutYourWorkControllerSpec extends
     }
 
     "must redirect to the next page when valid data is submitted" in {
-
       val mockUserDataService = mock[UserDataService]
 
       when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
@@ -207,7 +175,6 @@ class AboutYourWorkControllerSpec extends
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value[0]", AboutYourWork.values.head.toString))
             .withSession(validTaxYears)
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -216,7 +183,6 @@ class AboutYourWorkControllerSpec extends
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
-
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .build()
 
@@ -225,11 +191,8 @@ class AboutYourWorkControllerSpec extends
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
             .withSession(validTaxYears)
-
         val boundForm = form.bind(Map("value" -> "invalid value"))
-
         val view = application.injector.instanceOf[AboutYourWorkView]
-
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
@@ -238,7 +201,6 @@ class AboutYourWorkControllerSpec extends
     }
 
     "must return a Bad Request and errors when invalid data is submitted for an agent" in {
-
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
         .build()
 
@@ -247,11 +209,8 @@ class AboutYourWorkControllerSpec extends
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value", "invalid value"))
             .withSession(validTaxYears)
-
         val boundForm = agentForm.bind(Map("value" -> "invalid value"))
-
         val view = application.injector.instanceOf[AboutYourWorkAgentView]
-
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
@@ -260,22 +219,18 @@ class AboutYourWorkControllerSpec extends
     }
 
     "must redirect to Journey Recovery for a GET if no existing data is found" in {
-
       val application = applicationBuilder(userAnswers = None)
         .build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
         val result = route(application, request).value
-
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
       }
     }
 
     "must redirect to Journey Recovery for a POST if no existing data is found" in {
-
       val application = applicationBuilder(userAnswers = None)
         .build()
 
@@ -284,7 +239,6 @@ class AboutYourWorkControllerSpec extends
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value[0]", AboutYourWork.values.head.toString))
             .withSession(validTaxYears)
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -294,14 +248,11 @@ class AboutYourWorkControllerSpec extends
   }
 
   "AboutYourWork Controller when Foster Carer is true" - {
-
     "must redirect to Journey Recovery for a GET if no existing data is found" in {
-
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
         val request = FakeRequest(GET, aboutYourWorkRoute).withSession(validTaxYears)
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
@@ -310,7 +261,6 @@ class AboutYourWorkControllerSpec extends
     }
 
     "must redirect to Journey Recovery for a POST if no existing data is found" in {
-
       val application = applicationBuilder(userAnswers = None).build()
 
       running(application) {
@@ -318,7 +268,6 @@ class AboutYourWorkControllerSpec extends
           FakeRequest(POST, aboutYourWorkRoute)
             .withFormUrlEncodedBody(("value", "true"))
             .withSession(validTaxYears)
-
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
