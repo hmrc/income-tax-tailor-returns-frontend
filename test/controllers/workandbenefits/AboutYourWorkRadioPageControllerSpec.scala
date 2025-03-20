@@ -19,11 +19,15 @@ package controllers.workandbenefits
 import controllers.ControllerWithPrePopSpecBase
 import forms.workandbenefits.AboutYourWorkRadioPageFormProvider
 import models.prePopulation.EmploymentPrePopulationResponse
-import models.{Done, NormalMode, SessionValues}
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
+import pages.workandbenefits.AboutYourWorkRadioPage
+import play.api.data.Form
+import play.api.inject.bind
 import play.api.inject.guice.GuiceableModule
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import services.UserDataService
@@ -42,149 +46,136 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
   override val agentViewProvider: Application => AboutYourWorkRadioPageAgentView =
     (application: Application) => application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
 
-  override def requestRoute: String =
-    controllers.workandbenefits.routes.AboutYourWorkBaseController
-      .onPageLoad(NormalMode, taxYear).url
+  override val requestRoute: String =
+    controllers.workandbenefits.routes.AboutYourWorkRadioBaseController.onPageLoad(NormalMode, taxYear).url
 
-  lazy val aboutYourWorkRoute: String = requestRoute
+  lazy val aboutYourWorkRadioRoute: String = requestRoute
 
-  trait GETPrePopEnabledIndividual extends GetWithPrePopTest {
-    def hasEmployment = false
+  val form: Form[Boolean] = formProvider(isAgent = false)
+  val agentForm: Form[Boolean] = formProvider(isAgent = true)
 
-    mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-    override def defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
 
-    when(
-      mockEmploymentConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
-    ).thenReturn(Future.successful(Right(EmploymentPrePopulationResponse(hasEmployment))))
+  "AboutYourWorkRadio Controller" - {
+
+    "must return OK and the correct view for a GET" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRadioRoute).withSession(validTaxYears)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopCheck = false)(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET as an agent" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRadioRoute).withSession(validTaxYears)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopCheck = false)(request, messages(application)).toString
+      }
+    }
+
+    "must populate the view correctly on a GET when the question has previously been answered" in {
+      val userAnswers = UserAnswers(mtdItId, taxYear).set(AboutYourWorkRadioPage, true).success.value
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRadioRoute).withSession(validTaxYears)
+        val result = route(application, request).value
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(form.fill(true), NormalMode, taxYear, prePopCheck = false)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to the next page when valid data is submitted" in {
+      val mockUserDataService = mock[UserDataService]
+      when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+          bind[UserDataService].toInstance(mockUserDataService)
+        ).build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRadioRoute)
+          .withFormUrlEncodedBody("value" -> "true")
+          .withSession(validTaxYears)
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRadioRoute)
+          .withFormUrlEncodedBody("value" -> "invalid")
+          .withSession(validTaxYears)
+
+        val boundForm = form.bind(Map("value" -> "invalid"))
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageView]
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopCheck = false)(request, messages(application)).toString
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted for an agent" in {
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRadioRoute)
+          .withFormUrlEncodedBody("value" -> "invalid")
+          .withSession(validTaxYears)
+
+        val boundForm = agentForm.bind(Map("value" -> "invalid"))
+        val view = application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopCheck = false)(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(GET, aboutYourWorkRadioRoute).withSession(validTaxYears)
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear).url
+      }
+    }
+
+    "must redirect to Journey Recovery for a POST if no existing data is found" in {
+      val application = applicationBuilder(userAnswers = None).build()
+
+      running(application) {
+        val request = FakeRequest(POST, aboutYourWorkRadioRoute)
+          .withFormUrlEncodedBody("value" -> "true")
+          .withSession(validTaxYears)
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad(taxYear).url
+      }
+    }
   }
-
-  trait GETPrePopEnabledAgent extends GetWithPrePopAgentTest {
-    mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-    override def defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-    when(
-      mockEmploymentConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
-    ).thenReturn(Future.successful(Right(EmploymentPrePopulationResponse(true))))
-  }
-
-  trait PostSubmitWithNoPrePopTest extends SubmitWithNoPrePopTest {
-    override def formUrlEncodedBody: (String, String) = ("value", "true")
-
-    val mockUserDataService: UserDataService = mock[UserDataService]
-    when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
-
-    override def applicationOverrides: Seq[GuiceableModule] = Seq(
-      inject.bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-      inject.bind[UserDataService].toInstance(mockUserDataService)
-    )
-  }
-
-//  "AboutYourWorkRadio Controller" - {
-//    "GET" - {
-//      "must return OK and the correct view for an agent" in new GetWithNoPrePopAgentTest {
-//        running(application) {
-//          status(result) mustEqual OK
-//          contentAsString(result) mustEqual agentView(
-//            agentForm,
-//            NormalMode,
-//            taxYear,
-//            prePopData = false
-//          )(request, messages(application)).toString
-//        }
-//      }
-//    }
-//
-//    "must return OK and the correct view for an individual" in new GETPrePopEnabledIndividual {
-//      running(application) {
-//        status(result) mustEqual OK
-//        contentAsString(result) mustEqual view(
-//          form,
-//          NormalMode,
-//          taxYear,
-//          prePopData = false
-//        )(request, messages(application)).toString
-//      }
-//    }
-//  }
 }
-
-//      "must populate the view correctly when previously answered" in new GETPrePopEnabledIndividual {
-//        override val userAnswers = emptyUserAnswers.set(AboutYourWorkRadioPage, true).toOption
-//
-//        running(application) {
-//          status(result) mustEqual OK
-//          contentAsString(result) mustEqual view(
-//            form.fill(true),
-//            NormalMode,
-//            taxYear,
-//            prePopData = false
-//          )(request, messages(application)).toString
-//        }
-//      }
-
-//      "must redirect to Journey Recovery if no data is found" in new GETPrePopEnabledIndividual {
-//        override val userAnswers = None
-//
-//        running(application) {
-//          status(result) mustEqual SEE_OTHER
-//          redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(???, taxYear).url
-//        }
-//      }
-//    }
-
-//    "POST" - {
-      //      "must redirect on valid submission" in new PostSubmitWithNoPrePopTest {
-      //        running(application) {
-      //          status(result) mustEqual SEE_OTHER
-      //          redirectLocation(result).value mustEqual onwardRoute.url
-      //        }
-      //      }
-
-      //      "must return BAD_REQUEST on invalid submission" in new PostSubmitWithNoPrePopTest {
-      //        override def formUrlEncodedBody: (String, String) = ("value", "")
-      //
-      //        running(application) {
-      //          status(result) mustEqual BAD_REQUEST
-      //          contentAsString(result) mustEqual view(
-      //            boundForm,
-      //            NormalMode,
-      //            taxYear,
-      //            prePopData = false
-      //          )(request, messages(application)).toString
-      //        }
-      //      }
-
-      //      "must redirect to Journey Recovery if no data is found" in new PostSubmitWithNoPrePopTest {
-      //        override val userAnswers = None
-      //        override def formUrlEncodedBody: (String, String) = ("value", "true")
-      //
-      //        running(application) {
-      //          status(result) mustEqual SEE_OTHER
-      //          redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(???, taxYear).url
-      //        }
-      //      }
-
-      //      "must return BAD_REQUEST with errors for an agent on invalid submission" in new SubmitWithNoPrePopAgentTest {
-      //        override def formUrlEncodedBody: (String, String) = ("value", "")
-      //
-      //        val mockUserDataService: UserDataService = mock[UserDataService]
-      //        when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
-      //
-      //        override def applicationOverrides: Seq[GuiceableModule] = Seq(
-      //          inject.bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-      //          inject.bind[UserDataService].toInstance(mockUserDataService)
-      //        )
-      //
-      //        running(application) {
-      //          status(result) mustEqual BAD_REQUEST
-      //          contentAsString(result) mustEqual agentView(
-      //            boundForm,
-      //            NormalMode,
-      //            taxYear,
-      //            prePopData = false
-      //          )(request, messages(application)).toString
-      //        }
-      //      }
-      //    }
-//    }
