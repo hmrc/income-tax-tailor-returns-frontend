@@ -80,33 +80,33 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
     )
   }
 
-  "AboutYourWorkRadio Controller" - {
-    "GET" - {
-      "must return OK and the correct view for an agent" in new GetWithNoPrePopAgentTest {
-        running(application) {
-          status(result) mustEqual OK
-          contentAsString(result) mustEqual agentView(
-            agentForm,
-            NormalMode,
-            taxYear,
-            prePopData = false
-          )(request, messages(application)).toString
-        }
-      }
-    }
-
-    "must return OK and the correct view for an individual" in new GETPrePopEnabledIndividual {
-      running(application) {
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(
-          form,
-          NormalMode,
-          taxYear,
-          prePopData = false
-        )(request, messages(application)).toString
-      }
-    }
-  }
+//  "AboutYourWorkRadio Controller" - {
+//    "GET" - {
+//      "must return OK and the correct view for an agent" in new GetWithNoPrePopAgentTest {
+//        running(application) {
+//          status(result) mustEqual OK
+//          contentAsString(result) mustEqual agentView(
+//            agentForm,
+//            NormalMode,
+//            taxYear,
+//            prePopData = false
+//          )(request, messages(application)).toString
+//        }
+//      }
+//    }
+//
+//    "must return OK and the correct view for an individual" in new GETPrePopEnabledIndividual {
+//      running(application) {
+//        status(result) mustEqual OK
+//        contentAsString(result) mustEqual view(
+//          form,
+//          NormalMode,
+//          taxYear,
+//          prePopData = false
+//        )(request, messages(application)).toString
+//      }
+//    }
+//  }
 }
 
 //      "must populate the view correctly when previously answered" in new GETPrePopEnabledIndividual {

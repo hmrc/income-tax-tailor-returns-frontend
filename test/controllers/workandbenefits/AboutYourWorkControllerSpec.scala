@@ -23,8 +23,7 @@ import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import pages.aboutyou.FosterCarerPage
-import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
+import pages.workandbenefits.AboutYourWorkPage
 import play.api.Application
 import play.api.data.Form
 import play.api.inject.bind
