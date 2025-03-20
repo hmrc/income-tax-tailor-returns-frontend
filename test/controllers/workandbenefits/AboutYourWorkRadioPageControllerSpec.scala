@@ -47,7 +47,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
     (application: Application) => application.injector.instanceOf[AboutYourWorkRadioPageAgentView]
 
   override val requestRoute: String =
-    controllers.workandbenefits.routes.AboutYourWorkRadioBaseController.onPageLoad(NormalMode, taxYear).url
+    controllers.workandbenefits.routes.AboutYourWorkRadioController.onPageLoad(NormalMode, taxYear).url
 
   lazy val aboutYourWorkRadioRoute: String = requestRoute
 
