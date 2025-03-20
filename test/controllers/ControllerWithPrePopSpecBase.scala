@@ -23,7 +23,7 @@ import connectors.{ConnectorResponse, EmploymentConnector, IncomeTaxCisConnector
 import forms.FormProvider
 import handlers.ErrorHandler
 import models.UserAnswers
-import models.prePopulation.StateBenefitsPrePopulationResponse
+import models.prePopulation.{EmploymentPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import models.session.SessionData
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
@@ -138,6 +138,13 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
                                      ): OngoingStubbing[ConnectorResponse[StateBenefitsPrePopulationResponse]] =
       when(
         mockStateBenefitsConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
+      ).thenReturn(result)
+
+    def mockEmploymentsConnectorGet(
+                                     result: ConnectorResponse[EmploymentPrePopulationResponse]
+                                   ): OngoingStubbing[ConnectorResponse[EmploymentPrePopulationResponse]] =
+      when(
+        mockEmploymentConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
       ).thenReturn(result)
 
     override def applicationOverrides: Seq[GuiceableModule] = Seq(
