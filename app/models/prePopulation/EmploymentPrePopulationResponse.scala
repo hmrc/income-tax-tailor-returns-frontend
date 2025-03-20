@@ -23,6 +23,7 @@ case class EmploymentPrePopulationResponse(hasEmploymentPrePop: Boolean) {
   val hasPrePop: Boolean = hasEmploymentPrePop
 
   def toPrePopRadioModel: EmploymentRadioPrePop = new EmploymentRadioPrePop(hasPrePop)
+
 }
 
 object EmploymentPrePopulationResponse {
