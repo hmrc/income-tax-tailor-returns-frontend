@@ -14,7 +14,7 @@ GET        /refresh-session/:taxYear                                            
 
 GET        /there-is-a-problem/:taxYear                                                                                 controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None, taxYear: Int)
 
-GET         /error/supporting-agent-not-authorised                                                                      controllers.SupportingAgentAuthErrorController.show
+GET        /error/supporting-agent-not-authorised                                                                      controllers.SupportingAgentAuthErrorController.show
 
 GET        /account/sign-out                                                                                            controllers.auth.AuthController.signOutNoSurvey
 GET        /account/sign-out-survey                                                                                     controllers.auth.AuthController.signOut
@@ -87,6 +87,10 @@ GET        /:taxYear/work-and-benefits/about-your-work                          
 POST       /:taxYear/work-and-benefits/about-your-work                                                                  controllers.workandbenefits.AboutYourWorkBaseController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
 GET        /:taxYear/work-and-benefits/change-about-your-work                                                           controllers.workandbenefits.AboutYourWorkBaseController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/work-and-benefits/change-about-your-work                                                           controllers.workandbenefits.AboutYourWorkBaseController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
+
+GET        /:taxYear/work-and-benefits/about-your-work                                                                  controllers.workandbenefits.AboutYourWorkBaseController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
+POST       /:taxYear/work-and-benefits/about-your-work                                                                  controllers.workandbenefits.AboutYourWorkBaseController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
+GET        /:taxYear/work-and-benefits/change-about-your-work                                                           controllers.workandbenefits.AboutYourWorkBaseController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 
 GET        /:taxYear/work-and-benefits/construction-industry-scheme                                                     controllers.workandbenefits.ConstructionIndustrySchemeController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /:taxYear/work-and-benefits/construction-industry-scheme                                                     controllers.workandbenefits.ConstructionIndustrySchemeController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
