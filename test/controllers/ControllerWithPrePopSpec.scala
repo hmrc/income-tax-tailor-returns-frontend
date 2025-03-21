@@ -52,14 +52,14 @@ class ControllerWithPrePopSpec extends SpecBase
   with ResultExtractors
   with DefaultAwaitTimeout {
 
-  class DummyPrePop(data: String) extends PrePopulationResponse[String] {
+  case class DummyPrePop(data: String) extends PrePopulationResponse[String] {
     override def toPageModel: String = data
     override def toMessageString(isAgent: Boolean): String = "N/A"
-    override val hasPrePop: Boolean = false
+    override val hasPrePop: Boolean = data.nonEmpty
   }
 
   object DummyPrePop {
-    val default: DummyPrePop = new DummyPrePop("prePopValue")
+    val default: DummyPrePop = DummyPrePop("prePopValue")
   }
 
   class DummyFormProvider extends FormProvider[String] {
@@ -228,6 +228,22 @@ class ControllerWithPrePopSpec extends SpecBase
 
       status(result) mustBe OK
       contentAsString(result) mustBe "prePopValue"
+    }
+
+    "should not pre-fill form when pre-pop is empty and there are no user answers" in new Test {
+      setupStubs()
+      override val dummyPrePopResult: Either[SimpleErrorWrapper, DummyPrePop] = Right(DummyPrePop(""))
+
+      val result: Future[Result] = controller.onPageLoad(
+        pageName = "N/A",
+        incomeType = "N/A",
+        page = DummyPage,
+        mode = NormalMode,
+        taxYear = taxYear
+      )(FakeRequest().withSession())
+
+      status(result) mustBe OK
+      contentAsString(result) mustBe "N/A"
     }
   }
 

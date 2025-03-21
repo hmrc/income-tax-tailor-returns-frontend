@@ -449,7 +449,7 @@ class JobseekersAllowanceControllerSpec extends
       }
 
       "for a request with form errors" -> {
-        "[POST] should return expected view" in new SubmitWithNoPrePopTest {
+        "[POST] should return expected view" in new SubmitEsaJsaWithNoPrePopTest {
           override def formUrlEncodedBody: (String, String) = ("value", "invalid value")
 
           running(application) {
@@ -465,7 +465,7 @@ class JobseekersAllowanceControllerSpec extends
           }
         }
 
-        "[POST] should return expected view for an agent" in new SubmitWithNoPrePopAgentTest {
+        "[POST] should return expected view for an agent" in new SubmitEsaJsaWithNoPrePopTest {
           override def formUrlEncodedBody: (String, String) = ("value", "invalid value")
 
           running(application) {

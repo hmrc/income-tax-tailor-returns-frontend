@@ -283,7 +283,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
                 form = filledForm(true),
                 mode = NormalMode,
                 taxYear = taxYear,
-                prePopData = true
+                prePopData = false
               )(request, messages(application)).toString
           }
         }
