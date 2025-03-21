@@ -32,7 +32,7 @@
 
 @layout(pageTitle = title(form, messages("aboutYourWork.agent.title")), taxYear = taxYear) {
 
-    @formHelper(action = controllers.workandbenefits.routes.AboutYourWorkController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.workandbenefits.routes.AboutYourWorkBaseController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form, errorLinkOverrides = Map("value" -> "AboutYourWork")))

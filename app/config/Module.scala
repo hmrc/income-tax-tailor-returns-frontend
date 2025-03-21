@@ -52,8 +52,9 @@ class Module extends play.api.inject.Module {
     Seq(
       bind[DataRetrievalActionProvider].to[DataRetrievalActionProviderImpl].eagerly(),
       bind[DataRequiredActionProvider].to[DataRequiredActionProviderImpl].eagerly(),
+      bind[OverrideRequestActionProvider].to[OverrideRequestActionProviderImpl].eagerly(),
       bind[Clock].toInstance(Clock.systemUTC()),
-      bind[SessionDataConnector].to(classOf[SessionDataConnectorImpl]).eagerly(),
+      bind[SessionDataConnector].to[SessionDataConnectorImpl],
       authBinding
     ) ++ privateBetaBinding
 

@@ -22,25 +22,27 @@ trait Logging {
   protected val primaryContext : String
   protected lazy val logger: LoggerWithContext = LoggerWithContext(Logger(this.getClass), primaryContext)
 
-  protected def dataLogString(nino: String, taxYear: Int, requestContext: String = "") =
-    s" for $requestContext request with NINO: $nino, and tax year: $taxYear"
+  private def formatStringOpt(valueOpt: Option[String]): String = valueOpt.fold("")(value => " " + value)
 
-  protected def noNinoDataLogString(mtdItId: String, taxYear: Int, requestContext: String = "") =
-    s" for $requestContext request with tax year: $taxYear, and mtdItId: $mtdItId"
+  protected def dataLogString(nino: String, taxYear: Int, requestContext: Option[String] = None) =
+    s" for${formatStringOpt(requestContext)} request with NINO: $nino, and tax year: $taxYear"
+
+  protected def noNinoDataLogString(mtdItId: String, taxYear: Int, requestContext: Option[String] = None) =
+    s" for${formatStringOpt(requestContext)} request with tax year: $taxYear, and mtdItId: $mtdItId"
 
   protected def infoLog(secondaryContext: String,
-              dataLog: String = "",
-              extraContext: Option[String] = None): String => Unit = (message: String) =>
+                        dataLog: String = "",
+                        extraContext: Option[String] = None): String => Unit = (message: String) =>
     logger.info(secondaryContext, message, dataLog, extraContext)
 
   protected def warnLog(secondaryContext: String,
-              dataLog: String = "",
-              extraContext: Option[String] = None): String => Unit = (message: String) =>
+                        dataLog: String = "",
+                        extraContext: Option[String] = None): String => Unit = (message: String) =>
     logger.warn(secondaryContext, message, dataLog, extraContext)
 
   protected def errorLog(secondaryContext: String,
-               dataLog: String = "",
-               extraContext: Option[String] = None): String => Unit = (message: String) =>
+                         dataLog: String = "",
+                         extraContext: Option[String] = None): String => Unit = (message: String) =>
     logger.error(secondaryContext, message, dataLog, extraContext)
 }
 
