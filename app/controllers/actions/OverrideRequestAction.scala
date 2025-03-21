@@ -30,10 +30,10 @@ trait OverrideRequestActionProvider {
 }
 
 @Singleton
-class OverrideRequestActionProviderImpl @Inject()(implicit val ec: ExecutionContext,
-                                                  parser: BodyParsers.Default) extends OverrideRequestActionProvider {
+class OverrideRequestActionProviderImpl @Inject()(parser: BodyParsers.Default)
+                                                 (implicit val ec: ExecutionContext) extends OverrideRequestActionProvider {
   override def apply(overrideRequest: DataRequest[_]): ActionBuilder[DataRequest, AnyContent] =
-    new OverrideRequestActionImpl(overrideRequest)
+    new OverrideRequestActionImpl(overrideRequest)(ec, parser)
 }
 
 class OverrideRequestActionImpl @Inject()(overrideRequest: DataRequest[_])

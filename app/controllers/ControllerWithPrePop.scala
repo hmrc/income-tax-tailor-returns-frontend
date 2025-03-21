@@ -197,11 +197,14 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
         infoLogger(s"Received request to retrieve $pageName tailoring page")
 
         def preparedForm(prePop: R): Form[I] = dataRequest.userAnswers.get(page) match {
-          case None =>
-            infoLogger(s"No existing $incomeType journey answers found in request model")
+          case None if prePop.hasPrePop =>
+            infoLogger(s"No existing $incomeType journey answers found. Pre-filling form with pre-pop data")
             fillFormFromPageModel(form, prePop.toPageModel)
+          case None =>
+            infoLogger(s"No existing $incomeType journey answers or pre-pop data found. Returning empty form")
+            form
           case Some(value) =>
-            infoLogger(s"Existing $incomeType journey answers found. Pre-populating form with previous user answers")
+            infoLogger(s"Existing $incomeType journey answers found. Pre-filling form with previous user answers")
             form.fill(value)
         }
 
