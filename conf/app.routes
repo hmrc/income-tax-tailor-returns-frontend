@@ -88,9 +88,6 @@ POST       /:taxYear/work-and-benefits/about-your-work                          
 GET        /:taxYear/work-and-benefits/change-about-your-work                                                           controllers.workandbenefits.AboutYourWorkBaseController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
 POST       /:taxYear/work-and-benefits/change-about-your-work                                                           controllers.workandbenefits.AboutYourWorkBaseController.onSubmit(mode: Mode = CheckMode, taxYear: Int)
 
-GET        /:taxYear/work-and-benefits/about-your-work-radio                                                            controllers.workandbenefits.AboutYourWorkRadioController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
-
-
 GET        /:taxYear/work-and-benefits/about-your-work                                                                  controllers.workandbenefits.AboutYourWorkBaseController.onPageLoad(mode: Mode = NormalMode, taxYear: Int)
 POST       /:taxYear/work-and-benefits/about-your-work                                                                  controllers.workandbenefits.AboutYourWorkBaseController.onSubmit(mode: Mode = NormalMode, taxYear: Int)
 GET        /:taxYear/work-and-benefits/change-about-your-work                                                           controllers.workandbenefits.AboutYourWorkBaseController.onPageLoad(mode: Mode = CheckMode, taxYear: Int)
