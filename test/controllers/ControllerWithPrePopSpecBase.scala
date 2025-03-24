@@ -82,7 +82,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     def applicationBindings: Seq[GuiceableModule] = Nil
     def applicationOverrides: Seq[GuiceableModule] = Nil
 
-    def application: Application = applicationBuilder(userAnswers, isAgent)
+    lazy val application: Application = applicationBuilder(userAnswers, isAgent)
       .configure(isPrePopEnabled(prePopEnabled))
       .bindings(applicationBindings :_*)
       .overrides(applicationOverrides :_*)
