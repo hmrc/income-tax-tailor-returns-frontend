@@ -465,7 +465,7 @@ class JobseekersAllowanceControllerSpec extends
           }
         }
 
-        "[POST] should return expected view for an agent" in new SubmitEsaJsaWithNoPrePopTest {
+        "[POST] should return expected view for an agent" in new SubmitEsaJsaWithNoPrePopAgentTest {
           override def formUrlEncodedBody: (String, String) = ("value", "invalid value")
 
           running(application) {
