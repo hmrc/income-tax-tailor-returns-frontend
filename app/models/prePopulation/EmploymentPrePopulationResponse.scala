@@ -19,8 +19,8 @@ package models.prePopulation
 import models.prePopulation.EmploymentPrePopulationResponse.EmploymentRadioPrePop
 import play.api.libs.json.{Json, Reads}
 
-case class EmploymentPrePopulationResponse(hasEmploymentPrePop: Boolean) {
-  val hasPrePop: Boolean = hasEmploymentPrePop
+case class EmploymentPrePopulationResponse(hasEmployment: Boolean) {
+  val hasPrePop: Boolean = hasEmployment
 
   def toPrePopRadioModel: EmploymentRadioPrePop = new EmploymentRadioPrePop(hasPrePop)
 
@@ -29,17 +29,17 @@ case class EmploymentPrePopulationResponse(hasEmploymentPrePop: Boolean) {
 object EmploymentPrePopulationResponse {
   implicit val reads: Reads[EmploymentPrePopulationResponse] = Json.reads[EmploymentPrePopulationResponse]
 
-  val empty: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(hasEmploymentPrePop = false)
+  val empty: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(hasEmployment = false)
 
-  class EmploymentRadioPrePop(hasEmploymentPrePop: Boolean) extends EmploymentPrePopulationResponse(hasEmploymentPrePop)
+  class EmploymentRadioPrePop(hasEmployment: Boolean) extends EmploymentPrePopulationResponse(hasEmployment)
     with PrePopulationResponse[Boolean] {
 
-    override def toPageModel: Boolean = hasEmploymentPrePop
+    override def toPageModel: Boolean = hasEmployment
 
     override def toMessageString(isAgent: Boolean): String = ""
   }
 
   object EmploymentRadioPrePop {
-    val empty: EmploymentRadioPrePop = new EmploymentRadioPrePop(hasEmploymentPrePop = false)
+    val empty: EmploymentRadioPrePop = new EmploymentRadioPrePop(hasEmployment = false)
   }
 }

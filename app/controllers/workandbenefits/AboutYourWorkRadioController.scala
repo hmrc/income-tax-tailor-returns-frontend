@@ -61,11 +61,11 @@ class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesA
   extends ControllerWithPrePop[Boolean, EmploymentRadioPrePop]
     with Logging {
 
-  override protected val primaryContext: String = "AboutYourWorkRadioController"
+  override protected val primaryContext: String = classOf[AboutYourWorkRadioController].getSimpleName
   override val defaultPrePopulationResponse: EmploymentRadioPrePop = EmploymentRadioPrePop.empty
 
-  val pageName = "Employment" //TODO: Change this
-  val incomeType = "employment" //TODO: Change this
+  val pageName = classOf[AboutYourWorkRadioController].getSimpleName
+  val incomeType = "employment"
 
   override protected def actionChain(taxYear: Int,
                                      requestOverrideOpt: Option[DataRequest[_]] = None): ActionBuilder[DataRequest, AnyContent] =
@@ -82,7 +82,7 @@ class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesA
                                       taxYear: Int,
                                       prePopData: EmploymentRadioPrePop)
                                      (implicit request: DataRequest[_]): HtmlFormat.Appendable = {
-    val prePopCheck = config.isPrePopEnabled && prePopData.hasEmploymentPrePop
+    val prePopCheck = config.isPrePopEnabled && prePopData.hasEmployment
 
     if (request.isAgent) {
       agentRadioView(form, mode, taxYear, prePopCheck)

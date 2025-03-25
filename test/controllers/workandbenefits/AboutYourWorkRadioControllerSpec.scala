@@ -177,7 +177,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
             mockEmploymentsConnectorGet(
               result = Future.successful(Right(EmploymentPrePopulationResponse(
-                hasEmploymentPrePop = false
+                hasEmployment = false
               )))
             )
 
@@ -202,7 +202,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
             mockEmploymentsConnectorGet(
               result = Future.successful(Right(EmploymentPrePopulationResponse(
-                hasEmploymentPrePop = false
+                hasEmployment = false
               )))
             )
 
@@ -227,7 +227,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
             mockEmploymentsConnectorGet(
               result = Future.successful(Right(EmploymentPrePopulationResponse(
-                hasEmploymentPrePop = false
+                hasEmployment = false
               )))
             )
 
@@ -264,7 +264,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
-              hasEmploymentPrePop = false
+              hasEmployment = false
             )))
           )
 
@@ -293,7 +293,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
-              hasEmploymentPrePop = true
+              hasEmployment = true
             )))
           )
 
@@ -323,7 +323,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
-              hasEmploymentPrePop = true
+              hasEmployment = true
             )))
           )
 
@@ -346,7 +346,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
-              hasEmploymentPrePop = true
+              hasEmployment = true
             )))
           )
 
@@ -369,7 +369,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
-              hasEmploymentPrePop = false
+              hasEmployment = false
             )))
           )
 
@@ -392,7 +392,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
-              hasEmploymentPrePop = false
+              hasEmployment = false
             )))
           )
 

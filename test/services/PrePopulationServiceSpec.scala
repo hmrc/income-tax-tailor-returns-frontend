@@ -51,7 +51,7 @@ class PrePopulationServiceSpec extends SpecBase
   )
 
   val dummyEmploymentResponse: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(
-    hasEmploymentPrePop = true
+    hasEmployment = true
   )
 
   val dummyEsaJsaResponse: EsaJsaPrePopulationResponse = dummyStateBenefitsResponse.toEsaJsaModel
@@ -89,7 +89,7 @@ class PrePopulationServiceSpec extends SpecBase
       mockGetEmploymentPrePopulation(nino, taxYear, mtdItId, Right(dummyEmploymentResponse))
       val result = await(testService.getEmployment(nino, taxYear, mtdItId))
       result mustBe a[Right[_, _]]
-      result.getOrElse(EmploymentPrePopulationResponse(hasEmploymentPrePop = false)) mustBe dummyEmploymentResponse
+      result.getOrElse(EmploymentPrePopulationResponse(hasEmployment = false)) mustBe dummyEmploymentResponse
     }
 
     "should return an error response when employment connector returns error response" in {

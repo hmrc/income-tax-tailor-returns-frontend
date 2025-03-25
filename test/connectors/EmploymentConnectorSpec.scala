@@ -45,7 +45,7 @@ class EmploymentConnectorSpec extends SpecBase
       testConnector.StandardGetHttpReads
 
     val dummyResponse: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(
-      hasEmploymentPrePop = true
+      hasEmployment = true
     )
 
     val baseUrl = "http://test-BaseUrl"

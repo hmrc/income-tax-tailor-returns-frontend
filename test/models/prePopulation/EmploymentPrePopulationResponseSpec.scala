@@ -23,21 +23,21 @@ class EmploymentPrePopulationResponseSpec extends SpecBase {
 
   "hasPrePop" - {
     "should return true when pre-pop is true" in {
-      EmploymentPrePopulationResponse(hasEmploymentPrePop = true).hasPrePop mustBe true
+      EmploymentPrePopulationResponse(hasEmployment = true).hasPrePop mustBe true
     }
 
     "should return false when pre-pop is false" in {
-      EmploymentPrePopulationResponse(hasEmploymentPrePop = false).hasPrePop mustBe false
+      EmploymentPrePopulationResponse(hasEmployment = false).hasPrePop mustBe false
     }
   }
 
   "toPrePopRadioModel" - {
     "when hasEmploymentPrePop is true" in {
-      EmploymentPrePopulationResponse(hasEmploymentPrePop = true).toPrePopRadioModel mustBe EmploymentPrePopulationResponse(true)
+      EmploymentPrePopulationResponse(hasEmployment = true).toPrePopRadioModel mustBe EmploymentPrePopulationResponse(true)
     }
 
     "when hasEmploymentPrePop is false" in {
-      EmploymentPrePopulationResponse(hasEmploymentPrePop = false).toPrePopRadioModel mustBe EmploymentPrePopulationResponse(false)
+      EmploymentPrePopulationResponse(hasEmployment = false).toPrePopRadioModel mustBe EmploymentPrePopulationResponse(false)
     }
   }
 

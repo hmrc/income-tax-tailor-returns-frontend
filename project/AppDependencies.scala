@@ -36,7 +36,7 @@ object AppDependencies {
     "org.scalacheck"          %% "scalacheck"              % "1.18.1",
     "org.jsoup"               %  "jsoup"                   % "1.19.1",
     "org.wiremock"            %  "wiremock"                % "3.12.1",
-    "org.scalamock"           %% "scalamock"               % "6.2.0",
+    "org.scalamock"           %% "scalamock"               % "7.3.0",
     "org.playframework"       %% "play-test"               % current
   ).map(_ % "test")
 
