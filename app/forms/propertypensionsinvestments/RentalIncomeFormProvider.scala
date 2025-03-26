@@ -16,14 +16,14 @@
 
 package forms.propertypensionsinvestments
 
-import forms.mappings.Mappings
+import forms.FormProvider
 import models.propertypensionsinvestments.RentalIncome
 import play.api.data.Form
 import play.api.data.Forms.set
 
 import javax.inject.Inject
 
-class RentalIncomeFormProvider @Inject() extends Mappings {
+class RentalIncomeFormProvider @Inject() extends FormProvider[Set[RentalIncome]] {
 
   def apply(isAgent: Boolean): Form[Set[RentalIncome]] = {
     val error: String =

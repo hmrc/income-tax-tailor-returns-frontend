@@ -25,23 +25,27 @@ class IncomeTaxCisPrePopulationResponseSpec extends SpecBase {
     "should return true when pre-pop is true" in {
       IncomeTaxCisPrePopulationResponse(hasCis = true).hasCis mustBe true
     }
+
+    "should return false when pre-pop is false" in {
+      IncomeTaxCisPrePopulationResponse(hasCis = false).hasCis mustBe false
+    }
   }
 
   "toPageModel" -> {
     "when hasCis true" in {
       IncomeTaxCisPrePopulationResponse(hasCis = true).toPageModel mustBe true
     }
+
+    "when hasCis false" in {
+      IncomeTaxCisPrePopulationResponse(hasCis = false).toPageModel mustBe false
+    }
   }
 
   "toMessageString" -> {
     val testVals = Seq(
-      (true, true ),
+      (true, true),
       (true, false),
       (false, true),
-      (false, false),
-      (false, true),
-      (false, true),
-      (false, false),
       (false, false)
     )
 

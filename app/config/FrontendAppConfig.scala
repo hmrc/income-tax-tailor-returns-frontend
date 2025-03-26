@@ -20,8 +20,8 @@ import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
-import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
+import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, OnlyRelative, RedirectUrl}
 
 import java.util.UUID
 
@@ -89,6 +89,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   def cisFrontendUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-cis-frontend.url") +
       s"/update-and-submit-income-tax-return/construction-industry-scheme-deductions/$taxYear/contractor-details"
+
+  def propertyBaseUrl: String =
+    configuration.get[String]("microservice.services.income-tax-property.url") + "/income-tax-property"
 
   def pensionsGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-pensions-frontend.url") +

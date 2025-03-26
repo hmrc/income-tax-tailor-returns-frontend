@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,300 +16,460 @@
 
 package controllers.propertypensionsinvestments
 
-import base.SpecBase
+import controllers.ControllerWithPrePopSpecBase
 import forms.propertypensionsinvestments.RentalIncomeFormProvider
+import models.errors.{APIErrorBodyModel, APIErrorModel, SimpleErrorWrapper}
+import models.prePopulation.PropertyPrePopulationResponse
 import models.propertypensionsinvestments.RentalIncome
-import models.{Done, NormalMode, UserAnswers}
+import models.{Done, NormalMode, SessionValues, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
 import pages.propertypensionsinvestments.RentalIncomePage
-import play.api.inject.bind
-import play.api.mvc.Call
-import play.api.test.FakeRequest
+import play.api.data.Form
+import play.api.inject.guice.GuiceableModule
 import play.api.test.Helpers._
+import play.api.{Application, inject}
 import services.UserDataService
 import views.html.propertypensionsinvestments.{RentalIncomeAgentView, RentalIncomeView}
 
 import scala.concurrent.Future
 
-class RentalIncomeControllerSpec extends SpecBase with MockitoSugar {
+class RentalIncomeControllerSpec extends
+  ControllerWithPrePopSpecBase[RentalIncomeView, RentalIncomeAgentView, Set[RentalIncome]] {
 
-  def onwardRoute = Call("GET", "/foo")
+  override def formProvider: RentalIncomeFormProvider = new RentalIncomeFormProvider()
 
-  private val prePopEnabled = Map("feature-switch.isPrePopEnabled" -> "true")
-  private val prePopDisabled = Map("feature-switch.isPrePopEnabled" -> "false")
+  override val viewProvider: Application => RentalIncomeView =
+    (application: Application) => application.injector.instanceOf[RentalIncomeView]
 
+  override val agentViewProvider: Application => RentalIncomeAgentView =
+    (application: Application) => application.injector.instanceOf[RentalIncomeAgentView]
 
-  lazy val rentalIncomeRoute = routes.RentalIncomeController.onPageLoad(NormalMode, taxYear).url
+  override val requestRoute: String =
+    controllers
+      .propertypensionsinvestments
+      .routes
+      .RentalIncomeController
+      .onPageLoad(NormalMode, taxYear).url
 
-  val formProvider = new RentalIncomeFormProvider()
-  val form = formProvider(isAgent = false)
-  val agentForm = formProvider(isAgent = true)
-
-  val expectedConditionalIndividual = s"HMRC hold information that you received rental income between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on your Income Tax Return, where you can remove this."
-  val expectedConditionalAgent = s"HMRC hold information that your client received rental income between 6 April ${taxYear-1} and 5 April $taxYear. This will appear on their Income Tax Return, where you can remove this."
+  trait RentalIncomeSubmitRequest {
+    def formUrlEncodedBody: (String, String) = ("value[0]", RentalIncome.values.head.toString)
+  }
 
   "RentalIncome Controller" - {
+    "when trying to retrieve the view with a GET" -> {
+      "when pre-population is disabled" -> {
+        "[GET] should return expected view when no user answers exist" in new GetWithNoPrePopTest {
+          running(application) {
+            status(result) mustEqual OK
 
-    "must return OK and the correct view for a GET" in {
+            contentAsString(result) mustEqual
+              view(
+                form = form,
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = false
+              )(request, messages(application)).toString
+          }
+        }
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .configure(prePopDisabled)
-        .build()
+        "[GET] should return expected view when no user answers exist for an agent" in new GetWithNoPrePopAgentTest {
+          running(application) {
+            status(result) mustEqual OK
 
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
+            contentAsString(result) mustEqual
+              agentView(
+                form = form,
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = false
+              )(request, messages(application)).toString
+          }
+        }
 
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[RentalIncomeView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-      }
-    }
-
-    "must return OK and the correct view for a GET and isPrePopEnabled" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .configure(prePopEnabled)
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[RentalIncomeView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view(form, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalIndividual)
-      }
-    }
-
-    "must return OK and the correct view for a GET as an agent" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
-        .configure(prePopDisabled)
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[RentalIncomeAgentView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-      }
-    }
-
-    "must return OK and the correct view for a GET as an agent and isPrePopEnabled" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true)
-        .configure(prePopEnabled)
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[RentalIncomeAgentView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view(agentForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-        contentAsString(result) mustNot include(expectedConditionalAgent)
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered" in {
-
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, RentalIncome.values.toSet).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .configure(prePopDisabled)
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[RentalIncomeView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(RentalIncome.values.toSet), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered and isPrePopEnabled" in {
-
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, RentalIncome.values.toSet).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .configure(prePopEnabled)
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[RentalIncomeView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(RentalIncome.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
-        contentAsString(result) must include(expectedConditionalIndividual)
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered for an agent" in {
-
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, RentalIncome.values.toSet).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
-        .configure(prePopDisabled)
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[RentalIncomeAgentView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(RentalIncome.values.toSet), NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
-      }
-    }
-
-    "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled" in {
-
-      val userAnswers = UserAnswers(mtdItId, taxYear).set(RentalIncomePage, RentalIncome.values.toSet).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers), isAgent = true)
-        .configure(prePopEnabled)
-        .build()
-
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
-
-        val view = application.injector.instanceOf[RentalIncomeAgentView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual OK
-        contentAsString(result) mustEqual view(agentForm.fill(RentalIncome.values.toSet), NormalMode, taxYear, prePopData = true)(request, messages(application)).toString
-        contentAsString(result) must include(expectedConditionalAgent)
-      }
-    }
-
-    "must redirect to the next page when valid data is submitted" in {
-
-      val mockUserDataService = mock[UserDataService]
-
-      when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
-
-      val application =
-        applicationBuilder(userAnswers = Some(emptyUserAnswers))
-          .overrides(
-            bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
-            bind[UserDataService].toInstance(mockUserDataService)
+        "[GET] should return expected view when user answers exist" in new GetWithNoPrePopTest {
+          override val userAnswers: Option[UserAnswers] = Some(
+            emptyUserAnswers.set(
+              RentalIncomePage,
+              Set[RentalIncome](RentalIncome.Uk, RentalIncome.NonUk)
+            ).get
           )
-          .build()
 
-      running(application) {
-        val request =
-          FakeRequest(POST, rentalIncomeRoute)
-            .withFormUrlEncodedBody(("value[0]", RentalIncome.values.head.toString))
-            .withSession(validTaxYears)
+          val filledForm: Form[Set[RentalIncome]] = form.fill(Set[RentalIncome](RentalIncome.Uk, RentalIncome.NonUk))
 
-        val result = route(application, request).value
+          running(application) {
+            status(result) mustEqual OK
 
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+            contentAsString(result) mustEqual
+              view(
+                form = filledForm,
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = false
+              )(request, messages(application)).toString
+          }
+        }
+
+        "[GET] should return expected view when user answers exist for an agent" in new GetWithNoPrePopAgentTest {
+          override val userAnswers: Option[UserAnswers] = Some(
+            emptyUserAnswers.set(
+              RentalIncomePage,
+              Set[RentalIncome](RentalIncome.Uk, RentalIncome.NonUk)
+            ).get
+          )
+
+          val filledForm: Form[Set[RentalIncome]] = form.fill(Set[RentalIncome](RentalIncome.Uk, RentalIncome.NonUk))
+
+          running(application) {
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              agentView(
+                form = filledForm,
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = false
+              )(request, messages(application)).toString
+          }
+        }
+      }
+
+      "when pre-population is enabled" -> {
+        "handle errors during NINO retrieval" -> {
+          "[GET] should show error page - SessionDataService: disabled, Nino in session: false" in new GetWithPrePopTest {
+            override def sessionCookieServiceEnabled: Boolean = false
+
+            running(application) {
+              status(result) mustEqual INTERNAL_SERVER_ERROR
+              contentAsString(result) mustEqual mockErrorView
+            }
+          }
+
+          "[GET] should show error page - SessionDataService: returns error, Nino in session: false" in new GetWithPrePopTest {
+            mockSessionDataConnectorGet(Future.successful(Left(
+              APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", "")))
+            ))
+
+            running(application) {
+              status(result) mustEqual INTERNAL_SERVER_ERROR
+              contentAsString(result) mustEqual mockErrorView
+            }
+          }
+
+          "[GET] should show error page - SessionDataService: returns None, Nino in session: false" in new GetWithPrePopTest {
+            mockSessionDataConnectorGet(Future.successful(Right(None)))
+
+            running(application) {
+              status(result) mustEqual INTERNAL_SERVER_ERROR
+              contentAsString(result) mustEqual mockErrorView
+            }
+          }
+        }
+
+        "handle session NINO fallback" -> {
+          "[GET] should fallback to session NINO when session data service is not enabled" in new GetWithPrePopTest {
+            override val sessionCookieServiceEnabled: Boolean = false
+            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
+
+            mockPropertyConnectorGet(
+              result = Future.successful(Right(PropertyPrePopulationResponse(
+                hasUkPropertyPrePop = false,
+                hasForeignPropertyPrePop = false
+              )))
+            )
+
+            running(application) {
+              status(result) mustEqual OK
+
+              contentAsString(result) mustEqual
+                view(
+                  form = form,
+                  mode = NormalMode,
+                  taxYear = taxYear,
+                  prePopData = false
+                )(request, messages(application)).toString
+            }
+          }
+
+          "[GET] should fallback to session NINO when session data service returns an error" in new GetWithPrePopTest {
+            mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
+
+            mockPropertyConnectorGet(
+              result = Future.successful(Right(PropertyPrePopulationResponse(
+                hasUkPropertyPrePop = false,
+                hasForeignPropertyPrePop = false
+              )))
+            )
+
+            running(application) {
+              status(result) mustEqual OK
+
+              contentAsString(result) mustEqual
+                view(
+                  form = form,
+                  mode = NormalMode,
+                  taxYear = taxYear,
+                  prePopData = false
+                )(request, messages(application)).toString
+            }
+          }
+
+          "[GET] should fallback to session NINO when session data service returns None" in new GetWithPrePopTest {
+            mockSessionDataConnectorGet(Future.successful(Right(None)))
+
+            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
+
+            mockPropertyConnectorGet(
+              result = Future.successful(Right(PropertyPrePopulationResponse(
+                hasUkPropertyPrePop = false,
+                hasForeignPropertyPrePop = false
+              )))
+            )
+
+            running(application) {
+              status(result) mustEqual OK
+
+              contentAsString(result) mustEqual
+                view(
+                  form = form,
+                  mode = NormalMode,
+                  taxYear = taxYear,
+                  prePopData = false
+                )(request, messages(application)).toString
+            }
+          }
+        }
+
+        "[GET] should return an error page when pre-pop retrieval fails" in new GetWithPrePopTest {
+          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+          mockPropertyConnectorGet(
+            result = Future.successful(Left(SimpleErrorWrapper(IM_A_TEAPOT)))
+          )
+
+          running(application) {
+            status(result) mustEqual INTERNAL_SERVER_ERROR
+            contentAsString(result) mustEqual mockErrorView
+          }
+        }
+
+        "[GET] should return the expected view when user answers and pre-pop exists" in new GetWithPrePopTest {
+          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+          mockPropertyConnectorGet(
+            result = Future.successful(Right(PropertyPrePopulationResponse(
+              hasUkPropertyPrePop = true,
+              hasForeignPropertyPrePop = false
+            )))
+          )
+
+          override val userAnswers: Option[UserAnswers] = Some(
+            emptyUserAnswers.set(
+              RentalIncomePage,
+              Set[RentalIncome](RentalIncome.NonUk)
+            ).get
+          )
+
+          running(application) {
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(
+                form = filledForm(Set(RentalIncome.NonUk)),
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = true
+              )(request, messages(application)).toString
+          }
+        }
+
+        "[GET] should return the expected view when user answers and pre-pop exists for an agent" in new GetWithPrePopAgentTest {
+          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+          mockPropertyConnectorGet(
+            result = Future.successful(Right(PropertyPrePopulationResponse(
+              hasUkPropertyPrePop = true,
+              hasForeignPropertyPrePop = false
+            )))
+          )
+
+          override val userAnswers: Option[UserAnswers] = Some(
+            emptyUserAnswers.set(
+              RentalIncomePage,
+              Set[RentalIncome](RentalIncome.NonUk)
+            ).get
+          )
+
+          running(application) {
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              agentView(
+                form = filledForm(Set(RentalIncome.NonUk)),
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = true
+              )(request, messages(application)).toString
+          }
+        }
+
+        "[GET] should return the expected view when only pre-pop exists" in new GetWithPrePopTest {
+          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+          mockPropertyConnectorGet(
+            result = Future.successful(Right(PropertyPrePopulationResponse(
+              hasUkPropertyPrePop = true,
+              hasForeignPropertyPrePop = false
+            )))
+          )
+
+          running(application) {
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(
+                form = filledForm(Set(RentalIncome.Uk)),
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = true
+              )(request, messages(application)).toString
+          }
+        }
+
+        "[GET] should return the expected view when only pre-pop exists for an agent" in new GetWithPrePopAgentTest {
+          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+          mockPropertyConnectorGet(
+            result = Future.successful(Right(PropertyPrePopulationResponse(
+              hasUkPropertyPrePop = true,
+              hasForeignPropertyPrePop = false
+            )))
+          )
+
+          running(application) {
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              agentView(
+                form = filledForm(Set(RentalIncome.Uk)),
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = true
+              )(request, messages(application)).toString
+          }
+        }
+
+        "[GET] should return the expected view when user answers and pre-pop don't exist" in new GetWithPrePopTest {
+          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+          mockPropertyConnectorGet(
+            result = Future.successful(Right(PropertyPrePopulationResponse(
+              hasUkPropertyPrePop = false,
+              hasForeignPropertyPrePop = false
+            )))
+          )
+
+          running(application) {
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(
+                form = form,
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = false
+              )(request, messages(application)).toString
+          }
+        }
+
+        "[GET] should return the expected view when user answers and pre-pop don't exist for an agent" in new GetWithPrePopAgentTest {
+          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
+
+          mockPropertyConnectorGet(
+            result = Future.successful(Right(PropertyPrePopulationResponse(
+              hasUkPropertyPrePop = false,
+              hasForeignPropertyPrePop = false,
+            )))
+          )
+
+          running(application) {
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              agentView(
+                form = form,
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = false
+              )(request, messages(application)).toString
+          }
+        }
       }
     }
 
-    "must return a Bad Request and errors when invalid data is submitted" in {
+    "when trying to submit answers with a POST" -> {
+      trait SubmitRentalIncomeWithNoPrePopTest extends SubmitWithNoPrePopTest with RentalIncomeSubmitRequest
+      trait SubmitRentalIncomeWithNoPrePopAgentTest extends SubmitWithNoPrePopAgentTest with RentalIncomeSubmitRequest
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      "[POST] for a valid request should redirect to the next page" in new SubmitRentalIncomeWithNoPrePopTest {
+        val mockUserDataService: UserDataService = mock[UserDataService]
+        when(mockUserDataService.set(any(), any())(any())) thenReturn Future.successful(Done)
 
-      running(application) {
-        val request =
-          FakeRequest(POST, rentalIncomeRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
-            .withSession(validTaxYears)
+        override def applicationOverrides: Seq[GuiceableModule] = Seq(
+          inject.bind[Navigator].toInstance(new FakeNavigator(onwardRoute)),
+          inject.bind[UserDataService].toInstance(mockUserDataService)
+        )
 
-        val boundForm = form.bind(Map("value" -> "invalid value"))
-
-        val view = application.injector.instanceOf[RentalIncomeView]
-
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+        running(application) {
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual onwardRoute.url
+        }
       }
-    }
 
-    "must return a Bad Request and errors when invalid data is submitted for an agent" in {
+      "for a request with form errors" -> {
+        "[POST] should return expected view" in new SubmitWithNoPrePopTest {
+          override def formUrlEncodedBody: (String, String) = ("value", "invalid value")
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers), isAgent = true).build()
+          running(application) {
+            status(result) mustEqual BAD_REQUEST
 
-      running(application) {
-        val request =
-          FakeRequest(POST, rentalIncomeRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
-            .withSession(validTaxYears)
+            contentAsString(result) mustEqual
+              view(
+                form = boundForm,
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = false
+              )(request, messages(application)).toString
+          }
+        }
 
-        val boundForm = agentForm.bind(Map("value" -> "invalid value"))
+        "[POST] should return expected view for an agent" in new SubmitWithNoPrePopAgentTest {
+          override def formUrlEncodedBody: (String, String) = ("value", "invalid value")
 
-        val view = application.injector.instanceOf[RentalIncomeAgentView]
+          running(application) {
+            status(result) mustEqual BAD_REQUEST
 
-        val result = route(application, request).value
-
-        status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, NormalMode, taxYear, prePopData = false)(request, messages(application)).toString
+            contentAsString(result) mustEqual
+              agentView(
+                form = boundForm,
+                mode = NormalMode,
+                taxYear = taxYear,
+                prePopData = false
+              )(request, messages(application)).toString
+          }
+        }
       }
-    }
 
-    "must redirect to Journey Recovery for a GET if no existing data is found" in {
+      "[POST] must redirect to Journey Recovery if no existing data is found" in new SubmitRentalIncomeWithNoPrePopAgentTest {
+        override val userAnswers: Option[UserAnswers] = None
 
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request = FakeRequest(GET, rentalIncomeRoute).withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
-      }
-    }
-
-    "must redirect to Journey Recovery for a POST if no existing data is found" in {
-
-      val application = applicationBuilder(userAnswers = None).build()
-
-      running(application) {
-        val request =
-          FakeRequest(POST, rentalIncomeRoute)
-            .withFormUrlEncodedBody(("value[0]", RentalIncome.values.head.toString))
-            .withSession(validTaxYears)
-
-        val result = route(application, request).value
-
-        status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual controllers.routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear).url
+        running(application) {
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual journeyRecoveryUrl(taxYear)
+        }
       }
     }
   }

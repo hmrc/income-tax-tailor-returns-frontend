@@ -16,17 +16,20 @@
 
 package services
 
-import connectors.{ConnectorResponse, IncomeTaxCisConnector, StateBenefitsConnector, EmploymentConnector}
-import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, IncomeTaxCisPrePopulationResponse}
+import connectors.{ConnectorResponse, IncomeTaxCisConnector, PropertyConnector, StateBenefitsConnector, EmploymentConnector}
+import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, IncomeTaxCisPrePopulationResponse, PropertyPrePopulationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector,
-                                     cisConnector: IncomeTaxCisConnector,
-                                     employmentConnector: EmploymentConnector) {
+class PrePopulationService @Inject()(
+                                      stateBenefitsConnector: StateBenefitsConnector,
+                                      cisConnector: IncomeTaxCisConnector,
+                                      employmentConnector: EmploymentConnector,
+                                      propertyConnector: PropertyConnector
+                                    ) {
 
   def getEsaJsa(nino: String, taxYear: Int, mtdItId: String)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): ConnectorResponse[EsaJsaPrePopulationResponse] =
@@ -44,5 +47,9 @@ class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnec
   def getEmployment(nino: String, taxYear: Int, mtdItId: String)
                    (implicit hc: HeaderCarrier): ConnectorResponse[EmploymentPrePopulationResponse] = {
     employmentConnector.getPrePopulation(nino, taxYear, mtdItId)
+  }
+
+  def getProperty(nino: String, taxYear: Int, mtdItId: String)(implicit hc: HeaderCarrier): ConnectorResponse[PropertyPrePopulationResponse] = {
+    propertyConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 }

@@ -73,6 +73,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
    *             Required to retrieve pre-population data from HMRC HODs
    * @param taxYear The tax year associated with the current self-assessment tax submission being made.
    *                Required to retrieve pre-population data from HMRC HODs
+   * @param requestOverrideOpt An optional pre-existing data request model to be used for this request
    * @param mtdItId The unique MTD IT ID associated with a given NINO.
    *                Required for authorisation when making calls to ITSASS backend microservices
    * @param hc The header carrier. Contains relevant request headers
