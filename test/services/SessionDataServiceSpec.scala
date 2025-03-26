@@ -44,6 +44,46 @@ class SessionDataServiceSpec extends SpecBase
 
   val dummyError: APIErrorModel = APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", ""))
 
+  "getSessionData" -> {
+    "if session cookie service is enabled" -> {
+      "should return session data when it is returned from the session cookie service" in {
+        mockSessionServiceEnabled(true)
+        mockGetSessionData(Right(dummyResponse))
+
+        val result = await(testService.getSessionData())
+        result mustBe a[Right[_, _]]
+        result.getOrElse(None) mustBe dummyResponse
+      }
+
+      "should return None when no session data is returned from the session cookie service" in {
+        mockSessionServiceEnabled(true)
+        mockGetSessionData(Right(None))
+
+        val result = await(testService.getSessionData())
+        result mustBe a[Right[_, _]]
+        result.getOrElse(dummyResponse) mustBe None
+      }
+
+      "should return an error when an error is returned from the session cookie service" in {
+        mockSessionServiceEnabled(true)
+        mockGetSessionData(Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("", ""))))
+
+        val result = await(testService.getSessionData())
+        result mustBe a[Left[_, _]]
+      }
+    }
+
+    "if session cookie service is disabled" -> {
+      "should return None" in {
+        mockSessionServiceEnabled(false)
+
+        val result = await(testService.getSessionData())
+        result mustBe a[Right[_, _]]
+        result.getOrElse(dummyResponse) mustBe None
+      }
+    }
+  }
+
   "getNino" -> {
     "if session cookie service is enabled" -> {
       implicit val request: FakeRequest[AnyContentAsEmpty.type] =

@@ -16,30 +16,30 @@
 
 package mocks
 
-import org.scalamock.handlers.CallHandler3
+import org.scalamock.handlers.CallHandler2
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import play.api.mvc.Request
 import services.SessionDataService
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 trait MockSessionDataService extends MockFactory {this: TestSuite =>
   val mockSessionDataService: SessionDataService = mock[SessionDataService]
 
-  private type MockType = CallHandler3[Request[_], HeaderCarrier, ExecutionContext, Future[Either[Unit, String]]]
+  private type MockType = CallHandler2[Request[_], HeaderCarrier, Future[Either[Unit, String]]]
 
   def mockGetNino(result: Either[Unit, String]): MockType  =
     (mockSessionDataService
-      .getNino()(_: Request[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *)
+      .getNino()(_: Request[_], _: HeaderCarrier))
+      .expects(*, *)
       .returning(Future.successful(result))
 
   def mockGetNinoException(err: Throwable): MockType =
     (mockSessionDataService
-      .getNino()(_: Request[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *)
+      .getNino()(_: Request[_], _: HeaderCarrier))
+      .expects(*, *)
       .returning(Future.failed(err))
 }
 
