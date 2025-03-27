@@ -16,15 +16,17 @@
 
 package services
 
-import connectors.{ConnectorResponse, IncomeTaxCisConnector, StateBenefitsConnector}
-import models.prePopulation.{EsaJsaPrePopulationResponse, IncomeTaxCisPrePopulationResponse}
+import connectors.{ConnectorResponse, IncomeTaxCisConnector, StateBenefitsConnector, EmploymentConnector}
+import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, IncomeTaxCisPrePopulationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector, cisConnector: IncomeTaxCisConnector) {
+class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector,
+                                     cisConnector: IncomeTaxCisConnector,
+                                     employmentConnector: EmploymentConnector) {
 
   def getEsaJsa(nino: String, taxYear: Int, mtdItId: String)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): ConnectorResponse[EsaJsaPrePopulationResponse] =
@@ -34,7 +36,13 @@ class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnec
     } yield esaJsaResult
 
 
-  def getCis(nino: String, taxYear: Int,mtdItId: String)(implicit hc:HeaderCarrier):ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
+  def getCis(nino: String, taxYear: Int, mtdItId: String)
+            (implicit hc: HeaderCarrier): ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
     cisConnector.getPrePopulation(nino, taxYear, mtdItId)
+  }
+
+  def getEmployment(nino: String, taxYear: Int, mtdItId: String)
+                   (implicit hc: HeaderCarrier): ConnectorResponse[EmploymentPrePopulationResponse] = {
+    employmentConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 }

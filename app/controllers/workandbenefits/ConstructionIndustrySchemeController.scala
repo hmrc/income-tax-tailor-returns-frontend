@@ -62,7 +62,8 @@ class ConstructionIndustrySchemeController @Inject()(
 
   override val defaultPrePopulationResponse: IncomeTaxCisPrePopulationResponse = IncomeTaxCisPrePopulationResponse.empty
 
-  override protected def actionChain(taxYear: Int): ActionBuilder[DataRequest, AnyContent] =
+  override protected def actionChain(taxYear: Int,
+                                     requestOverrideOpt: Option[DataRequest[_]] = None): ActionBuilder[DataRequest, AnyContent] =
     identify(taxYear) andThen
       taxYearAction(taxYear) andThen
       getData(taxYear) andThen

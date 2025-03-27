@@ -19,11 +19,11 @@ package controllers
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
-import connectors.{ConnectorResponse, IncomeTaxCisConnector, SessionDataConnector, StateBenefitsConnector}
+import connectors.{ConnectorResponse, EmploymentConnector, IncomeTaxCisConnector, SessionDataConnector, StateBenefitsConnector}
 import forms.FormProvider
 import handlers.ErrorHandler
 import models.UserAnswers
-import models.prePopulation.StateBenefitsPrePopulationResponse
+import models.prePopulation.{EmploymentPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import models.session.SessionData
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
@@ -82,7 +82,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     def applicationBindings: Seq[GuiceableModule] = Nil
     def applicationOverrides: Seq[GuiceableModule] = Nil
 
-    def application: Application = applicationBuilder(userAnswers, isAgent)
+    lazy val application: Application = applicationBuilder(userAnswers, isAgent)
       .configure(isPrePopEnabled(prePopEnabled))
       .bindings(applicationBindings :_*)
       .overrides(applicationOverrides :_*)
@@ -105,6 +105,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
     val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
     val mockIncomeTaxCisConnector: IncomeTaxCisConnector = mock[IncomeTaxCisConnector]
+    val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
     val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
 
     val mockSessionDataService = new SessionDataService(
@@ -114,7 +115,8 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
 
     val mockPrePopulationService = new PrePopulationService(
       stateBenefitsConnector = mockStateBenefitsConnector,
-      cisConnector = mockIncomeTaxCisConnector
+      cisConnector = mockIncomeTaxCisConnector,
+      employmentConnector = mockEmploymentConnector
     )
 
     val mockErrorView: String = "This is some dummy error page"
@@ -136,6 +138,13 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
                                      ): OngoingStubbing[ConnectorResponse[StateBenefitsPrePopulationResponse]] =
       when(
         mockStateBenefitsConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
+      ).thenReturn(result)
+
+    def mockEmploymentsConnectorGet(
+                                     result: ConnectorResponse[EmploymentPrePopulationResponse]
+                                   ): OngoingStubbing[ConnectorResponse[EmploymentPrePopulationResponse]] =
+      when(
+        mockEmploymentConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
       ).thenReturn(result)
 
     override def applicationOverrides: Seq[GuiceableModule] = Seq(

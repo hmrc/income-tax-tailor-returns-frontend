@@ -16,8 +16,8 @@
 
 package mocks
 
-import connectors.{ConnectorResponse, HttpResult, StateBenefitsConnector}
-import models.prePopulation.StateBenefitsPrePopulationResponse
+import connectors.{ConnectorResponse, EmploymentConnector, HttpResult}
+import models.prePopulation.EmploymentPrePopulationResponse
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
@@ -25,26 +25,26 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-trait MockStateBenefitsConnector extends MockFactory { this: TestSuite =>
-  val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
+trait MockEmploymentConnector extends MockFactory { this: TestSuite =>
+  val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
 
   private type MockType = CallHandler4[String, Int, String, HeaderCarrier,
-    ConnectorResponse[StateBenefitsPrePopulationResponse]]
+    ConnectorResponse[EmploymentPrePopulationResponse]]
 
-  def mockGetStateBenefitsPrePopulation(nino: String,
-                                        taxYear: Int,
-                                        mtdItId: String,
-                                        response: HttpResult[StateBenefitsPrePopulationResponse]): MockType =
-    (mockStateBenefitsConnector
+  def mockGetEmploymentPrePopulation(nino: String,
+                                     taxYear: Int,
+                                     mtdItId: String,
+                                     response: HttpResult[EmploymentPrePopulationResponse]): MockType =
+    (mockEmploymentConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)
       .returning(Future.successful(response))
 
-  def mockGetStateBenefitsPrePopulationException(nino: String,
-                                                 taxYear: Int,
-                                                 mtdItId: String,
-                                                 ex: Throwable): MockType =
-    (mockStateBenefitsConnector
+  def mockGetEmploymentPrePopulationException(nino: String,
+                                              taxYear: Int,
+                                              mtdItId: String,
+                                              ex: Throwable): MockType =
+    (mockEmploymentConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)
       .returning(Future.failed(ex))
