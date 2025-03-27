@@ -19,7 +19,7 @@ package services
 import base.SpecBase
 import mocks.{MockCisConnector, MockEmploymentConnector, MockPropertyConnector, MockStateBenefitsConnector}
 import models.errors.SimpleErrorWrapper
-import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, IncomeTaxCisPrePopulationResponse, PropertyPrePopulationResponse, StateBenefitsPrePopulationResponse}
+import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, CisPrePopulationResponse, PropertyPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import play.api.http.Status.{IM_A_TEAPOT, INTERNAL_SERVER_ERROR}
 import play.api.test.DefaultAwaitTimeout
 import play.api.test.Helpers.await
@@ -65,10 +65,10 @@ class PrePopulationServiceSpec extends SpecBase
     hasEmployment = false
   )
 
-  val dummyCisResponse: IncomeTaxCisPrePopulationResponse = IncomeTaxCisPrePopulationResponse(
+  val dummyCisResponse: CisPrePopulationResponse = CisPrePopulationResponse(
     hasCis = true
   )
-  val emptyCisResponse: IncomeTaxCisPrePopulationResponse = IncomeTaxCisPrePopulationResponse(
+  val emptyCisResponse: CisPrePopulationResponse = CisPrePopulationResponse(
     hasCis = false
   )
 

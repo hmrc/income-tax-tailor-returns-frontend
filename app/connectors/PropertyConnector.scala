@@ -40,7 +40,7 @@ class PropertyConnector @Inject()(config: FrontendAppConfig, httpClient: HttpCli
 
     logger.info(
       secondaryContext = "[getPrePopulation]",
-      message = "Attempting to retrieve user's Property pre-pop data for property",
+      message = "Attempting to retrieve user's pre-pop data for property",
       dataLog = dataLogString(nino = nino, taxYear = taxYear)
     )
 

@@ -23,7 +23,7 @@ import controllers.actions._
 import forms.workandbenefits.ConstructionIndustrySchemeFormProvider
 import handlers.ErrorHandler
 import models.Mode
-import models.prePopulation.IncomeTaxCisPrePopulationResponse
+import models.prePopulation.CisPrePopulationResponse
 import models.requests.DataRequest
 import navigation.Navigator
 import pages.workandbenefits.ConstructionIndustrySchemePage
@@ -55,12 +55,12 @@ class ConstructionIndustrySchemeController @Inject()(
                                                       val config: FrontendAppConfig,
                                                       val errorHandler: ErrorHandler
                                                     )(implicit val ec: ExecutionContext)
-  extends ControllerWithPrePop[Boolean, IncomeTaxCisPrePopulationResponse]
+  extends ControllerWithPrePop[Boolean, CisPrePopulationResponse]
   with Logging {
 
   override protected val primaryContext: String = classOf[ConstructionIndustrySchemeController].getSimpleName
 
-  override val defaultPrePopulationResponse: IncomeTaxCisPrePopulationResponse = IncomeTaxCisPrePopulationResponse.empty
+  override val defaultPrePopulationResponse: CisPrePopulationResponse = CisPrePopulationResponse.empty
 
   override protected def actionChain(taxYear: Int,
                                      requestOverrideOpt: Option[DataRequest[_]] = None): ActionBuilder[DataRequest, AnyContent] =
@@ -76,7 +76,7 @@ class ConstructionIndustrySchemeController @Inject()(
   override protected def viewProvider(form: Form[_],
                                       mode: Mode,
                                       taxYear: Int,
-                                      prePopData: IncomeTaxCisPrePopulationResponse)
+                                      prePopData: CisPrePopulationResponse)
                                      (implicit request: DataRequest[_]): HtmlFormat.Appendable = {
     if (request.isAgent) {
       agentView(form, mode, taxYear, prePopData.hasCis)

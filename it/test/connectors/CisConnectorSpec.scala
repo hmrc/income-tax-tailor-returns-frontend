@@ -18,7 +18,7 @@ package connectors
 
 import generators.ModelGenerators
 import models.errors.{APIErrorBodyModel, SimpleErrorWrapper}
-import models.prePopulation.{IncomeTaxCisPrePopulationResponse, StateBenefitsPrePopulationResponse}
+import models.prePopulation.{CisPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -34,7 +34,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
-class IncomeTaxCisConnectorSpec
+class CisConnectorSpec
   extends AnyFreeSpec
     with WireMockHelper
     with ScalaFutures
@@ -55,15 +55,15 @@ class IncomeTaxCisConnectorSpec
   private val nino: String = "AA111111A"
   private val taxYear: Int = 2024
 
-  private lazy val connector = app.injector.instanceOf[IncomeTaxCisConnector]
+  private lazy val connector = app.injector.instanceOf[CisConnector]
   private val testUrl = s"/income-tax-cis/pre-population/$nino/$taxYear"
 
-  private val prePopResponse = IncomeTaxCisPrePopulationResponse(
+  private val prePopResponse = CisPrePopulationResponse(
     hasCis = true
   )
 
-  implicit val writes: OWrites[IncomeTaxCisPrePopulationResponse] =
-    Json.writes[IncomeTaxCisPrePopulationResponse]
+  implicit val writes: OWrites[CisPrePopulationResponse] =
+    Json.writes[CisPrePopulationResponse]
 
   private lazy val app: Application =
     new GuiceApplicationBuilder()
@@ -74,23 +74,23 @@ class IncomeTaxCisConnectorSpec
       .build()
 
 
-  "IncomeTaxCisConnector" - {
+  "CisConnector" - {
     "return pre population data when a success response is received" in {
       stubGet(testUrl, OK, Json.toJson(prePopResponse).toString())
-      val result: ConnectorResponse[IncomeTaxCisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
+      val result: ConnectorResponse[CisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
       result.futureValue shouldBe Right(prePopResponse)
     }
 
     "log failure when getPrePopulation returns invalid response" in {
       stubGet(testUrl, OK, Json.toJson(None).toString())
-      val result: ConnectorResponse[IncomeTaxCisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
+      val result: ConnectorResponse[CisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
       result.futureValue shouldBe Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR))
     }
 
     "log failure when getPrePopulation fails with some error" in {
       val serviceUnavailableError = APIErrorBodyModel("INTERNAL_SERVER_ERROR", "An error occurred")
       stubGet(testUrl, INTERNAL_SERVER_ERROR, Json.toJson(serviceUnavailableError).toString())
-      val result: ConnectorResponse[IncomeTaxCisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
+      val result: ConnectorResponse[CisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
       result.futureValue shouldBe Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR))
     }
   }

@@ -30,7 +30,7 @@ trait MockAppConfig extends MockFactory {this: TestSuite =>
       .expects()
       .returning(response)
 
-  def mockIncomeTaxCisBaseUrl(response: String): CallHandler0[String] =
+  def mockCisBaseUrl(response: String): CallHandler0[String] =
     (() => mockAppConfig.cisBaseUrl)
       .expects()
       .returning(response)

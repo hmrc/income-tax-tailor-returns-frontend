@@ -104,7 +104,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
     val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
     val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
-    val mockIncomeTaxCisConnector: IncomeTaxCisConnector = mock[IncomeTaxCisConnector]
+    val mockCisConnector: CisConnector = mock[CisConnector]
     val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
     val mockPropertyConnector: PropertyConnector = mock[PropertyConnector]
     val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
@@ -116,7 +116,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
 
     val mockPrePopulationService = new PrePopulationService(
       stateBenefitsConnector = mockStateBenefitsConnector,
-      cisConnector = mockIncomeTaxCisConnector,
+      cisConnector = mockCisConnector,
       employmentConnector = mockEmploymentConnector,
       propertyConnector = mockPropertyConnector
     )

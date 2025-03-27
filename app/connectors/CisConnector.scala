@@ -18,7 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import connectors.httpParsers.StandardGetHttpParser
-import models.prePopulation.IncomeTaxCisPrePopulationResponse
+import models.prePopulation.CisPrePopulationResponse
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, StringContextOps}
 import utils.Logging
@@ -28,25 +28,25 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class IncomeTaxCisConnector @Inject()(config: FrontendAppConfig, httpClient: HttpClientV2)
+class CisConnector @Inject()(config: FrontendAppConfig, httpClient: HttpClientV2)
                                      (implicit ec: ExecutionContext)
-  extends StandardGetHttpParser[IncomeTaxCisPrePopulationResponse]
+  extends StandardGetHttpParser[CisPrePopulationResponse]
   with Logging {
-  val primaryContext: String = classOf[IncomeTaxCisConnector].getSimpleName
+  val primaryContext: String = classOf[CisConnector].getSimpleName
 
   def getPrePopulation(nino: String, taxYear: Int, mtdItId:String)
-                      (implicit hc: HeaderCarrier): ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
+                      (implicit hc: HeaderCarrier): ConnectorResponse[CisPrePopulationResponse] = {
     val prePopulationUrl: URL = url"${config.cisBaseUrl}/pre-population/$nino/$taxYear"
 
     logger.info(
-      secondaryContext = "[IncomeTaxCis-getPrePopulation]",
-      message = "Attempting to retrieve user's cis pre-pop data ",
+      secondaryContext = "[getPrePopulation]",
+      message = "Attempting to retrieve user's pre-pop data for CIS",
       dataLog = dataLogString(nino = nino, taxYear = taxYear)
     )
 
     httpClient
       .get(prePopulationUrl)
       .setHeader(("mtditid", mtdItId))
-      .execute[HttpResult[IncomeTaxCisPrePopulationResponse]]
+      .execute[HttpResult[CisPrePopulationResponse]]
   }
 }

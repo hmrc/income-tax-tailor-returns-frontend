@@ -18,7 +18,7 @@ package controllers.workandbenefits
 
 import controllers.{ControllerWithPrePopSpecBase, routes}
 import forms.workandbenefits.ConstructionIndustrySchemeFormProvider
-import models.prePopulation.IncomeTaxCisPrePopulationResponse
+import models.prePopulation.CisPrePopulationResponse
 import models.{Done, NormalMode, SessionValues}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
@@ -65,8 +65,8 @@ class ConstructionIndustrySchemeControllerSpec extends
     override def defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
 
     when(
-      mockIncomeTaxCisConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
-    ).thenReturn(Future.successful(Right(IncomeTaxCisPrePopulationResponse(cis))))
+      mockCisConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
+    ).thenReturn(Future.successful(Right(CisPrePopulationResponse(cis))))
 
   }
   trait GETPrePropEnabledAgent extends GetWithPrePopAgentTest{
@@ -74,8 +74,8 @@ class ConstructionIndustrySchemeControllerSpec extends
     override def defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
 
     when(
-      mockIncomeTaxCisConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
-    ).thenReturn(Future.successful(Right(IncomeTaxCisPrePopulationResponse(true))))
+      mockCisConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
+    ).thenReturn(Future.successful(Right(CisPrePopulationResponse(true))))
 
   }
 

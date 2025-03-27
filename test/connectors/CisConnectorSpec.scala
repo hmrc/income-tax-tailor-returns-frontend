@@ -19,13 +19,13 @@ package connectors
 import base.SpecBase
 import mocks.{MockAppConfig, MockHttpClientV2}
 import models.errors.SimpleErrorWrapper
-import models.prePopulation.IncomeTaxCisPrePopulationResponse
+import models.prePopulation.CisPrePopulationResponse
 import play.api.http.Status.{IM_A_TEAPOT, INTERNAL_SERVER_ERROR}
 import play.api.test.DefaultAwaitTimeout
 import play.api.test.Helpers.await
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, StringContextOps}
 
-class IncomeTaxCisConnectorSpec extends SpecBase
+class CisConnectorSpec extends SpecBase
   with MockAppConfig
   with MockHttpClientV2
   with DefaultAwaitTimeout {
@@ -35,42 +35,42 @@ class IncomeTaxCisConnectorSpec extends SpecBase
 
     val nino: String = "AA111111A"
     val mtdItId: String = "111111"
-    val testConnector = new IncomeTaxCisConnector(
+    val testConnector = new CisConnector(
       config = mockAppConfig,
       httpClient = mockHttpClientV2
     )
 
-    implicit val httpReads: HttpReads[HttpResult[IncomeTaxCisPrePopulationResponse]] =
+    implicit val httpReads: HttpReads[HttpResult[CisPrePopulationResponse]] =
       testConnector.StandardGetHttpReads
 
-    val dummyResponse: IncomeTaxCisPrePopulationResponse = IncomeTaxCisPrePopulationResponse(
+    val dummyResponse: CisPrePopulationResponse = CisPrePopulationResponse(
       hasCis = true
     )
 
     val baseUrl = "http://test-BaseUrl"
-    mockIncomeTaxCisBaseUrl(response = baseUrl)
+    mockCisBaseUrl(response = baseUrl)
     mockHttpClientV2Get(url"$baseUrl/pre-population/$nino/$taxYear")
   }
 
   "getPrePopulation" -> {
     "should return a success when a success response is received from income tax cis backend" in new Test {
       mockHttpClientV2SetHeader()
-      mockHttpClientV2Execute[HttpResult[IncomeTaxCisPrePopulationResponse]](Right(dummyResponse))
+      mockHttpClientV2Execute[HttpResult[CisPrePopulationResponse]](Right(dummyResponse))
 
-      val result: Either[SimpleErrorWrapper, IncomeTaxCisPrePopulationResponse] =
+      val result: Either[SimpleErrorWrapper, CisPrePopulationResponse] =
         await(testConnector.getPrePopulation(nino, taxYear, mtdItId))
 
       result mustBe a[Right[_, _]]
-      result.getOrElse(IncomeTaxCisPrePopulationResponse.empty) mustBe dummyResponse
+      result.getOrElse(CisPrePopulationResponse.empty) mustBe dummyResponse
     }
 
     "should return an error when a success response is received from income tax cis backend" in new Test {
       mockHttpClientV2SetHeader()
-      mockHttpClientV2Execute[HttpResult[IncomeTaxCisPrePopulationResponse]](
+      mockHttpClientV2Execute[HttpResult[CisPrePopulationResponse]](
         Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR))
       )
 
-      val result: Either[SimpleErrorWrapper, IncomeTaxCisPrePopulationResponse] =
+      val result: Either[SimpleErrorWrapper, CisPrePopulationResponse] =
         await(testConnector.getPrePopulation(nino, taxYear, mtdItId))
 
       result mustBe a[Left[_, _]]
@@ -79,11 +79,11 @@ class IncomeTaxCisConnectorSpec extends SpecBase
 
     "should throw an exception when an exception occurs during call to income tax cis backend" in new Test {
       mockHttpClientV2SetHeader()
-      mockHttpClientV2ExecuteException[HttpResult[IncomeTaxCisPrePopulationResponse]](
+      mockHttpClientV2ExecuteException[HttpResult[CisPrePopulationResponse]](
         new RuntimeException()
       )
 
-      def result: Either[SimpleErrorWrapper, IncomeTaxCisPrePopulationResponse] =
+      def result: Either[SimpleErrorWrapper, CisPrePopulationResponse] =
         await(testConnector.getPrePopulation(nino, taxYear, mtdItId))
 
       assertThrows[RuntimeException](result)

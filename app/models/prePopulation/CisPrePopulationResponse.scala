@@ -18,7 +18,7 @@ package models.prePopulation
 
 import play.api.libs.json.{Json, Reads}
 
-case class IncomeTaxCisPrePopulationResponse (hasCis: Boolean) extends PrePopulationResponse[Boolean] {
+case class CisPrePopulationResponse (hasCis: Boolean) extends PrePopulationResponse[Boolean] {
   override def toPageModel: Boolean = hasCis
 
   override def toMessageString(isAgent:  Boolean): String = ""
@@ -26,8 +26,8 @@ case class IncomeTaxCisPrePopulationResponse (hasCis: Boolean) extends PrePopula
   override  val hasPrePop: Boolean = hasCis
 }
 
-object IncomeTaxCisPrePopulationResponse {
-  implicit val reads: Reads[IncomeTaxCisPrePopulationResponse] = Json.reads[IncomeTaxCisPrePopulationResponse]
+object CisPrePopulationResponse {
+  implicit val reads: Reads[CisPrePopulationResponse] = Json.reads[CisPrePopulationResponse]
 
-  val empty: IncomeTaxCisPrePopulationResponse = IncomeTaxCisPrePopulationResponse(hasCis = false)
+  val empty: CisPrePopulationResponse = CisPrePopulationResponse(hasCis = false)
 }

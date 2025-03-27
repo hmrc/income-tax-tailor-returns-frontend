@@ -17,7 +17,7 @@
 package mocks
 
 import connectors._
-import models.prePopulation.IncomeTaxCisPrePopulationResponse
+import models.prePopulation.CisPrePopulationResponse
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
@@ -26,15 +26,15 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 trait MockCisConnector extends MockFactory { this: TestSuite =>
-  val mockCisConnector: IncomeTaxCisConnector = mock[IncomeTaxCisConnector]
+  val mockCisConnector: CisConnector = mock[CisConnector]
 
   private type MockType = CallHandler4[String, Int, String, HeaderCarrier,
-    ConnectorResponse[IncomeTaxCisPrePopulationResponse]]
+    ConnectorResponse[CisPrePopulationResponse]]
 
   def mockGetCisPrePopulation(nino: String,
                               taxYear: Int,
                               mtdItId: String,
-                              response: HttpResult[IncomeTaxCisPrePopulationResponse]): MockType =
+                              response: HttpResult[CisPrePopulationResponse]): MockType =
     (mockCisConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)

@@ -16,8 +16,8 @@
 
 package services
 
-import connectors.{ConnectorResponse, IncomeTaxCisConnector, PropertyConnector, StateBenefitsConnector, EmploymentConnector}
-import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, IncomeTaxCisPrePopulationResponse, PropertyPrePopulationResponse}
+import connectors.{ConnectorResponse, CisConnector, PropertyConnector, StateBenefitsConnector, EmploymentConnector}
+import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, CisPrePopulationResponse, PropertyPrePopulationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -26,7 +26,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class PrePopulationService @Inject()(
                                       stateBenefitsConnector: StateBenefitsConnector,
-                                      cisConnector: IncomeTaxCisConnector,
+                                      cisConnector: CisConnector,
                                       employmentConnector: EmploymentConnector,
                                       propertyConnector: PropertyConnector
                                     ) {
@@ -40,7 +40,7 @@ class PrePopulationService @Inject()(
 
 
   def getCis(nino: String, taxYear: Int, mtdItId: String)
-            (implicit hc: HeaderCarrier): ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
+            (implicit hc: HeaderCarrier): ConnectorResponse[CisPrePopulationResponse] = {
     cisConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 
