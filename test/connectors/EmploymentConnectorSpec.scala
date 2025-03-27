@@ -49,7 +49,7 @@ class EmploymentConnectorSpec extends SpecBase
     )
 
     val baseUrl = "http://test-BaseUrl"
-    mockEmploymentUrl(response = baseUrl)
+    mockEmploymentBaseUrl(response = baseUrl)
     mockHttpClientV2Get(url"$baseUrl/pre-population/$nino/$taxYear")
   }
 
