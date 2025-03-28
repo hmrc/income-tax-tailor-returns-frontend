@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package connectors
 
 import generators.ModelGenerators
 import models.errors.{APIErrorBodyModel, SimpleErrorWrapper}
-import models.prePopulation.{IncomeTaxCisPrePopulationResponse, StateBenefitsPrePopulationResponse}
+import models.prePopulation.PropertyPrePopulationResponse
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -34,7 +34,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
-class IncomeTaxCisConnectorSpec
+class PropertyConnectorSpec
   extends AnyFreeSpec
     with WireMockHelper
     with ScalaFutures
@@ -55,42 +55,43 @@ class IncomeTaxCisConnectorSpec
   private val nino: String = "AA111111A"
   private val taxYear: Int = 2024
 
-  private lazy val connector = app.injector.instanceOf[IncomeTaxCisConnector]
-  private val testUrl = s"/income-tax-cis/pre-population/$nino/$taxYear"
+  private lazy val connector = app.injector.instanceOf[PropertyConnector]
+  private val testUrl = s"/income-tax-property/property/pre-population/$nino"
 
-  private val prePopResponse = IncomeTaxCisPrePopulationResponse(
-    hasCis = true
+  private val prePopResponse = PropertyPrePopulationResponse(
+    hasUkPropertyPrePop = true,
+    hasForeignPropertyPrePop = false
   )
 
-  implicit val writes: OWrites[IncomeTaxCisPrePopulationResponse] =
-    Json.writes[IncomeTaxCisPrePopulationResponse]
+  implicit val writes: OWrites[PropertyPrePopulationResponse] =
+    Json.writes[PropertyPrePopulationResponse]
 
   private lazy val app: Application =
     new GuiceApplicationBuilder()
       .configure(
-        "microservice.services.income-tax-cis.port" -> wireMockPort,
-        "microservice.services.income-tax-cis.url" -> s"http://localhost:$wireMockPort"
+        "microservice.services.income-tax-property.port" -> wireMockPort,
+        "microservice.services.income-tax-property.url" -> s"http://localhost:$wireMockPort"
       )
       .build()
 
 
-  "IncomeTaxCisConnector" - {
+  "PropertyConnector" - {
     "return pre population data when a success response is received" in {
       stubGet(testUrl, OK, Json.toJson(prePopResponse).toString())
-      val result: ConnectorResponse[IncomeTaxCisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
+      val result: ConnectorResponse[PropertyPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
       result.futureValue shouldBe Right(prePopResponse)
     }
 
     "log failure when getPrePopulation returns invalid response" in {
       stubGet(testUrl, OK, Json.toJson(None).toString())
-      val result: ConnectorResponse[IncomeTaxCisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
+      val result: ConnectorResponse[PropertyPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
       result.futureValue shouldBe Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR))
     }
 
     "log failure when getPrePopulation fails with some error" in {
       val serviceUnavailableError = APIErrorBodyModel("INTERNAL_SERVER_ERROR", "An error occurred")
       stubGet(testUrl, INTERNAL_SERVER_ERROR, Json.toJson(serviceUnavailableError).toString())
-      val result: ConnectorResponse[IncomeTaxCisPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
+      val result: ConnectorResponse[PropertyPrePopulationResponse] = connector.getPrePopulation(nino, taxYear, mtdItId)
       result.futureValue shouldBe Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR))
     }
   }

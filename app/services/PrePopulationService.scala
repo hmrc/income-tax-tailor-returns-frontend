@@ -16,17 +16,20 @@
 
 package services
 
-import connectors.{ConnectorResponse, IncomeTaxCisConnector, StateBenefitsConnector, EmploymentConnector}
-import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, IncomeTaxCisPrePopulationResponse}
+import connectors.{ConnectorResponse, CisConnector, PropertyConnector, StateBenefitsConnector, EmploymentConnector}
+import models.prePopulation.{EmploymentPrePopulationResponse, EsaJsaPrePopulationResponse, CisPrePopulationResponse, PropertyPrePopulationResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnector,
-                                     cisConnector: IncomeTaxCisConnector,
-                                     employmentConnector: EmploymentConnector) {
+class PrePopulationService @Inject()(
+                                      stateBenefitsConnector: StateBenefitsConnector,
+                                      cisConnector: CisConnector,
+                                      employmentConnector: EmploymentConnector,
+                                      propertyConnector: PropertyConnector
+                                    ) {
 
   def getEsaJsa(nino: String, taxYear: Int, mtdItId: String)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): ConnectorResponse[EsaJsaPrePopulationResponse] =
@@ -37,12 +40,16 @@ class PrePopulationService @Inject()(stateBenefitsConnector: StateBenefitsConnec
 
 
   def getCis(nino: String, taxYear: Int, mtdItId: String)
-            (implicit hc: HeaderCarrier): ConnectorResponse[IncomeTaxCisPrePopulationResponse] = {
+            (implicit hc: HeaderCarrier): ConnectorResponse[CisPrePopulationResponse] = {
     cisConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 
   def getEmployment(nino: String, taxYear: Int, mtdItId: String)
                    (implicit hc: HeaderCarrier): ConnectorResponse[EmploymentPrePopulationResponse] = {
     employmentConnector.getPrePopulation(nino, taxYear, mtdItId)
+  }
+
+  def getProperty(nino: String, taxYear: Int, mtdItId: String)(implicit hc: HeaderCarrier): ConnectorResponse[PropertyPrePopulationResponse] = {
+    propertyConnector.getPrePopulation(nino, taxYear, mtdItId)
   }
 }

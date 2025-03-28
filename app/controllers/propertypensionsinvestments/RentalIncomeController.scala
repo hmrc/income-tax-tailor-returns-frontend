@@ -17,73 +17,89 @@
 package controllers.propertypensionsinvestments
 
 import config.FrontendAppConfig
+import controllers.ControllerWithPrePop
 import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.propertypensionsinvestments.RentalIncomeFormProvider
+import handlers.ErrorHandler
 import models.Mode
+import models.prePopulation.PropertyPrePopulationResponse
 import models.propertypensionsinvestments.RentalIncome
+import models.requests.DataRequest
 import navigation.Navigator
 import pages.propertypensionsinvestments.RentalIncomePage
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.UserDataService
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import play.api.i18n.MessagesApi
+import play.api.mvc._
+import play.twirl.api.HtmlFormat
+import services.{PrePopulationService, SessionDataService, UserDataService}
+import uk.gov.hmrc.http.HeaderCarrier
+import utils.Logging
 import views.html.propertypensionsinvestments.{RentalIncomeAgentView, RentalIncomeView}
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class RentalIncomeController @Inject()(
                                         override val messagesApi: MessagesApi,
-                                        userDataService: UserDataService,
-                                        config: FrontendAppConfig,
-                                        navigator: Navigator,
-                                        identify: IdentifierActionProvider,
-                                        getData: DataRetrievalActionProvider,
-                                        requireData: DataRequiredActionProvider,
-                                        formProvider: RentalIncomeFormProvider,
+                                        val userDataService: UserDataService,
+                                        prePopService: PrePopulationService,
+                                        val ninoRetrievalService: SessionDataService,
+                                        val config: FrontendAppConfig,
+                                        val navigator: Navigator,
+                                        val identify: IdentifierActionProvider,
+                                        val getData: DataRetrievalActionProvider,
+                                        val requireData: DataRequiredActionProvider,
+                                        val formProvider: RentalIncomeFormProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: RentalIncomeView,
-                                        agentView: RentalIncomeAgentView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                        agentView: RentalIncomeAgentView,
+                                        val errorHandler: ErrorHandler
+                                      )(implicit val ec: ExecutionContext) extends ControllerWithPrePop[Set[RentalIncome], PropertyPrePopulationResponse] with Logging {
 
-  def form(isAgent: Boolean): Form[Set[RentalIncome]] = formProvider(isAgent)
-  def prePopCheck(prePopData: Boolean): Boolean = if (config.isPrePopEnabled) prePopData else false
+  override protected val primaryContext: String = classOf[RentalIncomeController].getSimpleName
 
-  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)) {
-    implicit request =>
+  override val defaultPrePopulationResponse: PropertyPrePopulationResponse = PropertyPrePopulationResponse.empty
 
-      val preparedForm = request.userAnswers.get(RentalIncomePage) match {
-        case None => form(request.isAgent)
-        case Some(value) => form(request.isAgent).fill(value)
-      }
+  override protected def actionChain(taxYear: Int,
+                                     requestOverrideOpt: Option[DataRequest[_]] = None): ActionBuilder[DataRequest, AnyContent] =
+    identify(taxYear) andThen
+      taxYearAction(taxYear) andThen
+      getData(taxYear) andThen
+      requireData(taxYear)
 
-      if (request.isAgent) {
-        Ok(agentView(preparedForm, mode, taxYear, prePopCheck(preparedForm.value.isDefined)))
-      } else {
-        Ok(view(preparedForm, mode, taxYear, prePopCheck(preparedForm.value.isDefined)))
-      }
+  override protected def prePopRetrievalAction(nino: String, taxYear: Int, mtdItId: String)
+                                              (implicit hc: HeaderCarrier): PrePopResult =
+    () => prePopService.getProperty(nino, taxYear, mtdItId)
+
+  override protected def viewProvider(form: Form[_],
+                                      mode: Mode,
+                                      taxYear: Int,
+                                      prePopData: PropertyPrePopulationResponse)
+                                     (implicit request: DataRequest[_]): HtmlFormat.Appendable = {
+    if (request.isAgent) {
+      agentView(form, mode, taxYear, prePopData.hasPrePop)
+    } else {
+      view(form, mode, taxYear, prePopData.hasPrePop)
+    }
   }
 
-  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] =
-    (identify(taxYear) andThen taxYearAction(taxYear) andThen getData(taxYear) andThen requireData(taxYear)).async {
-    implicit request =>
+  private val pageName = classOf[RentalIncomeController].getSimpleName
+  val incomeType = "property"
 
-      form(request.isAgent).bindFromRequest().fold(
-        formWithErrors =>
-          if (request.isAgent) {
-            Future.successful(BadRequest(agentView(formWithErrors, mode, taxYear, prePopCheck(formWithErrors.value.isDefined))))
-          } else {
-            Future.successful(BadRequest(view(formWithErrors, mode, taxYear, prePopCheck(formWithErrors.value.isDefined))))
-          },
+  def onPageLoad(mode: Mode, taxYear: Int): Action[AnyContent] = onPageLoad(
+    pageName = pageName,
+    incomeType = incomeType,
+    page = RentalIncomePage,
+    mode = mode,
+    taxYear = taxYear
+  )
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RentalIncomePage, value))
-            _              <- userDataService.set(updatedAnswers, request.userAnswers)
-          } yield Redirect(navigator.nextPage(RentalIncomePage, mode, updatedAnswers))
-      )
-  }
+  def onSubmit(mode: Mode, taxYear: Int): Action[AnyContent] = onSubmit(
+    pageName = pageName,
+    incomeType = incomeType,
+    page = RentalIncomePage,
+    mode = mode,
+    taxYear = taxYear
+  )
 }

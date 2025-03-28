@@ -17,7 +17,7 @@
 package mocks
 
 import connectors._
-import models.prePopulation.CisPrePopulationResponse
+import models.prePopulation.PropertyPrePopulationResponse
 import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
@@ -25,26 +25,26 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-trait MockCisConnector extends MockFactory { this: TestSuite =>
-  val mockCisConnector: CisConnector = mock[CisConnector]
+trait MockPropertyConnector extends MockFactory { this: TestSuite =>
+  val mockPropertyConnector: PropertyConnector = mock[PropertyConnector]
 
   private type MockType = CallHandler4[String, Int, String, HeaderCarrier,
-    ConnectorResponse[CisPrePopulationResponse]]
+    ConnectorResponse[PropertyPrePopulationResponse]]
 
-  def mockGetCisPrePopulation(nino: String,
-                              taxYear: Int,
-                              mtdItId: String,
-                              response: HttpResult[CisPrePopulationResponse]): MockType =
-    (mockCisConnector
+  def mockGetPropertyPrePopulation(nino: String,
+                           taxYear: Int,
+                           mtdItId: String,
+                           response: HttpResult[PropertyPrePopulationResponse]): MockType =
+    (mockPropertyConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)
       .returning(Future.successful(response))
 
-  def mockGetCisPrePopulationException(nino: String,
-                                       taxYear: Int,
-                                       mtdItId: String,
-                                       ex: Throwable): MockType =
-    (mockCisConnector
+  def mockGetPropertyPrePopulationException(nino: String,
+                                    taxYear: Int,
+                                    mtdItId: String,
+                                    ex: Throwable): MockType =
+    (mockPropertyConnector
       .getPrePopulation(_: String, _: Int, _: String)(_: HeaderCarrier))
       .expects(nino, taxYear, mtdItId, *)
       .returning(Future.failed(ex))

@@ -19,11 +19,11 @@ package controllers
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
-import connectors.{ConnectorResponse, EmploymentConnector, IncomeTaxCisConnector, SessionDataConnector, StateBenefitsConnector}
+import connectors._
 import forms.FormProvider
 import handlers.ErrorHandler
 import models.UserAnswers
-import models.prePopulation.{EmploymentPrePopulationResponse, StateBenefitsPrePopulationResponse}
+import models.prePopulation.{EmploymentPrePopulationResponse, PropertyPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import models.session.SessionData
 import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
@@ -104,8 +104,9 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
     val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
     val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
-    val mockIncomeTaxCisConnector: IncomeTaxCisConnector = mock[IncomeTaxCisConnector]
+    val mockCisConnector: CisConnector = mock[CisConnector]
     val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
+    val mockPropertyConnector: PropertyConnector = mock[PropertyConnector]
     val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
 
     val mockSessionDataService = new SessionDataService(
@@ -115,8 +116,9 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
 
     val mockPrePopulationService = new PrePopulationService(
       stateBenefitsConnector = mockStateBenefitsConnector,
-      cisConnector = mockIncomeTaxCisConnector,
-      employmentConnector = mockEmploymentConnector
+      cisConnector = mockCisConnector,
+      employmentConnector = mockEmploymentConnector,
+      propertyConnector = mockPropertyConnector
     )
 
     val mockErrorView: String = "This is some dummy error page"
@@ -145,6 +147,13 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
                                    ): OngoingStubbing[ConnectorResponse[EmploymentPrePopulationResponse]] =
       when(
         mockEmploymentConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
+      ).thenReturn(result)
+
+    def mockPropertyConnectorGet(
+                                       result: ConnectorResponse[PropertyPrePopulationResponse]
+                                     ): OngoingStubbing[ConnectorResponse[PropertyPrePopulationResponse]] =
+      when(
+        mockPropertyConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
       ).thenReturn(result)
 
     override def applicationOverrides: Seq[GuiceableModule] = Seq(

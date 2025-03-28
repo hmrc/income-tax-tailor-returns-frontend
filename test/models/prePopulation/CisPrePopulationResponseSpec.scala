@@ -19,34 +19,38 @@ package models.prePopulation
 import base.SpecBase
 import org.scalatest.Assertion
 
-class IncomeTaxCisPrePopulationResponseSpec extends SpecBase {
+class CisPrePopulationResponseSpec extends SpecBase {
 
   "hasPrePop" -> {
     "should return true when pre-pop is true" in {
-      IncomeTaxCisPrePopulationResponse(hasCis = true).hasCis mustBe true
+      CisPrePopulationResponse(hasCis = true).hasCis mustBe true
+    }
+
+    "should return false when pre-pop is false" in {
+      CisPrePopulationResponse(hasCis = false).hasCis mustBe false
     }
   }
 
   "toPageModel" -> {
     "when hasCis true" in {
-      IncomeTaxCisPrePopulationResponse(hasCis = true).toPageModel mustBe true
+      CisPrePopulationResponse(hasCis = true).toPageModel mustBe true
+    }
+
+    "when hasCis false" in {
+      CisPrePopulationResponse(hasCis = false).toPageModel mustBe false
     }
   }
 
   "toMessageString" -> {
     val testVals = Seq(
-      (true, true ),
+      (true, true),
       (true, false),
       (false, true),
-      (false, false),
-      (false, true),
-      (false, true),
-      (false, false),
       (false, false)
     )
 
     def testScenario(isAgent: Boolean, hasCis: Boolean): Assertion =
-      IncomeTaxCisPrePopulationResponse(
+      CisPrePopulationResponse(
         hasCis = hasCis
       ).toMessageString(isAgent) mustBe ""
 

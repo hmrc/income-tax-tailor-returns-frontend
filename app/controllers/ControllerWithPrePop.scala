@@ -69,13 +69,13 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
   /**
    * Any class which implements ControllerWithPrePop must define some function which can be called to retrieve
    * pre-population data R. This method returns that function for a given user's details
-   * @param nino The NINO associated with the current self-assessment tax submission being made.
-   *             Required to retrieve pre-population data from HMRC HODs
+   * @param nino    The NINO associated with the current self-assessment tax submission being made.
+   *                Required to retrieve pre-population data from HMRC HODs
    * @param taxYear The tax year associated with the current self-assessment tax submission being made.
    *                Required to retrieve pre-population data from HMRC HODs
    * @param mtdItId The unique MTD IT ID associated with a given NINO.
    *                Required for authorisation when making calls to ITSASS backend microservices
-   * @param hc The header carrier. Contains relevant request headers
+   * @param hc      The header carrier. Contains relevant request headers
    * @return A function which, when called, will return a Future containing either an error expressed as an instance of
    *         SimpleErrorWrapper, or pre-population data expressed as an instance of R
    */
