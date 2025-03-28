@@ -16,9 +16,9 @@
 
 package models.requests
 
+import models.session.SessionData
 import play.api.mvc.{Request, WrappedRequest}
 
 case class IdentifierRequest[A] (request: Request[A],
-                                 mtdItId: String,
-                                 isAgent: Boolean
-                                ) extends WrappedRequest[A](request)
+                                 sessionData: SessionData,
+                                 isAgent: Boolean) extends WrappedRequest[A](request)

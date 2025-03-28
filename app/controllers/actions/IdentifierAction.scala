@@ -16,6 +16,7 @@
 
 package controllers.actions
 
+import cats.data.EitherT
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import connectors.SessionDataConnector
@@ -26,6 +27,7 @@ import models.session.SessionData
 import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
+import services.SessionDataService
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
@@ -43,17 +45,16 @@ trait IdentifierActionProvider {
 
 class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
                                              config: FrontendAppConfig,
-                                             sessionDataConnector: SessionDataConnector,
+                                             sessionDataService: SessionDataService,
                                              parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
-
-  def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(authConnector, config, sessionDataConnector, parser)
+  def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(authConnector, config, sessionDataService, parser)
 }
 
 class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                              (override val authConnector: AuthConnector,
                                               config: FrontendAppConfig,
-                                              sessionDataConnector: SessionDataConnector,
+                                              sessionDataService: SessionDataService,
                                               val parser: BodyParsers.Default)
                                              (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions with Logging {
@@ -81,9 +82,9 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
 
     authorised().retrieve(affinityGroup and allEnrolments and confidenceLevel) {
       case Some(AffinityGroup.Individual) ~ enrolments ~ confidenceLevel =>
-        authorized(request, block, enrolments, confidenceLevel)
+        authorized(request, block, enrolments, confidenceLevel, Redirect(config.signUpUrlIndividual), withFallback = true)
       case Some(AffinityGroup.Organisation) ~ enrolments ~ confidenceLevel =>
-        authorized(request, block, enrolments, confidenceLevel)
+        authorized(request, block, enrolments, confidenceLevel, Redirect(config.signUpUrlIndividual), withFallback = true)
       case Some(AffinityGroup.Agent) ~ enrolments ~ _ =>
         agentAuth(request, block, enrolments)
       case _ =>
@@ -99,8 +100,47 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     }
   }
 
-  private def authorized[A](request: Request[A], block: IdentifierRequest[A] => Future[Result],
-                            enrolments: Enrolments, confidenceLevel: ConfidenceLevel): Future[Result] = {
+  private def authorized[A](request: Request[A],
+                            block: IdentifierRequest[A] => Future[Result],
+                            enrolments: Enrolments,
+                            confidenceLevel: ConfidenceLevel,
+                            errorResult: Result,
+                            withFallback: Boolean): Future[Result] = {
+    if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
+      val hc = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+
+      EitherT(sessionDataService.getSessionData()(hc))
+        .subflatMap(dataOpt => dataOpt.fold(Left[Unit, SessionData]().withRight)(data => Right(data)))
+        .swap.subflatMap { _ =>
+          if (withFallback) /* Insert config feature switch */ {
+            val mtdItIdOpt = getMtdItId(enrolments)
+            val ninoOpt = Some("")
+            val sessionIdOpt = Some("")
+            val utrOpt = Some("")
+
+            (mtdItIdOpt, ninoOpt, sessionIdOpt, utrOpt) match {
+              case (Some(mtdId), Some(nino), Some(sessionId), Some(utr)) =>
+                Left(SessionData(mtdId, nino, utr, sessionId))
+              case _ =>
+                Right(errorResult)
+            }
+          } else {
+            // If the session cookie service fails and there is no fallback enabled
+            Right(errorResult)
+          }
+        }
+        .swap
+        .semiflatMap(data => block(IdentifierRequest(request, data, isAgent = false)))
+        .merge
+    } else {
+      Future.successful(Redirect(config.incomeTaxSubmissionIvRedirect))
+    }
+  }
+
+/*  private def authorized[A](request: Request[A],
+                            block: IdentifierRequest[A] => Future[Result],
+                            enrolments: Enrolments,
+                            confidenceLevel: ConfidenceLevel): Future[Result] = {
     if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
       getMtdItId(enrolments) match {
         case Some(mtdItId) =>
@@ -112,9 +152,9 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
     } else {
       Future.successful(Redirect(config.incomeTaxSubmissionIvRedirect))
     }
-  }
+  }*/
 
-  private def getSessionData(request: Request[_])(implicit hc: HeaderCarrier): Future[Option[SessionData]] = {
+/*  private def getSessionData(request: Request[_])(implicit hc: HeaderCarrier): Future[Option[SessionData]] = {
     if (config.sessionCookieServiceEnabled) {
       sessionDataConnector.getSessionData.map {
         case Left(_) =>
@@ -129,7 +169,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
         request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
       }
     }
-  }
+  }*/
 
   def predicate(mtdId: String): Predicate =
     HMRCEnrolment("HMRC-MTD-IT")
@@ -144,24 +184,27 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
   private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments)
                           (implicit hc: HeaderCarrier): Future[Result] = {
 
-    getSessionData(request).flatMap {
-      case Some(sessionData) =>
+    authorized(
+      request = request,
+      block = (req: IdentifierRequest[A]) => {
         authorisedAgentServices(enrolments) match {
           case Some(_) =>
-            authorised(predicate(sessionData.mtditid)){
+            authorised(predicate(req.sessionData.mtditid)){
               logger.info(s"[AuthorisedAction][agentAuthentication] - authorised as Primary Agent")
-              block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
+              block(req)
             }.recoverWith{
-              agentRecovery(sessionData.mtditid)
+              agentRecovery(req.sessionData.mtditid)
             }
           case None =>
             logger.warn("User did not have HMRC-AS-AGENT enrolment ")
             Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
         }
-      case None =>
-        logger.warn("Session data not found")
-        Future.successful(Redirect(config.viewAndChangeEnterUtrUrl))
-    }
+      },
+      enrolments = enrolments,
+      confidenceLevel = ???,
+      errorResult = Redirect(config.viewAndChangeEnterUtrUrl),
+      withFallback = false
+    )
   }
 
   private def agentRecovery[A](mtdItId: String)
