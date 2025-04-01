@@ -38,9 +38,9 @@ class SessionDataServiceSpec extends SpecBase
     config = mockAppConfig
   )
 
-  val dummyResponse: Option[SessionData] = Some(SessionData(
+  val dummyResponse: SessionData = SessionData(
     mtditid = "111111", nino = "AA111111A", utr = "123456", sessionId = "xxxxxxx"
-  ))
+  )
 
   val dummyError: APIErrorModel = APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", ""))
 
@@ -49,7 +49,7 @@ class SessionDataServiceSpec extends SpecBase
       implicit val request: FakeRequest[AnyContentAsEmpty.type] =
         FakeRequest.apply("", "").withSession("ClientNino" -> "value")
       "should return NINO when call to session cookie service is successful" in {
-        mockGetSessionData(Right(dummyResponse))
+        mockGetSessionData(Right(Some(dummyResponse)))
         mockSessionServiceEnabled(true)
         val result = await(testService.getNino())
 
@@ -112,6 +112,44 @@ class SessionDataServiceSpec extends SpecBase
         mockSessionServiceEnabled(false)
         val result = await(testService.getNino())
 
+        result mustBe a[Left[_, _]]
+      }
+    }
+  }
+
+  "getSessionData" -> {
+    "if session cookie service is enabled" -> {
+      "should return session data when it is returned from the session cookie service" in {
+        mockSessionServiceEnabled(true)
+        mockGetSessionData(Right(Some(dummyResponse)))
+
+        val result = await(testService.getSessionData())
+        result mustBe a[Right[_, _]]
+        result.getOrElse(SessionData.empty) mustBe dummyResponse
+      }
+
+      "should return an error when no session data is returned from the session cookie service" in {
+        mockSessionServiceEnabled(true)
+        mockGetSessionData(Right(None))
+
+        val result = await(testService.getSessionData())
+        result mustBe a[Left[_, _]]
+      }
+
+      "should return an error when an error is returned from the session cookie service" in {
+        mockSessionServiceEnabled(true)
+        mockGetSessionData(Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("", ""))))
+
+        val result = await(testService.getSessionData())
+        result mustBe a[Left[_, _]]
+      }
+    }
+
+    "if session cookie service is disabled" -> {
+      "should return an error" in {
+        mockSessionServiceEnabled(false)
+
+        val result = await(testService.getSessionData())
         result mustBe a[Left[_, _]]
       }
     }

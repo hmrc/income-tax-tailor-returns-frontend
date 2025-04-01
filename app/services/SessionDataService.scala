@@ -54,6 +54,7 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector,
         Right(sessionVal)
       }
 
+  // TODO: Remove this method once session data is properly integrated into request models
   def getNino()(implicit request: Request[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Unit, String]] = {
     val methodLoggingContext: String = "getNino"
     val infoLogger: String => Unit = infoLog(methodLoggingContext)
@@ -99,5 +100,35 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector,
     }
 
     result.value
+  }
+
+  def getSessionData()(implicit hc: HeaderCarrier): Future[Either[Unit, SessionData]] = {
+    val methodLoggingContext: String = "getSessionData"
+    val infoLogger: String => Unit = infoLog(methodLoggingContext)
+    val errorLogger: String => Unit = errorLog(methodLoggingContext)
+
+    infoLogger("Attempting to retrieve session data for request")
+
+    if (config.sessionCookieServiceEnabled) {
+      infoLogger("Session cookie service is enabled. Attempting to retrieve session data")
+
+      sessionDataCacheResult
+        .leftMap(err => errorLogger(
+          s"Request to retrieve session data failed with error status: ${err.status} and error body: ${err.body}"
+        ))
+        .subflatMap(_.fold {
+          warnLog(methodLoggingContext)("Session cookie service returned empty data. Returning error outcome")
+          Left().withRight[SessionData]
+        }(
+          data => {
+            infoLogger("Session data successfully retrieved from session cookie service. Returning data")
+            Right(data)
+          }
+        )
+        ).value
+    } else {
+      infoLogger("Session cookie service disabled. Returning error outcome")
+      Future.successful(Left())
+    }
   }
 }
