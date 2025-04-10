@@ -38,7 +38,7 @@ class TaxYearAction @Inject()(taxYear: Int)
     }
 
     if (isValidYear) {
-      Future.successful(Right(IdentifierRequest(request.request, request.mtdItId, request.isAgent)))
+      Future.successful(Right(request))
     } else {
       logger.info(s"[TaxYearAction][refine] Invalid tax year, redirecting to error page")
       // todo should redirect to where user selects taxYear
@@ -48,6 +48,5 @@ class TaxYearAction @Inject()(taxYear: Int)
 }
 
 object TaxYearAction {
-  def taxYearAction(taxYear: Int)(implicit ec: ExecutionContext): TaxYearAction =
-    new TaxYearAction(taxYear)
+  def taxYearAction(taxYear: Int)(implicit ec: ExecutionContext): TaxYearAction = new TaxYearAction(taxYear)
 }

@@ -37,8 +37,10 @@ class TaxYearActionSpec extends SpecBase with MockitoSugar {
   }
 
   "TaxYearAction" - {
-
-    val identifierRequest = IdentifierRequest(FakeRequest().withSession(validTaxYears), "mtdItId", isAgent = false)
+    val identifierRequest = testIdentifierRequest(
+      request = FakeRequest().withSession(validTaxYears),
+      isAgent = false
+    )
 
     "when provided a taxYear INSIDE of a valid range" - {
 
