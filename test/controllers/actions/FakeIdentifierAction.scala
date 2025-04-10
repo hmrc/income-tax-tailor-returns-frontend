@@ -22,15 +22,23 @@ import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 
+class FakeIdentifierAction @Inject()(isAgent: Boolean)
+                                    (bodyParsers: PlayBodyParsers) extends IdentifierActionProvider {
 
-class FakeIdentifierAction @Inject()(isAgent: Boolean)(bodyParsers: PlayBodyParsers) extends IdentifierActionProvider {
-  override def apply(taxYear: Int): IdentifierAction = new IdentifierAction{
+  override def apply(taxYear: Int): IdentifierAction = new IdentifierAction {
     override def parser: BodyParser[AnyContent] = bodyParsers.default
 
-    override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-      block(IdentifierRequest(request, "mtdItId", isAgent))
+    override def invokeBlock[A](request: Request[A],
+                                block: IdentifierRequest[A] => Future[Result]): Future[Result] =
+      block(IdentifierRequest(
+        request = request,
+        nino = "AA111111A",
+        mtditid = "mtdItId",
+        sessionId = "some-session-id",
+        utr = "some-utr",
+        isAgent = isAgent
+      ))
 
-    override protected def executionContext: ExecutionContext =
-      scala.concurrent.ExecutionContext.Implicits.global
+    override protected def executionContext: ExecutionContext = ExecutionContext.Implicits.global
   }
 }
