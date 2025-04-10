@@ -20,9 +20,8 @@ import cats.data.EitherT
 import config.FrontendAppConfig
 import connectors.SessionDataConnector
 import models.SessionValues
-import models.errors.APIErrorModel
 import models.session.SessionData
-import play.api.mvc.Request
+import play.api.mvc.{Request, Result}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 
@@ -36,83 +35,48 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector,
 
   override protected val primaryContext: String = "NinoRetrievalService"
 
-  private def sessionDataCacheResult(implicit hc: HeaderCarrier): EitherT[Future, APIErrorModel, Option[SessionData]] =
-    EitherT(sessionDataConnector.getSessionData)
+  protected[services] def getFallbackSessionData[A](extraLoggingContext: Option[String])
+                                                   (implicit request: Request[A]): Either[Unit, SessionData] = {
+    val methodLoggingContext: String = "fallbackSessionData"
+    val infoLogger = infoLog(methodLoggingContext, extraContext = extraLoggingContext)
+    val warnLogger = warnLog(methodLoggingContext, extraContext = extraLoggingContext)
 
-  protected[services] def sessionValOpt(key: String,
-                                        valName: String,
-                                        infoLogger: String => Unit,
-                                        errorLogger: String => Unit)
-                                       (implicit request: Request[_]): Either[Unit, String] =
-    request
-      .session.get(key)
-      .fold {
-        errorLogger(s"No $valName was found in local session data")
-        Left[Unit, String]().withRight
-      } { sessionVal =>
-        infoLogger(s"Successfully retrieved $valName: $sessionVal from local session data")
-        Right(sessionVal)
+    if (config.sessionFallbackEnabled) {
+      infoLogger("HTTP Session fallback enabled. Attempting to retrieve session data from request")
+
+      val optionalNino = request.session.get(SessionValues.CLIENT_NINO)
+      val optionalMtdItId = request.session.get(SessionValues.CLIENT_MTDITID)
+      val utr = "" //I don't think we need these right now
+      val sessionId = "" //I don't think we need these right now
+
+      (optionalNino, optionalMtdItId) match {
+        case (Some(nino), Some(mtdItId)) => Right(SessionData(mtdItId, nino, utr, sessionId))
+        case _ =>
+          val logString: String =
+            (optionalNino.fold(Seq("NINO"))(_ => Seq.empty[String]) ++
+              optionalMtdItId.fold(Seq("MTD-IT-ID"))(_ => Seq.empty[String]))
+              .mkString(", ")
+
+          warnLogger(s"Could not find $logString in request session. Returning an error")
+          Left()
       }
-
-  // TODO: Remove this method once session data is properly integrated into request models
-  def getNino()(implicit request: Request[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Unit, String]] = {
-    val methodLoggingContext: String = "getNino"
-    val infoLogger: String => Unit = infoLog(methodLoggingContext)
-    val errorLogger: String => Unit = errorLog(methodLoggingContext)
-    val warnLogger: String => Unit = warnLog(methodLoggingContext)
-
-    infoLogger("Attempting to retrieve NINO for request")
-
-    lazy val sessionNinoOpt: Either[Unit, String] = sessionValOpt(
-      key = SessionValues.CLIENT_NINO,
-      valName = "NINO",
-      infoLogger = infoLogger,
-      errorLogger = errorLogger
-    )
-
-    val result = if (config.sessionCookieServiceEnabled) {
-      infoLogger("Session cookie service is enabled. Attempting to retrieve session data")
-
-      sessionDataCacheResult
-        .leftMap(err => errorLogger(
-          s"Request to retrieve session data failed with error status: ${err.status} and error body: ${err.body}"
-        ))
-        .flatMap { sessionDataOpt =>
-          infoLogger("Request to retrieve session data from session cookie service completed successfully")
-
-          EitherT(Future.successful(
-            sessionDataOpt.fold {
-              warnLogger("Session cookie service returned an empty session data object")
-              Left[Unit, String]().withRight
-            }(sessionData => {
-              infoLogger(s"Successfully extracted NINO: ${sessionData.nino} from session data response")
-              Right(sessionData.nino)
-            })
-          ))
-        }
-        .leftFlatMap{_ =>
-          infoLogger("Attempting to extract NINO from local session data as a fallback")
-          EitherT(Future.successful(sessionNinoOpt))
-        }
     } else {
-      infoLogger("Session cookie service is disabled. Attempting to retrieve NINO from local session data only")
-      EitherT(Future.successful(sessionNinoOpt))
+      infoLogger("HTTP Session fallback disabled. Returning no data")
+      Left()
     }
-
-    result.value
   }
 
-  def getSessionData()(implicit hc: HeaderCarrier): Future[Either[Unit, SessionData]] = {
+  def getSessionData(extraLoggingContext: Option[String] = None)(implicit hc: HeaderCarrier): Future[Either[Unit, SessionData]] = {
     val methodLoggingContext: String = "getSessionData"
-    val infoLogger: String => Unit = infoLog(methodLoggingContext)
-    val errorLogger: String => Unit = errorLog(methodLoggingContext)
+    val infoLogger: String => Unit = infoLog(methodLoggingContext, extraContext = extraLoggingContext)
+    val errorLogger: String => Unit = errorLog(methodLoggingContext, extraContext = extraLoggingContext)
 
-    infoLogger("Attempting to retrieve session data for request")
+    infoLogger("Received request to retrieve session data from session cookie service")
 
     if (config.sessionCookieServiceEnabled) {
-      infoLogger("Session cookie service is enabled. Attempting to retrieve session data")
+      infoLogger("Session cookie service enabled. Attempting to retrieve session data")
 
-      sessionDataCacheResult
+      EitherT(sessionDataConnector.getSessionData)
         .leftMap(err => errorLogger(
           s"Request to retrieve session data failed with error status: ${err.status} and error body: ${err.body}"
         ))
@@ -130,5 +94,32 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector,
       infoLogger("Session cookie service disabled. Returning error outcome")
       Future.successful(Left())
     }
+  }
+
+  def getSessionDataBlock[A](errorAction: () => Future[Result])
+                            (block: SessionData => Future[Result])
+                            (implicit request: Request[A], hc: HeaderCarrier): Future[Result] = {
+    val methodLoggingContext: String = "sessionDataBlock"
+
+    val infoLogger = infoLog(methodLoggingContext)
+    val warnLogger = warnLog(methodLoggingContext)
+    val errorLogger = errorLog(methodLoggingContext)
+
+    infoLogger("Received request to handle session data block")
+
+    EitherT(getSessionData(Some(methodLoggingContext)))
+      .leftFlatMap(_ => {
+        warnLogger("Could not retrieve session data from session cookie service. Attempting HTTP session fallback")
+        EitherT(Future.successful(getFallbackSessionData(Some(methodLoggingContext))))
+      })
+      .leftSemiflatMap(_ => {
+        errorLogger("Could not retrieve session data from HTTP session fallback. Returning an error status")
+        errorAction()
+      })
+      .semiflatMap(sessionData => {
+        infoLogger("Successfully retrieved session data for user. Invoking block action")
+        block(sessionData)
+      })
+      .merge
   }
 }

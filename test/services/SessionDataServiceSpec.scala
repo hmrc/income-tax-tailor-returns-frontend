@@ -20,20 +20,26 @@ import base.SpecBase
 import mocks.{MockAppConfig, MockSessionDataConnector}
 import models.errors.{APIErrorBodyModel, APIErrorModel}
 import models.session.SessionData
-import play.api.http.Status.{IM_A_TEAPOT, INTERNAL_SERVER_ERROR}
-import play.api.mvc.AnyContentAsEmpty
+import play.api.http.{HeaderNames, Status}
+import play.api.mvc.{AnyContentAsEmpty, Results}
 import play.api.test.Helpers.await
-import play.api.test.{DefaultAwaitTimeout, FakeRequest}
+import play.api.test.{DefaultAwaitTimeout, FakeRequest, ResultExtractors}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.Future
+
 class SessionDataServiceSpec extends SpecBase
+  with ResultExtractors
+  with HeaderNames
+  with Status
+  with Results
   with MockSessionDataConnector
   with MockAppConfig
   with DefaultAwaitTimeout {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  val testService = new SessionDataService(
+  val testService: SessionDataService = new SessionDataService(
     sessionDataConnector = mockSessionDataConnector,
     config = mockAppConfig
   )
@@ -44,76 +50,37 @@ class SessionDataServiceSpec extends SpecBase
 
   val dummyError: APIErrorModel = APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", ""))
 
-  "getNino" -> {
-    "if session cookie service is enabled" -> {
-      implicit val request: FakeRequest[AnyContentAsEmpty.type] =
-        FakeRequest.apply("", "").withSession("ClientNino" -> "value")
-      "should return NINO when call to session cookie service is successful" in {
-        mockGetSessionData(Right(Some(dummyResponse)))
-        mockSessionServiceEnabled(true)
-        val result = await(testService.getNino())
+  "getFallbackSessionData" -> {
+    "should return an error when request session fallback is disabled" in {
+      mockFallbackEnabled(false)
 
-        result mustBe a[Right[_, _]]
-        result.getOrElse("dummy val") mustBe "AA111111A"
-      }
+      implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+      val result: Either[Unit, SessionData] = testService.getFallbackSessionData(None)
 
-      "should fallback to local session NINO when session cookie service returns None" in {
-        mockGetSessionData(Right(None))
-        mockSessionServiceEnabled(true)
-        val result = await(testService.getNino())
-
-        result mustBe a[Right[_, _]]
-        result.getOrElse("dummy val") mustBe "value"
-      }
-
-      "should fallback to local session NINO when session cookie service call fails" in {
-        mockGetSessionData(Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("", ""))))
-        mockSessionServiceEnabled(true)
-        val result = await(testService.getNino())
-
-        result mustBe a[Right[_, _]]
-        result.getOrElse("dummy val") mustBe "value"
-      }
-
-      "should return a Left when local session and session cookie service fail to return NINO" in {
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] =
-          FakeRequest.apply("", "").withSession("NotNino" -> "value")
-
-        mockGetSessionData(Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("", ""))))
-        mockSessionServiceEnabled(true)
-        val result = await(testService.getNino())
-
-        result mustBe a[Left[_, _]]
-      }
-
-      "should return an exception when an error occurs during session cookie service call" in {
-        mockGetSessionDataException(new RuntimeException)
-        mockSessionServiceEnabled(true)
-        assertThrows[RuntimeException](await(testService.getNino()))
-      }
+      result mustBe a[Left[_, _]]
     }
 
-    "if session cookie service is disabled" -> {
-      "should return the NINO if it is in the session" in {
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] =
-          FakeRequest.apply("", "").withSession("ClientNino" -> "value")
+    "should return an error when fallback is enabled but data is not present in request session" in {
+      mockFallbackEnabled(true)
 
-        mockSessionServiceEnabled(false)
-        val result = await(testService.getNino())
+      implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+      val result: Either[Unit, SessionData] = testService.getFallbackSessionData(None)
 
-        result mustBe a[Right[_, _]]
-        result.getOrElse("Not nino") mustBe "value"
-      }
+      result mustBe a[Left[_, _]]
+    }
 
-      "should return a Left if the Nino is not in the session" in {
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] =
-          FakeRequest.apply("", "").withSession("NotClientNino" -> "value")
+    "should return data when fallback is enabled and data is present in request session" in {
+      mockFallbackEnabled(true)
 
-        mockSessionServiceEnabled(false)
-        val result = await(testService.getNino())
+      implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(
+        ("ClientNino", "AA111111A"),
+        ("ClientMTDID", "12345678")
+      )
 
-        result mustBe a[Left[_, _]]
-      }
+      val result: Either[Unit, SessionData] = testService.getFallbackSessionData(None)
+
+      result mustBe a[Right[_, _]]
+      result.getOrElse(dummySessionData) mustBe SessionData("12345678", "AA111111A", "", "")
     }
   }
 
@@ -138,7 +105,7 @@ class SessionDataServiceSpec extends SpecBase
 
       "should return an error when an error is returned from the session cookie service" in {
         mockSessionServiceEnabled(true)
-        mockGetSessionData(Left(APIErrorModel(INTERNAL_SERVER_ERROR, APIErrorBodyModel("", ""))))
+        mockGetSessionData(Left(dummyError))
 
         val result = await(testService.getSessionData())
         result mustBe a[Left[_, _]]
@@ -155,24 +122,77 @@ class SessionDataServiceSpec extends SpecBase
     }
   }
 
-  "sessionValOpt" -> {
-    "when a given key does not exist within the session should return an error" in {
-      implicit val request: FakeRequest[AnyContentAsEmpty.type] =
-        FakeRequest.apply("", "").withSession("notKey" -> "value")
+  "getSessionDataBlock" -> {
+    "when call to retrieve session data fails" -> {
+      "should return an error when fallback is disabled" in {
+        mockSessionServiceEnabled(true)
+        mockFallbackEnabled(false)
+        mockGetSessionData(Left(dummyError))
 
-      val result = testService.sessionValOpt("key", "key", _ => (), _ => ())
+        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
-      result mustBe a[Left[_, _]]
+        val result = testService.getSessionDataBlock(
+          () => Future.successful(ImATeapot("This is the error action"))
+        )(
+          _ => Future.successful(ImATeapot("This is the success action"))
+        )
+
+        status(result) mustBe IM_A_TEAPOT
+        contentAsString(result) mustBe "This is the error action"
+      }
+
+      "should return an error when fallback is enabled but fails" in {
+        mockSessionServiceEnabled(true)
+        mockFallbackEnabled(true)
+        mockGetSessionData(Left(dummyError))
+
+        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+
+        val result = testService.getSessionDataBlock(
+          () => Future.successful(ImATeapot("This is the error action"))
+        )(
+          _ => Future.successful(ImATeapot("This is the success action"))
+        )
+
+        status(result) mustBe IM_A_TEAPOT
+        contentAsString(result) mustBe "This is the error action"
+      }
+
+      "should return data when fallback is enabled and succeeds" in {
+        mockSessionServiceEnabled(true)
+        mockFallbackEnabled(true)
+        mockGetSessionData(Left(dummyError))
+
+        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+          .withSession(
+            ("ClientNino", "AA111111A"),
+            ("ClientMTDID", "12345678")
+          )
+
+        val result = testService.getSessionDataBlock(
+          () => Future.successful(ImATeapot("This is the error action"))
+        )(
+          _ => Future.successful(ImATeapot("This is the success action"))
+        )
+
+        status(result) mustBe IM_A_TEAPOT
+        contentAsString(result) mustBe "This is the success action"
+      }
     }
 
-    "when a key exists in the session should return it" in {
-      implicit val request: FakeRequest[AnyContentAsEmpty.type] =
-        FakeRequest.apply("", "").withSession("key" -> "value")
+    "should return data when session data retrieval is successful" in {
+      mockSessionServiceEnabled(true)
+      mockGetSessionData(Right(Some(dummyResponse)))
+      implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
-      val result = testService.sessionValOpt("key", "key", _ => (), _ => ())
+      val result = testService.getSessionDataBlock(
+        () => Future.successful(ImATeapot("This is the error action"))
+      )(
+        _ => Future.successful(ImATeapot("This is the success action"))
+      )
 
-      result mustBe a[Right[_, _]]
-      result.getOrElse("dummy string") mustBe "value"
+      status(result) mustBe IM_A_TEAPOT
+      contentAsString(result) mustBe "This is the success action"
     }
   }
 }
