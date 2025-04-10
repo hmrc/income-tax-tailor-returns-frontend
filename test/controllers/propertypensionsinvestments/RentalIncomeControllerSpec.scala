@@ -18,10 +18,10 @@ package controllers.propertypensionsinvestments
 
 import controllers.ControllerWithPrePopSpecBase
 import forms.propertypensionsinvestments.RentalIncomeFormProvider
-import models.errors.{APIErrorBodyModel, APIErrorModel, SimpleErrorWrapper}
+import models.errors.SimpleErrorWrapper
 import models.prePopulation.PropertyPrePopulationResponse
 import models.propertypensionsinvestments.RentalIncome
-import models.{Done, NormalMode, SessionValues, UserAnswers}
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -136,116 +136,7 @@ class RentalIncomeControllerSpec extends
       }
 
       "when pre-population is enabled" -> {
-        "handle errors during NINO retrieval" -> {
-          "[GET] should show error page - SessionDataService: disabled, Nino in session: false" in new GetWithPrePopTest {
-            override def sessionCookieServiceEnabled: Boolean = false
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-
-          "[GET] should show error page - SessionDataService: returns error, Nino in session: false" in new GetWithPrePopTest {
-            mockSessionDataConnectorGet(Future.successful(Left(
-              APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", "")))
-            ))
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-
-          "[GET] should show error page - SessionDataService: returns None, Nino in session: false" in new GetWithPrePopTest {
-            mockSessionDataConnectorGet(Future.successful(Right(None)))
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-        }
-
-        "handle session NINO fallback" -> {
-          "[GET] should fallback to session NINO when session data service is not enabled" in new GetWithPrePopTest {
-            override val sessionCookieServiceEnabled: Boolean = false
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockPropertyConnectorGet(
-              result = Future.successful(Right(PropertyPrePopulationResponse(
-                hasUkPropertyPrePop = false,
-                hasForeignPropertyPrePop = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = false
-                )(request, messages(application)).toString
-            }
-          }
-
-          "[GET] should fallback to session NINO when session data service returns an error" in new GetWithPrePopTest {
-            mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockPropertyConnectorGet(
-              result = Future.successful(Right(PropertyPrePopulationResponse(
-                hasUkPropertyPrePop = false,
-                hasForeignPropertyPrePop = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = false
-                )(request, messages(application)).toString
-            }
-          }
-
-          "[GET] should fallback to session NINO when session data service returns None" in new GetWithPrePopTest {
-            mockSessionDataConnectorGet(Future.successful(Right(None)))
-
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockPropertyConnectorGet(
-              result = Future.successful(Right(PropertyPrePopulationResponse(
-                hasUkPropertyPrePop = false,
-                hasForeignPropertyPrePop = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = false
-                )(request, messages(application)).toString
-            }
-          }
-        }
-
         "[GET] should return an error page when pre-pop retrieval fails" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockPropertyConnectorGet(
             result = Future.successful(Left(SimpleErrorWrapper(IM_A_TEAPOT)))
           )
@@ -257,8 +148,6 @@ class RentalIncomeControllerSpec extends
         }
 
         "[GET] should return the expected view when user answers and pre-pop exists" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockPropertyConnectorGet(
             result = Future.successful(Right(PropertyPrePopulationResponse(
               hasUkPropertyPrePop = true,
@@ -287,8 +176,6 @@ class RentalIncomeControllerSpec extends
         }
 
         "[GET] should return the expected view when user answers and pre-pop exists for an agent" in new GetWithPrePopAgentTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockPropertyConnectorGet(
             result = Future.successful(Right(PropertyPrePopulationResponse(
               hasUkPropertyPrePop = true,
@@ -317,8 +204,6 @@ class RentalIncomeControllerSpec extends
         }
 
         "[GET] should return the expected view when only pre-pop exists" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockPropertyConnectorGet(
             result = Future.successful(Right(PropertyPrePopulationResponse(
               hasUkPropertyPrePop = true,
@@ -340,8 +225,6 @@ class RentalIncomeControllerSpec extends
         }
 
         "[GET] should return the expected view when only pre-pop exists for an agent" in new GetWithPrePopAgentTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockPropertyConnectorGet(
             result = Future.successful(Right(PropertyPrePopulationResponse(
               hasUkPropertyPrePop = true,
@@ -363,8 +246,6 @@ class RentalIncomeControllerSpec extends
         }
 
         "[GET] should return the expected view when user answers and pre-pop don't exist" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockPropertyConnectorGet(
             result = Future.successful(Right(PropertyPrePopulationResponse(
               hasUkPropertyPrePop = false,
@@ -386,8 +267,6 @@ class RentalIncomeControllerSpec extends
         }
 
         "[GET] should return the expected view when user answers and pre-pop don't exist for an agent" in new GetWithPrePopAgentTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockPropertyConnectorGet(
             result = Future.successful(Right(PropertyPrePopulationResponse(
               hasUkPropertyPrePop = false,

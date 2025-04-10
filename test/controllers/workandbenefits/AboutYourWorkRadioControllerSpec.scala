@@ -18,9 +18,9 @@ package controllers.workandbenefits
 
 import controllers.ControllerWithPrePopSpecBase
 import forms.workandbenefits.AboutYourWorkRadioPageFormProvider
-import models.errors.{APIErrorBodyModel, APIErrorModel, SimpleErrorWrapper}
+import models.errors.SimpleErrorWrapper
 import models.prePopulation.EmploymentPrePopulationResponse
-import models.{Done, NormalMode, SessionValues, UserAnswers}
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -134,121 +134,8 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
       }
 
       "when pre-population is enabled" -> {
-        "handle errors during NINO retrieval" -> {
-          "[GET] should show error page - SessionDataService: disabled, Nino in session: false" in new GetWithPrePopTest {
-            override def sessionCookieServiceEnabled: Boolean = false
-            override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-
-          "[GET] should show error page - SessionDataService: returns error, Nino in session: false" in new GetWithPrePopTest {
-            override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-
-            mockSessionDataConnectorGet(Future.successful(Left(
-              APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", "")))
-            ))
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-
-          "[GET] should show error page - SessionDataService: returns None, Nino in session: false" in new GetWithPrePopTest {
-            override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-            mockSessionDataConnectorGet(Future.successful(Right(None)))
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-        }
-
-        "handle session NINO fallback" -> {
-          "[GET] should fallback to session NINO when session data service is not enabled" in new GetWithPrePopTest {
-            override val sessionCookieServiceEnabled: Boolean = false
-            override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockEmploymentsConnectorGet(
-              result = Future.successful(Right(EmploymentPrePopulationResponse(
-                hasEmployment = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = false
-                )(request, messages(application)).toString
-            }
-          }
-
-          "[GET] should fallback to session NINO when session data service returns an error" in new GetWithPrePopTest {
-            override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-            mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockEmploymentsConnectorGet(
-              result = Future.successful(Right(EmploymentPrePopulationResponse(
-                hasEmployment = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = false
-                )(request, messages(application)).toString
-            }
-          }
-
-          "[GET] should fallback to session NINO when session data service returns None" in new GetWithPrePopTest {
-            override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-            mockSessionDataConnectorGet(Future.successful(Right(None)))
-
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockEmploymentsConnectorGet(
-              result = Future.successful(Right(EmploymentPrePopulationResponse(
-                hasEmployment = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = false
-                )(request, messages(application)).toString
-            }
-          }
-        }
-
         "[GET] should return an error page when pre-pop retrieval fails" in new GetWithPrePopTest {
           override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockEmploymentsConnectorGet(
             result = Future.successful(Left(SimpleErrorWrapper(IM_A_TEAPOT)))
           )
@@ -260,8 +147,6 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
         }
 
         "[GET] should return the expected view when user answers and pre-pop exists" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
               hasEmployment = false
@@ -289,8 +174,6 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
         }
 
         "[GET] should return the expected view when user answers and pre-pop exists for an agent" in new GetWithPrePopAgentTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
               hasEmployment = true
@@ -319,7 +202,6 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
         "[GET] should return the expected view when only pre-pop exists" in new GetWithPrePopTest {
           override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
@@ -342,7 +224,6 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
         "[GET] should return the expected view when only pre-pop exists for an agent" in new GetWithPrePopAgentTest {
           override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
@@ -365,7 +246,6 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
         "[GET] should return the expected view when user answers and pre-pop don't exist" in new GetWithPrePopTest {
           override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(
@@ -388,7 +268,6 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
         "[GET] should return the expected view when user answers and pre-pop don't exist for an agent" in new GetWithPrePopAgentTest {
           override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
 
           mockEmploymentsConnectorGet(
             result = Future.successful(Right(EmploymentPrePopulationResponse(

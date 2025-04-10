@@ -18,7 +18,6 @@ package controllers
 
 import base.SpecBase
 import config.FrontendAppConfig
-import connectors.httpParsers.SessionDataHttpParser.SessionDataResponse
 import connectors._
 import forms.FormProvider
 import handlers.ErrorHandler
@@ -37,7 +36,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, inject}
 import play.twirl.api.Html
-import services.{PrePopulationService, SessionDataService}
+import services.PrePopulationService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
@@ -60,7 +59,6 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
 
   sealed trait ControllerWithPrePopTest {
     val nino: String = "AA111111A"
-    val taxYear: Int = 2024
     val mtdItId: String = "someMtdItId"
 
     val userAnswers: Option[UserAnswers] = Some(emptyUserAnswers)
@@ -101,20 +99,15 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
   trait PrePopEnabledTest extends ControllerWithPrePopTest {
     override def prePopEnabled: Boolean = true
 
-    val mockSessionDataConnector: SessionDataConnector = mock[SessionDataConnector]
     val mockAppConfig: FrontendAppConfig = mock[FrontendAppConfig]
+    val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
+
     val mockStateBenefitsConnector: StateBenefitsConnector = mock[StateBenefitsConnector]
     val mockCisConnector: CisConnector = mock[CisConnector]
     val mockEmploymentConnector: EmploymentConnector = mock[EmploymentConnector]
     val mockPropertyConnector: PropertyConnector = mock[PropertyConnector]
-    val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
 
-    val mockSessionDataService = new SessionDataService(
-      sessionDataConnector = mockSessionDataConnector,
-      config = mockAppConfig
-    )
-
-    val mockPrePopulationService = new PrePopulationService(
+    val mockPrePopulationService: PrePopulationService = new PrePopulationService(
       stateBenefitsConnector = mockStateBenefitsConnector,
       cisConnector = mockCisConnector,
       employmentConnector = mockEmploymentConnector,
@@ -125,15 +118,6 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
 
     when(mockErrorHandler.internalServerErrorTemplate(ArgumentMatchers.any[Request[_]]))
       .thenReturn(Html(mockErrorView))
-
-    def sessionCookieServiceEnabled: Boolean = true
-
-    when(mockAppConfig.sessionCookieServiceEnabled)
-      .thenReturn(sessionCookieServiceEnabled)
-
-    def mockSessionDataConnectorGet(result: Future[SessionDataResponse]): OngoingStubbing[Future[SessionDataResponse]] =
-      when(mockSessionDataConnector.getSessionData(any[HeaderCarrier]))
-        .thenReturn(result)
 
     def mockStateBenefitsConnectorGet(
                                        result: ConnectorResponse[StateBenefitsPrePopulationResponse]
@@ -150,8 +134,8 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
       ).thenReturn(result)
 
     def mockPropertyConnectorGet(
-                                       result: ConnectorResponse[PropertyPrePopulationResponse]
-                                     ): OngoingStubbing[ConnectorResponse[PropertyPrePopulationResponse]] =
+                                  result: ConnectorResponse[PropertyPrePopulationResponse]
+                                ): OngoingStubbing[ConnectorResponse[PropertyPrePopulationResponse]] =
       when(
         mockPropertyConnector.getPrePopulation(nino = any, taxYear = any, mtdItId = any)(any[HeaderCarrier])
       ).thenReturn(result)
@@ -161,7 +145,6 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     )
 
     override def applicationBindings: Seq[GuiceableModule] = Seq(
-      inject.bind[SessionDataService].toInstance(mockSessionDataService),
       inject.bind[PrePopulationService].toInstance(mockPrePopulationService)
     )
   }
