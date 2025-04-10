@@ -31,7 +31,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
-import services.{PrePopulationService, SessionDataService, UserDataService}
+import services.{PrePopulationService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import views.html.workandbenefits.{ConstructionIndustrySchemeAgentView, ConstructionIndustrySchemeView}
@@ -43,7 +43,6 @@ class ConstructionIndustrySchemeController @Inject()(
                                                       override val messagesApi: MessagesApi,
                                                       val userDataService: UserDataService,
                                                       prePopService: PrePopulationService,
-                                                      val ninoRetrievalService: SessionDataService,
                                                       val navigator: Navigator,
                                                       val identify: IdentifierActionProvider,
                                                       val getData: DataRetrievalActionProvider,

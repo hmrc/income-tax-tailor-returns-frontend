@@ -16,15 +16,14 @@
 
 package controllers
 
-import cats.data.EitherT
 import config.FrontendAppConfig
 import connectors.ConnectorResponse
 import forms.FormProvider
 import handlers.ErrorHandler
-import models.{Mode, UserAnswers}
 import models.errors.SimpleErrorWrapper
 import models.prePopulation.PrePopulationResponse
 import models.requests.DataRequest
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
 import play.api.data.Form
@@ -32,7 +31,7 @@ import play.api.i18n.I18nSupport
 import play.api.libs.json.Format
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import services.{SessionDataService, UserDataService}
+import services.UserDataService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{Logging, PrePopulationHelper}
@@ -60,7 +59,6 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
   val navigator: Navigator
   val config: FrontendAppConfig
   val errorHandler: ErrorHandler
-  val ninoRetrievalService: SessionDataService
 
   implicit val ec: ExecutionContext
 
@@ -106,60 +104,43 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
                             requestOverrideOpt: Option[DataRequest[_]] = None): ActionBuilder[DataRequest, AnyContent]
 
   /**
-   * This method wraps around some block which requires a NINO. It first attempts to retrieve the NINO from the session
-   * data service and then uses this NINO to build a log string, and prePopRetrievalAction function to be passed into
-   * the block. It then processes the block with these values and returns the result.
-   * If the pre-pop feature switch is disabled it instead passes a dummy prePopRetrievalAction into the block and does
-   * not attempt to retrieve the NINO.
-   * The actionChain this method uses converts a regular Request[_] into a DataRequest[_] to provide access to certain
-   * user details. This may also handle things like authentication, or updating the current session.
+   * This method wraps around some block which requires pre-population retrieval. First the action chain is invoked to
+   * get access to a user's session data, and to apply authentication or other pre-requisite checks. If the
+   * pre-population feature switch is enabled, the provided block is then invoked using the provided pre-population
+   * action and the user's session data from request model. If the pre-pop feature switch is disabled a dummy
+   * prePopRetrievalAction is instead passed into the block which does not require use of the session data.
    *
    * @param taxYear The tax year associated with the current self-assessment tax submission
-   * @param block   An action to be completed once the NINO for the request is retrieved
+   * @param block   An action to be completed
    * @return An action resulting from the provided block
    */
-  protected[controllers] def blockWithNino(taxYear: Int,
-                                           extraContext: String,
-                                           requestOverrideOpt: Option[DataRequest[_]] = None)
-                                          (block: (String, PrePopResult, DataRequest[_]) => Future[Result]): Action[AnyContent] = {
-    val methodContext: String = "blockWithNino"
+  protected[controllers] def blockWithPrePop(taxYear: Int,
+                                             extraContext: String,
+                                             requestOverrideOpt: Option[DataRequest[_]] = None)
+                                            (block: (String, PrePopResult, DataRequest[_]) => Future[Result]): Action[AnyContent] = {
+    val methodContext: String = "blockWithPrePop"
 
     logger.info(
       secondaryContext = methodContext,
-      message = "Received request to handle block with NINO, and pre-population actions. Processing action chain",
+      message = "Received request to handle block with pre-population actions. Processing action chain",
       extraContext = Some(extraContext)
     )
 
     actionChain(taxYear, requestOverrideOpt).async { implicit request =>
       val dataLog: String = noNinoDataLogString(request.mtdItId, taxYear, Some(requestToAgentString))
       val infoLogger = infoLog(methodContext, dataLog, Some(extraContext))
-      val errorLogger = errorLog(methodContext, dataLog, Some(extraContext))
 
       infoLogger("Action chain completed successfully")
 
-      def result: EitherT[Future, Unit, Result] = for {
-        nino <- EitherT(ninoRetrievalService.getNino())
-        result <- EitherT.right {
-          infoLogger(s"Successfully retrieved NINO from session data service. Processing block with NINO: $nino")
-
-          block(
-            dataLogString(nino, taxYear, Some(requestToAgentString)),
-            prePopRetrievalAction(nino, taxYear, request.mtdItId),
-            request
-          )
-        }
-      } yield result
-
       if (config.isPrePopEnabled) {
-        infoLogger("Pre-population feature switch enabled. Attempting to retrieve NINO from session data service")
-        result
-          .leftMap(_ => {
-            errorLogger("Failed to retrieve NINO from session data service. Returning an error page")
-            InternalServerError(errorHandler.internalServerErrorTemplate)
-          })
-          .merge
+        infoLogger("Pre-population feature switch enabled. Invoking block with pre-population retrieval actions")
+        block(
+          dataLogString(request.nino, taxYear, Some(requestToAgentString)),
+          prePopRetrievalAction(request.nino, taxYear, request.mtdItId),
+          request
+        )
       } else {
-        infoLogger("Pre-population feature switch disabled. Processing block without NINO, or pre-population actions")
+        infoLogger("Pre-population feature switch disabled. Invoking block without pre-population retrieval actions")
         block(
           dataLog,
           () => Future.successful(Right(defaultPrePopulationResponse)),
@@ -186,7 +167,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
                                         mode: Mode,
                                         taxYear: Int,
                                         requestOverrideOpt: Option[DataRequest[_]] = None): Action[AnyContent] =
-    blockWithNino(taxYear, "onPageLoad", requestOverrideOpt) {
+    blockWithPrePop(taxYear, "onPageLoad", requestOverrideOpt) {
       (dataLog: String, prePopulationAction: PrePopResult, dataRequest: DataRequest[_]) =>
         implicit val request: DataRequest[_] = dataRequest
 

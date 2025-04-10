@@ -36,7 +36,7 @@ import play.api.mvc._
 import play.api.test.Helpers.{await, stubBodyParser, stubMessagesControllerComponents}
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, ResultExtractors}
 import play.twirl.api.{Html, HtmlFormat}
-import services.{SessionDataService, UserDataService}
+import services.UserDataService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestLogging
 
@@ -90,7 +90,6 @@ class ControllerWithPrePopSpec extends SpecBase
     override def controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
 
     override implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
-    override val ninoRetrievalService: SessionDataService = mockSessionDataService
     override val errorHandler: ErrorHandler = mockErrorHandler
     override val config: FrontendAppConfig = mockAppConfig
 
@@ -103,7 +102,7 @@ class ControllerWithPrePopSpec extends SpecBase
                                     block: DataRequest[A] => Future[Result]): Future[Result] =
           block(DataRequest[A](
             request = request,
-            mtdItId = mtdItId,
+            sessionData = dummySessionData,
             userAnswers = userAnswers,
             isAgent = false
           ))
@@ -120,7 +119,6 @@ class ControllerWithPrePopSpec extends SpecBase
 
     def setupStubs(): Unit = {
       mockPrePopEnabled(true)
-      mockGetNino(Right("AA111111A"))
     }
   }
 
@@ -131,7 +129,7 @@ class ControllerWithPrePopSpec extends SpecBase
     "should process block when pre-population feature flag is off" in new Test {
       mockPrePopEnabled(false)
 
-      val result: Result = await(controller.blockWithNino(
+      val result: Result = await(controller.blockWithPrePop(
         taxYear = taxYear,
         extraContext = ""
       )(dummyBlock)(FakeRequest()))
@@ -139,41 +137,15 @@ class ControllerWithPrePopSpec extends SpecBase
       result mustBe Ok
     }
 
-    "should process block when pre-population feature flag is on, and NINO retrieval is successful" in new Test {
+    "should process block when pre-population feature flag is on" in new Test {
       mockPrePopEnabled(true)
-      mockGetNino(Right("AA111111A"))
 
-      val result: Result = await(controller.blockWithNino(
+      val result: Result = await(controller.blockWithPrePop(
         taxYear = taxYear,
         extraContext = ""
       )(dummyBlock)(FakeRequest()))
 
       result mustBe Ok
-    }
-
-    "should return an error when pre-population feature flag is on, and NINO retrieval fails" in new Test {
-      mockPrePopEnabled(true)
-      mockGetNino(Left())
-      mockInternalServerError(Html(""))
-
-      val result: Future[Result] = controller.blockWithNino(
-        taxYear = taxYear,
-        extraContext = ""
-      )(dummyBlock)(FakeRequest())
-
-      status(result) mustBe INTERNAL_SERVER_ERROR
-    }
-
-    "should handle exceptions during NINO retrieval" in new Test {
-      mockPrePopEnabled(true)
-      mockGetNinoException(new RuntimeException())
-
-      val result: Future[Result] = controller.blockWithNino(
-        taxYear = taxYear,
-        extraContext = ""
-      )(dummyBlock)(FakeRequest())
-
-      assertThrows[RuntimeException](await(result))
     }
   }
 
