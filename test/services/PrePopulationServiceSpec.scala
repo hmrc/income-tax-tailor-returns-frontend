@@ -32,10 +32,7 @@ class PrePopulationServiceSpec extends SpecBase
   with MockPropertyConnector
   with DefaultAwaitTimeout {
 
-  val nino: String = "AA111111A"
   override val taxYear: Int = 2025
-  override val mtdItId = "111111"
-
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val testService = new PrePopulationService(
@@ -51,6 +48,7 @@ class PrePopulationServiceSpec extends SpecBase
     hasPensionsPrePop = false,
     hasPensionLumpSumsPrePop = false
   )
+
   val dummyEsaJsaResponse: EsaJsaPrePopulationResponse = dummyStateBenefitsResponse.toEsaJsaModel
 
   val emptyEsaJsaPrePopResponse: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse(
@@ -61,6 +59,7 @@ class PrePopulationServiceSpec extends SpecBase
   val dummyEmploymentResponse: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(
     hasEmployment = true
   )
+
   val emptyEmploymentResponse: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(
     hasEmployment = false
   )
@@ -68,6 +67,7 @@ class PrePopulationServiceSpec extends SpecBase
   val dummyCisResponse: CisPrePopulationResponse = CisPrePopulationResponse(
     hasCis = true
   )
+
   val emptyCisResponse: CisPrePopulationResponse = CisPrePopulationResponse(
     hasCis = false
   )
@@ -76,6 +76,7 @@ class PrePopulationServiceSpec extends SpecBase
     hasUkPropertyPrePop = true,
     hasForeignPropertyPrePop = true
   )
+
   val emptyPropertyResponse: PropertyPrePopulationResponse = PropertyPrePopulationResponse(
     hasUkPropertyPrePop = false,
     hasForeignPropertyPrePop = false

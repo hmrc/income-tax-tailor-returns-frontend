@@ -43,7 +43,7 @@ class OverrideRequestActionSpec extends SpecBase
     "should invoke block with overriden request" in new Test {
       val overrideRequest: DataRequest[AnyContentAsEmpty.type] = DataRequest(
         request = FakeRequest(),
-        mtdItId = "mtdItId",
+        sessionData = dummySessionData,
         userAnswers = emptyUserAnswers,
         isAgent = true
       )
