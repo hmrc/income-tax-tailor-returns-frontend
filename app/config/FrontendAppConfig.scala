@@ -56,7 +56,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
-  lazy val incomeTaxSubmissionIvRedirect: String = RedirectUrl(configuration.get[String]("urls.ivUplift"))
+  def incomeTaxSubmissionIvRedirect: String = RedirectUrl(configuration.get[String]("urls.ivUplift"))
     .get(OnlyRelative | AbsoluteWithHostnameFromAllowlist(allowedRedirectUrls: _*))
     .url
 
@@ -134,11 +134,9 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("feature-switch.welsh-translation")
 
-  def sessionCookieServiceEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.sessionCookieService")
-
-  def isPrePopEnabled: Boolean =
-    configuration.get[Boolean]("feature-switch.isPrePopEnabled")
+  def sessionCookieServiceEnabled: Boolean = configuration.get[Boolean]("feature-switch.sessionCookieService")
+  def isPrePopEnabled: Boolean = configuration.get[Boolean]("feature-switch.isPrePopEnabled")
+  def sessionFallbackEnabled: Boolean = configuration.get[Boolean]("feature-switch.sessionFallbackEnabled")
 
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),
@@ -155,11 +153,13 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   lazy val overseasTransferChargeUrl: String = configuration.get[String]("external-urls.overseasTransferCharge")
   lazy val taxOnDividendsUrl: String = configuration.get[String]("external-urls.taxOnDividends")
   lazy val authorisedInvestmentFundsUrl: String = configuration.get[String]("external-urls.authorisedInvestmentFunds")
-  lazy val setUpAgentServicesAccountUrl: String = configuration.get[String]("external-urls.set-up-agent-services-account")
+
+  def setUpAgentServicesAccountUrl(): String = configuration.get[String]("external-urls.set-up-agent-services-account")
   //Subscription Service
+
   private def vcBaseUrl: String =
     configuration.get[String]("microservice.services.view-and-change.url") +
-    "/report-quarterly/income-and-expenses"
+      "/report-quarterly/income-and-expenses"
 
   def viewAndChangeEnterUtrUrl: String = s"$vcBaseUrl/view/agents/client-utr"
   def viewAndChangeViewUrlAgent: String = s"$vcBaseUrl/view/agents"
