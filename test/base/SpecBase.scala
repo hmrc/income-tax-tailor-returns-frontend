@@ -25,9 +25,11 @@ import models.pensions.PaymentsIntoPensions
 import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
 import models.propertypensionsinvestments.{Pensions, RentalIncome, UkDividendsSharesLoans, UkInsuranceGains, UkInterest}
-import models.propertypensionsinvestments.UkDividendsSharesLoans.{CashDividendsFromUkStocksAndShares, CloseCompanyLoansWrittenOffReleased, DividendsUnitTrustsInvestmentCompanies, FreeOrRedeemableShares, StockDividendsFromUkCompanies}
+import models.propertypensionsinvestments.UkDividendsSharesLoans._
 import models.propertypensionsinvestments.UkInsuranceGains.{CapitalRedemption, LifeAnnuity, LifeInsurance, VoidedISA}
 import models.propertypensionsinvestments.UkInterest.{FromGiltEdged, FromUkBanks, FromUkTrustFunds}
+import models.requests.IdentifierRequest
+import models.session.SessionData
 import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
 import models.workandbenefits.{AboutYourWork, JobseekersAllowance}
 import models.workandbenefits.JobseekersAllowance.{Esa, Jsa}
@@ -43,59 +45,111 @@ import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.mvc.PlayBodyParsers
+import play.api.mvc.{AnyContentAsEmpty, PlayBodyParsers, Request}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.stubControllerComponents
 import uk.gov.hmrc.time.TaxYear
 
 import scala.concurrent.ExecutionContext
 
-trait SpecBase
-  extends AnyFreeSpec
-    with Matchers
-    with TryValues
-    with OptionValues
-    with ScalaFutures
-    with IntegrationPatience {
+trait SpecBase extends AnyFreeSpec
+  with Matchers
+  with TryValues
+  with OptionValues
+  with ScalaFutures
+  with IntegrationPatience {
+
+  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
   val endOfTaxYearRange: Int = TaxYear.current.finishYear
   val startOfTaxYearRange: Int = endOfTaxYearRange - 5
   val taxYear: Int = TaxYear.current.currentYear
-  val taxYears: Seq[Int] = (startOfTaxYearRange to  endOfTaxYearRange).toList
+  val taxYears: Seq[Int] = (startOfTaxYearRange to endOfTaxYearRange).toList
   val validTaxYears: (String, String) = "validTaxYears" -> taxYears.mkString(",")
 
   val mtdItId: String = "anMtdItId"
+  val nino: String = "AA111111A"
   val anAgent: Boolean = true
   val notAnAgent: Boolean = false
   val parsers: PlayBodyParsers = stubControllerComponents().parsers
-  implicit val ec: ExecutionContext = ExecutionContext.Implicits.global
 
-  val submissionFrontendBaseUrl = "http://localhost:9302/update-and-submit-income-tax-return"
+  val dummySessionData: SessionData = SessionData(
+    mtditid = mtdItId,
+    nino = nino,
+    utr = "",
+    sessionId = ""
+  )
 
-  def emptyUserAnswers : UserAnswers = UserAnswers(mtdItId, taxYear)
+  def testIdentifierRequest(request: Request[AnyContentAsEmpty.type] = FakeRequest(),
+                            isAgent: Boolean): IdentifierRequest[AnyContentAsEmpty.type] =
+    IdentifierRequest(
+      request = request,
+      nino = nino,
+      mtditid = mtdItId,
+      sessionId = "aSessionId",
+      utr = "aUtr",
+      isAgent = isAgent
+    )
 
-  val fullUserAnswers: UserAnswers = emptyUserAnswers.copy().set(UkResidenceStatusPage, UkResidenceStatus.Uk)
-    .flatMap(_.set(CharitableDonationsPage, Set[CharitableDonations](DonationsUsingGiftAid, GiftsOfSharesOrSecurities, GiftsOfLandOrProperty, GiftsToOverseasCharities)))
+  val submissionFrontendBaseUrl: String = "http://localhost:9302/update-and-submit-income-tax-return"
+
+  def emptyUserAnswers: UserAnswers = UserAnswers(mtdItId, taxYear)
+
+  val charitableAnswersSet: Set[CharitableDonations] = Set[CharitableDonations](
+    DonationsUsingGiftAid,
+    GiftsOfSharesOrSecurities,
+    GiftsOfLandOrProperty,
+    GiftsToOverseasCharities
+  )
+
+  val pensionsAnswersSet: Set[Pensions] = Set[Pensions](
+    StatePension,
+    OtherUkPensions,
+    UnauthorisedPayments,
+    ShortServiceRefunds,
+    Pensions.NonUkPensions
+  )
+
+  val ukInsuranceGainsAnswersSet: Set[UkInsuranceGains] = Set[UkInsuranceGains](
+    LifeInsurance,
+    LifeAnnuity,
+    CapitalRedemption,
+    VoidedISA
+  )
+
+  val ukDividendsAnswersSet: Set[UkDividendsSharesLoans] = Set[UkDividendsSharesLoans](
+    CashDividendsFromUkStocksAndShares,
+    StockDividendsFromUkCompanies,
+    DividendsUnitTrustsInvestmentCompanies,
+    FreeOrRedeemableShares,
+    CloseCompanyLoansWrittenOffReleased
+  )
+
+  val paymentIntoPensionsAnswersSet: Set[PaymentsIntoPensions] = Set[PaymentsIntoPensions](
+    UkPensions,
+    AnnualAllowances,
+    PaymentsIntoPensions.NonUkPensions,
+    Overseas
+  )
+
+  val fullUserAnswers: UserAnswers = emptyUserAnswers.copy()
+    .set(UkResidenceStatusPage, UkResidenceStatus.Uk)
+    .flatMap(_.set(CharitableDonationsPage, charitableAnswersSet))
     .flatMap(_.set(FosterCarerPage, true))
     .flatMap(_.set(AboutYourWorkRadioPage, true))
     .flatMap(_.set(AboutYourWorkPage, Set[AboutYourWork](Employed, SelfEmployed)))
     .flatMap(_.set(ConstructionIndustrySchemePage, true))
     .flatMap(_.set(JobseekersAllowancePage, Set[JobseekersAllowance](Jsa, Esa)))
     .flatMap(_.set(RentalIncomePage, Set[RentalIncome](RentalIncome.Uk, RentalIncome.NonUk)))
-    .flatMap(_.set(PensionsPage, Set[Pensions](StatePension, OtherUkPensions, UnauthorisedPayments, ShortServiceRefunds, Pensions.NonUkPensions)))
-    .flatMap(_.set(UkInsuranceGainsPage, Set[UkInsuranceGains](LifeInsurance, LifeAnnuity, CapitalRedemption, VoidedISA)))
+    .flatMap(_.set(PensionsPage, pensionsAnswersSet))
+    .flatMap(_.set(UkInsuranceGainsPage, ukInsuranceGainsAnswersSet))
     .flatMap(_.set(UkInterestPage, Set[UkInterest](FromUkBanks, FromUkTrustFunds, FromGiltEdged)))
-    .flatMap(_.set(UkDividendsSharesLoansPage, Set[UkDividendsSharesLoans](
-      CashDividendsFromUkStocksAndShares,
-      StockDividendsFromUkCompanies,
-      DividendsUnitTrustsInvestmentCompanies,
-      FreeOrRedeemableShares,
-      CloseCompanyLoansWrittenOffReleased
-    )))
-    .flatMap(_.set(PaymentsIntoPensionsPage, Set[PaymentsIntoPensions](UkPensions, AnnualAllowances, PaymentsIntoPensions.NonUkPensions, Overseas)))
+    .flatMap(_.set(UkDividendsSharesLoansPage, ukDividendsAnswersSet))
+    .flatMap(_.set(PaymentsIntoPensionsPage, paymentIntoPensionsAnswersSet))
     .success.value
 
   def messages(app: Application): Messages = app.injector.instanceOf[MessagesApi].preferred(FakeRequest())
+
   def config(app: Application): FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   protected def applicationBuilder(userAnswers: Option[UserAnswers] = None, isAgent: Boolean = false): GuiceApplicationBuilder =
