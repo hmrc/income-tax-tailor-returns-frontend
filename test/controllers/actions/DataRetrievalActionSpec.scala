@@ -22,7 +22,6 @@ import models.requests.{IdentifierRequest, OptionalDataRequest}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.FakeRequest
 import services.UserDataService
 
 import scala.concurrent.Future
@@ -30,37 +29,28 @@ import scala.concurrent.Future
 class DataRetrievalActionSpec extends SpecBase with MockitoSugar {
 
   class Harness(userDataService: UserDataService) extends DataRetrievalActionImpl(userDataService, taxYear) {
-
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)
-
   }
 
   "Data Retrieval Action" - {
-
     "when there is no data in the cache" - {
-
       "must set userAnswers to 'None' in the request" in {
-
         val userDataService = mock[UserDataService]
         when(userDataService.get(any(), any())(any())) thenReturn Future(None)
         val action = new Harness(userDataService)
 
-        val result = action.callTransform(IdentifierRequest(FakeRequest(), "mtdItId", isAgent = false)).futureValue
-
+        val result = action.callTransform(testIdentifierRequest(isAgent = false)).futureValue
         result.userAnswers must not be defined
       }
     }
 
     "when there is data in the cache" - {
-
       "must build a userAnswers object and add it to the request" in {
-
         val userDataService = mock[UserDataService]
         when(userDataService.get(any(), any())(any())) thenReturn Future(Some(UserAnswers("mtdItId", taxYear)))(ec)
         val action = new Harness(userDataService)
 
-        val result = action.callTransform(IdentifierRequest(FakeRequest(), "mtdItId", isAgent = false)).futureValue
-
+        val result = action.callTransform(testIdentifierRequest(isAgent = false)).futureValue
         result.userAnswers mustBe defined
       }
     }

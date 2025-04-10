@@ -22,8 +22,7 @@ import play.api.libs.json.{Format, Json}
 case class SessionData(mtditid: String,
                        nino: String,
                        utr: String,
-                       sessionId: String
-                       )
+                       sessionId: String)
 
 object SessionData {
   implicit val format: Format[SessionData] = Json.format[SessionData]
