@@ -16,30 +16,31 @@
 
 package mocks
 
-import org.scalamock.handlers.CallHandler3
+import models.session.SessionData
+import org.scalamock.handlers.CallHandler4
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
-import play.api.mvc.Request
+import play.api.mvc.{Request, Result}
 import services.SessionDataService
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 trait MockSessionDataService extends MockFactory {this: TestSuite =>
   val mockSessionDataService: SessionDataService = mock[SessionDataService]
 
-  private type MockType = CallHandler3[Request[_], HeaderCarrier, ExecutionContext, Future[Either[Unit, String]]]
+  private type MockType = CallHandler4[() => Future[Result], SessionData => Future[Result], Request[_], HeaderCarrier, Future[Result]]
 
-  def mockGetNino(result: Either[Unit, String]): MockType  =
+  def mockSessionDataBlock(result: Result): MockType  =
     (mockSessionDataService
-      .getNino()(_: Request[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *)
+      .getSessionDataBlock(_: () => Future[Result])(_: SessionData => Future[Result])(_: Request[_], _: HeaderCarrier))
+      .expects(*, *, *, *)
       .returning(Future.successful(result))
 
-  def mockGetNinoException(err: Throwable): MockType =
+  def mockSessionDataBlockException(ex: Throwable): MockType =
     (mockSessionDataService
-      .getNino()(_: Request[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *)
-      .returning(Future.failed(err))
+      .getSessionDataBlock(_: () => Future[Result])(_: SessionData => Future[Result])(_: Request[_], _: HeaderCarrier))
+      .expects(*, *, *, *)
+      .returning(Future.failed(ex))
 }
 

@@ -17,7 +17,7 @@
 package mocks
 
 import config.FrontendAppConfig
-import org.scalamock.handlers.CallHandler0
+import org.scalamock.handlers.{CallHandler0, CallHandler1}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 
@@ -55,8 +55,50 @@ trait MockAppConfig extends MockFactory {this: TestSuite =>
       .expects()
       .returning(response)
 
-  def mockPrePopEnabled(response: Boolean): CallHandler0[Boolean] =
-  (() => mockAppConfig.isPrePopEnabled)
-    .expects()
-    .returning(response)
+  def mockFallbackEnabled(response: Boolean): CallHandler0[Boolean] =
+    (() => mockAppConfig.sessionFallbackEnabled)
+      .expects()
+      .returning(response)
+
+  def mockPrePopEnabled(response: Boolean): CallHandler0[Boolean] = {
+    (() => mockAppConfig.isPrePopEnabled)
+      .expects()
+      .returning(response)
+  }
+
+  def mockIncomeTaxSubmissionIvRedirect(response: String): CallHandler0[String] = {
+    (() => mockAppConfig.incomeTaxSubmissionIvRedirect)
+      .expects()
+      .returning(response)
+  }
+
+  def mockLoginRedirect(response: String): CallHandler1[Int, String] = {
+    (mockAppConfig.loginUrl(_: Int))
+      .expects(*)
+      .returning(response)
+  }
+
+  def mockSignUpRedirect(response: String): CallHandler0[String] = {
+    (() => mockAppConfig.signUpUrlIndividual)
+      .expects()
+      .returning(response)
+  }
+
+    def mockSetUpAgentServicesAccountUrl(response: String): CallHandler0[String] = {
+      (() => mockAppConfig.setUpAgentServicesAccountUrl())
+        .expects()
+        .returning(response)
+  }
+
+  def mockViewAndChangeEnterUtrUrl(response: String): CallHandler0[String] = {
+    (() => mockAppConfig.viewAndChangeEnterUtrUrl)
+      .expects()
+      .returning(response)
+  }
+
+  def mockLoginUrl(response: String): CallHandler1[Int, String] = {
+    (mockAppConfig.loginUrl(_: Int))
+      .expects(*)
+      .returning(response)
+  }
 }
