@@ -26,8 +26,6 @@ import play.api.test.Helpers.await
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, ResultExtractors}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
-
 class SessionDataServiceSpec extends SpecBase
   with ResultExtractors
   with HeaderNames
@@ -55,18 +53,18 @@ class SessionDataServiceSpec extends SpecBase
       mockFallbackEnabled(false)
 
       implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-      val result: Either[Unit, SessionData] = testService.getFallbackSessionData(None)
+      val result: Option[SessionData] = testService.getFallbackSessionData(None)
 
-      result mustBe a[Left[_, _]]
+      result mustBe None
     }
 
     "should return an error when fallback is enabled but data is not present in request session" in {
       mockFallbackEnabled(true)
 
       implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-      val result: Either[Unit, SessionData] = testService.getFallbackSessionData(None)
+      val result: Option[SessionData] = testService.getFallbackSessionData(None)
 
-      result mustBe a[Left[_, _]]
+      result mustBe None
     }
 
     "should return data when fallback is enabled and data is present in request session" in {
@@ -77,9 +75,7 @@ class SessionDataServiceSpec extends SpecBase
         ("ClientMTDID", "12345678")
       )
 
-      val result: Either[Unit, SessionData] = testService.getFallbackSessionData(None)
-
-      result mustBe a[Right[_, _]]
+      val result: Option[SessionData] = testService.getFallbackSessionData(None)
       result.getOrElse(dummySessionData) mustBe SessionData("12345678", "AA111111A", "", "")
     }
   }
@@ -91,7 +87,6 @@ class SessionDataServiceSpec extends SpecBase
         mockGetSessionData(Right(Some(dummyResponse)))
 
         val result = await(testService.getSessionData())
-        result mustBe a[Right[_, _]]
         result.getOrElse(SessionData.empty) mustBe dummyResponse
       }
 
@@ -100,7 +95,7 @@ class SessionDataServiceSpec extends SpecBase
         mockGetSessionData(Right(None))
 
         val result = await(testService.getSessionData())
-        result mustBe a[Left[_, _]]
+        result mustBe None
       }
 
       "should return an error when an error is returned from the session cookie service" in {
@@ -108,7 +103,7 @@ class SessionDataServiceSpec extends SpecBase
         mockGetSessionData(Left(dummyError))
 
         val result = await(testService.getSessionData())
-        result mustBe a[Left[_, _]]
+        result mustBe None
       }
     }
 
@@ -117,82 +112,8 @@ class SessionDataServiceSpec extends SpecBase
         mockSessionServiceEnabled(false)
 
         val result = await(testService.getSessionData())
-        result mustBe a[Left[_, _]]
+        result mustBe None
       }
-    }
-  }
-
-  "getSessionDataBlock" -> {
-    "when call to retrieve session data fails" -> {
-      "should return an error when fallback is disabled" in {
-        mockSessionServiceEnabled(true)
-        mockFallbackEnabled(false)
-        mockGetSessionData(Left(dummyError))
-
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-
-        val result = testService.getSessionDataBlock(
-          () => Future.successful(ImATeapot("This is the error action"))
-        )(
-          _ => Future.successful(ImATeapot("This is the success action"))
-        )
-
-        status(result) mustBe IM_A_TEAPOT
-        contentAsString(result) mustBe "This is the error action"
-      }
-
-      "should return an error when fallback is enabled but fails" in {
-        mockSessionServiceEnabled(true)
-        mockFallbackEnabled(true)
-        mockGetSessionData(Left(dummyError))
-
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-
-        val result = testService.getSessionDataBlock(
-          () => Future.successful(ImATeapot("This is the error action"))
-        )(
-          _ => Future.successful(ImATeapot("This is the success action"))
-        )
-
-        status(result) mustBe IM_A_TEAPOT
-        contentAsString(result) mustBe "This is the error action"
-      }
-
-      "should return data when fallback is enabled and succeeds" in {
-        mockSessionServiceEnabled(true)
-        mockFallbackEnabled(true)
-        mockGetSessionData(Left(dummyError))
-
-        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-          .withSession(
-            ("ClientNino", "AA111111A"),
-            ("ClientMTDID", "12345678")
-          )
-
-        val result = testService.getSessionDataBlock(
-          () => Future.successful(ImATeapot("This is the error action"))
-        )(
-          _ => Future.successful(ImATeapot("This is the success action"))
-        )
-
-        status(result) mustBe IM_A_TEAPOT
-        contentAsString(result) mustBe "This is the success action"
-      }
-    }
-
-    "should return data when session data retrieval is successful" in {
-      mockSessionServiceEnabled(true)
-      mockGetSessionData(Right(Some(dummyResponse)))
-      implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-
-      val result = testService.getSessionDataBlock(
-        () => Future.successful(ImATeapot("This is the error action"))
-      )(
-        _ => Future.successful(ImATeapot("This is the success action"))
-      )
-
-      status(result) mustBe IM_A_TEAPOT
-      contentAsString(result) mustBe "This is the success action"
     }
   }
 }

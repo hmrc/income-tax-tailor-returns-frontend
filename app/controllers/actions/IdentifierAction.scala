@@ -32,7 +32,7 @@ import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{Enrolment => HMRCEnrolment, _}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
-import utils.Logging
+import utils.{Logging, SessionDataHelper}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -60,10 +60,10 @@ class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
 class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                              (override val authConnector: AuthConnector,
                                               config: FrontendAppConfig,
-                                              sessionDataService: SessionDataService,
+                                              val sessionDataService: SessionDataService,
                                               val parser: BodyParsers.Default)
                                              (implicit val executionContext: ExecutionContext)
-  extends IdentifierAction with AuthorisedFunctions with Logging {
+  extends IdentifierAction with AuthorisedFunctions with Logging with SessionDataHelper {
 
   protected val primaryContext: String = "AuthenticatedIdentifierAction"
 
@@ -228,7 +228,7 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
 
     infoLogger("Received request to complete additional checks for agent user. Checking for agent enrolment")
 
-    sessionDataService.getSessionDataBlock(
+    getSessionDataBlock(
       errorAction = () => Future.successful(Redirect(config.viewAndChangeEnterUtrUrl))
     )(sessionData => {
       getEnrolmentValueOpt(Enrolment.Agent.key, Enrolment.Agent.value, enrolments) match {
@@ -303,11 +303,11 @@ class EarlyPrivateLaunchIdentifierActionProviderImpl @Inject()(authConnector: Au
 
 class EarlyPrivateLaunchIdentifierAction @Inject()(taxYear: Int)
                                                   (override val authConnector: AuthConnector,
-                                                   sessionDataService: SessionDataService,
+                                                   val sessionDataService: SessionDataService,
                                                    config: FrontendAppConfig,
                                                    val parser: BodyParsers.Default)
                                                   (implicit val executionContext: ExecutionContext)
-  extends IdentifierAction with AuthorisedFunctions with Logging {
+  extends IdentifierAction with AuthorisedFunctions with Logging with SessionDataHelper {
 
   protected val primaryContext: String = "EarlyPrivateLaunchIdentifierAction"
 
@@ -328,7 +328,7 @@ class EarlyPrivateLaunchIdentifierAction @Inject()(taxYear: Int)
 
     infoLogger("Received request to check authorisation for EarlyPrivateLaunch user")
 
-    sessionDataService.getSessionDataBlock(
+    getSessionDataBlock(
       errorAction = () => Future.successful(Redirect(config.viewAndChangeEnterUtrUrl))
     )(
       block = sessionData => {

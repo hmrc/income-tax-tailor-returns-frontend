@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import connectors.SessionDataConnector
 import models.SessionValues
 import models.session.SessionData
-import play.api.mvc.{Request, Result}
+import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 
@@ -33,8 +33,8 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector, c
 
   override protected val primaryContext: String = "NinoRetrievalService"
 
-  protected[services] def getFallbackSessionData[A](extraLoggingContext: Option[String])
-                                                   (implicit request: Request[A]): Option[SessionData] = {
+  def getFallbackSessionData[A](extraLoggingContext: Option[String])
+                               (implicit request: Request[A]): Option[SessionData] = {
     val methodLoggingContext: String = "fallbackSessionData"
 
     val infoLogger = infoLog(methodLoggingContext, extraContext = extraLoggingContext)
@@ -95,32 +95,5 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector, c
       infoLogger("Session cookie service disabled. Returning error outcome")
       Future.successful(None)
     }
-  }
-
-  def getSessionDataBlock[A](errorAction: () => Future[Result])
-                            (block: SessionData => Future[Result])
-                            (implicit request: Request[A], hc: HeaderCarrier): Future[Result] = {
-    val methodLoggingContext: String = "sessionDataBlock"
-
-    val infoLogger = infoLog(methodLoggingContext)
-    val warnLogger = warnLog(methodLoggingContext)
-    val errorLogger = errorLog(methodLoggingContext)
-
-    infoLogger("Received request to handle session data block")
-
-    getSessionData(Some(methodLoggingContext))
-      .flatMap(
-        _.orElse {
-            warnLogger("Could not retrieve session data from session cookie service. Attempting HTTP session fallback")
-            getFallbackSessionData(Some(methodLoggingContext))
-          }
-          .fold {
-            errorLogger("Could not retrieve session data from HTTP session fallback. Processing error action")
-            errorAction()
-          }(data => {
-            infoLogger("Successfully retrieved session data for user. Invoking block action")
-            block(data)
-          })
-      )
   }
 }

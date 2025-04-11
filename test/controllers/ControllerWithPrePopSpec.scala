@@ -21,7 +21,7 @@ import config.FrontendAppConfig
 import connectors.ConnectorResponse
 import forms.FormProvider
 import handlers.ErrorHandler
-import mocks.{MockAppConfig, MockErrorHandler, MockSessionDataService, MockUserDataService}
+import mocks.{MockAppConfig, MockErrorHandler, MockUserDataService}
 import models.errors.SimpleErrorWrapper
 import models.prePopulation.PrePopulationResponse
 import models.requests.DataRequest
@@ -43,7 +43,6 @@ import utils.TestLogging
 import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerWithPrePopSpec extends SpecBase
-  with MockSessionDataService
   with MockAppConfig
   with MockErrorHandler
   with MockUserDataService
