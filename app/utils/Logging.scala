@@ -19,7 +19,7 @@ package utils
 import play.api.Logger
 
 trait Logging {
-  protected val primaryContext : String
+  private val primaryContext : String = this.getClass.getSimpleName.replace("$", "")
   protected lazy val logger: LoggerWithContext = LoggerWithContext(Logger(this.getClass), primaryContext)
 
   private def formatStringOpt(valueOpt: Option[String]): String = valueOpt.fold("")(value => " " + value)

@@ -57,8 +57,6 @@ class ConstructionIndustrySchemeController @Inject()(
   extends ControllerWithPrePop[Boolean, CisPrePopulationResponse]
   with Logging {
 
-  override protected val primaryContext: String = classOf[ConstructionIndustrySchemeController].getSimpleName
-
   override val defaultPrePopulationResponse: CisPrePopulationResponse = CisPrePopulationResponse.empty
 
   override protected def actionChain(taxYear: Int,

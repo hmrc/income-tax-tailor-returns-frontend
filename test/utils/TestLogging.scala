@@ -17,7 +17,6 @@
 package utils
 
 trait TestLogging extends Logging {
-  override protected val primaryContext: String = "no-context"
 
   protected override def infoLog(secondaryContext: String,
                        dataLog: String = "",

@@ -34,7 +34,6 @@ class AboutYourWorkBaseController @Inject()(controller: AboutYourWorkController,
                                             val getData: DataRetrievalActionProvider,
                                             val requireData: DataRequiredActionProvider)
                                            (implicit val ec: ExecutionContext) extends Logging {
-  override protected val primaryContext: String = classOf[AboutYourWorkBaseController].getSimpleName
 
   private def requestToAgentString(implicit request: DataRequest[_]): String = if (request.isAgent) "agent" else ""
 

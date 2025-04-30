@@ -32,7 +32,6 @@ class StateBenefitsConnector @Inject()(config: FrontendAppConfig, httpClient: Ht
                                       (implicit ec: ExecutionContext)
   extends StandardGetHttpParser[StateBenefitsPrePopulationResponse]
   with Logging {
-  val primaryContext: String = "StateBenefitsConnector"
 
   def getPrePopulation(nino: String, taxYear: Int, mtdItId: String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[StateBenefitsPrePopulationResponse] = {

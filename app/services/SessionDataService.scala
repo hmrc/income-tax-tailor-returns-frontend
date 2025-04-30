@@ -32,8 +32,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector, config: FrontendAppConfig)
                                   (implicit ec: ExecutionContext) extends Logging {
 
-  override protected val primaryContext: String = "NinoRetrievalService"
-
   def getSessionData[A](sessionId: String)
                        (implicit request: Request[A], hc: HeaderCarrier): Future[SessionData] = { val ctx = "getSessionData"
     getSessionDataFromSessionStore().map {

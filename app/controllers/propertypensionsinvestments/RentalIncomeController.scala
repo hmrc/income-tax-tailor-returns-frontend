@@ -56,8 +56,6 @@ class RentalIncomeController @Inject()(
                                         val errorHandler: ErrorHandler
                                       )(implicit val ec: ExecutionContext) extends ControllerWithPrePop[Set[RentalIncome], PropertyPrePopulationResponse] with Logging {
 
-  override protected val primaryContext: String = classOf[RentalIncomeController].getSimpleName
-
   override val defaultPrePopulationResponse: PropertyPrePopulationResponse = PropertyPrePopulationResponse.empty
 
   override protected def actionChain(taxYear: Int,

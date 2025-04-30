@@ -64,8 +64,6 @@ class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                              (implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions with SessionIdHelper with Logging {
 
-  protected val primaryContext: String = "AuthenticatedIdentifierAction"
-
   override def invokeBlock[A](request: Request[A],
                               block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
     val ctx: String = "invokeBlock"

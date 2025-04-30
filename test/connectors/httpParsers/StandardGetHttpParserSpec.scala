@@ -31,9 +31,7 @@ class StandardGetHttpParserSpec extends SpecBase {
     implicit val reads: Reads[DummyDataModel] = Json.reads[DummyDataModel]
   }
 
-  object DummyGetHttpParser extends StandardGetHttpParser[DummyDataModel] with Logging {
-    override protected val primaryContext: String = "DummyLogString"
-  }
+  object DummyGetHttpParser extends StandardGetHttpParser[DummyDataModel] with Logging
 
   "parseToDataModel" -> {
     val dummyError: SimpleErrorWrapper = SimpleErrorWrapper(IM_A_TEAPOT)

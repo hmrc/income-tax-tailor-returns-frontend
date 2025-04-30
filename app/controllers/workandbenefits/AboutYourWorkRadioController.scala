@@ -60,7 +60,6 @@ class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesA
   extends ControllerWithPrePop[Boolean, EmploymentRadioPrePop]
     with Logging {
 
-  override protected val primaryContext: String = classOf[AboutYourWorkRadioController].getSimpleName
   override val defaultPrePopulationResponse: EmploymentRadioPrePop = EmploymentRadioPrePop.empty
 
   val pageName = classOf[AboutYourWorkRadioController].getSimpleName

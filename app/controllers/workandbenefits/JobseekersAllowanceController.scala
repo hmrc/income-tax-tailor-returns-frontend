@@ -57,8 +57,6 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
   extends ControllerWithPrePop[Set[JobseekersAllowance], EsaJsaPrePopulationResponse]
   with Logging {
 
-  override protected val primaryContext: String = "JobseekersAllowanceController"
-
   override val defaultPrePopulationResponse: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse.empty
 
   override protected def actionChain(taxYear: Int,

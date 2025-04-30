@@ -31,7 +31,6 @@ class SessionIdHelperSpec extends SpecBase
   with MockAppConfig {
 
   val testHelper: SessionIdHelper = new SessionIdHelper {
-    override protected val primaryContext: String = "testHelper"
     override val config: FrontendAppConfig = mockAppConfig
   }
 
