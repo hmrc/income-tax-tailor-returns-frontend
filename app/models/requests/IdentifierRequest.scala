@@ -25,7 +25,7 @@ case class IdentifierRequest[A](request: Request[A],
   val nino: String = sessionData.nino
   val mtdItId: String = sessionData.mtditid
   val sessionId: String = sessionData.sessionId
-  val utr: String = sessionData.utr
+  val utr: Option[String] = sessionData.utr
 }
 
 object IdentifierRequest {
@@ -33,10 +33,10 @@ object IdentifierRequest {
                nino: String,
                mtditid: String,
                sessionId: String,
-               utr: String,
+               utr: Option[String] = None,
                isAgent: Boolean): IdentifierRequest[A] = IdentifierRequest(
     request = request,
-    sessionData = SessionData(mtditid = nino, nino = mtditid, utr = sessionId, sessionId = utr),
+    sessionData = SessionData(mtditid = nino, nino = mtditid, utr = utr, sessionId = sessionId),
     isAgent = isAgent
   )
 }

@@ -136,7 +136,6 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
 
   def sessionCookieServiceEnabled: Boolean = configuration.get[Boolean]("feature-switch.sessionCookieService")
   def isPrePopEnabled: Boolean = configuration.get[Boolean]("feature-switch.isPrePopEnabled")
-  def sessionFallbackEnabled: Boolean = configuration.get[Boolean]("feature-switch.sessionFallbackEnabled")
 
   def languageMap: Map[String, Lang] = Map(
     "en" -> Lang("en"),

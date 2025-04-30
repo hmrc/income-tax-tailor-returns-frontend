@@ -18,13 +18,15 @@ package services
 
 import base.SpecBase
 import mocks.{MockAppConfig, MockSessionDataConnector}
-import models.errors.{APIErrorBodyModel, APIErrorModel}
+import models.errors.{APIErrorBodyModel, APIErrorModel, MissingAgentClientDetails}
 import models.session.SessionData
 import play.api.http.{HeaderNames, Status}
-import play.api.mvc.{AnyContentAsEmpty, Results}
+import play.api.mvc.{AnyContentAsEmpty, Result, Results}
 import play.api.test.Helpers.await
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, ResultExtractors}
 import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.Future
 
 class SessionDataServiceSpec extends SpecBase
   with ResultExtractors
@@ -43,40 +45,67 @@ class SessionDataServiceSpec extends SpecBase
   )
 
   val dummyResponse: SessionData = SessionData(
-    mtditid = "111111", nino = "AA111111A", utr = "123456", sessionId = "xxxxxxx"
+    mtditid = "111111", nino = "AA111111A", utr = Some("123456"), sessionId = sessionId
   )
 
   val dummyError: APIErrorModel = APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", ""))
 
+  "getSessionDataBlock" -> {
+    "when call to retrieve session data fails" -> {
+
+      "should return an error when fallback returns no data" in {
+        mockSessionServiceEnabled(true)
+        mockGetSessionDataFromSessionStore(Left(dummyError))
+
+        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+
+        val result: MissingAgentClientDetails = intercept[MissingAgentClientDetails](await(testService.getSessionData(sessionId)))
+        result.message mustBe "Session Data service and Session Cookie both returned empty data"
+      }
+
+      "should return data when fallback is enabled and succeeds" in {
+        mockSessionServiceEnabled(true)
+        mockGetSessionDataFromSessionStore(Left(dummyError))
+
+        implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+          .withSession(
+            ("ClientNino", "AA111111A"),
+            ("ClientMTDID", "12345678")
+          )
+
+        val result: SessionData = await(testService.getSessionData(sessionId))
+        result mustBe SessionData(sessionId = sessionId, mtditid = "12345678", nino = "AA111111A")
+      }
+    }
+
+    "should return data when session data retrieval is successful" in {
+      mockSessionServiceEnabled(true)
+      mockGetSessionDataFromSessionStore(Right(Some(dummyResponse)))
+
+      implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+
+      val result: SessionData = await(testService.getSessionData(sessionId))
+      result mustBe dummyResponse
+    }
+  }
+
   "getFallbackSessionData" -> {
-    "should return an error when request session fallback is disabled" in {
-      mockFallbackEnabled(false)
 
+    "should return an error when data is not present in request session" in {
       implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-      val result: Option[SessionData] = testService.getFallbackSessionData(None)
+      val result: Option[SessionData] = testService.getFallbackSessionData(sessionId)
 
       result mustBe None
     }
 
-    "should return an error when fallback is enabled but data is not present in request session" in {
-      mockFallbackEnabled(true)
-
-      implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
-      val result: Option[SessionData] = testService.getFallbackSessionData(None)
-
-      result mustBe None
-    }
-
-    "should return data when fallback is enabled and data is present in request session" in {
-      mockFallbackEnabled(true)
-
+    "should return data when data is present in request session" in {
       implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(
         ("ClientNino", "AA111111A"),
         ("ClientMTDID", "12345678")
       )
 
-      val result: Option[SessionData] = testService.getFallbackSessionData(None)
-      result.getOrElse(dummySessionData) mustBe SessionData("12345678", "AA111111A", "", "")
+      val result: Option[SessionData] = testService.getFallbackSessionData(sessionId)
+      result.getOrElse(dummySessionData) mustBe SessionData(sessionId = sessionId, mtditid = "12345678", nino = "AA111111A")
     }
   }
 
@@ -84,34 +113,34 @@ class SessionDataServiceSpec extends SpecBase
     "if session cookie service is enabled" -> {
       "should return session data when it is returned from the session cookie service" in {
         mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(Some(dummyResponse)))
+        mockGetSessionDataFromSessionStore(Right(Some(dummyResponse)))
 
-        val result = await(testService.getSessionData())
-        result.getOrElse(SessionData.empty) mustBe dummyResponse
+        val result = await(testService.getSessionDataFromSessionStore())
+        result mustBe Some(dummyResponse)
       }
 
       "should return an error when no session data is returned from the session cookie service" in {
         mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(None))
+        mockGetSessionDataFromSessionStore(Right(None))
 
-        val result = await(testService.getSessionData())
+        val result = await(testService.getSessionDataFromSessionStore())
         result mustBe None
       }
 
       "should return an error when an error is returned from the session cookie service" in {
         mockSessionServiceEnabled(true)
-        mockGetSessionData(Left(dummyError))
+        mockGetSessionDataFromSessionStore(Left(dummyError))
 
-        val result = await(testService.getSessionData())
+        val result = await(testService.getSessionDataFromSessionStore())
         result mustBe None
       }
     }
 
     "if session cookie service is disabled" -> {
-      "should return an error" in {
+      "should return None" in {
         mockSessionServiceEnabled(false)
 
-        val result = await(testService.getSessionData())
+        val result = await(testService.getSessionDataFromSessionStore())
         result mustBe None
       }
     }

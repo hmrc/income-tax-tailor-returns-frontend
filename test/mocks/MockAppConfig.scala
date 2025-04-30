@@ -55,11 +55,6 @@ trait MockAppConfig extends MockFactory {this: TestSuite =>
       .expects()
       .returning(response)
 
-  def mockFallbackEnabled(response: Boolean): CallHandler0[Boolean] =
-    (() => mockAppConfig.sessionFallbackEnabled)
-      .expects()
-      .returning(response)
-
   def mockPrePopEnabled(response: Boolean): CallHandler0[Boolean] = {
     (() => mockAppConfig.isPrePopEnabled)
       .expects()

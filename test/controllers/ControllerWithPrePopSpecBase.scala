@@ -58,16 +58,13 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
   def onwardRoute: Call = Call("GET", "/foo")
 
   sealed trait ControllerWithPrePopTest {
-    val nino: String = "AA111111A"
-    val mtdItId: String = "someMtdItId"
 
     val userAnswers: Option[UserAnswers] = Some(emptyUserAnswers)
 
     val dummySessionData: SessionData = SessionData(
       mtditid = mtdItId,
       nino = nino,
-      utr = "12345",
-      sessionId = "id"
+      sessionId = sessionId
     )
 
     def defaultSession: Seq[(String, String)] = Seq(validTaxYears)

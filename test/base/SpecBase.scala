@@ -69,15 +69,15 @@ trait SpecBase extends AnyFreeSpec
 
   val mtdItId: String = "anMtdItId"
   val nino: String = "AA111111A"
+  val sessionId = "aSessionId"
   val anAgent: Boolean = true
   val notAnAgent: Boolean = false
   val parsers: PlayBodyParsers = stubControllerComponents().parsers
 
   val dummySessionData: SessionData = SessionData(
+    sessionId = sessionId,
     mtditid = mtdItId,
-    nino = nino,
-    utr = "",
-    sessionId = ""
+    nino = nino
   )
 
   def testIdentifierRequest(request: Request[AnyContentAsEmpty.type] = FakeRequest(),
@@ -86,8 +86,7 @@ trait SpecBase extends AnyFreeSpec
       request = request,
       nino = nino,
       mtditid = mtdItId,
-      sessionId = "aSessionId",
-      utr = "aUtr",
+      sessionId = sessionId,
       isAgent = isAgent
     )
 

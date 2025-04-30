@@ -19,6 +19,7 @@ package services
 import config.FrontendAppConfig
 import connectors.SessionDataConnector
 import models.SessionValues
+import models.errors.MissingAgentClientDetails
 import models.session.SessionData
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,66 +34,46 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector, c
 
   override protected val primaryContext: String = "NinoRetrievalService"
 
-  def getFallbackSessionData[A](extraLoggingContext: Option[String])
-                               (implicit request: Request[A]): Option[SessionData] = {
-    val methodLoggingContext: String = "fallbackSessionData"
-
-    val infoLogger = infoLog(methodLoggingContext, extraContext = extraLoggingContext)
-    val warnLogger = warnLog(methodLoggingContext, extraContext = extraLoggingContext)
-
-    if (config.sessionFallbackEnabled) {
-      infoLogger("HTTP Session fallback enabled. Attempting to retrieve session data from request")
-
-      val optionalNino = request.session.get(SessionValues.CLIENT_NINO)
-      val optionalMtdItId = request.session.get(SessionValues.CLIENT_MTDITID)
-      val utr = "" //I don't think we need these right now
-      val sessionId = "" //I don't think we need these right now
-
-      (optionalNino, optionalMtdItId) match {
-        case (Some(nino), Some(mtdItId)) => Some(SessionData(mtdItId, nino, utr, sessionId))
-        case _ =>
-          val logString: String =
-            (optionalNino.fold(Seq("NINO"))(_ => Seq.empty[String]) ++
-              optionalMtdItId.fold(Seq("MTD-IT-ID"))(_ => Seq.empty[String]))
-              .mkString(", ")
-
-          warnLogger(s"Could not find $logString in request session. Returning no data")
-          None
-      }
-    } else {
-      infoLogger("HTTP Session fallback disabled. Returning no data")
-      None
+  def getSessionData[A](sessionId: String)
+                       (implicit request: Request[A], hc: HeaderCarrier): Future[SessionData] = { val ctx = "getSessionData"
+    getSessionDataFromSessionStore().map {
+      case Some(sessionData) => sessionData
+      case _ =>
+        getFallbackSessionData(sessionId) match {
+          case Some(sessionData) => sessionData
+          case _ =>
+            errorLog(ctx)("Session Data service and Session Cookie both returned empty data. Throwing exception")
+            throw MissingAgentClientDetails("Session Data service and Session Cookie both returned empty data")
+        }
     }
   }
 
-  def getSessionData(extraLoggingContext: Option[String] = None)
-                    (implicit hc: HeaderCarrier): Future[Option[SessionData]] = {
-    val methodLoggingContext: String = "getSessionData"
+  private[services] def getFallbackSessionData[A](sessionId: String)
+                                                 (implicit request: Request[A]): Option[SessionData] = { val ctx = "fallbackSessionData"
+    (
+      request.session.get(SessionValues.CLIENT_NINO),
+      request.session.get(SessionValues.CLIENT_MTDITID)
+    ) match {
+      case (Some(nino), Some(mtdItId)) => Some(SessionData(sessionId, mtdItId, nino))
+      case (optNino, optMtdItId) =>
+        warnLog(ctx)(s"Could not find ${Seq(optNino, optMtdItId).flatten.mkString(", ")} in request session. Returning no data")
+        None
+    }
+  }
 
-    val infoLogger: String => Unit = infoLog(methodLoggingContext, extraContext = extraLoggingContext)
-    val errorLogger: String => Unit = errorLog(methodLoggingContext, extraContext = extraLoggingContext)
-
-    infoLogger("Received request to retrieve session data from session cookie service")
-
+  private[services] def getSessionDataFromSessionStore()(implicit hc: HeaderCarrier): Future[Option[SessionData]] = { val ctx = "getSessionDataFromSessionStore"
     if (config.sessionCookieServiceEnabled) {
-      infoLogger("Session cookie service enabled. Attempting to retrieve session data")
-
+      infoLog(ctx)("Session cookie service enabled. Attempting to retrieve session data from income-tax-session-store")
       sessionDataConnector.getSessionData.map {
-        case Right(sessionDataOpt@Some(_)) =>
-          infoLogger("Session data successfully retrieved from session cookie service. Returning data")
+        case Right(sessionDataOpt) =>
+          if(sessionDataOpt.isEmpty) warnLog(ctx)("Session cookie service returned empty data. Returning no data")
           sessionDataOpt
-        case Right(None) =>
-          warnLog(methodLoggingContext)("Session cookie service returned empty data. Returning None")
-          None
         case Left(err) =>
-          errorLogger(
-            s"Request to retrieve session data failed with error status: ${err.status} and error body: ${err.body}. " +
-              s"Returning None"
-          )
+          errorLog(ctx)(s"Request to retrieve session data failed with error status: ${err.status} and error body: ${err.body}. Returning None")
           None
       }
     } else {
-      infoLogger("Session cookie service disabled. Returning error outcome")
+      infoLog(ctx)("Session cookie service disabled. Returning no data")
       Future.successful(None)
     }
   }

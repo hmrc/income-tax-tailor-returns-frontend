@@ -33,9 +33,8 @@ class FakeIdentifierAction @Inject()(isAgent: Boolean)
       block(IdentifierRequest(
         request = request,
         nino = "AA111111A",
-        mtditid = "mtdItId",
-        sessionId = "some-session-id",
-        utr = "some-utr",
+        mtditid = "anMtdItId",
+        sessionId = "aSessionId",
         isAgent = isAgent
       ))
 

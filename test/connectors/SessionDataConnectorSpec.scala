@@ -34,7 +34,6 @@ class SessionDataConnectorSpec extends SpecBase
   trait Test {
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
-    val nino: String = "AA111111A"
     val testConnector = new SessionDataConnectorImpl(
       config = mockAppConfig,
       httpClient = mockHttpClientV2
@@ -45,7 +44,7 @@ class SessionDataConnectorSpec extends SpecBase
     mockHttpClientV2Get(url"$baseUrl/income-tax-session-data/")
 
     val dummyResponse: Option[SessionData] = Some(SessionData(
-      mtditid = "111111", nino = "AA111111A", utr = "123456", sessionId = "xxxxxxx"
+      mtditid = mtdItId, nino = nino, sessionId = sessionId
     ))
 
     val dummyError: APIErrorModel = APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", ""))

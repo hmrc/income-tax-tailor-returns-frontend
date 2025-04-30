@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package models.session
+package models.errors
 
+import scala.util.control.NoStackTrace
 
-import play.api.libs.json.{Format, Json}
-
-case class SessionData(sessionId: String,
-                       mtditid: String,
-                       nino: String,
-                       utr: Option[String] = None)
-
-object SessionData {
-  implicit val format: Format[SessionData] = Json.format[SessionData]
+sealed trait ErrorResponse {
+  val message: String
+  val statusCode: Option[Int] = None
 }
+
+case class MissingAgentClientDetails(message: String) extends Exception(message) with NoStackTrace with ErrorResponse

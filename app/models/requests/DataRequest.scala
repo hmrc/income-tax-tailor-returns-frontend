@@ -27,7 +27,7 @@ case class OptionalDataRequest[A] (request: Request[A],
   val nino: String = sessionData.nino
   val mtdItId: String = sessionData.mtditid
   val sessionId: String = sessionData.sessionId
-  val utr: String = sessionData.utr
+  val utr: Option[String] = sessionData.utr
 }
 
 case class DataRequest[A] (request: Request[A],
@@ -37,5 +37,5 @@ case class DataRequest[A] (request: Request[A],
   val nino: String = sessionData.nino
   val mtdItId: String = sessionData.mtditid
   val sessionId: String = sessionData.sessionId
-  val utr: String = sessionData.utr
+  val utr: Option[String] = sessionData.utr
 }

@@ -50,8 +50,8 @@ class AuthActionSpec extends SpecBase
 
     type AuthReturnType = Option[AffinityGroup] ~ Enrolments ~ ConfidenceLevel
 
-    implicit val hc: HeaderCarrier = HeaderCarrier().copy(sessionId = Some(SessionId("sessionId")))
-    implicit val request: Request[AnyContent] = FakeRequest()
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    implicit val request: Request[AnyContent] = FakeRequest().withSession("sessionId" -> sessionId)
 
     val mockAuthConnector: AuthConnector = MockitoSugar.mock[AuthConnector]
     val mockSessionDataService: SessionDataService = new SessionDataService(mockSessionDataConnector, mockAppConfig)
@@ -64,89 +64,9 @@ class AuthActionSpec extends SpecBase
       sessionDataService = mockSessionDataService,
       parser = mockParser
     )
-
-    val testPrivateAuth: EarlyPrivateLaunchIdentifierAction = new EarlyPrivateLaunchIdentifierAction(
-      taxYear = taxYear
-    )(
-      authConnector = mockAuthConnector,
-      sessionDataService = mockSessionDataService,
-      config = mockAppConfig,
-      parser = mockParser
-    )
   }
   
   "AuthenticatedIdentifierAction" - {
-    "getEnrolmentValueOpt" - {
-      "should return the expected value when a key exists within the given enrolments" in new Test {
-        val testEnrolments: Enrolments = Enrolments(
-          Set(HMRCEnrolment("dummyKey", Seq(EnrolmentIdentifier("dummyIdentifier", "value")), "activated"))
-        )
-
-        testAuth.getEnrolmentValueOpt("dummyKey", "dummyIdentifier", testEnrolments) mustBe Some("value")
-      }
-
-      "should return the expected value when multiple keys exist within the given enrolments" in new Test {
-        val testEnrolments: Enrolments = Enrolments(
-          Set(
-            HMRCEnrolment("dummyKey", Seq(EnrolmentIdentifier("dummyIdentifier", "value")), "activated"),
-            HMRCEnrolment("dummyKey", Seq(EnrolmentIdentifier("dummyIdentifier2", "value2")), "activated")
-          )
-        )
-
-        testAuth.getEnrolmentValueOpt("dummyKey", "dummyIdentifier", testEnrolments) mustBe Some("value")
-      }
-      
-      "should return none when a key doesn't exist within the given enrolment" in new Test {
-        val testEnrolments: Enrolments = Enrolments(Set())
-        testAuth.getEnrolmentValueOpt("dummyKey", "dummyIdentifier", testEnrolments) mustBe None
-      }
-    }
-
-    "sessionIdBlock" - {
-      "should process block when sessionId is present in the header carrier" in new Test {
-        val result: Future[Result] = testAuth.sessionIdBlock(
-          extraLoggingContext = "dummyLoggingString",
-          errorLogString = "N/A",
-          errorAction = Future.successful(ImATeapot("Teapot time"))
-        )(
-          block = (sessionId: String) => Future.successful(Ok(sessionId))
-        )
-
-        status(result) mustBe OK
-        contentAsString(result) mustBe "sessionId"
-      }
-
-      "should process block when sessionId is present in the request headers" in new Test {
-        override implicit val hc: HeaderCarrier = HeaderCarrier()
-        override implicit val request: Request[AnyContent] = FakeRequest().withHeaders(("sessionId", "sessionId"))
-
-        val result: Future[Result] = testAuth.sessionIdBlock(
-          extraLoggingContext = "dummyLoggingString",
-          errorLogString = "N/A",
-          errorAction = Future.successful(ImATeapot("Teapot time"))
-        )(
-          block = (sessionId: String) => Future.successful(Ok(sessionId))
-        )
-
-        status(result) mustBe OK
-        contentAsString(result) mustBe "sessionId"
-      }
-
-      "should return error when sessionId is not present" in new Test {
-        override implicit val hc: HeaderCarrier = HeaderCarrier()
-
-        val result: Future[Result] = testAuth.sessionIdBlock(
-          extraLoggingContext = "dummyLoggingString",
-          errorLogString = "N/A",
-          errorAction = Future.successful(ImATeapot("Teapot time"))
-        )(
-          block = (sessionId: String) => Future.successful(Ok(sessionId))
-        )
-
-        status(result) mustBe IM_A_TEAPOT
-        contentAsString(result) mustBe "Teapot time"
-      }
-    }
 
     "invokeBlock" - {
       "should handle appropriately when call to authorisation fails with NoActiveSession error" in new Test {
@@ -164,7 +84,19 @@ class AuthActionSpec extends SpecBase
         redirectLocation(result).getOrElse("None Found") mustBe "dummyUrl"
       }
 
-      "should handle appropriately when call to authorisation fails with any unhandled error" in new Test {
+      "should handle appropriately when call to authorisation fails with an AuthorisationException" in new Test {
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.failed(InsufficientEnrolments("Dummy exception")))
+
+        val result: Future[Result] = testAuth.invokeBlock(
+          request = request,
+          block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Teapot time"))
+        )
+
+        status(result) mustBe UNAUTHORIZED
+      }
+
+      "should handle any other type of bubbled up unhandled exception" in new Test {
         when(mockAuthConnector.authorise(any(), any())(any(), any()))
           .thenReturn(Future.failed(new RuntimeException("Dummy exception")))
 
@@ -173,7 +105,7 @@ class AuthActionSpec extends SpecBase
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Teapot time"))
         )
 
-        status(result) mustBe UNAUTHORIZED
+        status(result) mustBe INTERNAL_SERVER_ERROR
       }
 
       "should handle appropriately when no affinity group is returned from authorisation call" in new Test {
@@ -199,7 +131,6 @@ class AuthActionSpec extends SpecBase
       }
 
       "should return expected result for Individual happy path" in new Test {
-        mockLoginUrl("dummyUrl")
 
         val partialAuthResponse: Option[AffinityGroup] ~ Enrolments = new ~(
           Some(AffinityGroup.Individual),
@@ -226,7 +157,7 @@ class AuthActionSpec extends SpecBase
           .thenReturn(Future.successful(authResponse))
 
         val result: Future[Result] = testAuth.invokeBlock(
-          request = FakeRequest().withHeaders(("sessionId", "sessionId")),
+          request = FakeRequest().withHeaders(("sessionId", sessionId)),
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Teapot time"))
         )
 
@@ -235,7 +166,6 @@ class AuthActionSpec extends SpecBase
       }
 
       "should return expected result for Organisation happy path" in new Test {
-        mockLoginUrl("dummyUrl")
 
         val partialAuthResponse: Option[AffinityGroup] ~ Enrolments = new ~(
           Some(AffinityGroup.Organisation),
@@ -262,7 +192,7 @@ class AuthActionSpec extends SpecBase
           .thenReturn(Future.successful(authResponse))
 
         val result: Future[Result] = testAuth.invokeBlock(
-          request = FakeRequest().withHeaders(("sessionId", "sessionId")),
+          request = FakeRequest().withHeaders(("sessionId", sessionId)),
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Teapot time"))
         )
 
@@ -298,10 +228,10 @@ class AuthActionSpec extends SpecBase
           .thenReturn(Future.successful())
 
         mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(Some(dummySessionData)))
+        mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
 
         val result: Future[Result] = testAuth.invokeBlock(
-          request = FakeRequest().withHeaders(("sessionId", "sessionId")),
+          request = FakeRequest().withHeaders(("sessionId", sessionId)),
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Teapot time"))
         )
 
@@ -318,7 +248,7 @@ class AuthActionSpec extends SpecBase
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("This should be impossible")),
           enrolments = Enrolments(Set.empty[HMRCEnrolment]),
           confidenceLevel = L50,
-          extraLoggingContext = "N/A"
+          sessionId = sessionId
         )
 
         status(result) mustBe SEE_OTHER
@@ -338,7 +268,7 @@ class AuthActionSpec extends SpecBase
             )
           )),
           confidenceLevel = L250,
-          extraLoggingContext = "N/A"
+          sessionId = sessionId
         )
 
         status(result) mustBe SEE_OTHER
@@ -358,41 +288,14 @@ class AuthActionSpec extends SpecBase
             )
           )),
           confidenceLevel = L250,
-          extraLoggingContext = "N/A"
+          sessionId = sessionId
         )
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).getOrElse("None found") mustBe "signUp"
       }
 
-      "should return a redirect when session ID cannot be found in request" in new Test {
-        mockLoginRedirect("loginUrl")
-        override implicit val hc: HeaderCarrier = HeaderCarrier()
-
-        val result: Future[Result] = testAuth.nonAgentAuthentication(
-          block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("This should be impossible")),
-          enrolments = Enrolments(Set(
-            HMRCEnrolment(
-              key = Enrolment.Nino.key,
-              identifiers = Seq(EnrolmentIdentifier(Enrolment.Nino.value, "AA111111A")),
-              state = "activated"
-            ),
-            HMRCEnrolment(
-              key = Enrolment.Individual.key,
-              identifiers = Seq(EnrolmentIdentifier(Enrolment.Individual.value, "12345678")),
-              state = "activated"
-            )
-          )),
-          confidenceLevel = L250,
-          extraLoggingContext = "N/A"
-        )
-
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).getOrElse("None found") mustBe "loginUrl"
-      }
-
       "should return correct result for happy path" in new Test {
-        mockLoginUrl("dummyUrl")
 
         val result: Future[Result] = testAuth.nonAgentAuthentication(
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Teapot time")),
@@ -409,7 +312,7 @@ class AuthActionSpec extends SpecBase
             )
           )),
           confidenceLevel = L250,
-          extraLoggingContext = "N/A"
+          sessionId = sessionId
         )
 
         status(result) mustBe IM_A_TEAPOT
@@ -418,14 +321,14 @@ class AuthActionSpec extends SpecBase
     }
 
     "agentAuth" - {
-      "should return an error when session data service returns no data" in new Test {
+      "should redirect to V&C Agent Client lookup when no client details returned from session" in new Test {
         mockSessionServiceEnabled(false)
-        mockFallbackEnabled(false)
         mockViewAndChangeEnterUtrUrl("dummyUrl")
 
         val result: Future[Result] = testAuth.agentAuth(
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Should not be possible")),
-          enrolments = Enrolments(Set())
+          enrolments = Enrolments(Set()),
+          sessionId = sessionId
         )
 
         status(result) mustBe SEE_OTHER
@@ -434,12 +337,13 @@ class AuthActionSpec extends SpecBase
 
       "should return an error when agent enrolment can't be found" in new Test {
         mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(Some(dummySessionData)))
+        mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
         mockSetUpAgentServicesAccountUrl("dummyUrl")
 
         val result: Future[Result] = testAuth.agentAuth(
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Should not be possible")),
-          enrolments = Enrolments(Set())
+          enrolments = Enrolments(Set()),
+          sessionId = sessionId
         )
 
         status(result) mustBe SEE_OTHER
@@ -452,7 +356,7 @@ class AuthActionSpec extends SpecBase
             .thenReturn(Future.failed(MissingBearerToken("AnError")))
 
           mockSessionServiceEnabled(true)
-          mockGetSessionData(Right(Some(dummySessionData)))
+          mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
           mockViewAndChangeEnterUtrUrl("dummyUrl")
 
           val result: Future[Result] = testAuth.agentAuth(
@@ -463,7 +367,8 @@ class AuthActionSpec extends SpecBase
                 identifiers = Seq(EnrolmentIdentifier(Enrolment.Agent.value, "value")),
                 state = "activated"
               )
-            ))
+            )),
+            sessionId = sessionId
           )
 
           status(result) mustBe SEE_OTHER
@@ -477,7 +382,7 @@ class AuthActionSpec extends SpecBase
               .andThen(Future.successful(()))
 
             mockSessionServiceEnabled(true)
-            mockGetSessionData(Right(Some(dummySessionData)))
+            mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
 
             val result: Future[Result] = testAuth.agentAuth(
               block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Should not be possible")),
@@ -487,7 +392,8 @@ class AuthActionSpec extends SpecBase
                   identifiers = Seq(EnrolmentIdentifier(Enrolment.Agent.value, "value")),
                   state = "activated"
                 )
-              ))
+              )),
+              sessionId = sessionId
             )
 
             status(result) mustBe SEE_OTHER
@@ -501,7 +407,7 @@ class AuthActionSpec extends SpecBase
               .andThen(Future.failed(InternalError("An Error")))
 
             mockSessionServiceEnabled(true)
-            mockGetSessionData(Right(Some(dummySessionData)))
+            mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
 
             val result: Future[Result] = testAuth.agentAuth(
               block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Should not be possible")),
@@ -511,7 +417,8 @@ class AuthActionSpec extends SpecBase
                   identifiers = Seq(EnrolmentIdentifier(Enrolment.Agent.value, "value")),
                   state = "activated"
                 )
-              ))
+              )),
+              sessionId = sessionId
             )
 
             status(result) mustBe UNAUTHORIZED
@@ -523,7 +430,7 @@ class AuthActionSpec extends SpecBase
               .andThen(Future.failed(new RuntimeException("AnError")))
 
             mockSessionServiceEnabled(true)
-            mockGetSessionData(Right(Some(dummySessionData)))
+            mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
 
             val result: Future[Result] = testAuth.agentAuth(
               block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Should not be possible")),
@@ -533,7 +440,8 @@ class AuthActionSpec extends SpecBase
                   identifiers = Seq(EnrolmentIdentifier(Enrolment.Agent.value, "value")),
                   state = "activated"
                 )
-              ))
+              )),
+              sessionId = sessionId
             )
 
             status(result) mustBe INTERNAL_SERVER_ERROR
@@ -545,7 +453,7 @@ class AuthActionSpec extends SpecBase
             .thenReturn(Future.failed(new RuntimeException("AnError")))
 
           mockSessionServiceEnabled(true)
-          mockGetSessionData(Right(Some(dummySessionData)))
+          mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
 
           val result: Future[Result] = testAuth.agentAuth(
             block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Should not be possible")),
@@ -555,7 +463,8 @@ class AuthActionSpec extends SpecBase
                 identifiers = Seq(EnrolmentIdentifier(Enrolment.Agent.value, "value")),
                 state = "activated"
               )
-            ))
+            )),
+            sessionId = sessionId
           )
 
           status(result) mustBe INTERNAL_SERVER_ERROR
@@ -567,7 +476,7 @@ class AuthActionSpec extends SpecBase
           .thenReturn(Future.successful())
 
         mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(Some(dummySessionData)))
+        mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
 
         val result: Future[Result] = testAuth.agentAuth(
           block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Teapot time")),
@@ -577,88 +486,8 @@ class AuthActionSpec extends SpecBase
               identifiers = Seq(EnrolmentIdentifier(Enrolment.Agent.value, "value")),
               state = "activated"
             )
-          ))
-        )
-
-        status(result) mustBe IM_A_TEAPOT
-        contentAsString(result) mustBe "Teapot time"
-      }
-    }
-  }
-
-  "EarlyPrivateLaunchIdentifierAction" - {
-    "invokeBlock" - {
-      "should return an error when session data service returns no data" in new Test {
-        mockSessionServiceEnabled(false)
-        mockFallbackEnabled(false)
-        mockViewAndChangeEnterUtrUrl("dummyUrl")
-
-        val result: Future[Result] = testPrivateAuth.invokeBlock(
-          request = request,
-          block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Not possible"))
-        )
-
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).getOrElse("None Found") mustBe "dummyUrl"
-      }
-
-      "should handle appropriately for a NoActiveSession error" in new Test {
-        mockLoginUrl("dummyUrl")
-        mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(Some(dummySessionData)))
-
-        when(mockAuthConnector.authorise[Option[String]](any(), any())(any(), any()))
-          .thenReturn(Future.failed(BearerTokenExpired("AnError")))
-
-        val result: Future[Result] = testPrivateAuth.invokeBlock(
-          request = request,
-          block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Not possible"))
-        )
-
-        status(result) mustBe SEE_OTHER
-        redirectLocation(result).getOrElse("None found") mustBe "dummyUrl"
-      }
-
-      "should handle appropriately for any unhandled error" in new Test {
-        mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(Some(dummySessionData)))
-
-        when(mockAuthConnector.authorise[Option[String]](any(), any())(any(), any()))
-          .thenReturn(Future.failed(new RuntimeException("AnError")))
-
-        val result: Future[Result] = testPrivateAuth.invokeBlock(
-          request = request,
-          block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Not possible"))
-        )
-
-        status(result) mustBe UNAUTHORIZED
-      }
-
-      "should handle appropriately when internalId cannot be found" in new Test {
-        mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(Some(dummySessionData)))
-
-        when(mockAuthConnector.authorise[Option[String]](any(), any())(any(), any()))
-          .thenReturn(Future.successful(None))
-
-        val result: Future[Result] = testPrivateAuth.invokeBlock(
-          request = request,
-          block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Not possible"))
-        )
-
-        status(result) mustBe UNAUTHORIZED
-      }
-
-      "should handle appropriately for happy path" in new Test {
-        mockSessionServiceEnabled(true)
-        mockGetSessionData(Right(Some(dummySessionData)))
-
-        when(mockAuthConnector.authorise[Option[String]](any(), any())(any(), any()))
-          .thenReturn(Future.successful(Some("someId")))
-
-        val result: Future[Result] = testPrivateAuth.invokeBlock(
-          request = request,
-          block = (_: IdentifierRequest[_]) => Future.successful(ImATeapot("Teapot time"))
+          )),
+          sessionId = sessionId
         )
 
         status(result) mustBe IM_A_TEAPOT
