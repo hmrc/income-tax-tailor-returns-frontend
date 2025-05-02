@@ -31,7 +31,7 @@ import uk.gov.hmrc.auth.core.ConfidenceLevel.{L250, L50}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, confidenceLevel}
 import uk.gov.hmrc.auth.core.retrieve.{EmptyRetrieval, ~}
 import uk.gov.hmrc.auth.core.{Enrolment => HMRCEnrolment, _}
-import uk.gov.hmrc.http.{HeaderCarrier, SessionId}
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 

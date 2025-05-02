@@ -36,7 +36,7 @@ object IdentifierRequest {
                utr: Option[String] = None,
                isAgent: Boolean): IdentifierRequest[A] = IdentifierRequest(
     request = request,
-    sessionData = SessionData(mtditid = nino, nino = mtditid, utr = utr, sessionId = sessionId),
+    sessionData = SessionData(mtditid = mtditid, nino = nino, utr = utr, sessionId = sessionId),
     isAgent = isAgent
   )
 }
