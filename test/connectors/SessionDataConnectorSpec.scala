@@ -52,7 +52,7 @@ class SessionDataConnectorSpec extends SpecBase
     implicit val reads: HttpReads[SessionDataResponse] = SessionDataResponseReads
   }
 
-  "getSessionData" -> {
+  "getSessionData" - {
     "should return a success when a success response is received from session data service" in new Test {
       mockHttpClientV2Execute[SessionDataResponse](Right(dummyResponse))
 

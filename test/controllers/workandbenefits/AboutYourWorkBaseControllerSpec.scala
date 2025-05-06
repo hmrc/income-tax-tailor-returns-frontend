@@ -78,8 +78,8 @@ class AboutYourWorkBaseControllerSpec extends SpecBase
       .withSession("validTaxYears" -> taxYears.mkString(","))
   }
 
-  "onPageLoad" -> {
-    "FosterCarer user answers exist and have a value of true" -> {
+  "onPageLoad" - {
+    "FosterCarer user answers exist and have a value of true" - {
       "should redirect to AboutYourWorkRadioController.onPageLoad for foster carers" in new Test {
         override val userAnswers: UserAnswers = UserAnswers(
           mtdItId = mtdItId,
@@ -95,7 +95,7 @@ class AboutYourWorkBaseControllerSpec extends SpecBase
       }
     }
 
-    "FosterCarer user answers exist and have a value of false" -> {
+    "FosterCarer user answers exist and have a value of false" - {
       "should redirect to AboutYourWorkController.onPageLoad for non foster carers" in new Test {
         override val userAnswers: UserAnswers = UserAnswers(
           mtdItId = mtdItId,
@@ -111,7 +111,7 @@ class AboutYourWorkBaseControllerSpec extends SpecBase
       }
     }
 
-    "FosterCarer user answers don't exist" -> {
+    "FosterCarer user answers don't exist" - {
       "should redirect to AboutYourWorkController.onPageLoad" in new Test {
         when(mockController.onPageLoad(any(), any(), any()))
           .thenReturn(nonRadioAction)
@@ -123,8 +123,8 @@ class AboutYourWorkBaseControllerSpec extends SpecBase
     }
   }
 
-  "onSubmit" -> {
-    "FosterCarer user answers exist and have a value of true for a submission" -> {
+  "onSubmit" - {
+    "FosterCarer user answers exist and have a value of true for a submission" - {
       "should redirect to AboutYourWorkRadioController.onSubmit for a foster carer" in new Test {
         override val userAnswers: UserAnswers = UserAnswers(
           mtdItId = mtdItId,
@@ -140,7 +140,7 @@ class AboutYourWorkBaseControllerSpec extends SpecBase
       }
     }
 
-    "FosterCarer user answers exist and have a value of false " -> {
+    "FosterCarer user answers exist and have a value of false " - {
       "should redirect to AboutYourWorkController.onSubmit for a non foster carer" in new Test {
         override val userAnswers: UserAnswers = UserAnswers(
           mtdItId = mtdItId,
@@ -156,7 +156,7 @@ class AboutYourWorkBaseControllerSpec extends SpecBase
       }
     }
 
-    "FosterCarer user answers don't exist" -> {
+    "FosterCarer user answers don't exist" - {
       "should redirect to AboutYourWorkController.onSubmit" in new Test {
         when(mockController.onSubmit(any(), any(), any()))
           .thenReturn(nonRadioAction)

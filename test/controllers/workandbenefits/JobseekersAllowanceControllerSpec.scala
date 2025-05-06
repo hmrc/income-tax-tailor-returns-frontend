@@ -59,8 +59,8 @@ class JobseekersAllowanceControllerSpec extends
   }
 
   "JobseekersAllowance Controller" - {
-    "when trying to retrieve the view with a GET" -> {
-      "when pre-population is disabled" -> {
+    "when trying to retrieve the view with a GET" - {
+      "when pre-population is disabled" - {
         "[GET] should return expected view when no user answers exist" in new GetWithNoPrePopTest {
           running(application) {
             status(result) mustEqual OK
@@ -136,7 +136,7 @@ class JobseekersAllowanceControllerSpec extends
         }
       }
 
-      "when pre-population is enabled" -> {
+      "when pre-population is enabled" - {
         "[GET] should return an error page when pre-pop retrieval fails" in new GetWithPrePopTest {
           mockStateBenefitsConnectorGet(
             result = Future.successful(Left(SimpleErrorWrapper(IM_A_TEAPOT)))
@@ -302,7 +302,7 @@ class JobseekersAllowanceControllerSpec extends
       }
     }
 
-    "when trying to submit answers with a POST" -> {
+    "when trying to submit answers with a POST" - {
       trait SubmitEsaJsaWithNoPrePopTest extends SubmitWithNoPrePopTest with EsaJsaSubmitRequest
       trait SubmitEsaJsaWithNoPrePopAgentTest extends SubmitWithNoPrePopAgentTest with EsaJsaSubmitRequest
 
@@ -321,7 +321,7 @@ class JobseekersAllowanceControllerSpec extends
         }
       }
 
-      "for a request with form errors" -> {
+      "for a request with form errors" - {
         "[POST] should return expected view" in new SubmitEsaJsaWithNoPrePopTest {
           override def formUrlEncodedBody: (String, String) = ("value", "invalid value")
 

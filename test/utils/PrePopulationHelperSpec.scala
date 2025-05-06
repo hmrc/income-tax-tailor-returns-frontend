@@ -44,7 +44,7 @@ class PrePopulationHelperSpec extends SpecBase
     val errorAction: SimpleErrorWrapper => Result = (_: SimpleErrorWrapper) => new Status(INTERNAL_SERVER_ERROR)
   }
 
-  "blockWithPrePop" -> {
+  "blockWithPrePop" - {
     "when pre-population retrieval call returns an error should process error action" in new Test {
       val result: Future[Result] = blockWithPrePop(
         () => Future.successful(Left(SimpleErrorWrapper(INTERNAL_SERVER_ERROR))),

@@ -54,7 +54,7 @@ class PropertyConnectorSpec extends SpecBase
     mockHttpClientV2Get(url"$baseUrl/property/pre-population/$nino")
   }
 
-  "getPrePopulation" -> {
+  "getPrePopulation" - {
     "should return a success when a success response is received from property backend" in new Test {
       mockHttpClientV2SetHeader()
       mockHttpClientV2Execute[HttpResult[PropertyPrePopulationResponse]](Right(dummyResponse))

@@ -121,7 +121,7 @@ class ControllerWithPrePopSpec extends SpecBase
     }
   }
 
-  "blockWithNino" -> {
+  "blockWithNino" - {
     val dummyBlock = (_: String, _: () => ConnectorResponse[DummyPrePop], _: DataRequest[_]) =>
       Future.successful(Ok)
 
@@ -148,7 +148,7 @@ class ControllerWithPrePopSpec extends SpecBase
     }
   }
 
-  "onPageLoad" -> {
+  "onPageLoad" - {
     "should return error result when pre-population retrieval fails" in new Test {
       setupStubs()
       mockInternalServerError(Html(""))
@@ -218,8 +218,8 @@ class ControllerWithPrePopSpec extends SpecBase
     }
   }
 
-  "onSubmit" -> {
-    "when there are no form errors in the request" -> {
+  "onSubmit" - {
+    "when there are no form errors in the request" - {
       "should redirect to next page when user data service and journey answers update successfully" in new Test {
         mockSetUserData(dummyUserAnswers.set(DummyPage, "validValue").get, dummyUserAnswers)
 
@@ -236,7 +236,7 @@ class ControllerWithPrePopSpec extends SpecBase
       }
     }
 
-    "when form errors exist in the request" -> {
+    "when form errors exist in the request" - {
       "should return view with form errors " in new Test {
         val result: Future[Result] = controller.onSubmit(
           pageName = "N/A",

@@ -51,9 +51,9 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
 
   val baseUserAnswers: UserAnswers = emptyUserAnswers.set(FosterCarerPage, true).get
 
-  "AboutYourWorkRadioController" -> {
-    "when trying to retrieve the view with a GET" -> {
-      "when pre-population is disabled" -> {
+  "AboutYourWorkRadioController" - {
+    "when trying to retrieve the view with a GET" - {
+      "when pre-population is disabled" - {
         "[GET] should return expected view when no user answers exist" in new GetWithNoPrePopTest {
           override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
 
@@ -133,7 +133,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
         }
       }
 
-      "when pre-population is enabled" -> {
+      "when pre-population is enabled" - {
         "[GET] should return an error page when pre-pop retrieval fails" in new GetWithPrePopTest {
           override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
           mockEmploymentsConnectorGet(
@@ -290,7 +290,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
       }
     }
 
-    "when trying to submit answers with a POST" -> {
+    "when trying to submit answers with a POST" - {
       trait EmploymentSubmitRequest {
         def formUrlEncodedBody: (String, String) = ("value", "true")
       }
@@ -313,7 +313,7 @@ class AboutYourWorkRadioControllerSpec extends ControllerWithPrePopSpecBase[Abou
         }
       }
 
-      "for a request with form errors" -> {
+      "for a request with form errors" - {
         "[POST] should return expected view" in new SubmitWithNoPrePopTest {
           override val userAnswers: Option[UserAnswers] = Some(baseUserAnswers)
           override def formUrlEncodedBody: (String, String) = ("value", "invalid value")

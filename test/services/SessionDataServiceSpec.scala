@@ -50,8 +50,8 @@ class SessionDataServiceSpec extends SpecBase
 
   val dummyError: APIErrorModel = APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", ""))
 
-  "getSessionDataBlock" -> {
-    "when call to retrieve session data fails" -> {
+  "getSessionData" - {
+    "when call to retrieve session data fails" - {
 
       "should return an error when fallback returns no data" in {
         mockSessionServiceEnabled(true)
@@ -89,7 +89,7 @@ class SessionDataServiceSpec extends SpecBase
     }
   }
 
-  "getFallbackSessionData" -> {
+  "getFallbackSessionData" - {
 
     "should return an error when data is not present in request session" in {
       implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
@@ -109,8 +109,8 @@ class SessionDataServiceSpec extends SpecBase
     }
   }
 
-  "getSessionData" -> {
-    "if session cookie service is enabled" -> {
+  "getSessionData" - {
+    "if session cookie service is enabled" - {
       "should return session data when it is returned from the session cookie service" in {
         mockSessionServiceEnabled(true)
         mockGetSessionDataFromSessionStore(Right(Some(dummyResponse)))
@@ -136,7 +136,7 @@ class SessionDataServiceSpec extends SpecBase
       }
     }
 
-    "if session cookie service is disabled" -> {
+    "if session cookie service is disabled" - {
       "should return None" in {
         mockSessionServiceEnabled(false)
 

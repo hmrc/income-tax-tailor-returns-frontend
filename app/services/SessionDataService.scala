@@ -40,7 +40,7 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector, c
         getFallbackSessionData(sessionId) match {
           case Some(sessionData) => sessionData
           case _ =>
-            errorLog(ctx)("Session Data service and Session Cookie both returned empty data. Throwing exception")
+            warnLog(ctx)("Session Data service and Session Cookie both returned empty data. Throwing exception")
             throw MissingAgentClientDetails("Session Data service and Session Cookie both returned empty data")
         }
     }

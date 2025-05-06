@@ -39,7 +39,7 @@ class OverrideRequestActionSpec extends SpecBase
     def testAction(req: DataRequest[_]) = new OverrideRequestActionImpl(req)
   }
 
-  "OverrideRequestAction" -> {
+  "OverrideRequestAction" - {
     "should invoke block with overriden request" in new Test {
       val overrideRequest: DataRequest[AnyContentAsEmpty.type] = DataRequest(
         request = FakeRequest(),

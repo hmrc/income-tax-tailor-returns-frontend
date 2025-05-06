@@ -22,7 +22,7 @@ import org.scalatest.Assertion
 
 class PropertyPrePopulationResponseSpec extends SpecBase {
 
-  "hasPrePop" -> {
+  "hasPrePop" - {
     "should return true when UkProperty and ForeignProperty pre-pop is true" in {
       PropertyPrePopulationResponse(
         hasUkPropertyPrePop = true,
@@ -52,7 +52,7 @@ class PropertyPrePopulationResponseSpec extends SpecBase {
     }
   }
 
-  "toPageModel" -> {
+  "toPageModel" - {
     "when UkProperty and ForeignProperty pre-pop is true" in {
       PropertyPrePopulationResponse(
         hasUkPropertyPrePop = true,
@@ -82,7 +82,7 @@ class PropertyPrePopulationResponseSpec extends SpecBase {
     }
   }
 
-  "toMessageString" -> {
+  "toMessageString" - {
     val testVals = Seq(
       (true, true, true),
       (true, true, false),

@@ -51,7 +51,7 @@ class EmploymentPrePopulationResponseSpec extends SpecBase {
     }
   }
 
-  "toMessageString" -> {
+  "toMessageString" - {
     val testVals = Seq(
       (true, true, None),
       (true, false, None),
