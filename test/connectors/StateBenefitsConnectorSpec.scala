@@ -55,7 +55,7 @@ class StateBenefitsConnectorSpec extends SpecBase
     mockHttpClientV2Get(url"$baseUrl/pre-population/$nino/$taxYear")
   }
 
-  "getPrePopulation" -> {
+  "getPrePopulation" - {
     "should return a success when a success response is received from state benefits backend" in new Test {
       mockHttpClientV2SetHeader()
       mockHttpClientV2Execute[HttpResult[StateBenefitsPrePopulationResponse]](Right(dummyResponse))

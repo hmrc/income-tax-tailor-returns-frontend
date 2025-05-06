@@ -19,7 +19,7 @@ package controllers.workandbenefits
 import controllers.{ControllerWithPrePopSpecBase, routes}
 import forms.workandbenefits.ConstructionIndustrySchemeFormProvider
 import models.prePopulation.CisPrePopulationResponse
-import models.{Done, NormalMode, SessionValues}
+import models.{Done, NormalMode, SessionValues, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
@@ -29,10 +29,7 @@ import play.api.test.Helpers._
 import play.api.{Application, inject}
 import services.UserDataService
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.workandbenefits.{
-  ConstructionIndustrySchemeAgentView,
-  ConstructionIndustrySchemeView
-}
+import views.html.workandbenefits.{ConstructionIndustrySchemeAgentView, ConstructionIndustrySchemeView}
 
 import scala.concurrent.Future
 
@@ -61,7 +58,6 @@ class ConstructionIndustrySchemeControllerSpec extends
 
   trait GETPrePropEnabledIndividual extends GetWithPrePopTest{
     def cis = false
-    mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
     override def defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
 
     when(
@@ -70,7 +66,6 @@ class ConstructionIndustrySchemeControllerSpec extends
 
   }
   trait GETPrePropEnabledAgent extends GetWithPrePopAgentTest{
-    mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
     override def defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
 
     when(
@@ -150,8 +145,9 @@ class ConstructionIndustrySchemeControllerSpec extends
       }
 
       "must populate the view correctly on a GET when the question has previously been answered" in new GETPrePropEnabledIndividual {
-        override val userAnswers =
-          emptyUserAnswers.set(ConstructionIndustrySchemePage, true).toOption
+        override val userAnswers: Option[UserAnswers] = emptyUserAnswers
+          .set(ConstructionIndustrySchemePage, true)
+          .toOption
 
         running(application) {
           status(result) mustEqual OK
@@ -181,8 +177,10 @@ class ConstructionIndustrySchemeControllerSpec extends
       }
 
       "must populate the view correctly on a GET when the question has previously been answered for an agent" in new GetWithNoPrePopTest {
-        override val userAnswers =
-          emptyUserAnswers.set(ConstructionIndustrySchemePage, true).toOption
+        override val userAnswers: Option[UserAnswers] = emptyUserAnswers
+          .set(ConstructionIndustrySchemePage, true)
+          .toOption
+
         running(application) {
           status(result) mustEqual OK
           contentAsString(result) mustEqual view(
@@ -194,7 +192,8 @@ class ConstructionIndustrySchemeControllerSpec extends
         }
       }
 
-      "must populate the view correctly on a GET when the question has previously been answered for an agent and isPrePopEnabled true" in new GETPrePropEnabledAgent {
+      "must populate the view correctly on a GET when the question has previously been answered for an agent " +
+        "and isPrePopEnabled true" in new GETPrePropEnabledAgent {
 
         running(application) {
           status(result) mustEqual OK
@@ -209,7 +208,7 @@ class ConstructionIndustrySchemeControllerSpec extends
       }
 
       "must redirect to Journey Recovery for a GET if no existing data is found" in new GETPrePropEnabledIndividual {
-        override val userAnswers = None
+        override val userAnswers: Option[UserAnswers] = None
         running(application) {
           status(result) mustEqual SEE_OTHER
           redirectLocation(
@@ -246,7 +245,7 @@ class ConstructionIndustrySchemeControllerSpec extends
       }
 
       "must redirect to Journey Recovery for a POST if no existing data is found" in new PostSubmitWithNoPrePopTest {
-        override val userAnswers = None
+        override val userAnswers: Option[UserAnswers] = None
         override def formUrlEncodedBody: (String, String) = ("value", "")
 
         running(application) {

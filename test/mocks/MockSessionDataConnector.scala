@@ -30,13 +30,13 @@ trait MockSessionDataConnector extends MockFactory { this: TestSuite =>
 
   private type MockType = CallHandler1[HeaderCarrier, Future[SessionDataResponse]]
 
-  def mockGetSessionData(resp: SessionDataResponse): MockType =
+  def mockGetSessionDataFromSessionStore(resp: SessionDataResponse): MockType =
     (mockSessionDataConnector
       .getSessionData(_: HeaderCarrier))
       .expects(*)
       .returning(Future.successful(resp))
 
-  def mockGetSessionDataException(err: Throwable): MockType =
+  def mockGetSessionDataFromSessionStoreException(err: Throwable): MockType =
     (mockSessionDataConnector
       .getSessionData(_: HeaderCarrier))
       .expects(*)

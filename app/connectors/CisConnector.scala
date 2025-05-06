@@ -32,7 +32,6 @@ class CisConnector @Inject()(config: FrontendAppConfig, httpClient: HttpClientV2
                                      (implicit ec: ExecutionContext)
   extends StandardGetHttpParser[CisPrePopulationResponse]
   with Logging {
-  val primaryContext: String = classOf[CisConnector].getSimpleName
 
   def getPrePopulation(nino: String, taxYear: Int, mtdItId:String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[CisPrePopulationResponse] = {

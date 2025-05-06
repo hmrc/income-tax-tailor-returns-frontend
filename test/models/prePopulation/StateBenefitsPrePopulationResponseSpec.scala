@@ -21,7 +21,7 @@ import play.api.libs.json.{JsError, JsSuccess, Json}
 
 class StateBenefitsPrePopulationResponseSpec extends SpecBase {
 
-  "reads" -> {
+  "reads" - {
     "should return a JsSuccess when provided with valid JSON" in {
       val json: String =
         """
@@ -56,7 +56,7 @@ class StateBenefitsPrePopulationResponseSpec extends SpecBase {
     }
   }
 
-  "toEsaJsaModel" -> {
+  "toEsaJsaModel" - {
     "should convert successfully" in {
       StateBenefitsPrePopulationResponse.empty.toEsaJsaModel mustBe EsaJsaPrePopulationResponse(
         hasEsaPrePop = false,

@@ -32,7 +32,6 @@ class PropertyConnector @Inject()(config: FrontendAppConfig, httpClient: HttpCli
                                  (implicit ec: ExecutionContext)
   extends StandardGetHttpParser[PropertyPrePopulationResponse]
   with Logging {
-  val primaryContext: String = classOf[PropertyConnector].getSimpleName
 
   def getPrePopulation(nino: String, taxYear: Int, mtdItId:String)
                       (implicit hc: HeaderCarrier): ConnectorResponse[PropertyPrePopulationResponse] = {

@@ -52,7 +52,7 @@ class CisConnectorSpec extends SpecBase
     mockHttpClientV2Get(url"$baseUrl/pre-population/$nino/$taxYear")
   }
 
-  "getPrePopulation" -> {
+  "getPrePopulation" - {
     "should return a success when a success response is received from income tax cis backend" in new Test {
       mockHttpClientV2SetHeader()
       mockHttpClientV2Execute[HttpResult[CisPrePopulationResponse]](Right(dummyResponse))

@@ -31,32 +31,30 @@ class StandardGetHttpParserSpec extends SpecBase {
     implicit val reads: Reads[DummyDataModel] = Json.reads[DummyDataModel]
   }
 
-  object DummyGetHttpParser extends StandardGetHttpParser[DummyDataModel] with Logging {
-    override protected val primaryContext: String = "DummyLogString"
-  }
+  object DummyGetHttpParser extends StandardGetHttpParser[DummyDataModel] with Logging
 
-  "parseToDataModel" -> {
+  "parseToDataModel" - {
     val dummyError: SimpleErrorWrapper = SimpleErrorWrapper(IM_A_TEAPOT)
-    "should return an error when body string cannot be parsed to JSON" -> {
+    "should return an error when body string cannot be parsed to JSON" - {
       val result = DummyGetHttpParser.parseToDataModel("")
       result mustBe a[Left[_, _]]
       result.swap.getOrElse(dummyError) mustBe SimpleErrorWrapper(INTERNAL_SERVER_ERROR)
     }
 
-    "should return an error when body string cannot be parsed to data model" -> {
+    "should return an error when body string cannot be parsed to data model" - {
       val result = DummyGetHttpParser.parseToDataModel("""{}""")
       result mustBe a[Left[_, _]]
       result.swap.getOrElse(dummyError) mustBe SimpleErrorWrapper(INTERNAL_SERVER_ERROR)
     }
 
-    "should return a data model when body string can be parsed to data model" -> {
+    "should return a data model when body string can be parsed to data model" - {
       val result = DummyGetHttpParser.parseToDataModel("""{"someData": "data"}""")
       result mustBe a[Right[_, _]]
       result.getOrElse(DummyDataModel("nonsense")).someData mustBe "data"
     }
   }
 
-  "reads" -> {
+  "reads" - {
     "should return an error when HttpResponse status is not 200" in {
       val result = DummyGetHttpParser.StandardGetHttpReads.read("", "", HttpResponse(BAD_REQUEST, ""))
       result mustBe a[Left[_, _]]

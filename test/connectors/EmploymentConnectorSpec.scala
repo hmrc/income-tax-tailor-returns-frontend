@@ -53,7 +53,7 @@ class EmploymentConnectorSpec extends SpecBase
     mockHttpClientV2Get(url"$baseUrl/pre-population/$nino/$taxYear")
   }
 
-  "getPrePopulation" -> {
+  "getPrePopulation" - {
     "should return a success when a success response is received from employments backend" in new Test {
       mockHttpClientV2SetHeader()
       mockHttpClientV2Execute[HttpResult[EmploymentPrePopulationResponse]](Right(dummyResponse))

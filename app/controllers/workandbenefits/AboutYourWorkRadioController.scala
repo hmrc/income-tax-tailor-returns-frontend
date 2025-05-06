@@ -22,11 +22,11 @@ import controllers.actions.TaxYearAction.taxYearAction
 import controllers.actions._
 import forms.workandbenefits.AboutYourWorkRadioPageFormProvider
 import handlers.ErrorHandler
-import models.{Mode, UserAnswers}
 import models.prePopulation.EmploymentPrePopulationResponse.EmploymentRadioPrePop
 import models.requests.DataRequest
 import models.workandbenefits.AboutYourWork
 import models.workandbenefits.AboutYourWork.{Employed, SelfEmployed}
+import models.{Mode, UserAnswers}
 import navigation.Navigator
 import pages.QuestionPage
 import pages.workandbenefits.{AboutYourWorkPage, AboutYourWorkRadioPage}
@@ -34,7 +34,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import play.twirl.api.HtmlFormat
-import services.{PrePopulationService, SessionDataService, UserDataService}
+import services.{PrePopulationService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import views.html.workandbenefits.{AboutYourWorkRadioPageAgentView, AboutYourWorkRadioPageView}
@@ -46,7 +46,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesApi,
                                              val userDataService: UserDataService,
                                              prePopService: PrePopulationService,
-                                             val ninoRetrievalService: SessionDataService,
                                              val config: FrontendAppConfig,
                                              val navigator: Navigator,
                                              val identify: IdentifierActionProvider,
@@ -61,7 +60,6 @@ class AboutYourWorkRadioController @Inject()(override val messagesApi: MessagesA
   extends ControllerWithPrePop[Boolean, EmploymentRadioPrePop]
     with Logging {
 
-  override protected val primaryContext: String = classOf[AboutYourWorkRadioController].getSimpleName
   override val defaultPrePopulationResponse: EmploymentRadioPrePop = EmploymentRadioPrePop.empty
 
   val pageName = classOf[AboutYourWorkRadioController].getSimpleName

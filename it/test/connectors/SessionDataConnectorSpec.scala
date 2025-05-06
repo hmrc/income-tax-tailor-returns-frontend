@@ -51,9 +51,10 @@ class SessionDataConnectorSpec
   private val sessionId = "test-session-id"
   implicit private lazy val hc: HeaderCarrier = HeaderCarrier().withExtraHeaders("X-Session-ID"->sessionId)
   private val mtdItId: String = "1234567890"
+  private val nino: String = "AA111111A"
   private lazy val connector = app.injector.instanceOf[SessionDataConnector]
   private val testUrl = s"/income-tax-session-data/"
-  private val sessionDataResponse = SessionData.empty.copy(mtditid = mtdItId)
+  private val sessionDataResponse = SessionData(mtditid = mtdItId, nino = nino, sessionId = sessionId)
 
   private lazy val app: Application =
     new GuiceApplicationBuilder()

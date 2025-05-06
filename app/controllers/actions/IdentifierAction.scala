@@ -18,20 +18,20 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.SessionDataConnector
 import models.Enrolment
-import models.SessionValues.CLIENT_MTDITID
+import models.authorisation.Enrolment.{Individual, Nino}
+import models.errors.MissingAgentClientDetails
 import models.requests.IdentifierRequest
-import models.session.SessionData
-import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.authorise.Predicate
+import services.SessionDataService
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.auth.core.{Enrolment => HMRCEnrolment, _}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
+import utils.EnrolmentHelper.getEnrolmentValueOpt
+import utils.{EnrolmentHelper, Logging, SessionIdHelper}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,181 +43,132 @@ trait IdentifierActionProvider {
 
 class IdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
                                              config: FrontendAppConfig,
-                                             sessionDataConnector: SessionDataConnector,
-                                             parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
+                                             sessionDataService: SessionDataService,
+                                             parser: BodyParsers.Default)
+                                            (implicit executionContext: ExecutionContext)
   extends IdentifierActionProvider {
 
-  def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(authConnector, config, sessionDataConnector, parser)
+  def apply(taxYear: Int): IdentifierAction = new AuthenticatedIdentifierAction(taxYear)(
+    authConnector = authConnector,
+    config = config,
+    sessionDataService = sessionDataService,
+    parser = parser
+  )
 }
 
 class AuthenticatedIdentifierAction @Inject()(taxYear: Int)
                                              (override val authConnector: AuthConnector,
-                                              config: FrontendAppConfig,
-                                              sessionDataConnector: SessionDataConnector,
+                                              val config: FrontendAppConfig,
+                                              val sessionDataService: SessionDataService,
                                               val parser: BodyParsers.Default)
                                              (implicit val executionContext: ExecutionContext)
-  extends IdentifierAction with AuthorisedFunctions with Logging {
+  extends IdentifierAction with AuthorisedFunctions with SessionIdHelper with Logging {
 
-  private val unauthorized: Future[Result] = Future.successful(Unauthorized)
+  override def invokeBlock[A](request: Request[A],
+                              block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
+    val ctx: String = "invokeBlock"
 
-  private def getMtdItId(enrolments: Enrolments): Option[String] = {
-    for {
-      enrolment <- enrolments.getEnrolment(Enrolment.MtdIncomeTax.key)
-      id <- enrolment.getIdentifier(Enrolment.MtdIncomeTax.value)
-    } yield id.value
-  }
-
-  private def authorisedAgentServices(enrolments: Enrolments): Option[String] = {
-    for {
-      agentEnrolment <- enrolments.getEnrolment(Enrolment.Agent.key)
-      arn <- agentEnrolment.getIdentifier(Enrolment.Agent.value)
-    } yield arn.value
-  }
-
-
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
-
+    implicit val implRequest: Request[A] = request
     implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    authorised().retrieve(affinityGroup and allEnrolments and confidenceLevel) {
-      case Some(AffinityGroup.Individual) ~ enrolments ~ confidenceLevel =>
-        authorized(request, block, enrolments, confidenceLevel)
-      case Some(AffinityGroup.Organisation) ~ enrolments ~ confidenceLevel =>
-        authorized(request, block, enrolments, confidenceLevel)
-      case Some(AffinityGroup.Agent) ~ enrolments ~ _ =>
-        agentAuth(request, block, enrolments)
-      case _ =>
-        logger.info(s"[AuthorisedAction][async] - User failed to authenticate no affinityGroup")
-        unauthorized
-    }.recover {
-      case _: NoActiveSession =>
-        logger.info(s"[AuthorisedAction][async] - No active session. Redirecting to sign in")
-        Redirect(config.loginUrl(taxYear))
-      case e =>
-        logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
-        Unauthorized
+    withSessionId(taxYear) { sessionId =>
+      authorised().retrieve(affinityGroup and allEnrolments and confidenceLevel) {
+        case Some(AffinityGroup.Agent) ~ enrolments ~ _ =>
+          agentAuth(block, enrolments, sessionId)
+        case Some(_) ~ enrolments ~ confidenceLevel =>
+          nonAgentAuthentication(block, enrolments, confidenceLevel, sessionId)
+        case _ =>
+          errorLog(ctx)("User authentication failed with reason: Missing affinity group. Returning an error status")
+          Future.successful(Unauthorized)
+      }.recover {
+        case _: NoActiveSession =>
+          warnLog(ctx)(s"User authentication failed with reason: No active session. Redirecting to sign in")
+          Redirect(config.loginUrl(taxYear))
+        case e: AuthorisationException =>
+          errorLog(ctx)(s"Request failed with authorisation exception: ${e.getMessage}. Returning Unauthorised status")
+          Unauthorized
+        case e =>
+          errorLog(ctx)(s"Request failed with unhandled exception: ${e.getMessage}. Returning Internal Server Error status")
+          InternalServerError
+      }
     }
   }
 
-  private def authorized[A](request: Request[A], block: IdentifierRequest[A] => Future[Result],
-                            enrolments: Enrolments, confidenceLevel: ConfidenceLevel): Future[Result] = {
+  protected[actions] def nonAgentAuthentication[A](block: IdentifierRequest[A] => Future[Result],
+                                                   enrolments: Enrolments,
+                                                   confidenceLevel: ConfidenceLevel,
+                                                   sessionId: String)
+                                                  (implicit request: Request[A]): Future[Result] = {
+    val ctx: String = "nonAgentAuthentication"
+
     if (confidenceLevel.level >= ConfidenceLevel.L250.level) {
-      getMtdItId(enrolments) match {
-        case Some(mtdItId) =>
-          block(IdentifierRequest(request, mtdItId, isAgent = false))
-        case None =>
-          logger.error("User did not have MTDITID Enrolment")
+      (
+        getEnrolmentValueOpt(Individual.key, Individual.value, enrolments),
+        getEnrolmentValueOpt(Nino.key, Nino.value, enrolments)
+      ) match {
+        case (Some(mtdItId), Some(nino)) =>
+          block(IdentifierRequest(request, nino, mtdItId, sessionId, isAgent = false))
+        case (_, None) =>
+          warnLog(ctx)("Could not find HMRC-NI enrolment for user. Redirecting user to login")
+          Future.successful(Redirect(config.loginUrl(taxYear)))
+        case (None, _) =>
+          warnLog(ctx)("Could not find MTD-IT enrolment for user. Redirecting to MTD sign-up")
           Future.successful(Redirect(config.signUpUrlIndividual))
       }
     } else {
+      warnLog(ctx)("Non-agent user has insufficient confidence levels. Redirecting to IV uplift")
       Future.successful(Redirect(config.incomeTaxSubmissionIvRedirect))
     }
   }
 
-  private def getSessionData(request: Request[_])(implicit hc: HeaderCarrier): Future[Option[SessionData]] = {
-    if (config.sessionCookieServiceEnabled) {
-      sessionDataConnector.getSessionData.map {
-        case Left(_) =>
-          //TODO
-          // It was decided with HMRC to read from session cookie as a fallback option, unless all are other services are
-          // migrated to read from V&C sesion service. This is to not impact users behaviour
-          request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
-        case Right(value) => value
+  protected[actions] def agentAuth[A](block: IdentifierRequest[A] => Future[Result],
+                                      enrolments: Enrolments,
+                                      sessionId: String)
+                                     (implicit request: Request[A], hc: HeaderCarrier): Future[Result] = {
+    val ctx: String = "agentAuth"
+
+    sessionDataService.getSessionData(sessionId).flatMap { sessionData =>
+      getEnrolmentValueOpt(Enrolment.Agent.key, Enrolment.Agent.value, enrolments) match {
+        case Some(_) =>
+          authorised(EnrolmentHelper.primaryAgentPredicate(sessionData.mtditid)) {
+            block(IdentifierRequest(request, sessionData, isAgent = true))
+          }.recoverWith {
+            agentRecovery(sessionData.mtditid)
+          }
+        case None =>
+          warnLog(ctx)("Could not find HMRC-AS-AGENT enrolment for user. Redirecting to agent set-up")
+          Future.successful(Redirect(config.setUpAgentServicesAccountUrl()))
       }
-    } else {
-      Future.successful {
-        request.session.get(CLIENT_MTDITID).map(value => SessionData.empty.copy(mtditid = value))
-      }
-    }
-  }
-
-  def predicate(mtdId: String): Predicate =
-    HMRCEnrolment("HMRC-MTD-IT")
-      .withIdentifier("MTDITID", mtdId)
-      .withDelegatedAuthRule("mtd-it-auth")
-
-  private def secondaryAgentPredicate(mtdId: String): Predicate =
-    HMRCEnrolment("HMRC-MTD-IT-SUPP")
-      .withIdentifier("MTDITID", mtdId)
-      .withDelegatedAuthRule("mtd-it-auth-supp")
-
-  private def agentAuth[A](request: Request[A], block: IdentifierRequest[A] => Future[Result], enrolments: Enrolments)
-                          (implicit hc: HeaderCarrier): Future[Result] = {
-
-    getSessionData(request).flatMap {
-      case Some(sessionData) =>
-        authorisedAgentServices(enrolments) match {
-          case Some(_) =>
-            authorised(predicate(sessionData.mtditid)){
-              logger.info(s"[AuthorisedAction][agentAuthentication] - authorised as Primary Agent")
-              block(IdentifierRequest(request, sessionData.mtditid, isAgent = true))
-            }.recoverWith{
-              agentRecovery(sessionData.mtditid)
-            }
-          case None =>
-            logger.warn("User did not have HMRC-AS-AGENT enrolment ")
-            Future.successful(Redirect(config.setUpAgentServicesAccountUrl))
-        }
-      case None =>
-        logger.warn("Session data not found")
-        Future.successful(Redirect(config.viewAndChangeEnterUtrUrl))
-    }
-  }
-
-  private def agentRecovery[A](mtdItId: String)
-                              (implicit hc: HeaderCarrier): PartialFunction[Throwable, Future[Result]] = {
-    case _: NoActiveSession =>
-      logger.info(s"[AuthorisedAction][agentAuthentication] - No active session. Redirecting to ${config.viewAndChangeEnterUtrUrl}")
-      Future(Redirect(config.viewAndChangeEnterUtrUrl))
-    case e: AuthorisationException =>
-      logger.info(s"[AuthorisedAction][agentRecovery.failed.authorised] - ${e.getMessage}")
-      authorised(secondaryAgentPredicate(mtdItId)) {
-        Future.successful(Redirect(controllers.routes.SupportingAgentAuthErrorController.show.url))
-      }.recoverWith {
-        case _: AuthorisationException =>
-          logger.info(s"[AuthorisedAction][agentAuthentication] - Agent does not have secondary delegated authority for Client.")
-          Future(Unauthorized)
-        case _ =>
-          logger.info(s"[AuthorisedAction][agentAuthentication] - Downstream service error.")
-          Future(InternalServerError)
-      }
-    case e =>
-      logger.info(s"[AuthorisedAction][agentAuthentication] - Agent Authenticator error. ${e.getMessage}")
-      Future(InternalServerError)
-  }
-}
-
-class EarlyPrivateLaunchIdentifierActionProviderImpl @Inject()(authConnector: AuthConnector,
-                                                               config: FrontendAppConfig,
-                                                               parser: BodyParsers.Default)(implicit executionContext: ExecutionContext)
-  extends IdentifierActionProvider {
-
-  def apply(taxYear: Int): IdentifierAction = new EarlyPrivateLaunchIdentifierAction(taxYear)(authConnector, config, parser)
-}
-
-class EarlyPrivateLaunchIdentifierAction @Inject()(taxYear: Int)
-                                                  (override val authConnector: AuthConnector,
-                                                   config: FrontendAppConfig,
-                                                   val parser: BodyParsers.Default)
-                                                  (implicit val executionContext: ExecutionContext)
-  extends IdentifierAction with AuthorisedFunctions with Logging {
-
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
-
-    implicit lazy val headerCarrier: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
-
-    authorised().retrieve(internalId) {
-      case Some(_) => block(IdentifierRequest(request, "1234567890", isAgent = false))
-      case _ =>
-        logger.info(s"[AuthorisedAction][async] - User failed to authenticate no affinityGroup")
-        Future.successful(Unauthorized)
     }.recover {
+      case _: MissingAgentClientDetails =>
+        Redirect(config.viewAndChangeEnterUtrUrl)
+    }
+  }
+
+  private def agentRecovery(mtdItId: String)
+                           (implicit hc: HeaderCarrier): PartialFunction[Throwable, Future[Result]] = {
+    val ctx: String = "agentRecovery"
+
+    {
       case _: NoActiveSession =>
-        logger.info(s"[AuthorisedAction][async] - No active session. Redirecting to sign in")
-        Redirect(config.loginUrl(taxYear))
+        warnLog(ctx)("Agent authentication failed with reason: No active session. Redirecting to V&C")
+        Future(Redirect(config.viewAndChangeEnterUtrUrl))
+      case e: AuthorisationException =>
+        warnLog(ctx)(s"Agent authentication failed with reason: ${e.getMessage}. Checking for supporting agent credentials")
+        authorised(EnrolmentHelper.secondaryAgentPredicate(mtdItId)) {
+          warnLog(ctx)("Agent user is a supporting agent. Redirecting to supporting agent error page")
+          Future.successful(Redirect(controllers.routes.SupportingAgentAuthErrorController.show.url))
+        }.recoverWith {
+          case _: AuthorisationException =>
+            errorLog(ctx)("Supporting agent authentication failed with reason: No secondary delegated authority. Returning an error status")
+            Future(Unauthorized)
+          case _ =>
+            errorLog(ctx)("Supporting agent authentication failed with reason: Unhandled error. Returning an error status")
+            Future(InternalServerError)
+        }
       case e =>
-        logger.info(s"[AuthorisedAction][async][recover] - User failed to authenticate ${e.getMessage}")
-        Unauthorized
+        errorLog(ctx)(s"Agent authentication failed with unhandled exception: ${e.getMessage}")
+        Future(InternalServerError)
     }
   }
 }

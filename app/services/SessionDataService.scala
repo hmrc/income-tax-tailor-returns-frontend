@@ -16,11 +16,10 @@
 
 package services
 
-import cats.data.EitherT
 import config.FrontendAppConfig
 import connectors.SessionDataConnector
 import models.SessionValues
-import models.errors.APIErrorModel
+import models.errors.MissingAgentClientDetails
 import models.session.SessionData
 import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,74 +29,50 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector,
-                                   config: FrontendAppConfig)
+class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector, config: FrontendAppConfig)
                                   (implicit ec: ExecutionContext) extends Logging {
 
-  override protected val primaryContext: String = "NinoRetrievalService"
-
-  private def sessionDataCacheResult(implicit hc: HeaderCarrier): EitherT[Future, APIErrorModel, Option[SessionData]] =
-    EitherT(sessionDataConnector.getSessionData)
-
-  protected[services] def sessionValOpt(key: String,
-                                        valName: String,
-                                        infoLogger: String => Unit,
-                                        errorLogger: String => Unit)
-                                       (implicit request: Request[_]): Either[Unit, String] =
-    request
-      .session.get(key)
-      .fold {
-        errorLogger(s"No $valName was found in local session data")
-        Left[Unit, String]().withRight
-      } { sessionVal =>
-        infoLogger(s"Successfully retrieved $valName: $sessionVal from local session data")
-        Right(sessionVal)
-      }
-
-  def getNino()(implicit request: Request[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Unit, String]] = {
-    val methodLoggingContext: String = "getNino"
-    val infoLogger: String => Unit = infoLog(methodLoggingContext)
-    val errorLogger: String => Unit = errorLog(methodLoggingContext)
-    val warnLogger: String => Unit = warnLog(methodLoggingContext)
-
-    infoLogger("Attempting to retrieve NINO for request")
-
-    lazy val sessionNinoOpt: Either[Unit, String] = sessionValOpt(
-      key = SessionValues.CLIENT_NINO,
-      valName = "NINO",
-      infoLogger = infoLogger,
-      errorLogger = errorLogger
-    )
-
-    val result = if (config.sessionCookieServiceEnabled) {
-      infoLogger("Session cookie service is enabled. Attempting to retrieve session data")
-
-      sessionDataCacheResult
-        .leftMap(err => errorLogger(
-          s"Request to retrieve session data failed with error status: ${err.status} and error body: ${err.body}"
-        ))
-        .flatMap { sessionDataOpt =>
-          infoLogger("Request to retrieve session data from session cookie service completed successfully")
-
-          EitherT(Future.successful(
-            sessionDataOpt.fold {
-              warnLogger("Session cookie service returned an empty session data object")
-              Left[Unit, String]().withRight
-            }(sessionData => {
-              infoLogger(s"Successfully extracted NINO: ${sessionData.nino} from session data response")
-              Right(sessionData.nino)
-            })
-          ))
+  def getSessionData[A](sessionId: String)
+                       (implicit request: Request[A], hc: HeaderCarrier): Future[SessionData] = { val ctx = "getSessionData"
+    getSessionDataFromSessionStore().map {
+      case Some(sessionData) => sessionData
+      case _ =>
+        getFallbackSessionData(sessionId) match {
+          case Some(sessionData) => sessionData
+          case _ =>
+            warnLog(ctx)("Session Data service and Session Cookie both returned empty data. Throwing exception")
+            throw MissingAgentClientDetails("Session Data service and Session Cookie both returned empty data")
         }
-        .leftFlatMap{_ =>
-          infoLogger("Attempting to extract NINO from local session data as a fallback")
-          EitherT(Future.successful(sessionNinoOpt))
-        }
-    } else {
-      infoLogger("Session cookie service is disabled. Attempting to retrieve NINO from local session data only")
-      EitherT(Future.successful(sessionNinoOpt))
     }
+  }
 
-    result.value
+  private[services] def getFallbackSessionData[A](sessionId: String)
+                                                 (implicit request: Request[A]): Option[SessionData] = { val ctx = "fallbackSessionData"
+    (
+      request.session.get(SessionValues.CLIENT_NINO),
+      request.session.get(SessionValues.CLIENT_MTDITID)
+    ) match {
+      case (Some(nino), Some(mtdItId)) => Some(SessionData(sessionId, mtdItId, nino))
+      case (optNino, optMtdItId) =>
+        warnLog(ctx)(s"Could not find ${Seq(optNino, optMtdItId).flatten.mkString(", ")} in request session. Returning no data")
+        None
+    }
+  }
+
+  private[services] def getSessionDataFromSessionStore()(implicit hc: HeaderCarrier): Future[Option[SessionData]] = { val ctx = "getSessionDataFromSessionStore"
+    if (config.sessionCookieServiceEnabled) {
+      infoLog(ctx)("Session cookie service enabled. Attempting to retrieve session data from income-tax-session-store")
+      sessionDataConnector.getSessionData.map {
+        case Right(sessionDataOpt) =>
+          if(sessionDataOpt.isEmpty) warnLog(ctx)("Session cookie service returned empty data. Returning no data")
+          sessionDataOpt
+        case Left(err) =>
+          errorLog(ctx)(s"Request to retrieve session data failed with error status: ${err.status} and error body: ${err.body}. Returning None")
+          None
+      }
+    } else {
+      infoLog(ctx)("Session cookie service disabled. Returning no data")
+      Future.successful(None)
+    }
   }
 }

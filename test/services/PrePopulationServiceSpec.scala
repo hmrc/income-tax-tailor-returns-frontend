@@ -32,10 +32,7 @@ class PrePopulationServiceSpec extends SpecBase
   with MockPropertyConnector
   with DefaultAwaitTimeout {
 
-  val nino: String = "AA111111A"
   override val taxYear: Int = 2025
-  override val mtdItId = "111111"
-
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
   val testService = new PrePopulationService(
@@ -51,6 +48,7 @@ class PrePopulationServiceSpec extends SpecBase
     hasPensionsPrePop = false,
     hasPensionLumpSumsPrePop = false
   )
+
   val dummyEsaJsaResponse: EsaJsaPrePopulationResponse = dummyStateBenefitsResponse.toEsaJsaModel
 
   val emptyEsaJsaPrePopResponse: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse(
@@ -61,6 +59,7 @@ class PrePopulationServiceSpec extends SpecBase
   val dummyEmploymentResponse: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(
     hasEmployment = true
   )
+
   val emptyEmploymentResponse: EmploymentPrePopulationResponse = EmploymentPrePopulationResponse(
     hasEmployment = false
   )
@@ -68,6 +67,7 @@ class PrePopulationServiceSpec extends SpecBase
   val dummyCisResponse: CisPrePopulationResponse = CisPrePopulationResponse(
     hasCis = true
   )
+
   val emptyCisResponse: CisPrePopulationResponse = CisPrePopulationResponse(
     hasCis = false
   )
@@ -76,12 +76,13 @@ class PrePopulationServiceSpec extends SpecBase
     hasUkPropertyPrePop = true,
     hasForeignPropertyPrePop = true
   )
+
   val emptyPropertyResponse: PropertyPrePopulationResponse = PropertyPrePopulationResponse(
     hasUkPropertyPrePop = false,
     hasForeignPropertyPrePop = false
   )
 
-  "getEsaJsa" -> {
+  "getEsaJsa" - {
     "should return a success response when state benefits connector returns success response" in {
       mockGetStateBenefitsPrePopulation(nino, taxYear, mtdItId, Right(dummyStateBenefitsResponse))
       val result = await(testService.getEsaJsa(nino, taxYear, mtdItId))
@@ -104,7 +105,7 @@ class PrePopulationServiceSpec extends SpecBase
     }
   }
 
-  "getConstructionIndustryScheme" -> {
+  "getConstructionIndustryScheme" - {
     "should return a success response when ConstructionIndustryScheme connector returns success response" in {
       mockGetCisPrePopulation(nino, taxYear, mtdItId, Right(dummyCisResponse))
       val result = await(testService.getCis(nino, taxYear, mtdItId))
@@ -127,7 +128,7 @@ class PrePopulationServiceSpec extends SpecBase
     }
   }
 
-  "getEmployment" -> {
+  "getEmployment" - {
     "should return a success response when employment connector returns success response" in {
       mockGetEmploymentPrePopulation(nino, taxYear, mtdItId, Right(dummyEmploymentResponse))
       val result = await(testService.getEmployment(nino, taxYear, mtdItId))
@@ -150,7 +151,7 @@ class PrePopulationServiceSpec extends SpecBase
     }
   }
 
-  "getRentalIncome" -> {
+  "getRentalIncome" - {
     "should return a success response when RentalIncome connector returns success response" in {
       mockGetPropertyPrePopulation(nino, taxYear, mtdItId, Right(dummyPropertyResponse))
       val result = await(testService.getProperty(nino, taxYear, mtdItId))

@@ -21,7 +21,7 @@ import org.scalatest.Assertion
 
 class CisPrePopulationResponseSpec extends SpecBase {
 
-  "hasPrePop" -> {
+  "hasPrePop" - {
     "should return true when pre-pop is true" in {
       CisPrePopulationResponse(hasCis = true).hasCis mustBe true
     }
@@ -31,7 +31,7 @@ class CisPrePopulationResponseSpec extends SpecBase {
     }
   }
 
-  "toPageModel" -> {
+  "toPageModel" - {
     "when hasCis true" in {
       CisPrePopulationResponse(hasCis = true).toPageModel mustBe true
     }
@@ -41,7 +41,7 @@ class CisPrePopulationResponseSpec extends SpecBase {
     }
   }
 
-  "toMessageString" -> {
+  "toMessageString" - {
     val testVals = Seq(
       (true, true),
       (true, false),

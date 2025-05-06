@@ -28,24 +28,22 @@ trait DataRetrievalActionProvider {
   def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest]
 }
 
-class DataRetrievalActionProviderImpl @Inject() (userDataService: UserDataService)(implicit executionContext: ExecutionContext)
+class DataRetrievalActionProviderImpl @Inject()(userDataService: UserDataService)(implicit executionContext: ExecutionContext)
   extends DataRetrievalActionProvider {
 
   def apply(taxYear: Int): ActionTransformer[IdentifierRequest, OptionalDataRequest] =
     new DataRetrievalActionImpl(userDataService, taxYear)
-
 }
-class DataRetrievalActionImpl @Inject()(
-                                         val userDataService: UserDataService,
-                                         taxYear: Int
-                                       )(implicit val executionContext: ExecutionContext) extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
+
+class DataRetrievalActionImpl @Inject()(val userDataService: UserDataService, taxYear: Int)
+                                       (implicit val executionContext: ExecutionContext)
+  extends ActionTransformer[IdentifierRequest, OptionalDataRequest] {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = {
-
     val hc = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     userDataService.get(request.mtdItId, taxYear)(hc).map {
-      OptionalDataRequest(request.request, request.mtdItId, _, request.isAgent)
+      OptionalDataRequest(request.request, request.sessionData, _, request.isAgent)
     }
   }
 }

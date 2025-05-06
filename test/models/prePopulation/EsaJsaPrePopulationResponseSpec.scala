@@ -22,7 +22,7 @@ import org.scalatest.Assertion
 
 class EsaJsaPrePopulationResponseSpec extends SpecBase {
 
-  "hasPrePop" -> {
+  "hasPrePop" - {
     "should return true when either ESA or JSA has pre-pop" in {
       EsaJsaPrePopulationResponse(hasEsaPrePop = true, hasJsaPrePop = false).hasPrePop mustBe true
     }
@@ -32,7 +32,7 @@ class EsaJsaPrePopulationResponseSpec extends SpecBase {
     }
   }
 
-  "toPageModel" -> {
+  "toPageModel" - {
     "when ESA exists should return ESA model" in {
       EsaJsaPrePopulationResponse(hasEsaPrePop = true, hasJsaPrePop = false).toPageModel mustBe Set(Esa)
     }
@@ -50,7 +50,7 @@ class EsaJsaPrePopulationResponseSpec extends SpecBase {
     }
   }
 
-  "toMessageString" -> {
+  "toMessageString" - {
     val testVals = Seq(
       (true, true, true, Some("agent.both")),
       (true, true, false, Some("agent.esa")),

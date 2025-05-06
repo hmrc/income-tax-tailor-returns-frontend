@@ -16,9 +16,27 @@
 
 package models.requests
 
+import models.session.SessionData
 import play.api.mvc.{Request, WrappedRequest}
 
-case class IdentifierRequest[A] (request: Request[A],
-                                 mtdItId: String,
-                                 isAgent: Boolean
-                                ) extends WrappedRequest[A](request)
+case class IdentifierRequest[A](request: Request[A],
+                                sessionData: SessionData,
+                                isAgent: Boolean) extends WrappedRequest[A](request) {
+  val nino: String = sessionData.nino
+  val mtdItId: String = sessionData.mtditid
+  val sessionId: String = sessionData.sessionId
+  val utr: Option[String] = sessionData.utr
+}
+
+object IdentifierRequest {
+  def apply[A](request: Request[A],
+               nino: String,
+               mtditid: String,
+               sessionId: String,
+               utr: Option[String] = None,
+               isAgent: Boolean): IdentifierRequest[A] = IdentifierRequest(
+    request = request,
+    sessionData = SessionData(mtditid = mtditid, nino = nino, utr = utr, sessionId = sessionId),
+    isAgent = isAgent
+  )
+}

@@ -42,7 +42,7 @@ class DataRequiredActionImpl @Inject()(taxYear: Int)(implicit val executionConte
       case None =>
         Future.successful(Left(Redirect(routes.JourneyRecoveryController.onPageLoad(taxYear = taxYear))))
       case Some(data) =>
-        Future.successful(Right(DataRequest(request.request, request.mtdItId, data, request.isAgent)))
+        Future.successful(Right(DataRequest(request.request, request.sessionData, data, request.isAgent)))
     }
   }
 }

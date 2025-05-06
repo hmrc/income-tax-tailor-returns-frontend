@@ -32,7 +32,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import services.{PrePopulationService, SessionDataService, UserDataService}
+import services.{PrePopulationService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import views.html.propertypensionsinvestments.{RentalIncomeAgentView, RentalIncomeView}
@@ -44,7 +44,6 @@ class RentalIncomeController @Inject()(
                                         override val messagesApi: MessagesApi,
                                         val userDataService: UserDataService,
                                         prePopService: PrePopulationService,
-                                        val ninoRetrievalService: SessionDataService,
                                         val config: FrontendAppConfig,
                                         val navigator: Navigator,
                                         val identify: IdentifierActionProvider,
@@ -56,8 +55,6 @@ class RentalIncomeController @Inject()(
                                         agentView: RentalIncomeAgentView,
                                         val errorHandler: ErrorHandler
                                       )(implicit val ec: ExecutionContext) extends ControllerWithPrePop[Set[RentalIncome], PropertyPrePopulationResponse] with Logging {
-
-  override protected val primaryContext: String = classOf[RentalIncomeController].getSimpleName
 
   override val defaultPrePopulationResponse: PropertyPrePopulationResponse = PropertyPrePopulationResponse.empty
 

@@ -29,13 +29,6 @@ class Module extends play.api.inject.Module {
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
 
-    val authBinding: Binding[_] =
-      if (configuration.get[Boolean]("feature-switch.earlyPrivateLaunch")) {
-          bind[IdentifierActionProvider].to[EarlyPrivateLaunchIdentifierActionProviderImpl].eagerly()
-      } else {
-          bind[IdentifierActionProvider].to[IdentifierActionProviderImpl].eagerly()
-      }
-
     val privateBetaBinding: Seq[Binding[_]] =
       if (configuration.get[Boolean]("feature-switch.privateBeta")) {
         Seq(
@@ -55,7 +48,7 @@ class Module extends play.api.inject.Module {
       bind[OverrideRequestActionProvider].to[OverrideRequestActionProviderImpl].eagerly(),
       bind[Clock].toInstance(Clock.systemUTC()),
       bind[SessionDataConnector].to(classOf[SessionDataConnectorImpl]).eagerly(),
-      authBinding
+      bind[IdentifierActionProvider].to[IdentifierActionProviderImpl].eagerly()
     ) ++ privateBetaBinding
 
   }

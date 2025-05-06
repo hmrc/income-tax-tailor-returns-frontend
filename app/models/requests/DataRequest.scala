@@ -17,14 +17,25 @@
 package models.requests
 
 import models.UserAnswers
+import models.session.SessionData
 import play.api.mvc.{Request, WrappedRequest}
 
 case class OptionalDataRequest[A] (request: Request[A],
-                                   mtdItId: String,
+                                   sessionData: SessionData,
                                    userAnswers: Option[UserAnswers],
-                                   isAgent: Boolean) extends WrappedRequest[A](request)
+                                   isAgent: Boolean) extends WrappedRequest[A](request) {
+  val nino: String = sessionData.nino
+  val mtdItId: String = sessionData.mtditid
+  val sessionId: String = sessionData.sessionId
+  val utr: Option[String] = sessionData.utr
+}
 
 case class DataRequest[A] (request: Request[A],
-                           mtdItId: String,
+                           sessionData: SessionData,
                            userAnswers: UserAnswers,
-                           isAgent: Boolean) extends WrappedRequest[A](request)
+                           isAgent: Boolean) extends WrappedRequest[A](request) {
+  val nino: String = sessionData.nino
+  val mtdItId: String = sessionData.mtditid
+  val sessionId: String = sessionData.sessionId
+  val utr: Option[String] = sessionData.utr
+}

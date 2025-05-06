@@ -32,7 +32,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesApi
 import play.api.mvc._
 import play.twirl.api.HtmlFormat
-import services.{PrePopulationService, SessionDataService, UserDataService}
+import services.{PrePopulationService, UserDataService}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import views.html.workandbenefits.{JobseekersAllowanceAgentView, JobseekersAllowanceView}
@@ -43,7 +43,6 @@ import scala.concurrent.ExecutionContext
 class JobseekersAllowanceController @Inject()(override val messagesApi: MessagesApi,
                                               val userDataService: UserDataService,
                                               prePopService: PrePopulationService,
-                                              val ninoRetrievalService: SessionDataService,
                                               val navigator: Navigator,
                                               val identify: IdentifierActionProvider,
                                               val getData: DataRetrievalActionProvider,
@@ -57,8 +56,6 @@ class JobseekersAllowanceController @Inject()(override val messagesApi: Messages
                                              (implicit val ec: ExecutionContext)
   extends ControllerWithPrePop[Set[JobseekersAllowance], EsaJsaPrePopulationResponse]
   with Logging {
-
-  override protected val primaryContext: String = "JobseekersAllowanceController"
 
   override val defaultPrePopulationResponse: EsaJsaPrePopulationResponse = EsaJsaPrePopulationResponse.empty
 

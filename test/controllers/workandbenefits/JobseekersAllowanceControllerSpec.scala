@@ -18,11 +18,11 @@ package controllers.workandbenefits
 
 import controllers.ControllerWithPrePopSpecBase
 import forms.workandbenefits.JobseekersAllowanceFormProvider
-import models.errors.{APIErrorBodyModel, APIErrorModel, SimpleErrorWrapper}
+import models.errors.SimpleErrorWrapper
 import models.prePopulation.{EsaJsaPrePopulationResponse, StateBenefitsPrePopulationResponse}
 import models.workandbenefits.JobseekersAllowance
 import models.workandbenefits.JobseekersAllowance.{Esa, Jsa}
-import models.{Done, NormalMode, SessionValues, UserAnswers}
+import models.{Done, NormalMode, UserAnswers}
 import navigation.{FakeNavigator, Navigator}
 import org.mockito.ArgumentMatchers._
 import org.mockito.Mockito.when
@@ -59,8 +59,8 @@ class JobseekersAllowanceControllerSpec extends
   }
 
   "JobseekersAllowance Controller" - {
-    "when trying to retrieve the view with a GET" -> {
-      "when pre-population is disabled" -> {
+    "when trying to retrieve the view with a GET" - {
+      "when pre-population is disabled" - {
         "[GET] should return expected view when no user answers exist" in new GetWithNoPrePopTest {
           running(application) {
             status(result) mustEqual OK
@@ -136,123 +136,8 @@ class JobseekersAllowanceControllerSpec extends
         }
       }
 
-      "when pre-population is enabled" -> {
-        "handle errors during NINO retrieval" -> {
-          "[GET] should show error page - SessionDataService: disabled, Nino in session: false" in new GetWithPrePopTest {
-            override def sessionCookieServiceEnabled: Boolean = false
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-
-          "[GET] should show error page - SessionDataService: returns error, Nino in session: false" in new GetWithPrePopTest {
-            mockSessionDataConnectorGet(Future.successful(Left(
-              APIErrorModel(IM_A_TEAPOT, APIErrorBodyModel("", "")))
-            ))
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-
-          "[GET] should show error page - SessionDataService: returns None, Nino in session: false" in new GetWithPrePopTest {
-            mockSessionDataConnectorGet(Future.successful(Right(None)))
-
-            running(application) {
-              status(result) mustEqual INTERNAL_SERVER_ERROR
-              contentAsString(result) mustEqual mockErrorView
-            }
-          }
-        }
-
-        "handle session NINO fallback" -> {
-          "[GET] should fallback to session NINO when session data service is not enabled" in new GetWithPrePopTest {
-            override val sessionCookieServiceEnabled: Boolean = false
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockStateBenefitsConnectorGet(
-              result = Future.successful(Right(StateBenefitsPrePopulationResponse(
-                hasEsaPrePop = false,
-                hasJsaPrePop = false,
-                hasPensionsPrePop = false,
-                hasPensionLumpSumsPrePop = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = EsaJsaPrePopulationResponse(hasJsaPrePop = false, hasEsaPrePop = false)
-                )(request, messages(application)).toString
-            }
-          }
-
-          "[GET] should fallback to session NINO when session data service returns an error" in new GetWithPrePopTest {
-            mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockStateBenefitsConnectorGet(
-              result = Future.successful(Right(StateBenefitsPrePopulationResponse(
-                hasEsaPrePop = false,
-                hasJsaPrePop = false,
-                hasPensionsPrePop = false,
-                hasPensionLumpSumsPrePop = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = EsaJsaPrePopulationResponse(hasJsaPrePop = false, hasEsaPrePop = false)
-                )(request, messages(application)).toString
-            }
-          }
-
-          "[GET] should fallback to session NINO when session data service returns None" in new GetWithPrePopTest {
-            mockSessionDataConnectorGet(Future.successful(Right(None)))
-
-            override val defaultSession: Seq[(String, String)] = Seq(validTaxYears, (SessionValues.CLIENT_NINO, nino))
-
-            mockStateBenefitsConnectorGet(
-              result = Future.successful(Right(StateBenefitsPrePopulationResponse(
-                hasEsaPrePop = false,
-                hasJsaPrePop = false,
-                hasPensionsPrePop = false,
-                hasPensionLumpSumsPrePop = false
-              )))
-            )
-
-            running(application) {
-              status(result) mustEqual OK
-
-              contentAsString(result) mustEqual
-                view(
-                  form = form,
-                  mode = NormalMode,
-                  taxYear = taxYear,
-                  prePopData = EsaJsaPrePopulationResponse(hasJsaPrePop = false, hasEsaPrePop = false)
-                )(request, messages(application)).toString
-            }
-          }
-        }
-
+      "when pre-population is enabled" - {
         "[GET] should return an error page when pre-pop retrieval fails" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockStateBenefitsConnectorGet(
             result = Future.successful(Left(SimpleErrorWrapper(IM_A_TEAPOT)))
           )
@@ -263,9 +148,7 @@ class JobseekersAllowanceControllerSpec extends
           }
         }
 
-        "[GET] should return the expected view when user answers and pre-pop exists" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
+        "[GET] should return the expected view when user answers exist" in new GetWithPrePopTest {
           mockStateBenefitsConnectorGet(
             result = Future.successful(Right(StateBenefitsPrePopulationResponse(
               hasEsaPrePop = true,
@@ -295,9 +178,7 @@ class JobseekersAllowanceControllerSpec extends
           }
         }
 
-        "[GET] should return the expected view when user answers and pre-pop exists for an agent" in new GetWithPrePopAgentTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
+        "[GET] should return the expected view when user answers exist for an agent" in new GetWithPrePopAgentTest {
           mockStateBenefitsConnectorGet(
             result = Future.successful(Right(StateBenefitsPrePopulationResponse(
               hasEsaPrePop = true,
@@ -328,8 +209,6 @@ class JobseekersAllowanceControllerSpec extends
         }
 
         "[GET] should return the expected view when only pre-pop exists" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockStateBenefitsConnectorGet(
             result = Future.successful(Right(StateBenefitsPrePopulationResponse(
               hasEsaPrePop = true,
@@ -353,8 +232,6 @@ class JobseekersAllowanceControllerSpec extends
         }
 
         "[GET] should return the expected view when only pre-pop exists for an agent" in new GetWithPrePopAgentTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockStateBenefitsConnectorGet(
             result = Future.successful(Right(StateBenefitsPrePopulationResponse(
               hasEsaPrePop = true,
@@ -378,8 +255,6 @@ class JobseekersAllowanceControllerSpec extends
         }
 
         "[GET] should return the expected view when user answers and pre-pop don't exist" in new GetWithPrePopTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockStateBenefitsConnectorGet(
             result = Future.successful(Right(StateBenefitsPrePopulationResponse(
               hasEsaPrePop = false,
@@ -403,8 +278,6 @@ class JobseekersAllowanceControllerSpec extends
         }
 
         "[GET] should return the expected view when user answers and pre-pop don't exist for an agent" in new GetWithPrePopAgentTest {
-          mockSessionDataConnectorGet(Future.successful(Right(Some(dummySessionData))))
-
           mockStateBenefitsConnectorGet(
             result = Future.successful(Right(StateBenefitsPrePopulationResponse(
               hasEsaPrePop = false,
@@ -429,7 +302,7 @@ class JobseekersAllowanceControllerSpec extends
       }
     }
 
-    "when trying to submit answers with a POST" -> {
+    "when trying to submit answers with a POST" - {
       trait SubmitEsaJsaWithNoPrePopTest extends SubmitWithNoPrePopTest with EsaJsaSubmitRequest
       trait SubmitEsaJsaWithNoPrePopAgentTest extends SubmitWithNoPrePopAgentTest with EsaJsaSubmitRequest
 
@@ -448,7 +321,7 @@ class JobseekersAllowanceControllerSpec extends
         }
       }
 
-      "for a request with form errors" -> {
+      "for a request with form errors" - {
         "[POST] should return expected view" in new SubmitEsaJsaWithNoPrePopTest {
           override def formUrlEncodedBody: (String, String) = ("value", "invalid value")
 

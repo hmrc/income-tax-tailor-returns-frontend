@@ -21,7 +21,7 @@ import config.FrontendAppConfig
 import connectors.ConnectorResponse
 import forms.FormProvider
 import handlers.ErrorHandler
-import mocks.{MockAppConfig, MockErrorHandler, MockSessionDataService, MockUserDataService}
+import mocks.{MockAppConfig, MockErrorHandler, MockUserDataService}
 import models.errors.SimpleErrorWrapper
 import models.prePopulation.PrePopulationResponse
 import models.requests.DataRequest
@@ -36,14 +36,13 @@ import play.api.mvc._
 import play.api.test.Helpers.{await, stubBodyParser, stubMessagesControllerComponents}
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, ResultExtractors}
 import play.twirl.api.{Html, HtmlFormat}
-import services.{SessionDataService, UserDataService}
+import services.UserDataService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestLogging
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerWithPrePopSpec extends SpecBase
-  with MockSessionDataService
   with MockAppConfig
   with MockErrorHandler
   with MockUserDataService
@@ -90,7 +89,6 @@ class ControllerWithPrePopSpec extends SpecBase
     override def controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
 
     override implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
-    override val ninoRetrievalService: SessionDataService = mockSessionDataService
     override val errorHandler: ErrorHandler = mockErrorHandler
     override val config: FrontendAppConfig = mockAppConfig
 
@@ -103,7 +101,7 @@ class ControllerWithPrePopSpec extends SpecBase
                                     block: DataRequest[A] => Future[Result]): Future[Result] =
           block(DataRequest[A](
             request = request,
-            mtdItId = mtdItId,
+            sessionData = dummySessionData,
             userAnswers = userAnswers,
             isAgent = false
           ))
@@ -120,18 +118,17 @@ class ControllerWithPrePopSpec extends SpecBase
 
     def setupStubs(): Unit = {
       mockPrePopEnabled(true)
-      mockGetNino(Right("AA111111A"))
     }
   }
 
-  "blockWithNino" -> {
+  "blockWithNino" - {
     val dummyBlock = (_: String, _: () => ConnectorResponse[DummyPrePop], _: DataRequest[_]) =>
       Future.successful(Ok)
 
     "should process block when pre-population feature flag is off" in new Test {
       mockPrePopEnabled(false)
 
-      val result: Result = await(controller.blockWithNino(
+      val result: Result = await(controller.blockWithPrePop(
         taxYear = taxYear,
         extraContext = ""
       )(dummyBlock)(FakeRequest()))
@@ -139,45 +136,19 @@ class ControllerWithPrePopSpec extends SpecBase
       result mustBe Ok
     }
 
-    "should process block when pre-population feature flag is on, and NINO retrieval is successful" in new Test {
+    "should process block when pre-population feature flag is on" in new Test {
       mockPrePopEnabled(true)
-      mockGetNino(Right("AA111111A"))
 
-      val result: Result = await(controller.blockWithNino(
+      val result: Result = await(controller.blockWithPrePop(
         taxYear = taxYear,
         extraContext = ""
       )(dummyBlock)(FakeRequest()))
 
       result mustBe Ok
-    }
-
-    "should return an error when pre-population feature flag is on, and NINO retrieval fails" in new Test {
-      mockPrePopEnabled(true)
-      mockGetNino(Left())
-      mockInternalServerError(Html(""))
-
-      val result: Future[Result] = controller.blockWithNino(
-        taxYear = taxYear,
-        extraContext = ""
-      )(dummyBlock)(FakeRequest())
-
-      status(result) mustBe INTERNAL_SERVER_ERROR
-    }
-
-    "should handle exceptions during NINO retrieval" in new Test {
-      mockPrePopEnabled(true)
-      mockGetNinoException(new RuntimeException())
-
-      val result: Future[Result] = controller.blockWithNino(
-        taxYear = taxYear,
-        extraContext = ""
-      )(dummyBlock)(FakeRequest())
-
-      assertThrows[RuntimeException](await(result))
     }
   }
 
-  "onPageLoad" -> {
+  "onPageLoad" - {
     "should return error result when pre-population retrieval fails" in new Test {
       setupStubs()
       mockInternalServerError(Html(""))
@@ -247,8 +218,8 @@ class ControllerWithPrePopSpec extends SpecBase
     }
   }
 
-  "onSubmit" -> {
-    "when there are no form errors in the request" -> {
+  "onSubmit" - {
+    "when there are no form errors in the request" - {
       "should redirect to next page when user data service and journey answers update successfully" in new Test {
         mockSetUserData(dummyUserAnswers.set(DummyPage, "validValue").get, dummyUserAnswers)
 
@@ -265,7 +236,7 @@ class ControllerWithPrePopSpec extends SpecBase
       }
     }
 
-    "when form errors exist in the request" -> {
+    "when form errors exist in the request" - {
       "should return view with form errors " in new Test {
         val result: Future[Result] = controller.onSubmit(
           pageName = "N/A",
