@@ -23,6 +23,7 @@ import models.aboutyou.CharitableDonations.{DonationsUsingGiftAid, GiftsOfLandOr
 import models.pensions.PaymentsIntoPensions
 import models.pensions.PaymentsIntoPensions.{AnnualAllowances, Overseas, UkPensions}
 import models.propertypensionsinvestments.Pensions.{OtherUkPensions, ShortServiceRefunds, StatePension, UnauthorisedPayments}
+import models.propertypensionsinvestments.RentalIncome.{NonUk, Uk}
 import models.propertypensionsinvestments.UkDividendsSharesLoans._
 import models.propertypensionsinvestments.UkInsuranceGains.{CapitalRedemption, LifeAnnuity, LifeInsurance, VoidedISA}
 import models.propertypensionsinvestments.UkInterest.{FromGiltEdged, FromUkBanks, FromUkTrustFunds}
@@ -34,7 +35,7 @@ import models.workandbenefits.JobseekersAllowance.{Esa, Jsa}
 import models.{Done, UserAnswers}
 import pages.aboutyou.{CharitableDonationsPage, FosterCarerPage, UkResidenceStatusPage}
 import pages.pensions.PaymentsIntoPensionsPage
-import pages.propertypensionsinvestments.{PensionsPage, UkDividendsSharesLoansPage, UkInsuranceGainsPage, UkInterestPage}
+import pages.propertypensionsinvestments.{PensionsPage, RentalIncomePage, UkDividendsSharesLoansPage, UkInsuranceGainsPage, UkInterestPage}
 import pages.workandbenefits.{AboutYourWorkPage, ConstructionIndustrySchemePage, JobseekersAllowancePage}
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
@@ -55,19 +56,20 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
 
   private def getTaskList()(implicit ua: UserAnswers): TaskListModel =
-    TaskListModel(Seq[TaskListSection](
-      aboutYouSection,
-      charitableDonationsSection,
-      employmentSection,
-      selfEmploymentSection,
-      esaSection,
-      jsaSection,
-      pensionsSection,
-      ukInsuranceGainsSection,
-      paymentsIntoPensionsSection,
-      interestSection,
-      dividendsSection
-    ).filter(_.taskItems.isDefined))
+    TaskListModel(Seq[Option[TaskListSection]](
+      Some(aboutYouSection),
+      Some(charitableDonationsSection),
+      Some(employmentSection),
+      Some(selfEmploymentSection),
+      Some(esaSection),
+      Some(jsaSection),
+      Some(pensionsSection),
+      Some(ukInsuranceGainsSection),
+      Some(paymentsIntoPensionsSection),
+      Some(interestSection),
+      Some(dividendsSection),
+      propertySection
+    ).flatten.filter(_.taskItems.isDefined))
 
   private def aboutYouSection()(implicit ua: UserAnswers): TaskListSection = {
 
@@ -380,4 +382,36 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
     TaskListSection(DividendsTitle, dividends)
   }
 
+  private def propertySection()(implicit ua: UserAnswers): Option[TaskListSection] =
+    ua.get(RentalIncomePage).map(_.toSeq).flatMap {
+      case Seq(Uk) =>
+        Some(TaskListSection(
+          sectionTitle = UkPropertyTitle,
+          taskItems = Some(Seq(TaskListSectionItem(
+            TaskTitle.UkProperty,
+            TaskStatus.NotStarted,
+            Some(appConfig.ukPropertyJourneyGatewayUrl(taxYear = ua.taxYear))
+          )))
+        ))
+      case Seq(NonUk) =>
+        Some(TaskListSection(
+          sectionTitle = ForeignPropertyTitle,
+          taskItems = Some(Seq(TaskListSectionItem(
+            TaskTitle.ForeignProperty,
+            TaskStatus.NotStarted,
+            Some(appConfig.foreignPropertyJourneyGatewayUrl(taxYear = ua.taxYear))
+          )))
+        ))
+      case Seq(Uk, NonUk) =>
+        Some(TaskListSection(
+          sectionTitle = UkForeignPropertyTitle,
+          taskItems = Some(Seq(TaskListSectionItem(
+            TaskTitle.UkForeignProperty,
+            TaskStatus.NotStarted,
+            Some(appConfig.ukForeignPropertyJourneyGatewayUrl(taxYear = ua.taxYear))
+          )))
+        ))
+      case _ =>
+        None
+    }
 }

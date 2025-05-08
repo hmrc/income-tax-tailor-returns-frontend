@@ -49,4 +49,10 @@ object SectionTitle extends Enum[SectionTitle] with PlayJsonEnum[SectionTitle] {
 
   case object DividendsTitle extends SectionTitle("Dividends")
 
+  case object UkPropertyTitle extends SectionTitle("UkProperty")
+
+  case object ForeignPropertyTitle extends SectionTitle("ForeignProperty")
+
+  case object UkForeignPropertyTitle extends SectionTitle("UkForeignProperty")
+
 }
