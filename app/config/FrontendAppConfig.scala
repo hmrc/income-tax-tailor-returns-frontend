@@ -157,7 +157,7 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   //Subscription Service
 
   private def vcBaseUrl: String =
-    configuration.get[String]("microservice.services.view-and-change.url") +
+    configuration.get[String]("microservice.services.income-tax-view-change-frontend.url") +
       "/report-quarterly/income-and-expenses"
 
   def viewAndChangeEnterUtrUrl: String = s"$vcBaseUrl/view/agents/client-utr"
