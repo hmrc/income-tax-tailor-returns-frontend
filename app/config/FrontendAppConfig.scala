@@ -25,6 +25,7 @@ import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, On
 
 import java.util.UUID
 
+//noinspection ScalaStyle
 @Singleton
 class FrontendAppConfig @Inject()(configuration: Configuration) {
 
@@ -120,6 +121,18 @@ class FrontendAppConfig @Inject()(configuration: Configuration) {
   def stateBenefitsJsaJourneyGatewayUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-state-benefits-frontend.url") +
       s"/update-and-submit-income-tax-return/state-benefits/$taxYear/jobseekers-allowance/claims"
+
+  def ukPropertyJourneyGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-property-frontend.url") +
+      s"/update-and-submit-income-tax-return/property/$taxYear/uk-property/about/start"
+
+  def foreignPropertyJourneyGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-property-frontend.url") +
+      s"/update-and-submit-income-tax-return/property/$taxYear/foreign-property/about/start"
+
+  def ukForeignPropertyJourneyGatewayUrl(taxYear: Int): String =
+    configuration.get[String]("microservice.services.income-tax-property-frontend.url") +
+      s"/update-and-submit-income-tax-return/property/$taxYear/uk-foreign-property/about/start"
 
   def additionalInfoUrl(taxYear: Int): String =
     configuration.get[String]("microservice.services.income-tax-additional-information-frontend.url") +
