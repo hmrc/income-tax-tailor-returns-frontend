@@ -54,7 +54,11 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector, c
     ) match {
       case (Some(nino), Some(mtdItId)) => Some(SessionData(sessionId, mtdItId, nino))
       case (optNino, optMtdItId) =>
-        warnLog(ctx)(s"Could not find ${Seq(optNino, optMtdItId).flatten.mkString(", ")} in request session. Returning no data")
+        val missingData = Seq(
+          Option.when(optNino.isEmpty)("NINO"),
+          Option.when(optMtdItId.isEmpty)("MTDITID")
+        ).flatten.mkString(", ")
+        infoLog(ctx)(s"[getFallbackSessionData] Could not find $missingData in request session. Returning no data")
         None
     }
   }
