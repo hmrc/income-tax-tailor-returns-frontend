@@ -47,14 +47,18 @@ class SessionDataService @Inject()(sessionDataConnector: SessionDataConnector, c
   }
 
   private[services] def getFallbackSessionData[A](sessionId: String)
-                                                 (implicit request: Request[A]): Option[SessionData] = { val ctx = "fallbackSessionData"
+                                                 (implicit request: Request[A]): Option[SessionData] = { val ctx = "getFallbackSessionData"
     (
       request.session.get(SessionValues.CLIENT_NINO),
       request.session.get(SessionValues.CLIENT_MTDITID)
     ) match {
       case (Some(nino), Some(mtdItId)) => Some(SessionData(sessionId, mtdItId, nino))
       case (optNino, optMtdItId) =>
-        warnLog(ctx)(s"Could not find ${Seq(optNino, optMtdItId).flatten.mkString(", ")} in request session. Returning no data")
+        val missingData = Seq(
+          Option.when(optNino.isEmpty)("NINO"),
+          Option.when(optMtdItId.isEmpty)("MTDITID")
+        ).flatten.mkString(", ")
+        infoLog(ctx)(s"Could not find $missingData in request session. Returning no data")
         None
     }
   }
