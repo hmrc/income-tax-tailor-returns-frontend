@@ -22,6 +22,8 @@ import org.scalatest.TestSuite
 import play.api.mvc.Request
 import play.twirl.api.Html
 
+import scala.concurrent.Future
+
 trait MockErrorHandler extends MockFactory {this: TestSuite =>
 
   protected val mockErrorHandler: ErrorHandler = mock[ErrorHandler]
@@ -29,6 +31,6 @@ trait MockErrorHandler extends MockFactory {this: TestSuite =>
   def mockInternalServerError(result: Html): Unit = {
     (mockErrorHandler.internalServerErrorTemplate(_: Request[_]))
       .expects(*)
-      .returns(result)
+      .returns(Future.successful(result))
   }
 }

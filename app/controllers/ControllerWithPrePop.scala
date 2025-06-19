@@ -251,9 +251,8 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
 
   protected def fillFormFromPageModel(form: Form[I], pageModel: I): Form[I]  = form.fill(pageModel)
 
-  private def internalServerErrorResult(implicit request: Request[_]): Result = InternalServerError(
-    errorHandler.internalServerErrorTemplate
-  )
+  private def internalServerErrorResult(implicit request: Request[_]): Future[Result] =
+    errorHandler.internalServerErrorTemplate.map(InternalServerError(_))
 
   private def requestToAgentString(implicit request: DataRequest[_]): String = if (request.isAgent) "agent" else ""
 
@@ -262,7 +261,7 @@ abstract class ControllerWithPrePop[I: Format, R <: PrePopulationResponse[I]]
   }
 
   private def prePopErrorResult(errLogger: String => Unit)
-                               (implicit request: DataRequest[_]): SimpleErrorWrapper => Result = {
+                               (implicit request: DataRequest[_]): SimpleErrorWrapper => Future[Result] = {
     _: SimpleErrorWrapper =>
       errLogger("Failed to load pre-population data. Returning error page")
       internalServerErrorResult

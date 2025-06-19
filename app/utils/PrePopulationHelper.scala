@@ -47,7 +47,7 @@ trait PrePopulationHelper[R <: PrePopulationResponse[_]] { _: Logging =>
    */
   protected def blockWithPrePop(prePopulationRetrievalAction: () => ConnectorResponse[R],
                                 successAction: R => Result,
-                                errorAction: SimpleErrorWrapper => Result,
+                                errorAction: SimpleErrorWrapper => Future[Result],
                                 extraLogContext: String,
                                 dataLog: String,
                                 incomeType: String)
@@ -66,7 +66,7 @@ trait PrePopulationHelper[R <: PrePopulationResponse[_]] { _: Logging =>
       res <- EitherT(prePopulationRetrievalAction())
     } yield {
       infoLogger(s"Successfully retrieved user's pre-pop data for $incomeType. Processing success action")
-      successAction(res)
+      Future.successful(successAction(res))
     }
 
     result.leftMap { err =>
@@ -80,5 +80,5 @@ trait PrePopulationHelper[R <: PrePopulationResponse[_]] { _: Logging =>
 
       errorAction(err)
     }.merge
-  }
+  }.flatten
 }
