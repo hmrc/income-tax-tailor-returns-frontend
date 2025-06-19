@@ -41,7 +41,7 @@ class PrePopulationHelperSpec extends SpecBase
 
   trait Test extends PrePopulationHelper[DummyPrePop] with TestLogging {
     val successAction: DummyPrePop => Result = (_: DummyPrePop) => new Status(OK)
-    val errorAction: SimpleErrorWrapper => Result = (_: SimpleErrorWrapper) => new Status(INTERNAL_SERVER_ERROR)
+    val errorAction: SimpleErrorWrapper => Future[Result] = (_: SimpleErrorWrapper) => Future.successful(Status(INTERNAL_SERVER_ERROR))
   }
 
   "blockWithPrePop" - {

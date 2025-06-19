@@ -21,12 +21,10 @@ import mocks.{MockAppConfig, MockSessionDataConnector}
 import models.errors.{APIErrorBodyModel, APIErrorModel, MissingAgentClientDetails}
 import models.session.SessionData
 import play.api.http.{HeaderNames, Status}
-import play.api.mvc.{AnyContentAsEmpty, Result, Results}
+import play.api.mvc.{AnyContentAsEmpty, Results}
 import play.api.test.Helpers.await
 import play.api.test.{DefaultAwaitTimeout, FakeRequest, ResultExtractors}
 import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.Future
 
 class SessionDataServiceSpec extends SpecBase
   with ResultExtractors

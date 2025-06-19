@@ -114,7 +114,7 @@ trait ControllerWithPrePopSpecBase[View, AgentView, FormType] extends SpecBase w
     val mockErrorView: String = "This is some dummy error page"
 
     when(mockErrorHandler.internalServerErrorTemplate(ArgumentMatchers.any[Request[_]]))
-      .thenReturn(Html(mockErrorView))
+      .thenReturn(Future.successful(Html(mockErrorView)))
 
     def mockStateBenefitsConnectorGet(
                                        result: ConnectorResponse[StateBenefitsPrePopulationResponse]

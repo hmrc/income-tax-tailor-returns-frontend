@@ -92,4 +92,4 @@ lazy val it = project
   .dependsOn(root % "test->test") // the "test->test" allows reusing test code and test dependencies
   .settings(testSettings ++ itSettings)
 
-addCommandAlias("runAllChecks", "clean;compile;scalastyle;coverage;test;it/test;coverageReport")
+addCommandAlias("runAllChecks", "clean;compile;coverage;test;it/test;coverageReport;dependencyUpdates")
