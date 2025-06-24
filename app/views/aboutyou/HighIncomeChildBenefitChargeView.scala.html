@@ -45,7 +45,7 @@
 
 @layout(pageTitle = title(form, messages("highIncomeChildBenefitCharge.title")), taxYear = taxYear) {
 
-    @formHelper(action = controllers.aboutyou.routes.HighIncomeChildBenefitChargeController.onSubmit(mode, taxYear), 'autoComplete -> "off") {
+    @formHelper(action = controllers.aboutyou.routes.HighIncomeChildBenefitChargeController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
 
         @if(form.errors.nonEmpty) {

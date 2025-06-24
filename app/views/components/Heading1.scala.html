@@ -20,7 +20,7 @@
   captionHeader: CaptionHeader
 )
 
-@(message: String, classes: String = "govuk-heading-l", caption: Option[String] = None)(implicit messages: Messages)
+@(message: String, classes: String = "govuk-heading-l", caption: Option[String] = None)
 
 <h1 class="@classes">
     @caption.fold(Html(""))(captionHeader(_))

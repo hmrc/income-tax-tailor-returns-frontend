@@ -52,10 +52,8 @@ lazy val root = (project in file("."))
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq(
-      "-feature",
-      "-rootdir",
-      baseDirectory.value.getCanonicalPath,
-      "-Wconf:cat=deprecation:ws,cat=feature:ws,cat=optimizer:ws,src=target/.*:s"
+      "-Wconf:src=routes/.*:s",
+      "-Wconf:cat=unused-imports&src=html/.*:s"
     ),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
@@ -72,7 +70,6 @@ lazy val root = (project in file("."))
 
 lazy val testSettings: Seq[Def.Setting[?]] = Seq(
   fork := true,
-  unmanagedResourceDirectories := Seq(baseDirectory.value / "test" / "resources"),
   javaOptions ++= Seq("-Dconfig.resource=test.application.conf", "-Dapplication.router=testOnlyDoNotUseInAppConf.Routes"),
   unmanagedSourceDirectories.withRank(KeyRanks.Invisible) += baseDirectory.value / "test-utils"
 )

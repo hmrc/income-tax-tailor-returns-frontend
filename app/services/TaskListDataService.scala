@@ -57,18 +57,18 @@ class TaskListDataService @Inject()(connector: TaskListDataConnector,
 
   private def getTaskList()(implicit ua: UserAnswers): TaskListModel =
     TaskListModel(Seq[Option[TaskListSection]](
-      Some(aboutYouSection),
-      Some(charitableDonationsSection),
-      Some(employmentSection),
-      Some(selfEmploymentSection),
-      Some(esaSection),
-      Some(jsaSection),
-      Some(pensionsSection),
-      Some(ukInsuranceGainsSection),
-      Some(paymentsIntoPensionsSection),
-      Some(interestSection),
-      Some(dividendsSection),
-      propertySection
+      Some(aboutYouSection()),
+      Some(charitableDonationsSection()),
+      Some(employmentSection()),
+      Some(selfEmploymentSection()),
+      Some(esaSection()),
+      Some(jsaSection()),
+      Some(pensionsSection()),
+      Some(ukInsuranceGainsSection()),
+      Some(paymentsIntoPensionsSection()),
+      Some(interestSection()),
+      Some(dividendsSection()),
+      propertySection()
     ).flatten.filter(_.taskItems.isDefined))
 
   private def aboutYouSection()(implicit ua: UserAnswers): TaskListSection = {
