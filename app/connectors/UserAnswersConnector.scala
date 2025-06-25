@@ -17,18 +17,19 @@
 package connectors
 
 import config.Service
+import connectors.ConnectorFailureLogger._
 import models.{Done, UserAnswers}
 import play.api.Configuration
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
-import uk.gov.hmrc.http.client.HttpClientV2
-import ConnectorFailureLogger._
 import play.api.http.Status.NO_CONTENT
 import play.api.libs.json.Json
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReadsInstances, HttpResponse, StringContextOps, UpstreamErrorResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClientV2)(implicit ec: ExecutionContext) {
+class UserAnswersConnector @Inject()(config: Configuration, httpClient: HttpClientV2)
+                                    (implicit ec: ExecutionContext) extends HttpReadsInstances {
   private val baseUrl = config.get[Service]("microservice.services.income-tax-tailor-return")
   private val userAnswersUrl = url"$baseUrl/income-tax-tailor-return/data"
   private val keepAliveUrl = url"$baseUrl/income-tax-tailor-return/keep-alive"

@@ -54,7 +54,7 @@
 
 @layout(pageTitle = title(form, messages("ukResidenceStatus.title")), taxYear = taxYear) {
 
-    @formHelper(action = controllers.aboutyou.routes.UkResidenceStatusController.onSubmit(mode, taxYear), 'autoComplete -> "off") {
+    @formHelper(action = controllers.aboutyou.routes.UkResidenceStatusController.onSubmit(mode, taxYear), Symbol("autoComplete") -> "off") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form,  errorLinkOverrides = Map("value" -> "value_0")))

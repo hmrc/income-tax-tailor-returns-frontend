@@ -225,7 +225,7 @@ class AuthActionSpec extends SpecBase
           predicate = any(),
           retrieval = ArgumentMatchers.eq(EmptyRetrieval)
         )(any(), any()))
-          .thenReturn(Future.successful())
+          .thenReturn(Future.unit)
 
         mockSessionServiceEnabled(true)
         mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
@@ -379,7 +379,7 @@ class AuthActionSpec extends SpecBase
           "should handle appropriately when secondary agent auth succeeds" in new Test {
             when(mockAuthConnector.authorise[Unit](any(), any())(any(), any()))
               .thenReturn(Future.failed(InternalError("AnError")))
-              .andThen(Future.successful(()))
+              .andThen(Future.unit)
 
             mockSessionServiceEnabled(true)
             mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
@@ -473,7 +473,7 @@ class AuthActionSpec extends SpecBase
 
       "should return correct result for happy path" in new Test {
         when(mockAuthConnector.authorise[Unit](any(), any())(any(), any()))
-          .thenReturn(Future.successful())
+          .thenReturn(Future.unit)
 
         mockSessionServiceEnabled(true)
         mockGetSessionDataFromSessionStore(Right(Some(dummySessionData)))
