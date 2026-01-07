@@ -18,7 +18,7 @@ package connectors
 
 import generators.ModelGenerators
 import models.errors.{APIErrorBodyModel, SimpleErrorWrapper}
-import models.prePopulation.{CisPrePopulationResponse, StateBenefitsPrePopulationResponse}
+import models.prePopulation.CisPrePopulationResponse
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
