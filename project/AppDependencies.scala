@@ -3,9 +3,9 @@ import sbt.*
 
 object AppDependencies {
 
-  private val bootstrapVersion = "10.4.0"
+  private val bootstrapVersion = "10.5.0"
   private val hmrcMongoVersion = "2.11.0"
-  private val hmrcPlayFrontend = "12.22.0"
+  private val hmrcPlayFrontend = "12.25.0"
 
   private val jacksonAndPlayExclusions: Seq[InclusionRule] = Seq(
     ExclusionRule(organization = "com.fasterxml.jackson.core"),
@@ -34,7 +34,7 @@ object AppDependencies {
     "org.scalatestplus"       %% "scalacheck-1-15"         % "3.2.11.0",
     "org.mockito"             %% "mockito-scala"           % "2.0.0",
     "org.scalacheck"          %% "scalacheck"              % "1.19.0",
-    "org.jsoup"               %  "jsoup"                   % "1.21.2",
+    "org.jsoup"               %  "jsoup"                   % "1.22.1",
     "org.wiremock"            %  "wiremock"                % "3.13.2",
     "org.scalamock"           %% "scalamock"               % "7.5.2",
     "org.playframework"       %% "play-test"               % current
