@@ -5,8 +5,8 @@ resolvers += "Typesafe Releases" at "https://repo.typesafe.com/typesafe/releases
 
 addSbtPlugin("uk.gov.hmrc"          % "sbt-auto-build"        % "3.24.0")
 addSbtPlugin("uk.gov.hmrc"          % "sbt-distributables"    % "2.6.0")
-addSbtPlugin("org.playframework"    % "sbt-plugin"            % "3.0.9")
-addSbtPlugin("org.scoverage"        % "sbt-scoverage"         % "2.4.2")
+addSbtPlugin("org.playframework"    % "sbt-plugin"            % "3.0.10")
+addSbtPlugin("org.scoverage"        % "sbt-scoverage"         % "2.4.4")
 addSbtPlugin("com.github.sbt"       % "sbt-gzip"              % "2.0.0")
 addSbtPlugin("io.github.irundaia"   % "sbt-sassify"           % "1.5.2")
 addSbtPlugin("com.github.sbt"       % "sbt-concat"            % "1.0.0")
