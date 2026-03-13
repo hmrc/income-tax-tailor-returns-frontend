@@ -3,9 +3,10 @@ import sbt.*
 
 object AppDependencies {
 
-  private val bootstrapVersion = "10.6.0"
+  private val bootstrapVersion = "10.7.0"
   private val hmrcMongoVersion = "2.12.0"
   private val hmrcPlayFrontend = "12.32.0"
+  private val enumeratumVersion = "1.9.6"
 
   private val jacksonAndPlayExclusions: Seq[InclusionRule] = Seq(
     ExclusionRule(organization = "com.fasterxml.jackson.core"),
@@ -24,15 +25,15 @@ object AppDependencies {
     "uk.gov.hmrc"                   %% "tax-year"                               % "6.0.0",
     "com.fasterxml.jackson.module"  %% "jackson-module-scala"                   % "2.21.1",
     "org.typelevel"                 %% "cats-core"                              % "2.13.0",
-    "com.beachape"                  %% "enumeratum"                             % "1.9.5",
-    "com.beachape"                  %% "enumeratum-play-json"                   % "1.9.5" excludeAll (jacksonAndPlayExclusions *)
+    "com.beachape"                  %% "enumeratum"                             % enumeratumVersion,
+    "com.beachape"                  %% "enumeratum-play-json"                   % enumeratumVersion excludeAll (jacksonAndPlayExclusions *)
   )
 
   val test: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"             %% "bootstrap-test-play-30"  % bootstrapVersion,
     "uk.gov.hmrc.mongo"       %% "hmrc-mongo-test-play-30" % hmrcMongoVersion,
     "org.scalatestplus"       %% "scalacheck-1-15"         % "3.2.11.0",
-    "org.mockito"             %% "mockito-scala"           % "2.0.0",
+    "org.mockito"             %% "mockito-scala"           % "2.1.0",
     "org.scalacheck"          %% "scalacheck"              % "1.19.0",
     "org.jsoup"               %  "jsoup"                   % "1.22.1",
     "org.wiremock"            %  "wiremock"                % "3.13.2",
